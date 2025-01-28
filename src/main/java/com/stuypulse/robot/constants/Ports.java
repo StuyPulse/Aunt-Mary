@@ -11,5 +11,12 @@ public interface Ports {
         int DRIVER = 0;
         int OPERATOR = 1;
         int DEBUGGER = 2;
+        //should these be final?
+    }
+
+    public interface Algae {
+        int ROLLER_PORT = 0; // CHANGE
+        int PIVOT_PORT = 0; // CHANGE
+        int PIVOT_ENCODER = 0;
     }
 }
