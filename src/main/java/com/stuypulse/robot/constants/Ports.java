@@ -12,4 +12,9 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface Climb {
+        int CLIMB_MOTOR = 0;
+        int CLIMB_ENCODER = 0;
+    }
 }
