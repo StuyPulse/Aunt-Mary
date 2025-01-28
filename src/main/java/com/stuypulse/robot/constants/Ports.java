@@ -12,4 +12,16 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    // Set values later
+    public interface Shooter {
+        int MOTOR = 0;
+        int BEAM = 1;
+    }
+    
+    // Set values later
+    public interface Funnel {
+        int MOTOR = 0;
+        int BEAM = 1;
+    }
 }
