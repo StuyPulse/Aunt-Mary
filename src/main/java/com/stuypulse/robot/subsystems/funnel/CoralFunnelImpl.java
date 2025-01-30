@@ -6,6 +6,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.streams.booleans.BStream;
+import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.HighPassFilter;
 
@@ -18,7 +20,7 @@ public class CoralFunnelImpl extends CoralFunnel {
     private final TalonFXConfiguration driveConfig;
 
     private final DigitalInput motorBeam;
-    private boolean funnelState;
+    private BStream funnelState;
 
     private final IStream driveCurrent;
 
@@ -26,6 +28,8 @@ public class CoralFunnelImpl extends CoralFunnel {
         driveMotor = new TalonFX(Ports.Funnel.MOTOR);
 
         motorBeam = new DigitalInput(Ports.Funnel.BEAM);
+        funnelState = BStream.create(motorBeam).not()
+            .filtered(new BDebounce.Both(Settings.Funnel.BB_DEBOUNCE));
 
         driveConfig = new TalonFXConfiguration();
 
@@ -69,6 +73,11 @@ public class CoralFunnelImpl extends CoralFunnel {
     }
 
     @Override
+    public boolean getFunnelState() {
+        return funnelState.get();
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
@@ -78,6 +87,7 @@ public class CoralFunnelImpl extends CoralFunnel {
 
         SmartDashboard.putNumber("Funnel/Current", driveCurrent.get());
 
+        SmartDashboard.putBoolean("Funnel/Has Coral", getFunnelState());
         SmartDashboard.putBoolean("Funnel/Coral Stuck", coralStuck());
     }
 }

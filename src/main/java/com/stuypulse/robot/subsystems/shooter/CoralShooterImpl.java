@@ -79,17 +79,19 @@ public class CoralShooterImpl extends CoralShooter {
     public boolean hasAlgae() {
         return driveCurrent.get() > Settings.Shooter.DRIVE_CURRENT_THRESHOLD;
     }
+    
 
     @Override
     public void periodic() {
         super.periodic();
-
-        SmartDashboard.putBoolean("Shooter/Has Coral", hasCoral());
 
         SmartDashboard.putNumber("Shooter/RPM", getShooterRPM());
 
         SmartDashboard.putNumber("Shooter/Voltage", driveMotor.getMotorVoltage().getValueAsDouble());
 
         SmartDashboard.putNumber("Shooter/Current", driveCurrent.get());
+
+        SmartDashboard.putBoolean("Shooter/Has Coral", hasCoral());        
+        SmartDashboard.putBoolean("Shooter/Has Algae", hasAlgae());
     }
 }

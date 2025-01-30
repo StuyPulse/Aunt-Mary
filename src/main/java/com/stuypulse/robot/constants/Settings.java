@@ -16,8 +16,8 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Settings {  
     public interface Shooter {
-        double MAX_SHOOTER_RPM = 6380; // Max RPM of Talon FX (rpm)
-        double TARGET_SHOOTER_RPM = 6000; // Target RPM of Talon FX (rpm)
+        double MAX_SHOOTER_RPM = 6000; // Max RPM of KrakenX60 (rpm)
+        double TARGET_SHOOTER_RPM = 6000; // Target RPM of KrakenX60 (rpm)
         double BB_DEBOUNCE = 0.0; 
         
         public interface PID {
@@ -40,7 +40,9 @@ public interface Settings {
     }
 
     public interface Funnel {
-        double MAX_FUNNEL_RPM = 6380; // Max RPM of Talon FX (rpm)
+        double MAX_FUNNEL_RPM = 6000; // Max RPM of KrakenX60 (rpm)
+        double TARGET_FUNNEL_RPM = 6000; // Target RPM of KrakenX60 (rpm)
+        double BB_DEBOUNCE = 0.0;
 
         public interface PID {
             // ADJUST LATER
