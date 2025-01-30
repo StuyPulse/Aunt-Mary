@@ -19,7 +19,7 @@ public abstract class CoralShooter extends SubsystemBase {
     private final SmartNumber targetRPM;
 
     public CoralShooter() {
-        targetRPM = new SmartNumber("CoralShooter/Target RPM",  0);
+        targetRPM = new SmartNumber("Shooter/Target RPM",  0);
     }
 
     public double getTargetRPM() {
@@ -29,7 +29,5 @@ public abstract class CoralShooter extends SubsystemBase {
     public abstract boolean hasCoral();
 
     public abstract boolean hasAlgae();
-
-
 }
 

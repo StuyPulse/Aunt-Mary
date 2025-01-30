@@ -17,6 +17,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
 public interface Settings {  
     public interface Shooter {
         double MAX_SHOOTER_RPM = 6380; // Max RPM of Talon FX (rpm)
+        double TARGET_SHOOTER_RPM = 6000; // Target RPM of Talon FX (rpm)
         double BB_DEBOUNCE = 0.0; 
         
         public interface PID {
@@ -32,6 +33,31 @@ public interface Settings {
             SmartNumber kV = new SmartNumber("kV", 0);
             SmartNumber kA = new SmartNumber("kA", 0);
         }
-        
+
+        double GEAR_RATIO = 0.0;
+        double DRIVE_CURRENT_THRESHOLD = 80;
+        double DRIVE_CURRENT_LIMIT = 120;
+    }
+
+    public interface Funnel {
+        double MAX_FUNNEL_RPM = 6380; // Max RPM of Talon FX (rpm)
+
+        public interface PID {
+            // ADJUST LATER
+            SmartNumber kP = new SmartNumber("kP", 0);
+            SmartNumber kI = new SmartNumber("kI", 0);
+            SmartNumber kD = new SmartNumber("kD", 0);
+        }
+
+        public interface FeedForward {
+            // ADJUST LATER
+            SmartNumber kS = new SmartNumber("kS", 0);
+            SmartNumber kV = new SmartNumber("kV", 0);
+            SmartNumber kA = new SmartNumber("kA", 0);
+        }
+    
+        double GEAR_RATIO = 0.0;
+        double DRIVE_CURRENT_THRESHOLD = 80;
+        double DRIVE_CURRENT_LIMIT = 120;
     }
 }
