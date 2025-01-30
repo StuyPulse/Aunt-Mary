@@ -5,7 +5,6 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 /*-
