@@ -4,12 +4,14 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbImpl extends Climb {
     private final TalonFX climbMotor;
@@ -19,9 +21,10 @@ public class ClimbImpl extends Climb {
     public ClimbImpl() {
         climbMotor = new TalonFX(Ports.Climb.CLIMB_MOTOR);
         climbEncoder = new CANcoder(Ports.Climb.CLIMB_ENCODER);
-        targetDegrees = 0;
 
         TalonFXConfiguration climbMotorConfig = new TalonFXConfiguration();
+
+        // gains setting
         Slot0Configs slot0 = new Slot0Configs();
 
         slot0.kS = Settings.Climb.kS;
@@ -32,19 +35,25 @@ public class ClimbImpl extends Climb {
         slot0.kD = Settings.Climb.kD;
 
         climbMotorConfig.Slot0 = slot0;
+
+        // basic configs
         climbMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         climbMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        climbMotorConfig.CurrentLimits.StatorCurrentLimit = Settings.Climb.CURRENT_LIMIT;
         climbMotorConfig.Feedback.SensorToMechanismRatio = Settings.Climb.GEAR_RATIO;
 
+        // current limiting
+        climbMotorConfig.CurrentLimits.StatorCurrentLimit = Settings.Climb.CURRENT_LIMIT;
         climbMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        climbMotor.getConfigurator().apply(climbMotorConfig);
-        climbMotor.setPosition(Settings.Climb.REST_ANGLE);
+        // ramp motor voltage
+        climbMotorConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Climb.RAMP_RATE;
+        climbMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Climb.RAMP_RATE;
 
-        CANcoderConfiguration climbEncoderConfig = new CANcoderConfiguration();
-        
+        // integrate CANcoder readings into controller
+        climbMotorConfig.Feedback.FeedbackRemoteSensorID = climbEncoder.getDeviceID();
+        climbMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
+        climbMotor.getConfigurator().apply(climbMotorConfig);
     }
 
     public void setTargetDegrees(double targetDegrees) {
@@ -63,7 +72,7 @@ public class ClimbImpl extends Climb {
 
     @Override
     public void stop() {
-        climbMotor.setVoltage(0.0);
+        climbMotor.stopMotor();
     }
 
     @Override
@@ -71,8 +80,13 @@ public class ClimbImpl extends Climb {
         PositionVoltage controlRequest = new PositionVoltage(0).withSlot(0);
         climbMotor.setControl(controlRequest.withPosition(getTargetDegrees()));
 
-    }
+        SmartDashboard.putNumber("Climb/Current Angle (deg)", getDegrees());
+        SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetDegrees());
 
-    
-    
+        SmartDashboard.putNumber("Climb/Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Supply Voltage", climbMotor.getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Motor Current", climbMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Supply Current", climbMotor.getSupplyCurrent().getValueAsDouble());
+        
+    }
 }

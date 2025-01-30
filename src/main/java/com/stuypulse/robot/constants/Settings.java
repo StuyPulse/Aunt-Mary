@@ -31,5 +31,6 @@ public interface Settings {
         double MIN_ANGLE = 0.0;
         double MAX_ANGLE = 270.0;
 		double REST_ANGLE = 0;
+        double RAMP_RATE = 0;
     }
 }
