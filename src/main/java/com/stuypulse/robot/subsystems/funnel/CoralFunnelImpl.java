@@ -61,8 +61,8 @@ public class CoralFunnelImpl extends CoralFunnel {
         driveMotor.setPosition(0);
 
         //Ramp Motor Voltage
-        driveConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Funnel.MAX_FUNNEL_RPM;
-        driveConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Funnel.MAX_FUNNEL_RPM;
+        driveConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Funnel.RAMP_RATE;
+        driveConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Funnel.RAMP_RATE;
     }
 
     private double getMotorRPM() {
