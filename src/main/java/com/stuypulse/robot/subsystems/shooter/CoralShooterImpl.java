@@ -61,7 +61,7 @@ public class CoralShooterImpl extends CoralShooter {
         driveMotor.setPosition(0);
     }
 
-    private double getShooterRPM() {
+    public double getShooterRPM() {
         return driveMotor.get() * Settings.Shooter.MAX_SHOOTER_RPM;
     }
 

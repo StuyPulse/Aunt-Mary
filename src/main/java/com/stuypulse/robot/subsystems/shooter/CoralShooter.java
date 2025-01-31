@@ -28,6 +28,10 @@ public abstract class CoralShooter extends SubsystemBase {
         return targetRPM.get();
     }
 
+    public abstract double getShooterRPM();
+
+    public abstract void setShooterRPM(double targetRPM);
+
     public abstract boolean hasCoral();
 
     public abstract boolean hasAlgae();
