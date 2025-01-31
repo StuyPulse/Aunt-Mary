@@ -36,6 +36,11 @@ public interface Settings {
 
         double L2_ANGLE = 0;
         double L3_ANGLE = 0;
-        double L4_Angle = 0;
+        double L4_ANGLE = 0;
+
+        public interface MotionMagic{
+            double MAX_VEL = 0;
+            double MAX_ACCEL = 0;
+        }
     }
 }
