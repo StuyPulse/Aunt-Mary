@@ -42,6 +42,7 @@ public interface Settings {
         double MAX_FUNNEL_RPM = 6000; // Max RPM of KrakenX60 (rpm)
         double TARGET_FUNNEL_RPM = 6000; // Target RPM of KrakenX60 (rpm)
         double BB_DEBOUNCE = 0.0;
+        double RAMP_RATE = 0.0; 
 
         public interface PID {
             // ADJUST LATER

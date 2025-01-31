@@ -53,11 +53,16 @@ public class CoralFunnelImpl extends CoralFunnel {
         driveConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         driveConfig.TorqueCurrent.TorqueNeutralDeadband = 0.05;
 
+        //Stall Detection
         driveCurrent = IStream.create(() -> driveMotor.getStatorCurrent().getValueAsDouble())
             .filtered(new HighPassFilter(Settings.Funnel.DRIVE_CURRENT_THRESHOLD));
         
         driveMotor.getConfigurator().apply(driveConfig);
         driveMotor.setPosition(0);
+
+        //Ramp Motor Voltage
+        driveConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Funnel.MAX_FUNNEL_RPM;
+        driveConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Funnel.MAX_FUNNEL_RPM;
     }
 
     private double getMotorRPM() {
