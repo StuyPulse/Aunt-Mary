@@ -11,6 +11,8 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
+import com.stuypulse.stuylib.streams.numbers.IStream;
+import com.stuypulse.stuylib.streams.numbers.filters.HighPassFilter;
 
 public class AlgaeImpl extends Algae {
 
@@ -19,9 +21,12 @@ public class AlgaeImpl extends Algae {
     private CANcoder pivotEncoder;
 
     private final AngleController pivotController;
+    private final IStream pivotCurrent;
 
     public double targetAngle;
     public double currentAngle;
+
+    
     
     public AlgaeImpl() {        
         rollerMotor = new TalonFX(Ports.Algae.ROLLER_PORT);
@@ -33,22 +38,22 @@ public class AlgaeImpl extends Algae {
 
         Slot0Configs slot0 = new Slot0Configs();
 
-        slot0.kS = Settings.Algae.PID.kS;
-        slot0.kV = Settings.Algae.PID.kV;
-        slot0.kA = Settings.Algae.PID.kA;
+        slot0.kS = Settings.Algae.FF.kS;
+        slot0.kV = Settings.Algae.FF.kV;
+        slot0.kA = Settings.Algae.FF.kA;
         slot0.kP = Settings.Algae.PID.kP;
         slot0.kI = Settings.Algae.PID.kI;
         slot0.kD = Settings.Algae.PID.kD;     
 
         pivotConfig.Slot0 = slot0;
 
-        
-
         pivotMotor.getConfigurator().apply(pivotConfig);
         pivotMotor.setPosition(0); // not sure if this should be here
 
         pivotController = new AnglePIDController(Settings.Algae.PID.kP, Settings.Algae.PID.kI, Settings.Algae.PID.kD);
-        
+
+        pivotCurrent = IStream.create(() -> pivotMotor.getStatorCurrent().getValueAsDouble()) // no idea if this works
+            .filtered(new HighPassFilter(Settings.Algae.PIVOT_CURRENT_THRESHOLD));
     }
     
     @Override
@@ -63,27 +68,27 @@ public class AlgaeImpl extends Algae {
     
     @Override
     public double getCurrentAngle() {
-        return currentAngle;
+        return pivotEncoder.getAbsolutePosition().getValueAsDouble() * 360; // i think its ok idk
     }
     
     @Override
     public void intakeAlgae() {
-        rollerMotor.set(Settings.Algae.ALGAE_INTAKE_SPEED);  // CHECK WHAT THE VALUE IS
+        rollerMotor.set(Settings.Algae.ALGAE_INTAKE_SPEED);  
     }
 
     @Override 
     public void outakeAlgae() {
-        rollerMotor.set(Settings.Algae.ALGAE_OUTTAKE_SPEED); //Check what value is :3
+        rollerMotor.set(Settings.Algae.ALGAE_OUTTAKE_SPEED); 
     }
 
     @Override
     public void intakeCoral() {
-        rollerMotor.set(Settings.Algae.CORAL_INTAKE_SPEED); // CHECK WHAT THE VALUE IS
+        rollerMotor.set(Settings.Algae.CORAL_INTAKE_SPEED); 
     }
 
     
     public void outakeCoral() {
-        rollerMotor.set(Settings.Algae.CORAL_OUTTAKE_SPEED); // check this value :3
+        rollerMotor.set(Settings.Algae.CORAL_OUTTAKE_SPEED);
     }
 
 
@@ -91,7 +96,7 @@ public class AlgaeImpl extends Algae {
 
     @Override
     public boolean hasAlgae() {
-        return true; // for now
+        return pivotCurrent.get() > Settings.Algae.PIVOT_CURRENT_THRESHOLD;
     }
 
     @Override

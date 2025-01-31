@@ -8,6 +8,8 @@ package com.stuypulse.robot.constants;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 /*-
  * File containing tunable settings for every subsystem on the robot.
  *
@@ -27,17 +29,22 @@ public interface Settings {
         double ALGAE_OUTTAKE_SPEED = 0.0;
         double CORAL_INTAKE_SPEED = ALGAE_OUTTAKE_SPEED; // these variables are in order to avoid confusion with the coral and algae intake and outtake speeds
         double CORAL_OUTTAKE_SPEED = ALGAE_INTAKE_SPEED;
+
+        Pose2d positionOffset = new Pose2d(); // idk what this is supposed to be
+        double PIVOT_CURRENT_THRESHOLD = 0.0;
         
         public interface PID{
             double kP = 0.0;
             double kI = 0.0;
             double kD = 0.0;
+            double MAX_VELOCITY = 0.0;
+            double MAX_ACCELERATION = 0.0;
+        }
+        public interface FF{
             double kA = 0.0;
             double kS = 0.0;
             double kV = 0.0;
-            double MAX_VELOCITY = 0.0;
-            double MAX_ACCELERATION = 0.0;
-   
+            double kG = 0.0;
         }
     }
 }
