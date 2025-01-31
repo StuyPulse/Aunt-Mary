@@ -30,6 +30,17 @@ public interface Settings {
 
         double FEED_HEIGHT_METERS = 0.4;
 
+        double RAMP_RATE = 0.1;
+
+        // FIND OUT REAL GEAR RATIO
+        double GEAR_RATIO = 1.0/5.0;
+        double CURRENT_LIMIT = 5.0;
+
+        // Magic motion, change RPS
+        double TARGET_CRUISE_VELOCITY = 0.0; //Rotations Per Second
+        double TARGET_ACCELERATION = 0.0; //Rotations Per Second^2
+        double TARGET_JERK = 0.0; //Rotations Per Second^3
+
         SmartNumber HEIGHT_TOLERANCE_METERS = new SmartNumber("Elevator/Height Tolerance (m)", 0.02);
     
         public interface PID {

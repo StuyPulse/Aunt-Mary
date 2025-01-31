@@ -1,48 +1,65 @@
 package com.stuypulse.robot.subsystems.elevator;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.ElevatorFeedforward;
-import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartNumber;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
-
-    private final DigitalInput bottomBumpSwitch;
-    private final DigitalInput topBumpSwitch;
-
     private final SmartNumber targetHeight;
-
-    private final Controller controller;
-
-    private boolean hasBeenReset;
+    private final DigitalInput bumpSwitchTop, bumpSwitchBottom;
 
     public ElevatorImpl() {
         motor = new TalonFX(Ports.Elevator.MOTOR);
-
-        bottomBumpSwitch = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
-        topBumpSwitch = new DigitalInput(Ports.Elevator.TOP_SWITCH);
-
         targetHeight = new SmartNumber("Elevator/Target Height", Constants.Elevator.MIN_HEIGHT_METERS);
 
-        MotionProfile motionProfile = new MotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+        bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
+        bumpSwitchTop = new DigitalInput(Ports.Elevator.TOP_SWITCH);
         
-        controller = new MotorFeedforward(Settings.Elevator.FF.kS, Settings.Elevator.FF.kV, Settings.Elevator.FF.kA).position()
-            .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
-            .add(new PIDController(Settings.Elevator.PID.kP, Settings.Elevator.PID.kI, Settings.Elevator.PID.kD))
-            .setSetpointFilter(motionProfile);
+        TalonFXConfiguration elevatorMotorConfig = new TalonFXConfiguration();
+
+        Slot0Configs slot0 = new Slot0Configs();
+
+        slot0.kS = Settings.Elevator.FF.kS.getAsDouble();
+        slot0.kV = Settings.Elevator.FF.kV.getAsDouble();
+        slot0.kA = Settings.Elevator.FF.kA.getAsDouble();
+        slot0.kG = Settings.Elevator.FF.kG.getAsDouble();
+        slot0.kP = Settings.Elevator.PID.kP.getAsDouble();
+        slot0.kI = Settings.Elevator.PID.kI.getAsDouble();
+        slot0.kD = Settings.Elevator.PID.kD.getAsDouble();
+
+        elevatorMotorConfig.Slot0 = slot0;
         
-        hasBeenReset = false;
+        // Base motor configs
+        elevatorMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        elevatorMotorConfig.Feedback.SensorToMechanismRatio = Settings.Elevator.GEAR_RATIO;
+
+        // Current limiting
+        elevatorMotorConfig.CurrentLimits.StatorCurrentLimit = Settings.Elevator.CURRENT_LIMIT;
+        elevatorMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
+        // Ramp motor voltage
+        elevatorMotorConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Elevator.RAMP_RATE;
+        elevatorMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Elevator.RAMP_RATE;
+    
+        var elevatorMotionMagicConfigs = elevatorMotorConfig.MotionMagic;
+        elevatorMotionMagicConfigs.MotionMagicCruiseVelocity = Settings.Elevator.TARGET_CRUISE_VELOCITY;
+        elevatorMotionMagicConfigs.MotionMagicAcceleration = Settings.Elevator.TARGET_ACCELERATION;
+        elevatorMotionMagicConfigs.MotionMagicJerk = Settings.Elevator.TARGET_JERK;
+
+        motor.getConfigurator().apply(elevatorMotorConfig);        
     }
     
     @Override
@@ -71,31 +88,26 @@ public class ElevatorImpl extends Elevator {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS.get();
     }
 
-    private void setVoltage(double voltage) {
-        motor.setVoltage(voltage);
+    @Override
+    public boolean atBottom() {
+        return !bumpSwitchBottom.get();
+    }
+
+    @Override
+    public boolean atTop() {
+        return !bumpSwitchTop.get();
     }
 
     @Override
     public void periodic() {
         super.periodic();
 
-        if (bottomBumpSwitch.get()) {
-            hasBeenReset = true;
-            motor.setPosition(0);
-        }
-        
-        if (topBumpSwitch.get()) {
-            hasBeenReset = true;
-            motor.setPosition(Constants.Elevator.MAX_HEIGHT_METERS / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
-        }
-
-        if (!hasBeenReset) {
-            setVoltage(-1);
-        } else {
-            controller.update(getTargetHeight(), getCurrentHeight());
-            setVoltage(controller.getOutput());
-        }
+        final MotionMagicVoltage controlRequest = new MotionMagicVoltage(getTargetHeight()/Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
+        motor.setControl(controlRequest);
 
         SmartDashboard.putNumber("Elevator/Current Height", getCurrentHeight());
+        SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Motor Current", motor.getStatorCurrent().getValueAsDouble());
+   
     }
 }

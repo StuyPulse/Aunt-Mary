@@ -176,11 +176,16 @@ public class ElevatorVisualizer {
         // Top of Carriage is Target Height
         Elevator elevator = Elevator.getInstance();
 
-        outerBL.setPosition(Units.inchesToMeters(3), (elevator.getCurrentHeight() - Constants.Elevator.MIN_HEIGHT_METERS) * Settings.Elevator.Simulation.SCALE_FACTOR + Constants.Elevator.MIN_HEIGHT_METERS);
-        outerTR.setPosition(Units.inchesToMeters(12), (elevator.getCurrentHeight() - Constants.Elevator.MIN_HEIGHT_METERS) * Settings.Elevator.Simulation.SCALE_FACTOR + Units.inchesToMeters(47) + Constants.Elevator.MIN_HEIGHT_METERS);
-
-        innerBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(1));
-        innerTR.setPosition(Units.inchesToMeters(11), elevator.getCurrentHeight() + Units.inchesToMeters(8));
+        if (elevator.getTargetHeight() <= Units.inchesToMeters(47)) {
+            innerBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(1));
+            innerTR.setPosition(Units.inchesToMeters(11), elevator.getCurrentHeight() + Units.inchesToMeters(8));
+        } else {
+            outerBL.setPosition(Units.inchesToMeters(3), (elevator.getCurrentHeight() - Constants.Elevator.MIN_HEIGHT_METERS));
+            outerTR.setPosition(Units.inchesToMeters(12), (elevator.getCurrentHeight() - Constants.Elevator.MIN_HEIGHT_METERS) + Units.inchesToMeters(47));
+    
+            innerBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(1));
+            innerTR.setPosition(Units.inchesToMeters(11), elevator.getCurrentHeight() + Units.inchesToMeters(8));
+        }
 
     }
 

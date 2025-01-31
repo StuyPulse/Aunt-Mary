@@ -30,6 +30,8 @@ public abstract class Elevator extends SubsystemBase {
     public abstract double getTargetHeight();
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
+    public abstract boolean atTop();
+    public abstract boolean atBottom();
     
     public void periodic() {
         visualizer.update();
