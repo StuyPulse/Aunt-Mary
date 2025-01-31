@@ -14,7 +14,7 @@ public interface Ports {
         //should these be final?
     }
 
-    public interface Algae {
+    public interface Froggy {
         int ROLLER_PORT = 0; // CHANGE
         int PIVOT_PORT = 0; // CHANGE
         int PIVOT_ENCODER = 0;

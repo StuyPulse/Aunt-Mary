@@ -1,20 +1,20 @@
-package com.stuypulse.robot.subsystems.algae;
+package com.stuypulse.robot.subsystems.froggy;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class Algae extends SubsystemBase {
+public abstract class Froggy extends SubsystemBase {
 
-    public static final Algae instance;
+    public static final Froggy instance;
     
     static {
-        instance = new AlgaeImpl();
+        instance = new FroggyImpl();
     }    
     
-    public Algae() {
+    public Froggy() {
         
     }
 
-    public static Algae getInstance(){
+    public static Froggy getInstance(){
         return instance;
     }
 
@@ -36,4 +36,7 @@ public abstract class Algae extends SubsystemBase {
 
     public abstract boolean hasAlgae();
     
+    public abstract void stopRoller();
+
+    public abstract void stopPivot();
 }
