@@ -1,4 +1,6 @@
-public class AlgaeSim extends Algae {
+package com.stuypulse.robot.subsystems.algae;
+
+public class AlgaeSim {
     public AlgaeSim() {
 
     }

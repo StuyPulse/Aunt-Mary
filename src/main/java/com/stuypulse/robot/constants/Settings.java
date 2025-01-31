@@ -32,6 +32,12 @@ public interface Settings {
 
         Pose2d positionOffset = new Pose2d(); // idk what this is supposed to be
         double PIVOT_CURRENT_THRESHOLD = 0.0;
+
+        double GEAR_RATIO = 0;
+        double PIVOT_CURRENT_LIMIT = 0;
+        double STATOR_CURRENT_LIMIT = 0;
+        double ROLLER_CURRENT_THRESHOLD = 0;
+        double ANGLE_OFFSET = 0;
         
         public interface PID{
             double kP = 0.0;

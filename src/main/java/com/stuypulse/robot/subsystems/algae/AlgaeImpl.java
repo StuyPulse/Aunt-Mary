@@ -1,18 +1,17 @@
 package com.stuypulse.robot.subsystems.algae;
-import java.util.Set;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.AbsoluteEncoder;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.stuylib.control.angle.AngleController;
-import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.HighPassFilter;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AlgaeImpl extends Algae {
 
@@ -20,13 +19,10 @@ public class AlgaeImpl extends Algae {
     private TalonFX pivotMotor;
     private CANcoder pivotEncoder;
 
-    private final AngleController pivotController;
     private final IStream pivotCurrent;
+    private final IStream rollerCurrent;
 
-    public double targetAngle;
-    public double currentAngle;
-
-    
+    public double targetAngle;    
     
     public AlgaeImpl() {        
         rollerMotor = new TalonFX(Ports.Algae.ROLLER_PORT);
@@ -46,19 +42,30 @@ public class AlgaeImpl extends Algae {
         slot0.kD = Settings.Algae.PID.kD;     
 
         pivotConfig.Slot0 = slot0;
+        pivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        pivotConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.0;
+        pivotConfig.Feedback.SensorToMechanismRatio = Settings.Algae.GEAR_RATIO;
+        pivotConfig.CurrentLimits.StatorCurrentLimit = Settings.Algae.STATOR_CURRENT_LIMIT; 
+        pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true; 
+        pivotConfig.TorqueCurrent.PeakForwardTorqueCurrent = Settings.Algae.PIVOT_CURRENT_LIMIT; 
+        pivotConfig.TorqueCurrent.PeakReverseTorqueCurrent = -Settings.Algae.PIVOT_CURRENT_LIMIT;
+
 
         pivotMotor.getConfigurator().apply(pivotConfig);
         pivotMotor.setPosition(0); // not sure if this should be here
 
-        pivotController = new AnglePIDController(Settings.Algae.PID.kP, Settings.Algae.PID.kI, Settings.Algae.PID.kD);
-
-        pivotCurrent = IStream.create(() -> pivotMotor.getStatorCurrent().getValueAsDouble()) // no idea if this works
+        pivotCurrent = IStream.create(() -> pivotMotor.getStatorCurrent().getValueAsDouble()) // no idea if these work
             .filtered(new HighPassFilter(Settings.Algae.PIVOT_CURRENT_THRESHOLD));
+
+        rollerCurrent = IStream.create(() -> rollerMotor.getStatorCurrent().getValueAsDouble()) 
+            .filtered(new HighPassFilter(Settings.Algae.ROLLER_CURRENT_THRESHOLD));
+
+        
     }
     
     @Override
     public double getTargetAngle() {
-        return targetAngle;
+        return targetAngle + Settings.Algae.ANGLE_OFFSET;
     }
     
     @Override
@@ -86,13 +93,9 @@ public class AlgaeImpl extends Algae {
         rollerMotor.set(Settings.Algae.CORAL_INTAKE_SPEED); 
     }
 
-    
     public void outakeCoral() {
         rollerMotor.set(Settings.Algae.CORAL_OUTTAKE_SPEED);
     }
-
-
-
 
     @Override
     public boolean hasAlgae() {
@@ -101,13 +104,20 @@ public class AlgaeImpl extends Algae {
 
     @Override
     public boolean hasCoral() {
-        return true; // for now
+        return rollerCurrent.get() > Settings.Algae.ROLLER_CURRENT_THRESHOLD;
     }
+
 
     @Override
     public void periodic() {
         PositionVoltage controllerOutput = new PositionVoltage(targetAngle);
-        
+
         pivotMotor.setControl(controllerOutput);
+
+        SmartDashboard.putNumber("Algae/angle", getCurrentAngle());
+        SmartDashboard.putNumber("Algae/pivotCurrent", pivotCurrent.get());
+        SmartDashboard.putNumber("Algae/rollerCurrent", rollerCurrent.get());
+        SmartDashboard.putNumber("Algae/targetAngle", targetAngle);
+
     }
 }
