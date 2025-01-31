@@ -28,6 +28,10 @@ public abstract class CoralShooter extends SubsystemBase {
         return targetRPM.get();
     }
 
+    public void setTargetRPM(double targetRPM){
+        this.targetRPM.set(targetRPM);
+    }
+
     public abstract double getShooterRPM();
 
     public abstract void setShooterRPM(double targetRPM);

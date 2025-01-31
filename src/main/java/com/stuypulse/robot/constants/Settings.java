@@ -17,6 +17,11 @@ public interface Settings {
     public interface Shooter {
         double MAX_SHOOTER_RPM = 6000; // Max RPM of KrakenX60 (rpm)
         double TARGET_SHOOTER_RPM = 6000; // Target RPM of KrakenX60 (rpm)
+
+        SmartNumber ALGAE_TARGET_RPM = new SmartNumber("Algae Target RPM", 6000);
+        SmartNumber CORAL_TARGET_RPM = new SmartNumber("Coral Target RPM", 5000);
+        SmartNumber ALGAE_ACQUIRE_RPM = new SmartNumber("Algae Acquire RPM", 3000);
+
         double BB_DEBOUNCE = 0.0; 
         
         public interface PID {

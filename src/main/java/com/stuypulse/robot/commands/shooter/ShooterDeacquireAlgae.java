@@ -3,23 +3,19 @@ package com.stuypulse.robot.commands.shooter;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.shooter.CoralShooter;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ShootCoral extends Command {
+public class ShooterDeacquireAlgae extends InstantCommand {
+    
     private final CoralShooter shooter;
 
-    public ShootCoral(){
+    public ShooterDeacquireAlgae(){
         shooter = CoralShooter.getInstance();
         addRequirements(shooter);
     }
     
     @Override
-    public void execute(){
-        shooter.setShooterRPM(Settings.Shooter.MAX_SHOOTER_RPM);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        shooter.setShooterRPM(0);
+    public void initialize() {  
+        shooter.setShooterRPM(-Settings.Shooter.ALGAE_ACQUIRE_RPM.getAsDouble());
     }
 }

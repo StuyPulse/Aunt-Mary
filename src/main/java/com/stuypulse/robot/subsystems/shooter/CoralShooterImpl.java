@@ -22,6 +22,7 @@ public class CoralShooterImpl extends CoralShooter {
 
     private final DigitalInput motorBeam;
     private final BStream hasCoral;
+    private boolean hasAlgae;
 
     private final IStream driveCurrent;
     
@@ -66,6 +67,7 @@ public class CoralShooterImpl extends CoralShooter {
     }
 
     public void setShooterRPM(double targetRPM) {
+        this.setTargetRPM(targetRPM);
         driveMotor.set(targetRPM / Settings.Shooter.MAX_SHOOTER_RPM);
     }
     
@@ -74,9 +76,13 @@ public class CoralShooterImpl extends CoralShooter {
         return hasCoral.get();
     }
 
-    // Uses stall detection to determine if the shooter has algae by checking if the current is above a certain threshold
     @Override
-    public boolean hasAlgae() {
+    public boolean hasAlgae(){
+        return this.hasAlgae;
+    }
+
+    // Uses stall detection to determine if the shooter has algae by checking if the current is above a certain threshold
+    public boolean detectCurrentSpike() {
         return driveCurrent.get() > Settings.Shooter.DRIVE_CURRENT_THRESHOLD;
     }
     
@@ -84,6 +90,10 @@ public class CoralShooterImpl extends CoralShooter {
     @Override
     public void periodic() {
         super.periodic();
+
+        if (this.getTargetRPM() != 0){
+            this.hasAlgae = this.detectCurrentSpike();
+        }
 
         SmartDashboard.putNumber("Shooter/RPM", getShooterRPM());
 
