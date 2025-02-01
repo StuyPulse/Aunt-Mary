@@ -6,6 +6,6 @@ public class ClimbDriveToClimb extends ClimbDriveToAngle {
 
     public ClimbDriveToClimb() {
         super(Settings.Climb.CLIMBED_ANGLE);
+        
     }
-    
 }

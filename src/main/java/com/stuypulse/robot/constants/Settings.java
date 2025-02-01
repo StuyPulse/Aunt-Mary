@@ -34,5 +34,6 @@ public interface Settings {
         double INTAKE_ANGLE = 0.0;
         double ACQUIRED_ANGLE = 0.0;
         double CLIMBED_ANGLE = 0.0;
+        double CLIMB_ANGLE_TOLERANCE = 2.0;
     }
 }

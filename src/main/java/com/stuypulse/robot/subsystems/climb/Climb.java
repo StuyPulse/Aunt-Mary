@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.climb;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Climb extends SubsystemBase {
@@ -17,7 +18,7 @@ public abstract class Climb extends SubsystemBase {
 
     public abstract double getDegrees();
 
-    public abstract double getTargetDegrees();
+    public abstract Rotation2d getTargetAngle();
 
     public abstract void stop();
 
