@@ -35,6 +35,7 @@ public interface Settings {
         double STATOR_CURRENT_LIMIT = 0;
         double ROLLER_CURRENT_THRESHOLD = 0;
         double ANGLE_OFFSET = 0;
+
         double ROLLER_FF_RAMPING = 0;
         double PIVOT_FF_RAMPING = 0;
 		double ROLLER_PID_RAMPING = 0;

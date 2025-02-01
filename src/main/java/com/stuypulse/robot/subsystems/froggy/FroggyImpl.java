@@ -33,6 +33,7 @@ public class FroggyImpl extends Froggy {
         
 
         TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+        TalonFXConfiguration rollerConfig = new TalonFXConfiguration();      
 
         Slot0Configs slot0 = new Slot0Configs();
 
@@ -56,22 +57,32 @@ public class FroggyImpl extends Froggy {
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true; 
         pivotConfig.TorqueCurrent.PeakForwardTorqueCurrent = Settings.Froggy.PIVOT_CURRENT_LIMIT; 
         pivotConfig.TorqueCurrent.PeakReverseTorqueCurrent = -Settings.Froggy.PIVOT_CURRENT_LIMIT;
-        
-        pivotConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Settings.Froggy.ROLLER_FF_RAMPING;
-        pivotConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Settings.Froggy.ROLLER_PID_RAMPING;
-        
+
         pivotConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Froggy.PIVOT_PID_RAMPING;
         pivotConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Froggy.PIVOT_FF_RAMPING;
         
+        rollerConfig.Slot0 = slot0;
+        rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        rollerConfig.Feedback.SensorToMechanismRatio = Settings.Froggy.GEAR_RATIO;
+        rollerConfig.CurrentLimits.StatorCurrentLimit = Settings.Froggy.STATOR_CURRENT_LIMIT; 
+        rollerConfig.CurrentLimits.StatorCurrentLimitEnable = true; 
+        rollerConfig.TorqueCurrent.PeakForwardTorqueCurrent = Settings.Froggy.PIVOT_CURRENT_LIMIT; 
+        rollerConfig.TorqueCurrent.PeakReverseTorqueCurrent = -Settings.Froggy.PIVOT_CURRENT_LIMIT;
+        rollerConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Settings.Froggy.ROLLER_FF_RAMPING;
+        rollerConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Settings.Froggy.ROLLER_PID_RAMPING;
+
+
         pivotMotor.getConfigurator().apply(pivotConfig);
         pivotMotor.getConfigurator().apply(motionMagicConfigs);
-        pivotMotor.setPosition(0); // not sure if this should be here
+
+        rollerMotor.getConfigurator().apply(rollerConfig);
+
 
         pivotCurrent = IStream.create(() -> pivotMotor.getStatorCurrent().getValueAsDouble()) // no idea if these work
             .filtered(new HighPassFilter(Settings.Froggy.PIVOT_CURRENT_THRESHOLD));
 
         rollerCurrent = IStream.create(() -> rollerMotor.getStatorCurrent().getValueAsDouble()) 
-            .filtered(new HighPassFilter(Settings.Froggy.ROLLER_CURRENT_THRESHOLD));
+            .filtered(new HighPassFilter(Settings.Froggy.ROLLER_CURRENT_THRESHOLD));        
 
     }
     
