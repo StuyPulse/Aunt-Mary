@@ -2,10 +2,9 @@ package com.stuypulse.robot.commands.arm;
 
 import com.stuypulse.robot.constants.Settings;
 
-
-public class ArmMoveToL3 extends ArmMoveToAngle{
-    public ArmMoveToL3(){
-        super(Settings.Arm.L3_ANGLE);
+public class ArmMoveToL4Back extends ArmMoveToAngle {
+    public ArmMoveToL4Back(){
+        super(Settings.Arm.L4_ANGLE_BACK);
     }
     @Override
     public void initialize(){

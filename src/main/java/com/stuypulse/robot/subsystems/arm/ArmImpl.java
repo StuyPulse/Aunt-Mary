@@ -39,9 +39,7 @@ public class ArmImpl extends Arm {
     private TalonFX armMotor;
 
     private CANcoder armEncoder;
-    static {
-        instance = new ArmImpl();
-    }
+    
 
     public ArmImpl() {
         
@@ -67,7 +65,7 @@ public class ArmImpl extends Arm {
         config.Slot0 = slot0;
         config.Feedback.SensorToMechanismRatio = Settings.Arm.GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = armEncoder.getDeviceID();
-        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
 
         MotionMagicConfigs motionMagicConfigs = config.MotionMagic;
@@ -134,6 +132,8 @@ public class ArmImpl extends Arm {
         final MotionMagicVelocityVoltage m_request = new MotionMagicVelocityVoltage(Settings.Arm.MotionMagic.MAX_VEL);
         armMotor.setControl(m_request);
 
+        SmartDashboard.putNumber("Arm/targetAngle", getTargetAngle());
+        SmartDashboard.putNumber("Arm/currentAngle",getArmAngle());
         
         
     }

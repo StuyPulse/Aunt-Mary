@@ -33,11 +33,17 @@ public interface Settings {
             double kG = 0;
         }
 
-        double L2_ANGLE = 0;
-        double L3_ANGLE = 0;
-        double L4_ANGLE = 0;
+        double L2_ANGLE_FRONT = 0;
+        double L3_ANGLE_FRONT = 0;
+        double L4_ANGLE_FRONT = 0;
+
+        double L2_ANGLE_BACK = 0;
+        double L3_ANGLE_BACK = 0;
+        double L4_ANGLE_BACK = 0;
+
         double FUNNEL_ANGLE = 0;
         double GEAR_RATIO = 0;
+        double BARGE_ANGLE = 0;
 
         public interface MotionMagic{
             double MAX_VEL = 0;
