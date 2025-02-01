@@ -7,5 +7,8 @@ public class ArmMoveToL3 extends ArmMoveToAngle{
     public ArmMoveToL3(){
         super(Settings.Arm.L3_ANGLE);
     }
-
+    @Override
+    public void initialize(){
+        super.initialize();
+    }
 }

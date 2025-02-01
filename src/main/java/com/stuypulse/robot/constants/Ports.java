@@ -15,5 +15,6 @@ public interface Ports {
 
     public interface Arm {
         int ARM_MOTOR = 0;
+        int ARM_ENCODER = 0;
     }
 }

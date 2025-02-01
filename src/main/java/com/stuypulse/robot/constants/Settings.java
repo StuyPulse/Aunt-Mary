@@ -18,8 +18,7 @@ public interface Settings {
 
     public interface Arm {
 
-            double MAX_VEL = 0;
-            double MAX_ACCEL = 0;
+            
         public interface PID {
             double kP = 0;
             double kI = 0;
@@ -37,6 +36,8 @@ public interface Settings {
         double L2_ANGLE = 0;
         double L3_ANGLE = 0;
         double L4_ANGLE = 0;
+        double FUNNEL_ANGLE = 0;
+        double GEAR_RATIO = 0;
 
         public interface MotionMagic{
             double MAX_VEL = 0;
