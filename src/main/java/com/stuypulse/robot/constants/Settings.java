@@ -15,56 +15,30 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Settings {  
     public interface Shooter {
-        double MAX_SHOOTER_RPM = 6000; // Max RPM of KrakenX60 (rpm)
-        double TARGET_SHOOTER_RPM = 6000; // Target RPM of KrakenX60 (rpm)
-
-        SmartNumber ALGAE_TARGET_RPM = new SmartNumber("Algae Target RPM", 6000);
-        SmartNumber CORAL_TARGET_RPM = new SmartNumber("Coral Target RPM", 5000);
-        SmartNumber ALGAE_ACQUIRE_RPM = new SmartNumber("Algae Acquire RPM", 3000);
+        SmartNumber ALGAE_FRONT_SPEED = new SmartNumber("Algae Target Speed", 1);
+        SmartNumber CORAL_FRONT_SPEED = new SmartNumber("Coral Target Speed",0.75);
+        SmartNumber ALGAE_BACK_SPEED = new SmartNumber("Algae Target Speed", 1);
+        SmartNumber CORAL_BACK_SPEED = new SmartNumber("Coral Target Speed",0.75);
+        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
+        SmartNumber ALGAE_DEACQUIRE_SPEED = new SmartNumber("Algae Deacquire Speed", 0.45);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.3);
 
         double BB_DEBOUNCE = 0.0; 
-        
-        public interface PID {
-            // ADJUST LATER
-            SmartNumber kP = new SmartNumber("kP", 0);
-            SmartNumber kI = new SmartNumber("kI", 0);
-            SmartNumber kD = new SmartNumber("kD", 0);
-        }
+        double CORAL_STALLING_DEBOUNCE = 0.0;
+        double ALGAE_DEBOUNCE = 0.0;
 
-        public interface FeedForward {
-            // ADJUST LATER
-            SmartNumber kS = new SmartNumber("kS", 0);
-            SmartNumber kV = new SmartNumber("kV", 0);
-            SmartNumber kA = new SmartNumber("kA", 0);
-        }
-
-        double GEAR_RATIO = 0.0;
-        double DRIVE_CURRENT_THRESHOLD = 80;
-        double DRIVE_CURRENT_LIMIT = 120;
+        double DRIVE_CURRENT_THRESHOLD = 30;
+        double DRIVE_CURRENT_LIMIT = 40;
     }
 
     public interface Funnel {
-        double MAX_FUNNEL_RPM = 6000; // Max RPM of KrakenX60 (rpm)
-        double TARGET_FUNNEL_RPM = 6000; // Target RPM of KrakenX60 (rpm)
+        SmartNumber MOTOR_SPEED = new SmartNumber("Funnel Speed", 0.0);
         double BB_DEBOUNCE = 0.0;
+        double FUNNEL_STALLING = 0.0;
         double RAMP_RATE = 0.0; 
-
-        public interface PID {
-            // ADJUST LATER
-            SmartNumber kP = new SmartNumber("kP", 0);
-            SmartNumber kI = new SmartNumber("kI", 0);
-            SmartNumber kD = new SmartNumber("kD", 0);
-        }
-
-        public interface FeedForward {
-            // ADJUST LATER
-            SmartNumber kS = new SmartNumber("kS", 0);
-            SmartNumber kV = new SmartNumber("kV", 0);
-            SmartNumber kA = new SmartNumber("kA", 0);
-        }
     
         double GEAR_RATIO = 0.0;
-        double DRIVE_CURRENT_THRESHOLD = 80;
-        double DRIVE_CURRENT_LIMIT = 120;
+        double DRIVE_CURRENT_THRESHOLD = 30;
+        double DRIVE_CURRENT_LIMIT = 40;
     }
 }

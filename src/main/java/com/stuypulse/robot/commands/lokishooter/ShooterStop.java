@@ -1,20 +1,20 @@
-package com.stuypulse.robot.commands.shooter;
+package com.stuypulse.robot.commands.lokishooter;
 
-import com.stuypulse.robot.subsystems.shooter.CoralShooter;
+import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ShooterStop extends InstantCommand {
 
-    private final CoralShooter shooter;
+    private final LokiShooter shooter;
 
     public ShooterStop() {
-        shooter = CoralShooter.getInstance();
+        shooter = LokiShooter.getInstance();
         addRequirements(shooter);
     }
 
     @Override
     public void initialize() {
-        shooter.setShooterRPM(0);
+        shooter.setSpeed(0);
     }
 }
