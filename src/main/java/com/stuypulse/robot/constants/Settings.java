@@ -27,10 +27,12 @@ public interface Settings {
         double kD = 0.0;
 
         int CURRENT_LIMIT = 0;
-		double GEAR_RATIO = 25/1;
-        double MIN_ANGLE = 0.0;
-        double MAX_ANGLE = 270.0;
-		double REST_ANGLE = 0;
+		double GEAR_RATIO = 25;
         double RAMP_RATE = 0;
+
+        double STOW_ANGLE = 0.0;
+        double INTAKE_ANGLE = 0.0;
+        double ACQUIRED_ANGLE = 0.0;
+        double CLIMBED_ANGLE = 0.0;
     }
 }
