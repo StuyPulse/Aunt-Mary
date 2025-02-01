@@ -10,4 +10,14 @@ public class FroggyStow extends FroggySetPivot {
     public void initialize(){
         super.initialize();
     }
+
+    @Override
+    public void end(boolean interrupted){
+        froggy.stopRoller();
+    }
+
+    @Override
+    public boolean isFinished(){
+        return froggy.getCurrentAngle().equals(Settings.Froggy.STOW_ANGLE);
+    }
 }

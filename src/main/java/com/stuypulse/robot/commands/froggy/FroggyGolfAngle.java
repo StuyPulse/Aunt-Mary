@@ -2,11 +2,10 @@ package com.stuypulse.robot.commands.froggy;
 
 import com.stuypulse.robot.constants.Settings;
 
-public class FroggyGolf extends FroggySetPivot{
+public class FroggyGolfAngle extends FroggySetPivot{
 
-    public FroggyGolf(double angle){
+    public FroggyGolfAngle(){
         super(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE);
-        froggy.intakeAlgae();
     }
     public void initialize(){
         super.initialize();

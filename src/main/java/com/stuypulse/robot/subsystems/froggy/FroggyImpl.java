@@ -1,19 +1,26 @@
- package com.stuypulse.robot.subsystems.froggy;
+package com.stuypulse.robot.subsystems.froggy;
+
+import java.lang.annotation.Target;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.booleans.BStream;
+import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.HighPassFilter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.*;
 
 public class FroggyImpl extends Froggy {
 
@@ -21,10 +28,11 @@ public class FroggyImpl extends Froggy {
     private TalonFX pivotMotor;
     private CANcoder pivotEncoder;
 
-    private final IStream pivotCurrent;
     private final IStream rollerCurrent;
+    private final BStream hasCoral;
+    private final BStream hasAlgae;
 
-    public double targetAngle;    
+    public Rotation2d targetAngle = new Rotation2d();
     
     public FroggyImpl() {        
         rollerMotor = new TalonFX(Ports.Froggy.ROLLER_PORT);
@@ -43,11 +51,12 @@ public class FroggyImpl extends Froggy {
         slot0.kP = Settings.Froggy.PID.kP;
         slot0.kI = Settings.Froggy.PID.kI;
         slot0.kD = Settings.Froggy.PID.kD;     
+        slot0.kG = Settings.Froggy.PID.kG;
 
         MotionMagicConfigs motionMagicConfigs = pivotConfig.MotionMagic;
         
-        motionMagicConfigs.MotionMagicCruiseVelocity = Settings.Froggy.MotionMagic.MAX_VELOCITY; // Target cruise velocity of 80 rps
-        motionMagicConfigs.MotionMagicAcceleration = Settings.Froggy.MotionMagic.MAX_ACCELERATION; // Target acceleration of 160 rps/s (0.5 seconds)
+        motionMagicConfigs.MotionMagicCruiseVelocity = Settings.Froggy.MotionMagic.MAX_VELOCITY; 
+        motionMagicConfigs.MotionMagicAcceleration = Settings.Froggy.MotionMagic.MAX_ACCELERATION; 
 
 
         pivotConfig.Slot0 = slot0;
@@ -77,28 +86,28 @@ public class FroggyImpl extends Froggy {
 
         rollerMotor.getConfigurator().apply(rollerConfig);
 
+        rollerCurrent = IStream.create(() -> Math.abs(rollerMotor.getStatorCurrent().getValueAsDouble()));
 
-        pivotCurrent = IStream.create(() -> pivotMotor.getStatorCurrent().getValueAsDouble()) // no idea if these work
-            .filtered(new HighPassFilter(Settings.Froggy.PIVOT_CURRENT_THRESHOLD));
+        hasCoral = BStream.create(() -> rollerCurrent.getAsDouble() > Settings.Froggy.CORAL_CURRENT_THRESHOLD)
+            .filtered(new BDebounce.Rising(Settings.Froggy.ROLLER_DEBOUNCE_TIME));
 
-        rollerCurrent = IStream.create(() -> rollerMotor.getStatorCurrent().getValueAsDouble()) 
-            .filtered(new HighPassFilter(Settings.Froggy.ROLLER_CURRENT_THRESHOLD));        
-
+        hasAlgae = BStream.create(() -> rollerCurrent.getAsDouble() > Settings.Froggy.ALGAE_CURRENT_THRESHOLD)
+            .filtered(new BDebounce.Rising(Settings.Froggy.ROLLER_DEBOUNCE_TIME));
     }
     
     @Override
-    public double getTargetAngle() {
-        return targetAngle + Settings.Froggy.ANGLE_OFFSET;
+    public Rotation2d getTargetAngle() {
+        return targetAngle;
     }
     
     @Override
-    public void setTargetAngle(double targetAngle) {
-        this.targetAngle = targetAngle;
+    public void setTargetAngle(Rotation2d targetAngle) {
+        this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(getCurrentAngle().getDegrees(), Settings.Froggy.MINIMUM_ANGLE, Settings.Froggy.MAXIMUM_ANGLE));
     }
     
     @Override
-    public double getCurrentAngle() {
-        return pivotEncoder.getAbsolutePosition().getValueAsDouble() * 360; // i think its ok idk
+    public Rotation2d   getCurrentAngle() {
+        return Rotation2d.fromRotations(pivotEncoder.getAbsolutePosition().getValueAsDouble());
     }
     
     @Override
@@ -122,35 +131,29 @@ public class FroggyImpl extends Froggy {
 
     @Override
     public boolean hasAlgae() {
-        return pivotCurrent.get() > Settings.Froggy.PIVOT_CURRENT_THRESHOLD;
+        return hasAlgae.get();
     }
 
     @Override
     public boolean hasCoral() {
-        return rollerCurrent.get() > Settings.Froggy.ROLLER_CURRENT_THRESHOLD;
+        return hasCoral.get();
     }
     @Override
     public void stopRoller(){
         rollerMotor.set(0);
     }
-    @Override
-    public void stopPivot(){
-        pivotMotor.set(0);
-    }
+
+
 
     @Override
     public void periodic() {
-        final PositionVoltage controllerOutput = new PositionVoltage(targetAngle);
-
-        pivotMotor.setControl(controllerOutput);
-
-        final MotionMagicVelocityVoltage m_request = new MotionMagicVelocityVoltage(Settings.Froggy.MotionMagic.MAX_VELOCITY);
-        rollerMotor.setControl(m_request);
+        MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getDegrees());
+        rollerMotor.setControl(controllerOutput);
     
-        SmartDashboard.putNumber("Froggy/angle", getCurrentAngle());
-        SmartDashboard.putNumber("Froggy/pivotCurrent", pivotCurrent.get());
+        SmartDashboard.putNumber("Froggy/angle", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/rollerCurrent", rollerCurrent.get());
-        SmartDashboard.putNumber("Froggy/targetAngle", targetAngle);
-
+        SmartDashboard.putNumber("Froggy/targetAngle", targetAngle.getDegrees());
+        SmartDashboard.putBoolean("Froggy/hasAlgae", hasAlgae());
+        SmartDashboard.putBoolean("Froggy/hasCoral", hasCoral());
     }
 }

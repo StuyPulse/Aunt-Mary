@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.froggy;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Froggy extends SubsystemBase {
@@ -10,7 +11,7 @@ public abstract class Froggy extends SubsystemBase {
         instance = new FroggyImpl();
     }    
     
-    public Froggy() {
+    protected Froggy() {
         
     }
 
@@ -18,11 +19,11 @@ public abstract class Froggy extends SubsystemBase {
         return instance;
     }
 
-    public abstract void setTargetAngle(double targetAngle);
+    public abstract void setTargetAngle(Rotation2d targetAngle);
 
-    public abstract double getTargetAngle();
+    public abstract Rotation2d getTargetAngle();
     
-    public abstract double getCurrentAngle(); 
+    public abstract Rotation2d getCurrentAngle(); 
     
     public abstract void intakeAlgae();
 
@@ -37,6 +38,4 @@ public abstract class Froggy extends SubsystemBase {
     public abstract boolean hasAlgae();
     
     public abstract void stopRoller();
-
-    public abstract void stopPivot();
 }
