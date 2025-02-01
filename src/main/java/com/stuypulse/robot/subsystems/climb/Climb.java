@@ -9,6 +9,12 @@ public abstract class Climb extends SubsystemBase {
         instance = new ClimbImpl();
     }
     
+    public static Climb getInstance() {
+        return instance;
+    }
+
+    public abstract void setTargetDegrees(double targetDegrees);
+
     public abstract double getDegrees();
 
     public abstract double getTargetDegrees();
