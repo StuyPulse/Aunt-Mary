@@ -106,8 +106,8 @@ public class ElevatorImpl extends Elevator {
         motor.setControl(controlRequest);
 
         SmartDashboard.putNumber("Elevator/Current Height", getCurrentHeight());
-        SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Motor Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Motor Current", motor.getStatorCurrent().getValueAsDouble());
    
     }
 }
