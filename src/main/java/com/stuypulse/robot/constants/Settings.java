@@ -5,8 +5,8 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.network.SmartBoolean;
-import com.stuypulse.stuylib.network.SmartNumber;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -33,17 +33,20 @@ public interface Settings {
             double kG = 0;
         }
 
-        double L2_ANGLE_FRONT = 0;
-        double L3_ANGLE_FRONT = 0;
-        double L4_ANGLE_FRONT = 0;
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(0);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(0);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(0);
 
-        double L2_ANGLE_BACK = 0;
-        double L3_ANGLE_BACK = 0;
-        double L4_ANGLE_BACK = 0;
+        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(0);
+        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(0);
+        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(0);
 
-        double FUNNEL_ANGLE = 0;
+        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
         double GEAR_RATIO = 0;
-        double BARGE_ANGLE = 0;
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(0);
+        double OFFSET = 0;
+        double PID_RAMPING = 0;
+        double FF_RAMPING = 0;
 
         public interface MotionMagic{
             double MAX_VEL = 0;
