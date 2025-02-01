@@ -74,12 +74,6 @@ public class ElevatorSimu extends Elevator {
     public boolean atTargetHeight() {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS.get();
     }
-
-    // atTop() and atBottom() are unused
-    @Override
-    public boolean atTop() {
-        return false;
-    }
     
     @Override
     public boolean atBottom() {

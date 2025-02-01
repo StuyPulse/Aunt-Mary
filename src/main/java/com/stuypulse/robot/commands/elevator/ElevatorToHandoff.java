@@ -7,7 +7,4 @@ public class ElevatorToHandoff extends ElevatorToHeight{
         super(Elevator.HANDOFF_HEIGHT_METERS);
     }
 
-    public void initialize() {
-        super.initialize();
-    }
 }

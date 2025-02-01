@@ -17,6 +17,8 @@ public class Constants {
 
             double POSITION_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP;
             double VELOCITY_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP / 60;
+
+            double DISTANCE_PER_ROTATION = 0.0;
         }
     }
 }

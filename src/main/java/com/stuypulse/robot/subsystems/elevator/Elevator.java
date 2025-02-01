@@ -2,6 +2,7 @@ package com.stuypulse.robot.subsystems.elevator;
 
 import com.stuypulse.robot.Robot;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Elevator extends SubsystemBase {
@@ -30,7 +31,6 @@ public abstract class Elevator extends SubsystemBase {
     public abstract double getTargetHeight();
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
-    public abstract boolean atTop();
     public abstract boolean atBottom();
     
     public void periodic() {

@@ -5,7 +5,6 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 /*-
@@ -16,7 +15,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Settings {
     
-    double DT = 0.020;
+    double DT = 0.020; // 20ms Differential Time
 
     public interface Elevator {
         SmartNumber MAX_VELOCITY_METERS_PER_SECOND = new SmartNumber("Elevator/Max Velocity (m per s)", 1.0);
@@ -24,11 +23,13 @@ public interface Settings {
 
         // CHANGE
         double HANDOFF_HEIGHT_METERS = 0.1;
-        double L2_HEIGHT_METERS = 0.25;
-        double L3_HEIGHT_METERS = 0.5;
-        double L4_HEIGHT_METERS = 0.75;
-
-        double FEED_HEIGHT_METERS = 0.4;
+        // front and funnel
+        double ALT_L2_HEIGHT_METERS = 0.25;
+        double ALT_L3_HEIGHT_METERS = 0.5;
+        double ALT_L4_HEIGHT_METERS = 0.75;
+        double FUNNEL_L2_HEIGHT_METERS = 0.3; // funnel side; should be higher than L2
+        double FUNNEL_L3_HEIGHT_METERS = 0.55; // funnel side; should be higher than L3
+        double FUNNEL_L4_HEIGHT_METERS = 0.8;
 
         double RAMP_RATE = 0.1;
 
@@ -44,9 +45,10 @@ public interface Settings {
         SmartNumber HEIGHT_TOLERANCE_METERS = new SmartNumber("Elevator/Height Tolerance (m)", 0.02);
     
         public interface PID {
-            SmartNumber kP = new SmartNumber("Elevator/Controller/kP",10);
+            //tune
+            SmartNumber kP = new SmartNumber("Elevator/Controller/kP",0.0);
             SmartNumber kI = new SmartNumber("Elevator/Controller/kI",0.0);
-            SmartNumber kD = new SmartNumber("Elevator/Controller/kD",0.2);
+            SmartNumber kD = new SmartNumber("Elevator/Controller/kD",0.0);
         }
 
         public interface FF {
