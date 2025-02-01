@@ -6,4 +6,8 @@ public class ElevatorToBottom extends ElevatorToHeight{
     public ElevatorToBottom(){
         super(Elevator.MIN_HEIGHT_METERS);
     }
+
+    public void initialize() {
+        super.initialize();
+    }
 }
