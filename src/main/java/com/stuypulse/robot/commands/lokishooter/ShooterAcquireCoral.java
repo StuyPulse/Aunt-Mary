@@ -18,4 +18,14 @@ public class ShooterAcquireCoral extends InstantCommand {
     public void initialize() {  
         shooter.setSpeed(-Settings.Shooter.CORAL_ACQUIRE_SPEED.getAsDouble());
     }
+
+    @Override
+    public boolean isFinished(){
+        return shooter.hasCoral();
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        shooter.setSpeed(0);
+    }
 }

@@ -21,4 +21,14 @@ public class ShooterShootBack extends InstantCommand {
             shooter.setSpeed(-Settings.Shooter.CORAL_BACK_SPEED.getAsDouble());
         }
     }
+
+    @Override
+    public boolean isFinished(){
+        return !shooter.hasAlgae() && !shooter.hasCoral();
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        shooter.setSpeed(0);
+    }
 }

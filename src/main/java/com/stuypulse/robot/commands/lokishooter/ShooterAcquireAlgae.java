@@ -18,4 +18,14 @@ public class ShooterAcquireAlgae extends InstantCommand {
     public void initialize() {
         shooter.setSpeed(Settings.Shooter.ALGAE_ACQUIRE_SPEED.getAsDouble());
     }
+
+    @Override
+    public boolean isFinished(){
+        return shooter.hasAlgae();
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        shooter.setSpeed(0);
+    }
 }

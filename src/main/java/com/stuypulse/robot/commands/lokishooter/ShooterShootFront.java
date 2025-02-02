@@ -21,4 +21,14 @@ public class ShooterShootFront extends InstantCommand {
             shooter.setSpeed(Settings.Shooter.CORAL_FRONT_SPEED.getAsDouble());
         }
     }
+
+    @Override
+    public boolean isFinished(){
+        return !shooter.hasAlgae() && !shooter.hasCoral();
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        shooter.setSpeed(0);
+    }
 }
