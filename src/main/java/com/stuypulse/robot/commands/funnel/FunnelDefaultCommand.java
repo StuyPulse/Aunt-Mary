@@ -8,11 +8,15 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class FunnelDefaultCommand extends Command {
     private final CoralFunnel funnel;
+    private final LokiShooter shooter;
+
     private boolean stopped = false;
     private boolean reversed = false;
 
     public FunnelDefaultCommand() {
         funnel = CoralFunnel.getInstance();
+        shooter = LokiShooter.getInstance();
+        
         addRequirements(funnel);
     }
 
@@ -24,7 +28,8 @@ public class FunnelDefaultCommand extends Command {
     }
 
     private void setState(){
-        stopped = LokiShooter.getInstance().hasCoral();
+        stopped = shooter.hasCoral();
+
         if(funnel.isStalling() && !reversed) {
             reversed = true;
 
