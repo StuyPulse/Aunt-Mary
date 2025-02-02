@@ -49,26 +49,26 @@ public class LokiShooterImpl extends LokiShooter {
 
     @Override
     public void setSpeed(double speed){
-        this.shooterMotor.set(speed);
+        shooterMotor.set(speed);
     }
 
     @Override
     public double getSpeed(){
-        return this.shooterMotor.get();
+        return shooterMotor.get();
     }
     
     @Override
     public boolean hasCoral() {
-        return this.hasCoral.get();
+        return hasCoral.get();
     }
 
     @Override
     public boolean hasAlgae(){
-        return this.hasAlgae.get();
+        return hasAlgae.get();
     }
 
     // Uses stall detection to determine if the shooter has algae by checking if the current is above a certain threshold
-    public boolean detectCurrentSpike() {
+    private boolean detectCurrentSpike() {
         return shooterCurrent.get() > Settings.Shooter.DRIVE_CURRENT_THRESHOLD;
     }
     

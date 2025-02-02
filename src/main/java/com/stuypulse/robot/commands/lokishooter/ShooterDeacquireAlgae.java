@@ -3,9 +3,9 @@ package com.stuypulse.robot.commands.lokishooter;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShooterDeacquireAlgae extends InstantCommand {
+public class ShooterDeacquireAlgae extends Command {
     
     private final LokiShooter shooter;
 

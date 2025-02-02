@@ -53,17 +53,17 @@ public class CoralFunnelImpl extends CoralFunnel {
 
     @Override
     public void forward() {
-        this.funnelMotor.set(Settings.Funnel.MOTOR_SPEED.getAsDouble());
+        funnelMotor.set(Settings.Funnel.MOTOR_SPEED.getAsDouble());
     }
 
     @Override
     public void reverse() {
-        this.funnelMotor.set(-Settings.Funnel.MOTOR_SPEED.getAsDouble());
+        funnelMotor.set(-Settings.Funnel.MOTOR_SPEED.getAsDouble());
     }
 
     @Override
     public void stop() {
-        this.funnelMotor.set(0);
+        funnelMotor.set(0);
     }
 
     public boolean isStalling() {

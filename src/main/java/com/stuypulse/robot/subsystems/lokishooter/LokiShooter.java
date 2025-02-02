@@ -9,6 +9,7 @@ public abstract class LokiShooter extends SubsystemBase {
     static {
         instance = new LokiShooterImpl();
     }
+    
     public static LokiShooter getInstance() {
         return instance;
     }

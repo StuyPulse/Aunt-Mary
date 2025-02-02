@@ -14,9 +14,6 @@ public abstract class CoralFunnel extends SubsystemBase{
         return instance;
     }
 
-    public CoralFunnel() {
-    }
-
     public abstract void forward();
 
     public abstract void reverse();
