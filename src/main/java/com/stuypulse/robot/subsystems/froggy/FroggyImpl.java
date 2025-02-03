@@ -45,13 +45,13 @@ public class FroggyImpl extends Froggy {
 
         Slot0Configs slot0 = new Slot0Configs();
 
-        slot0.kS = Settings.Froggy.FF.kS;
-        slot0.kV = Settings.Froggy.FF.kV;
-        slot0.kA = Settings.Froggy.FF.kA;
-        slot0.kP = Settings.Froggy.PID.kP;
-        slot0.kI = Settings.Froggy.PID.kI;
-        slot0.kD = Settings.Froggy.PID.kD;     
-        slot0.kG = Settings.Froggy.PID.kG;
+        slot0.kS = Settings.Froggy.FF.kS.getAsDouble();
+        slot0.kV = Settings.Froggy.FF.kV.getAsDouble();
+        slot0.kA = Settings.Froggy.FF.kA.getAsDouble();
+        slot0.kP = Settings.Froggy.PID.kP.getAsDouble();
+        slot0.kI = Settings.Froggy.PID.kI.getAsDouble();
+        slot0.kD = Settings.Froggy.PID.kD.getAsDouble();     
+        slot0.kG = Settings.Froggy.PID.kG.getAsDouble();
         slot0.GravityType = GravityTypeValue.Arm_Cosine;    
 
         MotionMagicConfigs motionMagicConfigs = pivotConfig.MotionMagic;
@@ -140,6 +140,10 @@ public class FroggyImpl extends Froggy {
         rollerMotor.set(Settings.Froggy.CORAL_OUTTAKE_SPEED);
     }
 
+    public void holdAlgae(){
+        rollerMotor.set(Settings.Froggy.HOLD_SPEED);
+    }
+
     @Override
     public boolean hasAlgae() {
         return hasAlgae.get();
@@ -156,7 +160,7 @@ public class FroggyImpl extends Froggy {
 
     @Override
     public void periodic() {
-        MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getDegrees());
+        MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getRotations());
         rollerMotor.setControl(controllerOutput);
     
         SmartDashboard.putNumber("Froggy/angle", getCurrentAngle().getDegrees());

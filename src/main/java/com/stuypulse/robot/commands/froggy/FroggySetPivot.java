@@ -21,13 +21,4 @@ public class FroggySetPivot extends InstantCommand {
         froggy.setTargetAngle(targetAngle);
     }
 
-    @Override
-    public void end(boolean interrupted){
-        froggy.stopRoller();
-    }
-
-    @Override
-    public boolean isFinished(){
-        return froggy.getCurrentAngle().equals(targetAngle);
-    }
 }

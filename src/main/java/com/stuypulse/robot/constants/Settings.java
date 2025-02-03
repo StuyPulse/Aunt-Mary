@@ -5,6 +5,8 @@
 
 package com.stuypulse.robot.constants;
 
+import com.stuypulse.stuylib.network.SmartNumber;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 
 /*-
@@ -47,18 +49,18 @@ public interface Settings {
         double MAXIMUM_ANGLE = 0.0;
 		double MAGNET_OFFSET = 0.0;
 		double ENCODER_GEAR_RATIO = 0.0;
+        double HOLD_SPEED = 0.0;
         
         public interface PID{
-            double kP = 0.0;
-            double kI = 0.0;
-            double kD = 0.0;
-            double kG = 0.0;
+            SmartNumber kP = new SmartNumber("kP", 0.0);
+            SmartNumber kI = new SmartNumber("kI", 0.0);
+            SmartNumber kD = new SmartNumber("kD", 0.0);
+            SmartNumber kG = new SmartNumber("kG", 0.0);
         }
         public interface FF{
-            double kA = 0.0;
-            double kS = 0.0;
-            double kV = 0.0;
-            double kG = 0.0;
+            SmartNumber kA = new SmartNumber("kA", 0.0);
+            SmartNumber kS = new SmartNumber("kS", 0.0);
+            SmartNumber kV = new SmartNumber("kV", 0.0);
         }
         public interface MotionMagic{
             double MAX_VELOCITY = 0.0;
