@@ -10,6 +10,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -52,6 +53,7 @@ public class FroggyImpl extends Froggy {
         slot0.kI = Settings.Froggy.PID.kI;
         slot0.kD = Settings.Froggy.PID.kD;     
         slot0.kG = Settings.Froggy.PID.kG;
+        slot0.GravityType = GravityTypeValue.Arm_Cosine;    
 
         MotionMagicConfigs motionMagicConfigs = pivotConfig.MotionMagic;
         

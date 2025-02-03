@@ -9,7 +9,6 @@ public class FroggyAlgaeGroundPickup extends FroggySetPivot {
     }
     public void initialize(){
         super.initialize();
-        froggy.intakeAlgae();
     }
     
 }
