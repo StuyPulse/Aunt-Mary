@@ -5,6 +5,8 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.elevator.ElevatorToBottom;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -15,12 +17,15 @@ public class Robot extends TimedRobot {
     private Command auto;
 
     /*************************/
-    /*** ROBOT SCHEDULEING ***/
+    /*** ROBOT SCHEDULING ***/
     /*************************/
 
     @Override
     public void robotInit() {
         robot = new RobotContainer();
+        
+        // Check with Philip to automatically reset elevator encoder
+        // new ElevatorToBottom().schedule();
     }
 
     @Override
