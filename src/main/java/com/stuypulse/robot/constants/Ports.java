@@ -13,6 +13,12 @@ public interface Ports {
         int DEBUGGER = 2;
     }
 
+
+    public interface Arm {
+        int ARM_MOTOR = 0;
+        int ARM_ENCODER = 0;
+    }
+  
     // Set values later
     public interface Shooter {
         int MOTOR = 0;
