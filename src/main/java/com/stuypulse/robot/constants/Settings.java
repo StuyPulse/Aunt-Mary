@@ -45,6 +45,8 @@ public interface Settings {
         
         double MINIMUM_ANGLE = 0.0;
         double MAXIMUM_ANGLE = 0.0;
+		double MAGNET_OFFSET = 0.0;
+		double ENCODER_GEAR_RATIO = 0.0;
         
         public interface PID{
             double kP = 0.0;
@@ -61,6 +63,7 @@ public interface Settings {
         public interface MotionMagic{
             double MAX_VELOCITY = 0.0;
             double MAX_ACCELERATION = 0.0;
+            double MAX_JERK = 0.0;
         }
     }
 }
