@@ -23,5 +23,10 @@ public interface Ports {
     public interface Funnel {
         int MOTOR = 0;
         int IR = 1;
+      
+    public interface Elevator {
+        int MOTOR = 0;
+        int BOTTOM_SWITCH = 1;
+        int TOP_SWITCH = 2;
     }
 }
