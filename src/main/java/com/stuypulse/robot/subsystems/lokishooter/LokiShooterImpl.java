@@ -43,6 +43,9 @@ public class LokiShooterImpl extends LokiShooter {
         shooterConfig.TorqueCurrent.PeakReverseTorqueCurrent = -Settings.Shooter.DRIVE_CURRENT_LIMIT;
         shooterConfig.CurrentLimits.StatorCurrentLimit = Settings.Shooter.DRIVE_CURRENT_LIMIT;
         shooterConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        //Ramp Motor Voltage
+        shooterConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Shooter.RAMP_RATE;
+        shooterConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Shooter.RAMP_RATE;
 
         shooterMotor.getConfigurator().apply(shooterConfig);
     }

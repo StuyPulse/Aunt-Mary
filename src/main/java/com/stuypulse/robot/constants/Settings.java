@@ -26,6 +26,8 @@ public interface Settings {
         double BB_DEBOUNCE = 0.0; 
         double CORAL_STALLING_DEBOUNCE = 0.0;
         double ALGAE_DEBOUNCE = 0.0;
+        
+        double RAMP_RATE = 0.0;
 
         double DRIVE_CURRENT_THRESHOLD = 30;
         double DRIVE_CURRENT_LIMIT = 40;
@@ -35,6 +37,7 @@ public interface Settings {
         SmartNumber MOTOR_SPEED = new SmartNumber("Funnel Speed", 0.0);
         double BB_DEBOUNCE = 0.0;
         double FUNNEL_STALLING = 0.0;
+
         double RAMP_RATE = 0.0; 
     
         double GEAR_RATIO = 0.0;
