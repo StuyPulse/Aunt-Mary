@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.820109340122767,
-        "y": 3.9438973563058033
+        "y": 4.034775573328922
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.837145996093748,
-        "y": 4.320285034179685
+        "y": 4.411163251202804
       },
       "isLocked": false,
       "linkedName": "Red G"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 5.820109340122767,
-        "y": 4.075752912248884
+        "y": 4.354403817026238
       },
       "prevControl": {
         "x": 5.846521207674518,
-        "y": 3.8271520006406825
+        "y": 4.105802905418036
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

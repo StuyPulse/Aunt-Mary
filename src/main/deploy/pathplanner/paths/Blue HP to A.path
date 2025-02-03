@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1932754309125437,
-        "y": 4.134117906650523
+        "x": 3.150582055307095,
+        "y": 3.9865597701223434
       },
       "isLocked": false,
       "linkedName": "Blue Top HP"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 3.1605547223772317,
-        "y": 4.104164341517857
+        "y": 4.0015230028252855
       },
       "prevControl": {
-        "x": 1.9665117191560932,
-        "y": 6.763312887636926
+        "x": 1.9121515310074628,
+        "y": 7.003184311671886
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8693612234933035,
-        "y": 5.182472446986607
+        "x": 3.8223037870306715,
+        "y": 5.166979410773829
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6679791503469796,
-        "y": 5.034333118598468
+        "x": 3.6209217138843477,
+        "y": 5.01884008238569
       },
       "isLocked": false,
       "linkedName": "Red K"
     },
     {
       "anchor": {
-        "x": 3.7562255859375,
-        "y": 5.092086356026786
+        "x": 3.5396619294819076,
+        "y": 4.973269959499961
       },
       "prevControl": {
-        "x": 3.97496778971012,
-        "y": 5.213131175365317
+        "x": 3.7584041332545275,
+        "y": 5.094314778838492
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

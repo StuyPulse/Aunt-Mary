@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9904980431760175,
-        "y": 1.010481292744868
+        "x": 1.8318287411423102,
+        "y": 0.7885515086018793
       },
       "isLocked": false,
       "linkedName": "Red C"
@@ -20,8 +20,8 @@
         "y": 0.6684727260044645
       },
       "prevControl": {
-        "x": 3.6049578168463015,
-        "y": 2.6828911448719746
+        "x": 3.661116210735485,
+        "y": 2.6932082612352097
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

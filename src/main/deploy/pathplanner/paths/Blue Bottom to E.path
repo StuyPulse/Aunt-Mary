@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.054603794642857,
-        "y": 2.939958844866071
+        "x": 7.035958039133171,
+        "y": 2.849531645523874
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.120770478895419,
-        "y": 2.7613264109041573
+        "x": 5.180015207556129,
+        "y": 2.8742644624160394
       },
       "isLocked": false,
       "linkedName": "Blue Bottom Start"
     },
     {
       "anchor": {
-        "x": 5.085033743722098,
-        "y": 2.8322300502232145
+        "x": 5.110584700734991,
+        "y": 2.849531645523874
       },
       "prevControl": {
-        "x": 6.7184896672125705,
-        "y": 2.9420030344863575
+        "x": 6.6547514458964585,
+        "y": 2.8423416932704955
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5980522677768403,
-        "y": 2.723956485314284
+        "x": 3.639901538670854,
+        "y": 2.7921634583898163
       },
       "isLocked": false,
       "linkedName": "Blue Bottom HP"
     },
     {
       "anchor": {
-        "x": 3.8,
-        "y": 2.9
+        "x": 3.8270274337969323,
+        "y": 2.895005738107782
       },
       "prevControl": {
-        "x": 1.8976108532772695,
-        "y": 0.930533293645422
+        "x": 1.822878676555069,
+        "y": 0.8458593891461255
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

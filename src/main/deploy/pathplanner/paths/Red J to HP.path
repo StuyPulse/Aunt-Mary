@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.080034964425223,
-        "y": 5.215678623744419
+        "x": 4.846759911587363,
+        "y": 5.311376714706421
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8901454078165498,
-        "y": 7.173394372431895
+        "x": 1.7224117132157866,
+        "y": 7.280426848527926
       },
       "isLocked": false,
       "linkedName": "Red J"
@@ -20,8 +20,8 @@
         "y": 7.357808576311384
       },
       "prevControl": {
-        "x": 4.724418605839899,
-        "y": 5.358761337985146
+        "x": 4.469871676867877,
+        "y": 5.657707038274106
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

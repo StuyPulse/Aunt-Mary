@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.1815625871930795,
-        "y": 4.055655779157366
+        "x": 7.141065125716359,
+        "y": 4.340860954083895
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.180440412248884,
-        "y": 3.7315512520926335
+        "x": 7.139942950772164,
+        "y": 4.016756427019162
       },
       "isLocked": false,
       "linkedName": "Blue Mid Top Start"
     },
     {
       "anchor": {
-        "x": 7.182,
-        "y": 3.948
+        "x": 7.157541952635111,
+        "y": 4.018959416841206
       },
       "prevControl": {
-        "x": 7.193753487723213,
-        "y": 4.240916660853794
+        "x": 7.169295440358324,
+        "y": 4.3118760776950005
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

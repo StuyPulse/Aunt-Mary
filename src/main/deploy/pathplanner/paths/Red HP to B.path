@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.192514052684397,
-        "y": 3.931605569855825
+        "x": 3.1168682045574316,
+        "y": 3.588944010723651
       },
       "isLocked": false,
       "linkedName": "Red Bottom HP"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 3.1605547223772317,
-        "y": 3.9716456821986608
+        "y": 3.682675818393105
       },
       "prevControl": {
-        "x": 1.9939397440866862,
-        "y": 1.2347650686382101
+        "x": 1.8696032400691402,
+        "y": 1.0389543883413999
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

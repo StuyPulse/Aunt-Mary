@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8,
-        "y": 2.9
+        "x": 3.8270274337969323,
+        "y": 2.895005738107782
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.946200623936616,
-        "y": 0.9732084913827661
+        "x": 2.044992915883796,
+        "y": 1.0479601352406644
       },
       "isLocked": false,
       "linkedName": "Blue C"
@@ -20,8 +20,8 @@
         "y": 0.6684727260044645
       },
       "prevControl": {
-        "x": 3.511886642582348,
-        "y": 2.594230782197969
+        "x": 3.41819503343677,
+        "y": 2.4579397041435245
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

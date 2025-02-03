@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8,
-        "y": 2.9
+        "x": 3.803906024129767,
+        "y": 2.8958895683288572
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.3669023786272305,
-        "y": 2.6266993931361604
+        "x": 4.370808402756997,
+        "y": 2.6225889614650177
       },
       "isLocked": false,
       "linkedName": "Red C"
     },
     {
       "anchor": {
-        "x": 3.8856837681361607,
-        "y": 2.8378919328962047
+        "x": 4.11959725932071,
+        "y": 2.715678641670629
       },
       "prevControl": {
-        "x": 3.2858302525111607,
-        "y": 3.127923148018973
+        "x": 3.5197437436957104,
+        "y": 3.0057098567933975
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

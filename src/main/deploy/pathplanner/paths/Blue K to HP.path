@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8693612234933035,
-        "y": 5.182472446986607
+        "x": 3.834556434029027,
+        "y": 5.170325339467902
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8362644346713775,
-        "y": 7.271188961804617
+        "x": 1.7947748695404604,
+        "y": 7.226896581228004
       },
       "isLocked": false,
       "linkedName": "Blue K"
@@ -20,8 +20,8 @@
         "y": 7.357808576311384
       },
       "prevControl": {
-        "x": 3.642967284783108,
-        "y": 5.4280678814513
+        "x": 3.6347683072498054,
+        "y": 5.434688067503154
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
