@@ -12,8 +12,6 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartNumber;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,12 +19,10 @@ public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
     private final SmartNumber targetHeight;
     private final DigitalInput bumpSwitchBottom;
-    private final Distance targetHeightMeters;
 
     public ElevatorImpl() {
         motor = new TalonFX(Ports.Elevator.MOTOR);
         targetHeight = new SmartNumber("Elevator/Target Height", Constants.Elevator.MIN_HEIGHT_METERS);
-        targetHeightMeters = Units.Meters.of(targetHeight.getAsDouble());
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
         
         TalonFXConfiguration elevatorMotorConfig = new TalonFXConfiguration();
@@ -56,8 +52,11 @@ public class ElevatorImpl extends Elevator {
         elevatorMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // Ramp motor voltage
-        elevatorMotorConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Elevator.RAMP_RATE;
-        elevatorMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Elevator.RAMP_RATE;
+        elevatorMotorConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Elevator.RAMP_RATE_VOLTAGE;
+        elevatorMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Elevator.RAMP_RATE_VOLTAGE;
+ 
+        elevatorMotorConfig.OpenLoopRamps.TorqueOpenLoopRampPeriod = Settings.Elevator.RAMP_RATE_CURRENT;
+        elevatorMotorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = Settings.Elevator.RAMP_RATE_CURRENT;
     
         var elevatorMotionMagicConfigs = elevatorMotorConfig.MotionMagic;
         elevatorMotionMagicConfigs.MotionMagicCruiseVelocity = Settings.Elevator.TARGET_CRUISE_VELOCITY;
@@ -81,7 +80,7 @@ public class ElevatorImpl extends Elevator {
 
     @Override
     public double getTargetHeight() {
-       return targetHeightMeters.magnitude();
+       return targetHeight.getAsDouble();
     }
 
     @Override

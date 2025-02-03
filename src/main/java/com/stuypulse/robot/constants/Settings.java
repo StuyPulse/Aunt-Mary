@@ -30,8 +30,9 @@ public interface Settings {
         double FUNNEL_L2_HEIGHT_METERS = 0.3; // funnel side; should be higher than L2
         double FUNNEL_L3_HEIGHT_METERS = 0.55; // funnel side; should be higher than L3
         double FUNNEL_L4_HEIGHT_METERS = 0.8;
-
-        double RAMP_RATE = 0.1;
+        
+        double RAMP_RATE_CURRENT = 1.0;
+        double RAMP_RATE_VOLTAGE = 0.1;
 
         // FIND OUT REAL GEAR RATIO
         double GEAR_RATIO = 1.0/5.0;

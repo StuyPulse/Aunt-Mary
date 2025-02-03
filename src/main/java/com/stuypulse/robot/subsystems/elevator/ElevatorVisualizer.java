@@ -25,11 +25,8 @@ public class ElevatorVisualizer {
     private final MechanismRoot2d elevatorBL;
     private final MechanismRoot2d elevatorTR;
 
-    private final MechanismRoot2d outerBL;
-    private final MechanismRoot2d outerTR;
-
-    private final MechanismRoot2d innerBL;
-    private final MechanismRoot2d innerTR;
+    private final MechanismRoot2d stageTwoBL;
+    private final MechanismRoot2d stageTwoTR;
 
     public static ElevatorVisualizer getInstance(){
         return instance;
@@ -38,7 +35,7 @@ public class ElevatorVisualizer {
     public ElevatorVisualizer() {
 
         // Mechanism2d
-        elevator2d = new Mechanism2d(Units.inchesToMeters(17), Units.inchesToMeters(150));
+        elevator2d = new Mechanism2d(Units.inchesToMeters(14), Units.inchesToMeters(150));
         
         // Stage One
         // Bottom Left Node 
@@ -46,7 +43,7 @@ public class ElevatorVisualizer {
 
         elevatorBL.append(new MechanismLigament2d(
             "Left Tower",
-            Units.inchesToMeters(47), 
+            Units.inchesToMeters(39), 
             90,
             10, 
             new Color8Bit(Color.kOrange)
@@ -55,7 +52,7 @@ public class ElevatorVisualizer {
 
         elevatorBL.append(new MechanismLigament2d(
             "Bottom Tower",
-            Units.inchesToMeters(11), 
+            Units.inchesToMeters(10), //Change
             0,
             10, 
             new Color8Bit(Color.kOrange)
@@ -63,11 +60,11 @@ public class ElevatorVisualizer {
         );
 
         // Top Right Node
-        elevatorTR = elevator2d.getRoot("Elevator TR", Units.inchesToMeters(13), Units.inchesToMeters(47) + Constants.Elevator.MIN_HEIGHT_METERS);
+        elevatorTR = elevator2d.getRoot("Elevator TR", Units.inchesToMeters(12), Units.inchesToMeters(39) + Constants.Elevator.MIN_HEIGHT_METERS);
 
         elevatorTR.append(new MechanismLigament2d(
             "Right Tower", 
-            Units.inchesToMeters(47),
+            Units.inchesToMeters(39),
             -90,
             10,
             new Color8Bit(Color.kOrange)
@@ -76,7 +73,7 @@ public class ElevatorVisualizer {
 
         elevatorTR.append(new MechanismLigament2d(
             "Top Side",
-            Units.inchesToMeters(11),
+            Units.inchesToMeters(10), //Change
             180, 
             10, 
             new Color8Bit(Color.kOrange)
@@ -85,20 +82,20 @@ public class ElevatorVisualizer {
 
         // Stage Two
         // Bottom Left Node
-        outerBL = elevator2d.getRoot("Outer BL", Units.inchesToMeters(3), Constants.Elevator.MIN_HEIGHT_METERS);
+        stageTwoBL = elevator2d.getRoot("Outer BL", Units.inchesToMeters(3), Constants.Elevator.MIN_HEIGHT_METERS);
 
-        outerBL.append(new MechanismLigament2d(
+        stageTwoBL.append(new MechanismLigament2d(
             "Left Side",
-            Units.inchesToMeters(47),
+            Units.inchesToMeters(35),
             90, 
             10,
             new Color8Bit(Color.kYellow)
             )
         );
     
-        outerBL.append(new MechanismLigament2d(
+        stageTwoBL.append(new MechanismLigament2d(
             "Bottom Side",
-            Units.inchesToMeters(9),
+            Units.inchesToMeters(6),
             0,
             10,
             new Color8Bit(Color.kYellow)
@@ -106,87 +103,34 @@ public class ElevatorVisualizer {
         );
         
         // Top Right Node
-        outerTR = elevator2d.getRoot("Outer TR", Units.inchesToMeters(12), Units.inchesToMeters(47) + Constants.Elevator.MIN_HEIGHT_METERS);
+        stageTwoTR = elevator2d.getRoot("Outer TR", Units.inchesToMeters(12), Units.inchesToMeters(47) + Constants.Elevator.MIN_HEIGHT_METERS);
 
-        outerTR.append(new MechanismLigament2d(
-            "Top Side",
-            Units.inchesToMeters(9),
-            180,
-            10,
-            new Color8Bit(Color.kYellow)
-            )
-        );
-
-        outerTR.append(new MechanismLigament2d(
+        stageTwoTR.append(new MechanismLigament2d(
             "Right Side",
-            Units.inchesToMeters(47),
+            Units.inchesToMeters(35),
             -90,
             10,
             new Color8Bit(Color.kYellow)
             )
         );
-        
-        // Carriage
-        // Bottom Left Node
-        innerBL = elevator2d.getRoot("Inner BL", Units.inchesToMeters(4), Units.inchesToMeters(1) + Constants.Elevator.MIN_HEIGHT_METERS);
 
-        innerBL.append(new MechanismLigament2d(
-            "Left Side",
-            Units.inchesToMeters(7),
-            90, 
-            10,
-            new Color8Bit(Color.kPink)
-            )
-        );
-
-        innerBL.append(new MechanismLigament2d(
-            "Bottom Side",
-            Units.inchesToMeters(7),
-            0,
-            10,
-            new Color8Bit(Color.kPink)
-            )
-        );
-
-        // Top Right Node
-        innerTR = elevator2d.getRoot("Inner TR", Units.inchesToMeters(11), Units.inchesToMeters(8) + Constants.Elevator.MIN_HEIGHT_METERS);
-
-        innerTR.append(new MechanismLigament2d(
+        stageTwoTR.append(new MechanismLigament2d(
             "Top Side",
-            Units.inchesToMeters(7),
+            Units.inchesToMeters(6),
             180,
             10,
-            new Color8Bit(Color.kPink)
+            new Color8Bit(Color.kYellow)
             )
         );
-            
-        innerTR.append(new MechanismLigament2d(
-            "Right Side",
-            Units.inchesToMeters(7),
-            -90, 
-            10,
-            new Color8Bit(Color.kPink)
-            )
-        );
-
+        
         SmartDashboard.putData("Visualizers/Elevator", elevator2d);
     }
 
     public void update() {
-        // Top of Carriage is Target Height
+        // Top of Stage Two is target height
         Elevator elevator = Elevator.getInstance();
-
-        if (elevator.getTargetHeight() <= Units.inchesToMeters(47)) {
-            innerBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(1));
-            innerTR.setPosition(Units.inchesToMeters(11), elevator.getCurrentHeight() + Units.inchesToMeters(8));
-        } else {
-            outerBL.setPosition(Units.inchesToMeters(3), (elevator.getCurrentHeight() - Constants.Elevator.MIN_HEIGHT_METERS));
-            outerTR.setPosition(Units.inchesToMeters(12), (elevator.getCurrentHeight() - Constants.Elevator.MIN_HEIGHT_METERS) + Units.inchesToMeters(47));
-    
-            innerBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(1));
-            innerTR.setPosition(Units.inchesToMeters(11), elevator.getCurrentHeight() + Units.inchesToMeters(8));
-        }
-
+        stageTwoBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(4));
+        stageTwoTR.setPosition(Units.inchesToMeters(10), elevator.getCurrentHeight() + Units.inchesToMeters(39));
     }
 
 }
