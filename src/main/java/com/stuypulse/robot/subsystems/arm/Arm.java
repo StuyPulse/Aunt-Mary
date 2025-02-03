@@ -22,5 +22,4 @@ public abstract class Arm extends SubsystemBase {
 
     public abstract Rotation2d getArmAngle();
 
-    // public abstract void setVoltage(double voltage);
 }

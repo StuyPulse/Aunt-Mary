@@ -44,7 +44,8 @@ public interface Settings {
         Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
         double GEAR_RATIO = 0;
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(0);
-        double OFFSET = 0;
+        double ARM_OFFSET = 0;
+        double ENCODER_OFFSET = 0;
         double PID_RAMPING = 0;
         double FF_RAMPING = 0;
 

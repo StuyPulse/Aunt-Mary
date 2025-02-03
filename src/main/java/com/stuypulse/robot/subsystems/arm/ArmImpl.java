@@ -1,11 +1,13 @@
 package com.stuypulse.robot.subsystems.arm;
 
 
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -57,12 +59,17 @@ public class ArmImpl extends Arm {
         motionMagicConfigs.MotionMagicCruiseVelocity = Settings.Arm.MotionMagic.MAX_VEL; // Target cruise velocity of 80 rps
         motionMagicConfigs.MotionMagicAcceleration = Settings.Arm.MotionMagic.MAX_ACCEL; // Target acceleration of 160 rps/s (0.5 seconds) 
 
+        MagnetSensorConfigs magnet_config = new MagnetSensorConfigs();
+        magnet_config.MagnetOffset = Settings.Arm.ENCODER_OFFSET;
+
+
         config.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Arm.PID_RAMPING; 
         config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Arm.FF_RAMPING; 
 
 
         armMotor.getConfigurator().apply(config);
         armMotor.getConfigurator().apply(motionMagicConfigs);
+        armEncoder.getConfigurator().apply(magnet_config);
 
 
         // actual gooner code
@@ -70,6 +77,11 @@ public class ArmImpl extends Arm {
     }
 
     public void setTargetAngle(Rotation2d targetAngle) {
+        // if(getArmAngle().getDegrees() > 360) {
+        //     this.targetAngle = Rotation2d.fromDegrees(360);
+        // } else {
+        //     this.targetAngle = targetAngle;
+        // }
         this.targetAngle = targetAngle;
     }
 
@@ -79,7 +91,7 @@ public class ArmImpl extends Arm {
                     
 
     public Rotation2d getArmAngle() {
-        return Rotation2d.fromRotations(armMotor.getPosition().getValueAsDouble() - Settings.Arm.OFFSET);
+        return Rotation2d.fromRotations(armMotor.getPosition().getValueAsDouble() - Settings.Arm.ARM_OFFSET);
     }
 
     // public void setPID(double kP, double kI, double kD) {
@@ -100,12 +112,13 @@ public class ArmImpl extends Arm {
     @Override
     public void periodic() { 
 
-        armMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+        MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getDegrees() * 360.0);
+        // armMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+        armMotor.setControl(armOutput);
 
         SmartDashboard.putNumber("Arm/targetAngle", getTargetAngle().getDegrees());
         SmartDashboard.putNumber("Arm/currentAngle",getArmAngle().getDegrees());
         
-            
     }
 }
     
