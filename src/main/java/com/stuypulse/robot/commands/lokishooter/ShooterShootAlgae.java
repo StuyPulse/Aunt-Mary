@@ -5,11 +5,11 @@ import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShooterDeacquireAlgae extends Command {
+public class ShooterShootAlgae extends Command {
     
     private final LokiShooter shooter;
 
-    public ShooterDeacquireAlgae(){
+    public ShooterShootAlgae(){
         shooter = LokiShooter.getInstance();
         addRequirements(shooter);
     }
