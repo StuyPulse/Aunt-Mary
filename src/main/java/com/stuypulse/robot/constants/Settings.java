@@ -48,6 +48,7 @@ public interface Settings {
         double ENCODER_OFFSET = 0;
         double PID_RAMPING = 0;
         double FF_RAMPING = 0;
+        double CURRENT_RAMP = 0;
 
         public interface MotionMagic{
             double MAX_VEL = 0;

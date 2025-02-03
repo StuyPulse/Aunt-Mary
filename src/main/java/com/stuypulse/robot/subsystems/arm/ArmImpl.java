@@ -52,8 +52,6 @@ public class ArmImpl extends Arm {
         config.Feedback.FeedbackRemoteSensorID = armEncoder.getDeviceID();
         config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
-
-
         MotionMagicConfigs motionMagicConfigs = config.MotionMagic;
 
         motionMagicConfigs.MotionMagicCruiseVelocity = Settings.Arm.MotionMagic.MAX_VEL; // Target cruise velocity of 80 rps
@@ -63,26 +61,19 @@ public class ArmImpl extends Arm {
         MagnetSensorConfigs magnet_config = new MagnetSensorConfigs();
         magnet_config.MagnetOffset = Settings.Arm.ENCODER_OFFSET;
 
-
         config.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Arm.PID_RAMPING; 
         config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Arm.FF_RAMPING; 
-
+        config.OpenLoopRamps.TorqueOpenLoopRampPeriod = Settings.Arm.PID_RAMPING;
+        config.ClosedLoopRamps.TorqueClosedLoopRampPeriod = Settings.Arm.FF_RAMPING;
+        
 
         armMotor.getConfigurator().apply(config);
         armMotor.getConfigurator().apply(motionMagicConfigs);
         armEncoder.getConfigurator().apply(magnet_config);
 
-
-        // actual gooner code
-
     }
 
     public void setTargetAngle(Rotation2d targetAngle) {
-        // if(getArmAngle().getDegrees() > 360) {
-        //     this.targetAngle = Rotation2d.fromDegrees(360);
-        // } else {
-        //     this.targetAngle = targetAngle;
-        // }
         this.targetAngle = targetAngle;
     }
 
