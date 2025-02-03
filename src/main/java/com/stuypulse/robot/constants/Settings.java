@@ -52,6 +52,7 @@ public interface Settings {
         public interface MotionMagic{
             double MAX_VEL = 0;
             double MAX_ACCEL = 0;
+            double JERK = 0;
         }
     }
 }

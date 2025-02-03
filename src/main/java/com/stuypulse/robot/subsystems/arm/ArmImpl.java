@@ -57,7 +57,8 @@ public class ArmImpl extends Arm {
         MotionMagicConfigs motionMagicConfigs = config.MotionMagic;
 
         motionMagicConfigs.MotionMagicCruiseVelocity = Settings.Arm.MotionMagic.MAX_VEL; // Target cruise velocity of 80 rps
-        motionMagicConfigs.MotionMagicAcceleration = Settings.Arm.MotionMagic.MAX_ACCEL; // Target acceleration of 160 rps/s (0.5 seconds) 
+        motionMagicConfigs.MotionMagicAcceleration = Settings.Arm.MotionMagic.MAX_ACCEL; // Target acceleration of 160 rps/s (0.5 seconds)
+        motionMagicConfigs.MotionMagicJerk = Settings.Arm.MotionMagic.JERK; 
 
         MagnetSensorConfigs magnet_config = new MagnetSensorConfigs();
         magnet_config.MagnetOffset = Settings.Arm.ENCODER_OFFSET;
@@ -91,28 +92,13 @@ public class ArmImpl extends Arm {
                     
 
     public Rotation2d getArmAngle() {
-        return Rotation2d.fromRotations(armMotor.getPosition().getValueAsDouble() - Settings.Arm.ARM_OFFSET);
+        return Rotation2d.fromRotations(armMotor.getPosition().getValueAsDouble());
     }
-
-    // public void setPID(double kP, double kI, double kD) {
-    //     config.Slot0.kP = kP;
-    //     config.Slot0.kI = kI;
-    //     config.Slot0.kD = kD;
-        
-    // }
-
-    // public void setFF(double kS, double kV, double kA, double kG ){
-    //     config.Slot0.kS = kS;
-    //     config.Slot0.kV = kV;
-    //     config.Slot0.kA = kA;
-    //     config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        
-    // }
 
     @Override
     public void periodic() { 
 
-        MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getDegrees() * 360.0);
+        MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
         // armMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
         armMotor.setControl(armOutput);
 
