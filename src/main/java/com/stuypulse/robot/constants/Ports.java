@@ -13,8 +13,33 @@ public interface Ports {
         int DEBUGGER = 2;
     }
 
+
     public interface Climb {
         int CLIMB_MOTOR = 0;
         int CLIMB_ENCODER = 0;
+
+
+    public interface Arm {
+        int ARM_MOTOR = 0;
+        int ARM_ENCODER = 0;
+    }
+  
+    // Set values later
+    public interface Shooter {
+        int MOTOR = 0;
+        int RECEIVER = 1;
+    }
+    
+    // Set values later
+    public interface Funnel {
+        int MOTOR = 0;
+        int IR = 1;
+    }
+      
+    public interface Elevator {
+        int MOTOR = 0;
+        int BOTTOM_SWITCH = 1;
+        int TOP_SWITCH = 2;
+
     }
 }
