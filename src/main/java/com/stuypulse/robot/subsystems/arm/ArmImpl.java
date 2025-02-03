@@ -36,14 +36,14 @@ public class ArmImpl extends Arm {
 
         Slot0Configs slot0 = new Slot0Configs();
 
-        slot0.kP = Settings.Arm.PID.kP;
-        slot0.kI = Settings.Arm.PID.kI;
-        slot0.kD = Settings.Arm.PID.kD;
+        slot0.kP = Settings.Arm.PID.kP.getAsDouble();
+        slot0.kI = Settings.Arm.PID.kI.getAsDouble();
+        slot0.kD = Settings.Arm.PID.kD.getAsDouble();
 
-        slot0.kS = Settings.Arm.FF.kS;
-        slot0.kV = Settings.Arm.FF.kV;
-        slot0.kA = Settings.Arm.FF.kA;
-        slot0.kG = Settings.Arm.FF.kG;
+        slot0.kS = Settings.Arm.FF.kS.getAsDouble();
+        slot0.kV = Settings.Arm.FF.kV.getAsDouble();
+        slot0.kA = Settings.Arm.FF.kA.getAsDouble();
+        slot0.kG = Settings.Arm.FF.kG.getAsDouble();
         slot0.GravityType = GravityTypeValue.Arm_Cosine;
         
         config.Slot0 = slot0;
@@ -61,10 +61,10 @@ public class ArmImpl extends Arm {
         MagnetSensorConfigs magnet_config = new MagnetSensorConfigs();
         magnet_config.MagnetOffset = Settings.Arm.ENCODER_OFFSET;
 
-        config.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Arm.PID_RAMPING; 
-        config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Arm.FF_RAMPING; 
-        config.OpenLoopRamps.TorqueOpenLoopRampPeriod = Settings.Arm.PID_RAMPING;
-        config.ClosedLoopRamps.TorqueClosedLoopRampPeriod = Settings.Arm.FF_RAMPING;
+        config.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Arm.PID_RAMPING.getAsDouble(); 
+        config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Arm.FF_RAMPING.getAsDouble(); 
+        config.OpenLoopRamps.TorqueOpenLoopRampPeriod = Settings.Arm.PID_RAMPING.getAsDouble();
+        config.ClosedLoopRamps.TorqueClosedLoopRampPeriod = Settings.Arm.FF_RAMPING.getAsDouble();
         
 
         armMotor.getConfigurator().apply(config);

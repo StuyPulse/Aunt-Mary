@@ -6,6 +6,8 @@
 package com.stuypulse.robot.constants;
 
 
+import com.stuypulse.stuylib.network.SmartNumber;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 
 /*-
@@ -20,17 +22,17 @@ public interface Settings {
 
             
         public interface PID {
-            double kP = 0;
-            double kI = 0;
-            double kD = 0;
+            SmartNumber kP = new SmartNumber("Arm/PID/kP", 0.0);
+            SmartNumber kI = new SmartNumber("Arm/PID/kI", 0);
+            SmartNumber kD = new SmartNumber("Arm/PID/kD", 0);
 
         }
 
         public interface FF {
-            double kS = 0;
-            double kV = 0;
-            double kA = 0;
-            double kG = 0;
+            SmartNumber kS = new SmartNumber("Arm/PID/kP", 0.0);
+            SmartNumber kV = new SmartNumber("Arm/PID/kI", 0);
+            SmartNumber kA = new SmartNumber("Arm/PID/kD", 0);
+            SmartNumber kG = new SmartNumber("Arm/PID/kG", 0);
         }
 
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(0);
@@ -42,13 +44,14 @@ public interface Settings {
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(0);
 
         Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
-        double GEAR_RATIO = 0;
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(0);
+        double GEAR_RATIO = 0;
         double ARM_OFFSET = 0;
         double ENCODER_OFFSET = 0;
-        double PID_RAMPING = 0;
-        double FF_RAMPING = 0;
-        double CURRENT_RAMP = 0;
+        SmartNumber PID_RAMPING = new SmartNumber("Arm/PID_RAMP",0);
+        SmartNumber FF_RAMPING = new SmartNumber("Arm/FF_RAMP", 0);
+        SmartNumber CURRENT_RAMPING = new SmartNumber("Arm/CURRENT_RAMP",0);
+
 
         public interface MotionMagic{
             double MAX_VEL = 0;
