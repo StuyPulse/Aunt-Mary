@@ -1,9 +1,7 @@
  package com.stuypulse.robot.subsystems.climb;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -55,14 +53,17 @@ public class ClimbImpl extends Climb {
 
         // integrate CANcoder readings into controller
         climbMotorConfig.Feedback.FeedbackRemoteSensorID = climbEncoder.getDeviceID();
-        climbMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        climbMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         climbMotor.getConfigurator().apply(climbMotorConfig);
     }
 
-
     public void setTargetAngle(Rotation2d targetAngle) {
         this.targetAngle = targetAngle;
+    }
+
+    public void setTargetDegrees(double targetDegrees) {
+        this.targetAngle = new Rotation2d(targetDegrees / 360);
     }
 
     @Override
@@ -70,12 +71,9 @@ public class ClimbImpl extends Climb {
         return targetAngle;
     }
     
-    @Override
-    public double getDegrees() {
-        return (climbEncoder.getAbsolutePosition().getValueAsDouble() * 360);
+    public Rotation2d getAngle() {
+        return new Rotation2d((climbEncoder.getAbsolutePosition().getValueAsDouble()));
     }
-
-    // field/method check target an
 
     @Override
     public void stop() {
@@ -87,7 +85,7 @@ public class ClimbImpl extends Climb {
         PositionVoltage controlRequest = new PositionVoltage(0).withSlot(0);
         climbMotor.setControl(controlRequest.withPosition(getTargetAngle().getDegrees()));
 
-        SmartDashboard.putNumber("Climb/Current Angle (deg)", getDegrees());
+        SmartDashboard.putNumber("Climb/Current Angle (deg)", getAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putNumber("Climb/Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
@@ -95,12 +93,5 @@ public class ClimbImpl extends Climb {
         SmartDashboard.putNumber("Climb/Motor Current", climbMotor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Climb/Supply Current", climbMotor.getSupplyCurrent().getValueAsDouble());
         
-    }
-
-
-    @Override
-    public void setTargetDegrees(double targetDegrees) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setTargetDegrees'");
     }
 }

@@ -14,9 +14,11 @@ public abstract class Climb extends SubsystemBase {
         return instance;
     }
 
+    public abstract void setTargetAngle(Rotation2d targetAngle);
+
     public abstract void setTargetDegrees(double targetDegrees);
 
-    public abstract double getDegrees();
+    public abstract Rotation2d getAngle();
 
     public abstract Rotation2d getTargetAngle();
 

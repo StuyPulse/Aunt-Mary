@@ -26,10 +26,9 @@ public class ClimbDriveToAngle extends Command {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(climb.getDegrees() - climb.getTargetAngle().getDegrees()) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE){
+        if (Math.abs(climb.getAngle().getDegrees() - climb.getTargetAngle().getDegrees()) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE){
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
