@@ -12,4 +12,10 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface Elevator {
+        int MOTOR = 0;
+        int BOTTOM_SWITCH = 1;
+        int TOP_SWITCH = 2;
+    }
 }
