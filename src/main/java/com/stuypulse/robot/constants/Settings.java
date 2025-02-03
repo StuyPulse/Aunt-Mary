@@ -13,10 +13,39 @@ import com.stuypulse.stuylib.network.SmartNumber;
  * We use StuyLib's SmartNumber / SmartBoolean in order to have tunable
  * values that we can edit on Shuffleboard.
  */
-public interface Settings {
-    
-    double DT = 0.020; // 20ms Differential Time
 
+public interface Settings { 
+    double DT = 0.020; // 20ms Differential Time
+  
+    public interface Shooter {
+        SmartNumber CORAL_FRONT_SPEED = new SmartNumber("Coral Target Speed",0.75);
+        SmartNumber CORAL_BACK_SPEED = new SmartNumber("Coral Target Speed",0.75);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.3);
+        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
+        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
+
+        double BB_DEBOUNCE = 0.0; 
+        double CORAL_STALLING_DEBOUNCE = 0.0;
+        double ALGAE_DEBOUNCE = 0.0;
+        
+        double RAMP_RATE = 0.0;
+
+        double DRIVE_CURRENT_THRESHOLD = 30;
+        double DRIVE_CURRENT_LIMIT = 40;
+    }
+
+    public interface Funnel {
+        SmartNumber MOTOR_SPEED = new SmartNumber("Funnel Speed", 0.0);
+        double IR_DEBOUNCE = 0.0;
+        double FUNNEL_STALLING = 0.0;
+
+        double RAMP_RATE = 0.0; 
+    
+        double GEAR_RATIO = 0.0;
+        double DRIVE_CURRENT_THRESHOLD = 30;
+        double DRIVE_CURRENT_LIMIT = 40;
+    }
+  
     public interface Elevator {
         SmartNumber MAX_VELOCITY_METERS_PER_SECOND = new SmartNumber("Elevator/Max Velocity (m per s)", 1.0);
         SmartNumber MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = new SmartNumber("Elevator/Max Accel (m per s^2)", 2.0);
