@@ -16,7 +16,7 @@ public class ShooterAcquireCoral extends Command {
     
     @Override
     public void initialize() {  
-        shooter.setSpeed(-Settings.Shooter.CORAL_ACQUIRE_SPEED.getAsDouble());
+        shooter.setSpeed(Settings.Shooter.CORAL_ACQUIRE_SPEED.getAsDouble());
     }
 
     @Override

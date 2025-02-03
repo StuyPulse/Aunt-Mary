@@ -18,7 +18,7 @@ public class LokiShooterImpl extends LokiShooter {
     private final TalonFX shooterMotor;
     private final TalonFXConfiguration shooterConfig;
 
-    private final DigitalInput motorBeam;
+    private final DigitalInput beamReceiver;
     private final BStream hasCoral;
     private final BStream hasAlgae;
     
@@ -27,11 +27,11 @@ public class LokiShooterImpl extends LokiShooter {
     public LokiShooterImpl(){
         shooterMotor = new TalonFX(Ports.Shooter.MOTOR);
 
-        motorBeam = new DigitalInput(Ports.Shooter.BEAM);
+        beamReceiver = new DigitalInput(Ports.Shooter.RECEIVER);
         
         shooterCurrent = IStream.create(() -> shooterMotor.getStatorCurrent().getValueAsDouble());
         
-        hasCoral = BStream.create(motorBeam).not()
+        hasCoral = BStream.create(beamReceiver).not()
             .filtered(new BDebounce.Both(Settings.Shooter.BB_DEBOUNCE));
         hasAlgae = BStream.create(this::detectCurrentSpike)
             .filtered(new BDebounce.Both(Settings.Shooter.ALGAE_DEBOUNCE));

@@ -15,13 +15,11 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Settings {  
     public interface Shooter {
-        SmartNumber ALGAE_FRONT_SPEED = new SmartNumber("Algae Target Speed", 1);
         SmartNumber CORAL_FRONT_SPEED = new SmartNumber("Coral Target Speed",0.75);
-        SmartNumber ALGAE_BACK_SPEED = new SmartNumber("Algae Target Speed", 1);
         SmartNumber CORAL_BACK_SPEED = new SmartNumber("Coral Target Speed",0.75);
-        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
-        SmartNumber ALGAE_DEACQUIRE_SPEED = new SmartNumber("Algae Deacquire Speed", 0.45);
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.3);
+        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
+        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
 
         double BB_DEBOUNCE = 0.0; 
         double CORAL_STALLING_DEBOUNCE = 0.0;
@@ -35,7 +33,7 @@ public interface Settings {
 
     public interface Funnel {
         SmartNumber MOTOR_SPEED = new SmartNumber("Funnel Speed", 0.0);
-        double BB_DEBOUNCE = 0.0;
+        double IR_DEBOUNCE = 0.0;
         double FUNNEL_STALLING = 0.0;
 
         double RAMP_RATE = 0.0; 

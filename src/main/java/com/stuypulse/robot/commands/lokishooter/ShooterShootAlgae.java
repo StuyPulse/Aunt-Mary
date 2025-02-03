@@ -16,7 +16,7 @@ public class ShooterDeacquireAlgae extends Command {
     
     @Override
     public void initialize() {  
-        shooter.setSpeed(-Settings.Shooter.ALGAE_DEACQUIRE_SPEED.getAsDouble());
+        shooter.setSpeed(Settings.Shooter.ALGAE_SHOOT_SPEED.getAsDouble());
     }
 
     @Override

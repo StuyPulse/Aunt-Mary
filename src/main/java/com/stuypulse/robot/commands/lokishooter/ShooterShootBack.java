@@ -15,16 +15,14 @@ public class ShooterShootBack extends Command {
     
     @Override
     public void initialize(){
-        if (shooter.hasAlgae()){
-            shooter.setSpeed(-Settings.Shooter.ALGAE_BACK_SPEED.getAsDouble());
-        } else if (shooter.hasCoral()){
+        if (shooter.hasCoral()){
             shooter.setSpeed(-Settings.Shooter.CORAL_BACK_SPEED.getAsDouble());
         }
     }
 
     @Override
     public boolean isFinished(){
-        return !shooter.hasAlgae() && !shooter.hasCoral();
+        return !shooter.hasCoral();
     }
 
     @Override

@@ -16,22 +16,22 @@ public class CoralFunnelImpl extends CoralFunnel {
     private final TalonFX funnelMotor;
     private final TalonFXConfiguration funnelConfig;
 
-    private final DigitalInput motorBeam;
-    private BStream hasCoral;
-    private BStream isStalling;
+    private final DigitalInput irSensor;
+    private final BStream hasCoral;
+    private final BStream isStalling;
 
     private final IStream funnelCurrent;
 
     public CoralFunnelImpl(){
         funnelMotor = new TalonFX(Ports.Funnel.MOTOR);
 
-        motorBeam = new DigitalInput(Ports.Funnel.BEAM);
+        irSensor = new DigitalInput(Ports.Funnel.IR);
 
         //Stall Detection
         funnelCurrent = IStream.create(() -> Math.abs(funnelMotor.getStatorCurrent().getValueAsDouble()));
 
-        hasCoral = BStream.create(motorBeam).not()
-            .filtered(new BDebounce.Both(Settings.Funnel.BB_DEBOUNCE));
+        hasCoral = BStream.create(irSensor).not()
+            .filtered(new BDebounce.Both(Settings.Funnel.IR_DEBOUNCE));
         isStalling = BStream.create(() -> funnelCurrent.get() > Settings.Funnel.DRIVE_CURRENT_THRESHOLD)
             .filtered(new BDebounce.Both(Settings.Funnel.FUNNEL_STALLING));
 
