@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.054603794642857,
+        "y": 5.113815743582589
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.131987389575825,
+        "y": 5.130479608370275
+      },
+      "isLocked": false,
+      "linkedName": "Red Top Start"
+    },
+    {
+      "anchor": {
+        "x": 5.080034964425223,
+        "y": 5.215678623744419
+      },
+      "prevControl": {
+        "x": 6.586671738077989,
+        "y": 5.148261610266845
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red J"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Red to Reef",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "useDefaultConstraints": true
+}
