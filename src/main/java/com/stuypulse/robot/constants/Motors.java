@@ -1,7 +1,8 @@
-/************************ PROJECT PHIL ************************/
-/* Copyright (c) 2024 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 
 package com.stuypulse.robot.constants;
 
@@ -21,7 +22,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 public interface Motors {
 
     /** Classes to store all of the values a motor needs */
-
     public static class TalonSRXConfig {
         public final boolean INVERTED;
         public final NeutralMode NEUTRAL_MODE;
@@ -63,10 +63,7 @@ public interface Motors {
         public final NeutralMode NEUTRAL_MODE;
         public final double OPEN_LOOP_RAMP_RATE;
 
-        public VictorSPXConfig(
-                boolean inverted,
-                NeutralMode neutralMode,
-                double openLoopRampRate) {
+        public VictorSPXConfig(boolean inverted, NeutralMode neutralMode, double openLoopRampRate) {
             this.INVERTED = inverted;
             this.NEUTRAL_MODE = neutralMode;
             this.OPEN_LOOP_RAMP_RATE = openLoopRampRate;

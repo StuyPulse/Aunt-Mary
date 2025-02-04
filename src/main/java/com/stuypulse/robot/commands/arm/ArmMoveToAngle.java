@@ -4,23 +4,24 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands;
+package com.stuypulse.robot.commands.arm;
 
+import com.stuypulse.robot.subsystems.arm.Arm;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-/*-
- * This command does a whole load of nothing...
- *
- * @author Ivan Chen
- */
-public class DoNothingCommand extends InstantCommand {
+public class ArmMoveToAngle extends InstantCommand {
+    private final Arm arm;
+    private final Rotation2d angle;
 
-    public DoNothingCommand() {
-        // Do loads of nothing
+    public ArmMoveToAngle(Rotation2d angle) {
+        arm = Arm.getInstance();
+        this.angle = angle;
     }
 
     @Override
     public void initialize() {
-        // Do loads of nothing
+        arm.setTargetAngle(angle);
     }
 }

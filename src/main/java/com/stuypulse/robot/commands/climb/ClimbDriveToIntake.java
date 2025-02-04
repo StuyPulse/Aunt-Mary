@@ -4,14 +4,13 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot;
+package com.stuypulse.robot.commands.climb;
 
-import edu.wpi.first.wpilibj.RobotBase;
+import com.stuypulse.robot.constants.Settings;
 
-public final class Main {
-    private Main() {}
+public class ClimbDriveToIntake extends ClimbDriveToAngle {
 
-    public static void main(String... args) {
-        RobotBase.startRobot(Robot::new);
+    public ClimbDriveToIntake() {
+        super(Settings.Climb.INTAKE_ANGLE);
     }
 }
