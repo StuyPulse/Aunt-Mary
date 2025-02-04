@@ -20,6 +20,10 @@ public interface Ports {
         int PIVOT_ENCODER = 0;
     }
 
+    public interface Climb {
+        int CLIMB_MOTOR = 0;
+        int CLIMB_ENCODER = 0;
+    }
 
     public interface Arm {
         int ARM_MOTOR = 0;
@@ -44,3 +48,4 @@ public interface Ports {
         int TOP_SWITCH = 2;
     }
 }
+
