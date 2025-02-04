@@ -1,7 +1,8 @@
-/************************ PROJECT PHIL ************************/
-/* Copyright (c) 2024 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 
 package com.stuypulse.robot.constants;
 
@@ -11,7 +12,7 @@ public interface Ports {
         int DRIVER = 0;
         int OPERATOR = 1;
         int DEBUGGER = 2;
-        //should these be final?
+        // should these be final?
     }
 
     public interface Froggy {
@@ -29,23 +30,22 @@ public interface Ports {
         int ARM_MOTOR = 0;
         int ARM_ENCODER = 0;
     }
-  
+
     // Set values later
     public interface Shooter {
         int MOTOR = 0;
         int RECEIVER = 1;
     }
-    
+
     // Set values later
     public interface Funnel {
         int MOTOR = 0;
         int IR = 1;
     }
-      
+
     public interface Elevator {
         int MOTOR = 0;
         int BOTTOM_SWITCH = 1;
         int TOP_SWITCH = 2;
     }
 }
-

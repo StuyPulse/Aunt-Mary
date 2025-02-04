@@ -1,4 +1,16 @@
- package com.stuypulse.robot.subsystems.climb;
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
+package com.stuypulse.robot.subsystems.climb;
+
+import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.constants.Settings;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -8,11 +20,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.stuypulse.robot.constants.Ports;
-import com.stuypulse.robot.constants.Settings;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbImpl extends Climb {
     private final TalonFX climbMotor;
@@ -31,7 +38,7 @@ public class ClimbImpl extends Climb {
         slot0.kS = Settings.Climb.kS;
         slot0.kV = Settings.Climb.kV;
         slot0.kA = Settings.Climb.kA;
-        
+
         slot0.kP = Settings.Climb.kP;
         slot0.kI = Settings.Climb.kI;
         slot0.kD = Settings.Climb.kD;
@@ -70,7 +77,7 @@ public class ClimbImpl extends Climb {
     public Rotation2d getTargetAngle() {
         return targetAngle;
     }
-    
+
     public Rotation2d getAngle() {
         return new Rotation2d((climbEncoder.getAbsolutePosition().getValueAsDouble()));
     }
@@ -88,10 +95,13 @@ public class ClimbImpl extends Climb {
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putNumber("Climb/Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Supply Voltage", climbMotor.getSupplyVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Motor Current", climbMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Supply Current", climbMotor.getSupplyCurrent().getValueAsDouble());
-        
+        SmartDashboard.putNumber(
+                "Climb/Motor Voltage", climbMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Climb/Supply Voltage", climbMotor.getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Climb/Motor Current", climbMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Climb/Supply Current", climbMotor.getSupplyCurrent().getValueAsDouble());
     }
 }

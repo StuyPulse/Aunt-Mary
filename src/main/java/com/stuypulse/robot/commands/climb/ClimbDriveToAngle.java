@@ -1,3 +1,9 @@
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.commands.climb;
 
 import com.stuypulse.robot.constants.Settings;
@@ -26,7 +32,8 @@ public class ClimbDriveToAngle extends Command {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(climb.getAngle().getDegrees() - climb.getTargetAngle().getDegrees()) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE){
+        if (Math.abs(climb.getAngle().getDegrees() - climb.getTargetAngle().getDegrees())
+                <= Settings.Climb.CLIMB_ANGLE_TOLERANCE) {
             return true;
         } else {
             return false;

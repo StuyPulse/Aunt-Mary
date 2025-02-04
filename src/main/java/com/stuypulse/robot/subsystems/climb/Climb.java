@@ -1,3 +1,9 @@
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.subsystems.climb;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,7 +15,7 @@ public abstract class Climb extends SubsystemBase {
     static {
         instance = new ClimbImpl();
     }
-    
+
     public static Climb getInstance() {
         return instance;
     }
@@ -25,9 +31,4 @@ public abstract class Climb extends SubsystemBase {
     public abstract void stop();
 
     public abstract void periodic();
-
 }
-
-
-
-

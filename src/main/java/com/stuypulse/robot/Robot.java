@@ -1,11 +1,10 @@
-/************************ PROJECT PHIL ************************/
-/* Copyright (c) 2024 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 
 package com.stuypulse.robot;
-
-import com.stuypulse.robot.commands.elevator.ElevatorToBottom;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +22,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robot = new RobotContainer();
-        
+
         // Check with Philip to automatically reset elevator encoder
         // new ElevatorToBottom().schedule();
     }
@@ -45,7 +44,7 @@ public class Robot extends TimedRobot {
 
     /***********************/
     /*** AUTONOMOUS MODE ***/
-    /***********************/  
+    /***********************/
 
     @Override
     public void autonomousInit() {

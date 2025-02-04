@@ -1,3 +1,9 @@
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.commands.funnel;
 
 import com.stuypulse.robot.subsystems.funnel.CoralFunnel;
@@ -16,7 +22,7 @@ public class FunnelDefaultCommand extends Command {
     public FunnelDefaultCommand() {
         funnel = CoralFunnel.getInstance();
         shooter = LokiShooter.getInstance();
-        
+
         addRequirements(funnel);
     }
 
@@ -27,22 +33,25 @@ public class FunnelDefaultCommand extends Command {
         runState();
     }
 
-    private void setState(){
+    private void setState() {
         stopped = shooter.hasCoral();
 
-        if(funnel.isStalling() && !reversed) {
+        if (funnel.isStalling() && !reversed) {
             reversed = true;
 
-            new WaitCommand(1).andThen(() -> {
-                reversed = false;
-            }).schedule();
+            new WaitCommand(1)
+                    .andThen(
+                            () -> {
+                                reversed = false;
+                            })
+                    .schedule();
         }
     }
 
-    private void runState(){
-        if (stopped){
+    private void runState() {
+        if (stopped) {
             funnel.stop();
-        } else if (reversed){
+        } else if (reversed) {
             funnel.reverse();
         } else {
             funnel.forward();
