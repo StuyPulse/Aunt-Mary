@@ -13,11 +13,10 @@ public interface Ports {
         int DEBUGGER = 2;
     }
 
-
     public interface Climb {
         int CLIMB_MOTOR = 0;
         int CLIMB_ENCODER = 0;
-
+    }
 
     public interface Arm {
         int ARM_MOTOR = 0;
@@ -40,6 +39,6 @@ public interface Ports {
         int MOTOR = 0;
         int BOTTOM_SWITCH = 1;
         int TOP_SWITCH = 2;
-
     }
 }
+
