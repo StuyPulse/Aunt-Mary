@@ -58,12 +58,14 @@ public interface Settings {
         // CHANGE
         double HANDOFF_HEIGHT_METERS = 0.1;
         // front and funnel
-        double ALT_L2_HEIGHT_METERS = 0.25;
-        double ALT_L3_HEIGHT_METERS = 0.5;
-        double ALT_L4_HEIGHT_METERS = 0.75;
-        double FUNNEL_L2_HEIGHT_METERS = 0.3; // funnel side; should be higher than L2
-        double FUNNEL_L3_HEIGHT_METERS = 0.55; // funnel side; should be higher than L3
-        double FUNNEL_L4_HEIGHT_METERS = 0.8;
+        double L2_FRONT_HEIGHT = 0.25;
+        double L3_FRONT_HEIGHT = 0.5;
+        double L4_FRONT_HEIGHT = 0.75;
+        double L2_BACK_HEIGHT = 0.3; // funnel side; should be higher than L2
+        double L3_BACK_HEIGHT = 0.55; // funnel side; should be higher than L3
+        double L4_BACK_HEIGHT = 0.8;
+        double L2_REEF_HEIGHT = 0.5;
+        double L3_REEF_HEIGHT = 0.75;
 
         double RAMP_RATE_CURRENT = 1.0;
         double RAMP_RATE_VOLTAGE = 0.1;
@@ -137,7 +139,7 @@ public interface Settings {
             double JERK = 0;
         }
     }
-
+// lingangu
     public interface Froggy {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);

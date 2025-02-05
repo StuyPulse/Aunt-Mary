@@ -6,10 +6,10 @@
 
 package com.stuypulse.robot.commands.elevator;
 
-import com.stuypulse.robot.constants.Settings.Elevator;
+import com.stuypulse.robot.constants.Constants;
 
-public class ElevatorToLvl3Funnel extends ElevatorToHeight {
-    public ElevatorToLvl3Funnel() {
-        super(Elevator.FUNNEL_L3_HEIGHT_METERS);
+public class ElevatorToBarge extends ElevatorToHeight {
+    public ElevatorToBarge() {
+        super(Constants.Elevator.MAX_HEIGHT_METERS);
     }
 }
