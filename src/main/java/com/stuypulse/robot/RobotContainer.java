@@ -84,14 +84,14 @@ public class RobotContainer {
     /* RIGHT SIDE BUTTONS */
     // ADD ALIGNMENT TO ALL SCORING ROUTINES
 
-    // LEFT BOTTOM PADDLE -> LVL 2 FRONT
+    // BOTTOM BUTTON -> LVL 2 FRONT
     driver.getBottomButton()
         .whileTrue(new SequentialCommandGroup(
             new ElevatorToLvl2Front()
             .andThen(new ArmMoveToL2Front())
             .andThen(new ShooterShootFront()))); 
     
-    // LEFT TOP PADDLE -> LVL 3 FRONT
+    // RIGHT BUTTON -> LVL 3 FRONT
     driver.getRightButton()
         .whileTrue(new SequentialCommandGroup(
             new ElevatorToLvl3Front()

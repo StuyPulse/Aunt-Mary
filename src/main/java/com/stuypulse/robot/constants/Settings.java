@@ -139,7 +139,7 @@ public interface Settings {
             double JERK = 0;
         }
     }
-// lingangu
+
     public interface Froggy {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
