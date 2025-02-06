@@ -4,14 +4,13 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot;
+package com.stuypulse.robot.commands.froggy;
 
-import edu.wpi.first.wpilibj.RobotBase;
+import com.stuypulse.robot.constants.Settings;
 
-public final class Main {
-    private Main() {}
+public class FroggyStow extends FroggySetPivot {
 
-    public static void main(String... args) {
-        RobotBase.startRobot(Robot::new);
+    public FroggyStow() {
+        super(Settings.Froggy.STOW_ANGLE);
     }
 }

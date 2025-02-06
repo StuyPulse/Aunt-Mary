@@ -4,20 +4,17 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands.auton;
+package com.stuypulse.robot.commands.froggy;
+
+import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-/*-
- * This auton does nothing... it is used as a placeholder
- *
- * @author Sam Belliveau
- */
-public class DoNothingAuton extends SequentialCommandGroup {
+public class FroggyProcessorScore extends SequentialCommandGroup {
 
-    public DoNothingAuton() {
+    public FroggyProcessorScore() {
         addCommands(
-                /** Do a whole lot of nothing */
-                );
+                new FroggySetPivot(Settings.Froggy.PROCESSOR_SCORE_ANGLE),
+                new FroggyOuttakeAlgae());
     }
 }

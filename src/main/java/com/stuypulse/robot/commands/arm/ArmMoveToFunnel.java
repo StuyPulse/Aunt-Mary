@@ -4,23 +4,17 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands;
+package com.stuypulse.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import com.stuypulse.robot.constants.Settings;
 
-/*-
- * This command does a whole load of nothing...
- *
- * @author Ivan Chen
- */
-public class DoNothingCommand extends InstantCommand {
-
-    public DoNothingCommand() {
-        // Do loads of nothing
+public class ArmMoveToFunnel extends ArmMoveToAngle {
+    public ArmMoveToFunnel() {
+        super(Settings.Arm.FUNNEL_ANGLE);
     }
 
     @Override
     public void initialize() {
-        // Do loads of nothing
+        super.initialize();
     }
 }

@@ -4,23 +4,24 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands;
+package com.stuypulse.robot.commands.froggy;
+
+import com.stuypulse.robot.subsystems.froggy.*;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-/*-
- * This command does a whole load of nothing...
- *
- * @author Ivan Chen
- */
-public class DoNothingCommand extends InstantCommand {
+public class FroggyStopRoller extends InstantCommand {
 
-    public DoNothingCommand() {
-        // Do loads of nothing
+    private final Froggy froggy;
+
+    public FroggyStopRoller() {
+        froggy = Froggy.getInstance();
+
+        addRequirements(froggy);
     }
 
     @Override
     public void initialize() {
-        // Do loads of nothing
+        froggy.stopRoller();
     }
 }

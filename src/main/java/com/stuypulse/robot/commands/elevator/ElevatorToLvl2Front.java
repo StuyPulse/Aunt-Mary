@@ -4,14 +4,12 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot;
+package com.stuypulse.robot.commands.elevator;
 
-import edu.wpi.first.wpilibj.RobotBase;
+import com.stuypulse.robot.constants.Settings.Elevator;
 
-public final class Main {
-    private Main() {}
-
-    public static void main(String... args) {
-        RobotBase.startRobot(Robot::new);
+public class ElevatorToLvl2Front extends ElevatorToHeight {
+    public ElevatorToLvl2Front() {
+        super(Elevator.L2_FRONT_HEIGHT);
     }
 }
