@@ -11,6 +11,6 @@ import com.stuypulse.robot.constants.Settings;
 public class ClimbDriveToIntake extends ClimbDriveToAngle {
 
     public ClimbDriveToIntake() {
-        super(Settings.Climb.INTAKE_ANGLE);
+        super(Settings.Climb.OPEN_ANGLE);
     }
 }

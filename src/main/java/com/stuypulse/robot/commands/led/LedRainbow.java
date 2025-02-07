@@ -6,18 +6,16 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LedRainbow extends Command{
-    LEDController controller;
-    int value;
+    protected final LEDController leds;
 
-    public LedRainbow(int value) {
-        controller = LEDController.getInstance();
-        this.value = value;
+    public LedRainbow() {
+        leds = LEDController.getInstance();
         
-        addRequirements(controller);
+        addRequirements(leds);
     }
 
     @Override
     public void execute() {
-        controller.applyPattern(LEDPattern.rainbow(255, value));
+        leds.applyPattern(LEDPattern.rainbow(255, 255));
     }
 }

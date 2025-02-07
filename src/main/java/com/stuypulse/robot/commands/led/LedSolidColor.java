@@ -7,18 +7,18 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LedSolidColor extends Command{
-    LEDController controller;
-    Color selectedColor;
+    protected final LEDController leds;
+    protected final Color selectedColor;
 
     public LedSolidColor(Color color) {
-        controller = LEDController.getInstance();
+        leds = LEDController.getInstance();
         selectedColor = color;
         
-        addRequirements(controller);
+        addRequirements(leds);
     }
 
     @Override
     public void execute() {
-        controller.applyPattern(LEDPattern.solid(selectedColor));
+        leds.applyPattern(LEDPattern.solid(selectedColor));
     }
 }
