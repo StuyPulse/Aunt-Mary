@@ -58,16 +58,15 @@ public class ElevatorSimu extends Elevator {
 
         controller =
                 new MotorFeedforward(
-                                Settings.Elevator.FF.kS,
-                                Settings.Elevator.FF.kV,
-                                Settings.Elevator.FF.kA)
+                            Settings.Elevator.FF.kS,
+                            Settings.Elevator.FF.kV,
+                            Settings.Elevator.FF.kA)
                         .position()
                         .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
-                        .add(
-                                new PIDController(
-                                        Settings.Elevator.PID.kP,
-                                        Settings.Elevator.PID.kI,
-                                        Settings.Elevator.PID.kD))
+                        .add(new PIDController(
+                            Settings.Elevator.PID.kP,
+                            Settings.Elevator.PID.kI,
+                            Settings.Elevator.PID.kD))
                         .setSetpointFilter(motionProfile);
     }
 

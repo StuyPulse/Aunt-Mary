@@ -6,7 +6,7 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.robot.subsystems.led.LEDController;
+//import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 import com.stuypulse.robot.commands.arm.ArmMoveToBarge;
@@ -56,7 +56,7 @@ public class RobotContainer {
     private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
 
-    public final LEDController ledController = LEDController.getInstance();
+    // public final LEDController ledController = LEDController.getInstance();
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
