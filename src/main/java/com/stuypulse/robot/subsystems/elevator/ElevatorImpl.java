@@ -49,7 +49,7 @@ public class ElevatorImpl extends Elevator {
         // Base motor configs
         elevatorMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        elevatorMotorConfig.Feedback.SensorToMechanismRatio = Settings.Elevator.GEAR_RATIO;
+        elevatorMotorConfig.Feedback.SensorToMechanismRatio = Constants.Elevator.GEAR_RATIO;
 
         // Current limiting
         elevatorMotorConfig.CurrentLimits.StatorCurrentLimit = Settings.Elevator.CURRENT_LIMIT;

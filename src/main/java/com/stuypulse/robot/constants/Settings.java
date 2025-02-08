@@ -56,6 +56,16 @@ public interface Settings {
         SmartNumber MAX_ACCEL_METERS_PER_SECOND_PER_SECOND =
                 new SmartNumber("Elevator/Max Accel (m per s^2)", 2.0);
 
+        double RAMP_RATE_CURRENT = 1.0;
+        double RAMP_RATE_VOLTAGE = 0.1;
+
+        double CURRENT_LIMIT = 5.0;
+
+        // Magic motion, change RPS
+        double TARGET_CRUISE_VELOCITY = 0.0; // Rotations Per Second
+        double TARGET_ACCELERATION = 0.0; // Rotations Per Second^2
+        double TARGET_JERK = 0.0; // Rotations Per Second^3
+
         // CHANGE
         double FUNNEL_HEIGHT_METERS = 0.1;
         double CLEARANCE_HEIGHT_METERS = 0.3; // above this is safe for arm funnel side
@@ -73,18 +83,6 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS = 0.2;
         double ALGAE_L3_HEIGHT_METERS = 0.3;
         
-        double RAMP_RATE_CURRENT = 1.0;
-        double RAMP_RATE_VOLTAGE = 0.1;
-
-        // FIND OUT REAL GEAR RATIO
-        double GEAR_RATIO = 1.0 / 5.0;
-        double CURRENT_LIMIT = 5.0;
-
-        // Magic motion, change RPS
-        double TARGET_CRUISE_VELOCITY = 0.0; // Rotations Per Second
-        double TARGET_ACCELERATION = 0.0; // Rotations Per Second^2
-        double TARGET_JERK = 0.0; // Rotations Per Second^3
-
         SmartNumber HEIGHT_TOLERANCE_METERS =
                 new SmartNumber("Elevator/Height Tolerance (m)", 0.02);
 
@@ -108,20 +106,6 @@ public interface Settings {
     }
 
     public interface Arm {
-
-        public interface PID {
-            SmartNumber kP = new SmartNumber("Arm/PID/kP", 0.0);
-            SmartNumber kI = new SmartNumber("Arm/PID/kI", 0);
-            SmartNumber kD = new SmartNumber("Arm/PID/kD", 0);
-        }
-
-        public interface FF {
-            SmartNumber kS = new SmartNumber("Arm/PID/kP", 0.0);
-            SmartNumber kV = new SmartNumber("Arm/PID/kI", 0);
-            SmartNumber kA = new SmartNumber("Arm/PID/kD", 0);
-            SmartNumber kG = new SmartNumber("Arm/PID/kG", 0);
-        }
-
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(0);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(0);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(0);
@@ -139,24 +123,26 @@ public interface Settings {
 
         Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(0);
 
-        double GEAR_RATIO = 0.833333330333;
-        double ARM_OFFSET = 0.0;
-        double ENCODER_OFFSET = 0.0;
-        double TOLERANCE = 1.0;
-        double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
+        public interface PID {
+            SmartNumber kP = new SmartNumber("Arm/PID/kP", 0.0);
+            SmartNumber kI = new SmartNumber("Arm/PID/kI", 0);
+            SmartNumber kD = new SmartNumber("Arm/PID/kD", 0);
+        }
+
+        public interface FF {
+            SmartNumber kS = new SmartNumber("Arm/PID/kP", 0.0);
+            SmartNumber kV = new SmartNumber("Arm/PID/kI", 0);
+            SmartNumber kA = new SmartNumber("Arm/PID/kD", 0);
+            SmartNumber kG = new SmartNumber("Arm/PID/kG", 0);
+        }
+
         SmartNumber PID_RAMPING = new SmartNumber("Arm/PID_RAMP",0);
         SmartNumber FF_RAMPING = new SmartNumber("Arm/FF_RAMP", 0);
         SmartNumber CURRENT_RAMPING = new SmartNumber("Arm/CURRENT_RAMP", 0);
 
-        double AREA = 3; // meters squared
-        double ARM_LENGTH = Units.inchesToMeters(3);
-        double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
-
-        double LOWER_ANGLE_LIMIT = 0;
-        double UPPER_ANGLE_LIMIT = 360;
-
         double MAX_VELOCITY_METERS_PER_SECOND = 0;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0;
+        double TOLERANCE = 1.0;
 
         public interface MotionMagic {
             double MAX_VEL = 10.0;
@@ -166,6 +152,8 @@ public interface Settings {
     }
 
     public interface Froggy {
+        double CORAL_CURRENT_THRESHOLD = 0.0;
+        double ALGAE_CURRENT_THRESHOLD = 0.0;
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
@@ -178,14 +166,9 @@ public interface Settings {
         double CORAL_INTAKE_SPEED = 0.0;
         double CORAL_OUTTAKE_SPEED = 0.0;
 
-        double CORAL_CURRENT_THRESHOLD = 0.0;
-        double ALGAE_CURRENT_THRESHOLD = 0.0;
-
-        double GEAR_RATIO = 0.0;
         double PIVOT_CURRENT_LIMIT = 0.0;
         double STATOR_CURRENT_LIMIT = 0.0;
         double ROLLER_CURRENT_THRESHOLD = 0.0;
-        double ANGLE_OFFSET = 0.0;
 
         double ROLLER_FF_RAMPING = 0.0;
         double PIVOT_FF_RAMPING = 0.0;
@@ -193,10 +176,6 @@ public interface Settings {
         double PIVOT_PID_RAMPING = 0.0;
         double ROLLER_DEBOUNCE_TIME = 0.0;
 
-        double MINIMUM_ANGLE = 0.0;
-        double MAXIMUM_ANGLE = 0.0;
-        double MAGNET_OFFSET = 0.0;
-        double ENCODER_GEAR_RATIO = 0.0;
         double HOLD_SPEED = 0.0;
 
         public interface PID {
@@ -228,7 +207,6 @@ public interface Settings {
         double kD = 0.0;
 
         int CURRENT_LIMIT = 0;
-        double GEAR_RATIO = 25;
         double RAMP_RATE = 0;
 
         double STOW_ANGLE = 0.0;
@@ -239,7 +217,6 @@ public interface Settings {
     }
     
     public interface LED {
-        public int LED_LENGTH = 0;
         Color SHOOT_COLOR = Color.kGreen;
         Color ABORT_COLOR = Color.kBlue;
         Color HAS_CORAL_COLOR = Color.kRed;

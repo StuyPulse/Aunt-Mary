@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
@@ -49,7 +50,7 @@ public class ClimbImpl extends Climb {
         // basic configs
         climbMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         climbMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        climbMotorConfig.Feedback.SensorToMechanismRatio = Settings.Climb.GEAR_RATIO;
+        climbMotorConfig.Feedback.SensorToMechanismRatio = Constants.Climb.GEAR_RATIO;
 
         // current limiting
         climbMotorConfig.CurrentLimits.StatorCurrentLimit = Settings.Climb.CURRENT_LIMIT;

@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
@@ -54,7 +55,7 @@ public class ArmImpl extends Arm {
         slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
         config.Slot0 = slot0;
-        config.Feedback.SensorToMechanismRatio = Settings.Arm.GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = Constants.Arm.GEAR_RATIO;
         // config.Feedback.RotorToSensorRatio = 0.0;
         config.Feedback.FeedbackRemoteSensorID = armEncoder.getDeviceID();
         config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
@@ -69,7 +70,7 @@ public class ArmImpl extends Arm {
         motionMagicConfigs.MotionMagicJerk = Settings.Arm.MotionMagic.JERK;
 
         MagnetSensorConfigs magnet_config = new MagnetSensorConfigs();
-        magnet_config.MagnetOffset = Settings.Arm.ENCODER_OFFSET;
+        magnet_config.MagnetOffset = Constants.Arm.ANGLE_OFFSET;
 
         config.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Arm.PID_RAMPING.getAsDouble();
         config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Arm.FF_RAMPING.getAsDouble();

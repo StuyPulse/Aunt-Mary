@@ -10,7 +10,7 @@ import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 import com.stuypulse.stuylib.streams.numbers.IStream;
-
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
@@ -68,7 +68,7 @@ public class FroggyImpl extends Froggy {
 
         pivotConfig.Slot0 = slot0;
         pivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        pivotConfig.Feedback.SensorToMechanismRatio = Settings.Froggy.GEAR_RATIO;
+        pivotConfig.Feedback.SensorToMechanismRatio = Constants.Froggy.GEAR_RATIO;
         pivotConfig.CurrentLimits.StatorCurrentLimit = Settings.Froggy.STATOR_CURRENT_LIMIT;
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         pivotConfig.TorqueCurrent.PeakForwardTorqueCurrent = Settings.Froggy.PIVOT_CURRENT_LIMIT;
@@ -76,7 +76,7 @@ public class FroggyImpl extends Froggy {
         pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
         pivotConfig.Feedback.FeedbackRemoteSensorID = pivotEncoder.getDeviceID();
         pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        pivotConfig.Feedback.RotorToSensorRatio = Settings.Froggy.ENCODER_GEAR_RATIO;
+        pivotConfig.Feedback.RotorToSensorRatio = Constants.Froggy.ENCODER_GEAR_RATIO;
         pivotConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Settings.Froggy.PIVOT_PID_RAMPING;
         pivotConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Froggy.PIVOT_FF_RAMPING;
         pivotConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = Settings.Froggy.PIVOT_FF_RAMPING;
@@ -84,7 +84,7 @@ public class FroggyImpl extends Froggy {
 
         rollerConfig.Slot0 = slot0;
         rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        rollerConfig.Feedback.SensorToMechanismRatio = Settings.Froggy.GEAR_RATIO;
+        rollerConfig.Feedback.SensorToMechanismRatio = Constants.Froggy.GEAR_RATIO;
         rollerConfig.CurrentLimits.StatorCurrentLimit = Settings.Froggy.STATOR_CURRENT_LIMIT;
         rollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         rollerConfig.TorqueCurrent.PeakForwardTorqueCurrent = Settings.Froggy.PIVOT_CURRENT_LIMIT;
@@ -95,7 +95,7 @@ public class FroggyImpl extends Froggy {
         rollerConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = Settings.Froggy.ROLLER_FF_RAMPING;
         rollerConfig.OpenLoopRamps.TorqueOpenLoopRampPeriod = Settings.Froggy.ROLLER_PID_RAMPING;
 
-        encoderConfig.MagnetSensor.MagnetOffset = Settings.Froggy.MAGNET_OFFSET;
+        encoderConfig.MagnetSensor.MagnetOffset = Constants.Froggy.MAGNET_OFFSET;
         encoderConfig.MagnetSensor.SensorDirection =
                 SensorDirectionValue.CounterClockwise_Positive; // need to find this out
 
@@ -133,8 +133,8 @@ public class FroggyImpl extends Froggy {
                 Rotation2d.fromDegrees(
                         SLMath.clamp(
                                 getCurrentAngle().getDegrees(),
-                                Settings.Froggy.MINIMUM_ANGLE,
-                                Settings.Froggy.MAXIMUM_ANGLE));
+                                Constants.Froggy.MINIMUM_ANGLE,
+                                Constants.Froggy.MAXIMUM_ANGLE));
     }
 
     @Override

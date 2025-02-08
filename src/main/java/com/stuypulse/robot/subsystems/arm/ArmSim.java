@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.arm;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.elevator.ElevatorVisualizer;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
@@ -35,11 +36,11 @@ public class ArmSim extends SubsystemBase{
     protected ArmSim() {
         sim = new SingleJointedArmSim(
             DCMotor.getKrakenX60(1),
-            Settings.Arm.GEAR_RATIO,
-            Settings.Arm.MOMENT_OF_INERTIA,
-            Settings.Arm.ARM_LENGTH,
-            Settings.Arm.LOWER_ANGLE_LIMIT,
-            Settings.Arm.UPPER_ANGLE_LIMIT,
+            Constants.Arm.GEAR_RATIO,
+            Constants.Arm.MOMENT_OF_INERTIA,
+            Constants.Arm.ARM_LENGTH,
+            Constants.Arm.LOWER_ANGLE_LIMIT,
+            Constants.Arm.UPPER_ANGLE_LIMIT,
             true,
             
             0,0);
