@@ -210,4 +210,11 @@ public interface Settings {
         double CLIMBED_ANGLE = 0.0;
         double CLIMB_ANGLE_TOLERANCE = 2.0;
     }
+
+    public interface Auton {
+
+        double SHOOTER_WAIT_TIME = 0.0;
+
+    }
+
 }
