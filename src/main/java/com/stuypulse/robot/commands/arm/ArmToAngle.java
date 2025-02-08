@@ -6,15 +6,22 @@
 
 package com.stuypulse.robot.commands.arm;
 
-import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.arm.Arm;
 
-public class ArmMoveToL3Front extends ArmMoveToAngle {
-    public ArmMoveToL3Front() {
-        super(Settings.Arm.L3_ANGLE_FRONT);
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+public class ArmToAngle extends InstantCommand{
+    protected final Arm arm;
+    protected final Rotation2d angle;
+
+    public ArmToAngle(Rotation2d angle){
+        arm = Arm.getInstance();
+        this.angle = angle;
     }
 
     @Override
     public void initialize() {
-        super.initialize();
+        arm.setTargetAngle(angle);
     }
 }

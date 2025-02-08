@@ -55,17 +55,22 @@ public interface Settings {
                 new SmartNumber("Elevator/Max Accel (m per s^2)", 2.0);
 
         // CHANGE
-        double HANDOFF_HEIGHT_METERS = 0.1;
-        // front and funnel
-        double L2_FRONT_HEIGHT = 0.25;
-        double L3_FRONT_HEIGHT = 0.5;
-        double L4_FRONT_HEIGHT = 0.75;
-        double L2_BACK_HEIGHT = 0.3; // funnel side; should be higher than L2
-        double L3_BACK_HEIGHT = 0.55; // funnel side; should be higher than L3
-        double L4_BACK_HEIGHT = 0.8;
-        double L2_REEF_HEIGHT = 0.5;
-        double L3_REEF_HEIGHT = 0.75;
+        double FUNNEL_HEIGHT_METERS = 0.1;
+        double CLEARANCE_HEIGHT_METERS = 0.3; // above this is safe for arm funnel side
+        
+        // Front and Funnel
+        double FRONT_L2_HEIGHT_METERS = 0.25;
+        double FRONT_L3_HEIGHT_METERS = 0.5;
+        double FRONT_L4_HEIGHT_METERS = 0.75;
+        double FUNNEL_L2_HEIGHT_METERS = 0.3; // funnel side; should be higher than L2
+        double FUNNEL_L3_HEIGHT_METERS = 0.55; // funnel side; should be higher than L3
+        double FUNNEL_L4_HEIGHT_METERS = 0.8;
 
+        // Algae
+        double BARGE_HEIGHT_METERS = 0.9;
+        double ALGAE_L2_HEIGHT_METERS = 0.2;
+        double ALGAE_L3_HEIGHT_METERS = 0.3;
+        
         double RAMP_RATE_CURRENT = 1.0;
         double RAMP_RATE_VOLTAGE = 0.1;
 
@@ -123,12 +128,19 @@ public interface Settings {
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(0);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(0);
 
-        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(0);
-        double GEAR_RATIO = 0;
-        double ARM_OFFSET = 0;
-        double ENCODER_OFFSET = 0;
-        SmartNumber PID_RAMPING = new SmartNumber("Arm/PID_RAMP", 0);
+
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
+
+        double GEAR_RATIO = 0.0;
+        double ARM_OFFSET = 0.0;
+        double ENCODER_OFFSET = 0.0;
+        double TOLERANCE = 1.0;
+        double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
+        SmartNumber PID_RAMPING = new SmartNumber("Arm/PID_RAMP",0);
         SmartNumber FF_RAMPING = new SmartNumber("Arm/FF_RAMP", 0);
         SmartNumber CURRENT_RAMPING = new SmartNumber("Arm/CURRENT_RAMP", 0);
 

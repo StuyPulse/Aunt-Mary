@@ -36,6 +36,10 @@ import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.funnel.CoralFunnel;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
+import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
+import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,10 +57,6 @@ public class RobotContainer {
     private final LokiShooter shooter = LokiShooter.getInstance();
     private final Arm arm = Arm.getInstance();
     private final Elevator elevator = Elevator.getInstance();
-    private final Climb climb = Climb.getInstance();
-    private final Froggy froggy = Froggy.getInstance();
-
-    public final LEDController ledController = LEDController.getInstance();
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();

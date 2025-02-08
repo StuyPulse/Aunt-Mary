@@ -30,11 +30,14 @@ public class ArmImpl extends Arm {
 
     private CANcoder armEncoder;
 
+    private boolean rotateOverElevator;
+
     public ArmImpl() {
 
         targetAngle = Rotation2d.fromDegrees(0.0);
         armMotor = new TalonFX(Ports.Arm.ARM_MOTOR);
         armEncoder = new CANcoder(Ports.Arm.ARM_ENCODER);
+        rotateOverElevator = false;
 
         TalonFXConfiguration config = new TalonFXConfiguration();
 
@@ -90,13 +93,30 @@ public class ArmImpl extends Arm {
         return Rotation2d.fromRotations(armMotor.getPosition().getValueAsDouble());
     }
 
+    public boolean getRotateBoolean() {
+        return rotateOverElevator;
+    }
+
+    public void setRotateBoolean(boolean overElevator) {
+        rotateOverElevator = overElevator;
+    }
+
+    public boolean atTargetAngle() {
+        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees() ) < Settings.Arm.TOLERANCE;
+    }
+
     @Override
     public void periodic() {
-
-        MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
-        // armMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
-        armMotor.setControl(armOutput);
-
+        
+        // check?
+        if (!getRotateBoolean()) {
+            MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
+            armMotor.setControl(armOutput);
+        } else {
+            MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations()-1);
+            armMotor.setControl(armOutput);
+        }
+        
         SmartDashboard.putNumber("Arm/targetAngle", getTargetAngle().getDegrees());
         SmartDashboard.putNumber("Arm/currentAngle", getArmAngle().getDegrees());
     }
