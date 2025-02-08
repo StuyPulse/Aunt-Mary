@@ -41,14 +41,26 @@ public class ElevatorSimu extends Elevator {
         minHeight = Constants.Elevator.MIN_HEIGHT_METERS;
         maxHeight = Constants.Elevator.MAX_HEIGHT_METERS;
 
-        targetHeight = new SmartNumber("Elevator/Target Height (m)", Constants.Elevator.MIN_HEIGHT_METERS);
-        
-        MotionProfile motionProfile = new MotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
-        
-        controller = new MotorFeedforward(Settings.Elevator.FF.kS, Settings.Elevator.FF.kV, Settings.Elevator.FF.kA).position()
-            .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
-            .add(new PIDController(Settings.Elevator.PID.kP, Settings.Elevator.PID.kI, Settings.Elevator.PID.kD))
-            .setSetpointFilter(motionProfile);
+        targetHeight =
+                new SmartNumber("Elevator/Target Height (m)", Constants.Elevator.MIN_HEIGHT_METERS);
+
+        MotionProfile motionProfile =
+                new MotionProfile(
+                        Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND,
+                        Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+
+        controller =
+                new MotorFeedforward(
+                            Settings.Elevator.FF.kS,
+                            Settings.Elevator.FF.kV,
+                            Settings.Elevator.FF.kA)
+                        .position()
+                        .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
+                        .add(new PIDController(
+                            Settings.Elevator.PID.kP,
+                            Settings.Elevator.PID.kI,
+                            Settings.Elevator.PID.kD))
+                        .setSetpointFilter(motionProfile);
     }
 
     public ElevatorSim getSim() {

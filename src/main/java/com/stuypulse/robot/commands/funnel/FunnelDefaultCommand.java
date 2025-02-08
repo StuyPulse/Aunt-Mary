@@ -57,4 +57,8 @@ public class FunnelDefaultCommand extends Command {
             funnel.forward();
         }
     }
+
+    public boolean isUnjamming(){
+        return reversed;
+    }
 }

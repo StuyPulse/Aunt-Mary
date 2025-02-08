@@ -3,9 +3,15 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Autonomous": "String Chooser",
+      "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d"
     },
     "windows": {
+      "/SmartDashboard/Visualizers/Arm": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Visualizers/Elevator": {
         "window": {
           "visible": true
@@ -24,6 +30,9 @@
     }
   },
   "NetworkTables Info": {
+    "Server": {
+      "open": true
+    },
     "visible": true
   }
 }

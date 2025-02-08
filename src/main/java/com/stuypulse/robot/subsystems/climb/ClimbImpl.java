@@ -29,7 +29,8 @@ public class ClimbImpl extends Climb {
     public ClimbImpl() {
         climbMotor = new TalonFX(Ports.Climb.CLIMB_MOTOR);
         climbEncoder = new CANcoder(Ports.Climb.CLIMB_ENCODER);
-
+        targetAngle = new Rotation2d();
+    
         TalonFXConfiguration climbMotorConfig = new TalonFXConfiguration();
 
         // gains setting

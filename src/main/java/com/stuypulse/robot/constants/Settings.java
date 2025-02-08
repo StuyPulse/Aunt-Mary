@@ -9,6 +9,7 @@ package com.stuypulse.robot.constants;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -144,6 +145,17 @@ public interface Settings {
         SmartNumber FF_RAMPING = new SmartNumber("Arm/FF_RAMP", 0);
         SmartNumber CURRENT_RAMPING = new SmartNumber("Arm/CURRENT_RAMP", 0);
 
+        double GEAR_RATIO = 0.833333330333;
+        double AREA = 3; // meters squared
+        double ARM_LENGTH = Units.inchesToMeters(3);
+        double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
+
+        double LOWER_ANGLE_LIMIT = 0;
+        double UPPER_ANGLE_LIMIT = 360;
+
+        double MAX_VELOCITY_METERS_PER_SECOND = 0;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0;
+
         public interface MotionMagic {
             double MAX_VEL = 0;
             double MAX_ACCEL = 0;
@@ -218,7 +230,7 @@ public interface Settings {
         double RAMP_RATE = 0;
 
         double STOW_ANGLE = 0.0;
-        double INTAKE_ANGLE = 0.0;
+        double OPEN_ANGLE = 0.0;
         double ACQUIRED_ANGLE = 0.0;
         double CLIMBED_ANGLE = 0.0;
         double CLIMB_ANGLE_TOLERANCE = 2.0;

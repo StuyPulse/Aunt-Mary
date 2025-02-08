@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.commands.froggy;
 
+import com.stuypulse.robot.commands.led.LedRainbow;
 import com.stuypulse.robot.subsystems.froggy.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,7 @@ public class FroggyIntakeCoral extends Command {
 
     @Override
     public void execute() {
+        new LedRainbow().schedule();
         froggy.intakeCoral();
     }
 

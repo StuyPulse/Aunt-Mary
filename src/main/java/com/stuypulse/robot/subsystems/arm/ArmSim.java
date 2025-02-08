@@ -1,0 +1,89 @@
+package com.stuypulse.robot.subsystems.arm;
+
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.elevator.ElevatorVisualizer;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
+import com.stuypulse.stuylib.network.SmartNumber;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
+import com.stuypulse.stuylib.control.Controller;
+
+
+public class ArmSim extends SubsystemBase{
+
+    private final SingleJointedArmSim sim;
+    private final Controller controller;
+
+    private final SmartNumber targetAngle;
+
+    private static final ArmSim instance;
+
+    static{
+        instance = new ArmSim();
+    
+    }
+
+    protected ArmSim() {
+        sim = new SingleJointedArmSim(
+            DCMotor.getKrakenX60(1),
+            Settings.Arm.GEAR_RATIO,
+            Settings.Arm.MOMENT_OF_INERTIA,
+            Settings.Arm.ARM_LENGTH,
+            Settings.Arm.LOWER_ANGLE_LIMIT,
+            Settings.Arm.UPPER_ANGLE_LIMIT,
+            true,
+            
+            0,0);
+
+        MotionProfile motionProfile =
+                new MotionProfile(
+                        Settings.Arm.MAX_VELOCITY_METERS_PER_SECOND,
+                        Settings.Arm.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+
+        controller =
+                new MotorFeedforward(
+                        Settings.Elevator.FF.kS,
+                        Settings.Elevator.FF.kV,
+                        Settings.Elevator.FF.kA)
+                        .position()
+                        .add(new ArmFeedforward(Settings.Arm.FF.kG))
+                        .add(new PIDController(
+                            Settings.Elevator.PID.kP.getAsDouble(),
+                            Settings.Elevator.PID.kI.getAsDouble(),
+                            Settings.Elevator.PID.kD.getAsDouble()))
+                        .setSetpointFilter(motionProfile);
+
+        targetAngle = new SmartNumber("Arm/Target Angle", 0.0);
+    }
+
+    public static ArmSim getInstance() {
+        return instance;
+    }
+
+    public double getTargetAngle() {
+        return targetAngle.getAsDouble();
+    }
+
+    public double getArmAngle() {
+        return Rotation2d.fromRadians(sim.getAngleRads()).getDegrees();
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+
+        ArmVisualizer.getInstance().update();
+
+        sim.update(0.020);
+
+        SmartDashboard.putNumber("Arm/Arm Angle", getArmAngle());
+        SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle());
+}
+}

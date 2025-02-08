@@ -16,37 +16,37 @@ public interface Ports {
     }
 
     public interface Froggy {
-        int ROLLER_PORT = 0; // CHANGE
-        int PIVOT_PORT = 0; // CHANGE
-        int PIVOT_ENCODER = 0;
+        int ROLLER_PORT = 3; // CHANGE
+        int PIVOT_PORT = 4; // CHANGE
+        int PIVOT_ENCODER = 5;
     }
 
     public interface Climb {
-        int CLIMB_MOTOR = 0;
-        int CLIMB_ENCODER = 0;
+        int CLIMB_MOTOR = 6;
+        int CLIMB_ENCODER = 7;
     }
 
     public interface Arm {
-        int ARM_MOTOR = 0;
-        int ARM_ENCODER = 0;
+        int ARM_MOTOR = 8;
+        int ARM_ENCODER = 9;
     }
 
     // Set values later
     public interface Shooter {
-        int MOTOR = 0;
-        int RECEIVER = 1;
+        int MOTOR = 17;
+        int RECEIVER = 11;
     }
 
     // Set values later
     public interface Funnel {
-        int MOTOR = 0;
-        int IR = 1;
+        int MOTOR = 12;
+        int IR = 13;
     }
 
     public interface Elevator {
-        int MOTOR = 0;
-        int BOTTOM_SWITCH = 1;
-        int TOP_SWITCH = 2;
+        int MOTOR = 14;
+        int BOTTOM_SWITCH = 15;
+        int TOP_SWITCH = 16;
     }
 
     public interface LED {
