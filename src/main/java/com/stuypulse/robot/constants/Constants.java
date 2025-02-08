@@ -26,8 +26,7 @@ public class Constants {
 
             double NUM_ROTATIONS_TO_REACH_TOP =
                     (6 + 9.0 / 24)
-                            * GEARING; // Number of rotations that the motor has to spin, NOT the
-            // gear
+                            * GEARING; // Number of rotations that the motor has to spin, NOT the gear
 
             double POSITION_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP;
             double VELOCITY_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP / 60;

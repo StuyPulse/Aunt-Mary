@@ -10,6 +10,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -158,9 +159,9 @@ public interface Settings {
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0;
 
         public interface MotionMagic {
-            double MAX_VEL = 0;
-            double MAX_ACCEL = 0;
-            double JERK = 0;
+            double MAX_VEL = 10.0;
+            double MAX_ACCEL = 2.5;
+            double JERK = 0.0;
         }
     }
 
@@ -239,6 +240,12 @@ public interface Settings {
     
     public interface LED {
         public int LED_LENGTH = 0;
+        Color SHOOT_COLOR = Color.kGreen;
+        Color ABORT_COLOR = Color.kBlue;
+        Color HAS_CORAL_COLOR = Color.kRed;
+        Color ALIGN_COLOR = Color.kYellow;
+        Color UNJAM_COLOR = Color.kBlue;
+        Color CLIMB_COLOR = Color.kGreen;
     }
 
 }
