@@ -136,7 +136,7 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
 
-        double GEAR_RATIO = 0.0;
+        double GEAR_RATIO = 0.833333330333;
         double ARM_OFFSET = 0.0;
         double ENCODER_OFFSET = 0.0;
         double TOLERANCE = 1.0;
@@ -145,7 +145,6 @@ public interface Settings {
         SmartNumber FF_RAMPING = new SmartNumber("Arm/FF_RAMP", 0);
         SmartNumber CURRENT_RAMPING = new SmartNumber("Arm/CURRENT_RAMP", 0);
 
-        double GEAR_RATIO = 0.833333330333;
         double AREA = 3; // meters squared
         double ARM_LENGTH = Units.inchesToMeters(3);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;

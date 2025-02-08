@@ -6,7 +6,7 @@
 
 package com.stuypulse.robot;
 
-//import com.stuypulse.robot.subsystems.led.LEDController;
+import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 import com.stuypulse.robot.commands.arm_elevator.*;
@@ -32,7 +32,9 @@ import com.stuypulse.robot.commands.lokishooter.ShooterShootFront;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.funnel.CoralFunnel;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
