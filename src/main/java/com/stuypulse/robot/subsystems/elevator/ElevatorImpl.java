@@ -99,7 +99,7 @@ public class ElevatorImpl extends Elevator {
     @Override
     public boolean atTargetHeight() {
         return Math.abs(getTargetHeight() - getCurrentHeight())
-                < Settings.Elevator.HEIGHT_TOLERANCE_METERS.get();
+                < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ElevatorImpl extends Elevator {
         motor.setControl(controlRequest);
 
         if (atBottom()) {
-            motor.setPosition(0);
+            motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
         }
 
         SmartDashboard.putNumber("Elevator/Current Height", getCurrentHeight());

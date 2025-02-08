@@ -9,7 +9,6 @@ package com.stuypulse.robot.constants;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
 
 /*-
@@ -18,6 +17,7 @@ import edu.wpi.first.wpilibj.util.Color;
  * We use StuyLib's SmartNumber / SmartBoolean in order to have tunable
  * values that we can edit on Shuffleboard.
  */
+
 public interface Settings {
     double DT = 0.020; // 20ms Differential Time
 
@@ -45,7 +45,7 @@ public interface Settings {
 
         double RAMP_RATE = 0.0;
 
-        double GEAR_RATIO = 0.0;
+        double GEAR_RATIO = 1.0;
         double DRIVE_CURRENT_THRESHOLD = 30;
         double DRIVE_CURRENT_LIMIT = 40;
     }
@@ -56,35 +56,33 @@ public interface Settings {
         SmartNumber MAX_ACCEL_METERS_PER_SECOND_PER_SECOND =
                 new SmartNumber("Elevator/Max Accel (m per s^2)", 2.0);
 
-        double RAMP_RATE_CURRENT = 1.0;
+        double RAMP_RATE_CURRENT = 2.5;
         double RAMP_RATE_VOLTAGE = 0.1;
 
         double CURRENT_LIMIT = 5.0;
 
-        // Magic motion, change RPS
+        // Motion magic, change RPS
         double TARGET_CRUISE_VELOCITY = 0.0; // Rotations Per Second
         double TARGET_ACCELERATION = 0.0; // Rotations Per Second^2
         double TARGET_JERK = 0.0; // Rotations Per Second^3
 
         // CHANGE
-        double FUNNEL_HEIGHT_METERS = 0.1;
-        double CLEARANCE_HEIGHT_METERS = 0.3; // above this is safe for arm funnel side
+        double FEED_HEIGHT_METERS = 1.0; // estimate
         
         // Front and Funnel
-        double FRONT_L2_HEIGHT_METERS = 0.25;
-        double FRONT_L3_HEIGHT_METERS = 0.5;
-        double FRONT_L4_HEIGHT_METERS = 0.75;
-        double FUNNEL_L2_HEIGHT_METERS = 0.3; // funnel side; should be higher than L2
-        double FUNNEL_L3_HEIGHT_METERS = 0.55; // funnel side; should be higher than L3
-        double FUNNEL_L4_HEIGHT_METERS = 0.8;
+        double FRONT_L2_HEIGHT_METERS = 1.609;
+        double FRONT_L3_HEIGHT_METERS = 1.073;
+        double FRONT_L4_HEIGHT_METERS = 1.708;
+        double FUNNEL_L2_HEIGHT_METERS = 1.106; // funnel side; should be higher than L2
+        double FUNNEL_L3_HEIGHT_METERS = 1.161; // funnel side; should be higher than L3
+        double FUNNEL_L4_HEIGHT_METERS = 1.836;
 
         // Algae
-        double BARGE_HEIGHT_METERS = 0.9;
-        double ALGAE_L2_HEIGHT_METERS = 0.2;
-        double ALGAE_L3_HEIGHT_METERS = 0.3;
+        double BARGE_HEIGHT_METERS = 2.073;
+        double ALGAE_L2_HEIGHT_METERS = 1.4; // estimate
+        double ALGAE_L3_HEIGHT_METERS = 1.8; // estimate
         
-        SmartNumber HEIGHT_TOLERANCE_METERS =
-                new SmartNumber("Elevator/Height Tolerance (m)", 0.02);
+        double HEIGHT_TOLERANCE_METERS = 0.02;
 
         public interface PID {
             // tune
@@ -100,31 +98,28 @@ public interface Settings {
             SmartNumber kG = new SmartNumber("Elevator/Controller/kG", 1.37);
         }
 
-        public interface Simulation {
-            double SCALE_FACTOR = 0.5 + 2.5 / 77;
-        }
     }
 
     public interface Arm {
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(0);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(0);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(0);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0);
 
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(0);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(0);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(0);
+        Rotation2d L2_ANGLE_FUNNEL = Rotation2d.fromDegrees(261.5);
+        Rotation2d L3_ANGLE_FUNNEL = Rotation2d.fromDegrees(236.1);
+        Rotation2d L4_ANGLE_FUNNEL = Rotation2d.fromDegrees(240.0);
 
-        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7); // estimate
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9); // estimate
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(150.0);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-8.0); // estimate
+        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(-9.8);
 
-        Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(180.0);
 
         public interface PID {
-            SmartNumber kP = new SmartNumber("Arm/PID/kP", 0.0);
+            SmartNumber kP = new SmartNumber("Arm/PID/kP", 0);
             SmartNumber kI = new SmartNumber("Arm/PID/kI", 0);
             SmartNumber kD = new SmartNumber("Arm/PID/kD", 0);
         }
@@ -142,7 +137,7 @@ public interface Settings {
 
         double MAX_VELOCITY_METERS_PER_SECOND = 0;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0;
-        double TOLERANCE = 1.0;
+        double ARM_TOLERANCE = 1.0; // Degrees
 
         public interface MotionMagic {
             double MAX_VEL = 10.0;
@@ -152,9 +147,9 @@ public interface Settings {
     }
 
     public interface Froggy {
-        double CORAL_CURRENT_THRESHOLD = 0.0;
-        double ALGAE_CURRENT_THRESHOLD = 0.0;
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
+        double CORAL_CURRENT_THRESHOLD = 1.0;
+        double ALGAE_CURRENT_THRESHOLD = 1.0;
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0); //Change
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
@@ -192,8 +187,8 @@ public interface Settings {
         }
 
         public interface MotionMagic {
-            double MAX_VELOCITY = 0.0;
-            double MAX_ACCELERATION = 0.0;
+            double MAX_VELOCITY = 1.0;
+            double MAX_ACCELERATION = 1.0;
             double MAX_JERK = 0.0;
         }
     }

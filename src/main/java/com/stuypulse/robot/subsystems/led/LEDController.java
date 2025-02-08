@@ -2,7 +2,6 @@ package com.stuypulse.robot.subsystems.led;
 
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Ports;
-import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;

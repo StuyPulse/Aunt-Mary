@@ -103,7 +103,7 @@ public class ArmImpl extends Arm {
     }
 
     public boolean atTargetAngle() {
-        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees() ) < Settings.Arm.TOLERANCE;
+        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees() ) < Settings.Arm.ARM_TOLERANCE;
     }
 
     @Override

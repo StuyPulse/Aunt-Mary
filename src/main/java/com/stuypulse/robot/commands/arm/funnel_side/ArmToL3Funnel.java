@@ -5,7 +5,7 @@ import com.stuypulse.robot.commands.arm.ArmToAngle;
 
 public class ArmToL3Funnel extends ArmToAngle {
     public ArmToL3Funnel(){
-        super(Settings.Arm.L3_ANGLE_BACK);
+        super(Settings.Arm.L3_ANGLE_FUNNEL);
     }
     @Override
     public void initialize(){

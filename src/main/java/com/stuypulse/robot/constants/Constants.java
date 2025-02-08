@@ -10,10 +10,12 @@ import edu.wpi.first.math.util.Units;
 
 public class Constants {
     public interface Elevator {
-        double MIN_HEIGHT_METERS =
-                Units.inchesToMeters(9.09375); // FROM THE BOTTOM OF FIXED STAGE TO TOP OF CARRIAGE
-        double MAX_HEIGHT_METERS =
-                Units.inchesToMeters(77); // FROM THE BOTTOM OF FIXED STAGE TO TOP ELEVATOR
+        double MIN_HEIGHT_METERS = 0.889; // check?
+        double MAX_HEIGHT_METERS = 2.1; // definitely check
+        // double MIN_HEIGHT_METERS =
+        //         Units.inchesToMeters(9.09375); // FROM THE BOTTOM OF FIXED STAGE TO TOP OF CARRIAGE
+        // double MAX_HEIGHT_METERS =
+        //         Units.inchesToMeters(77); // FROM THE BOTTOM OF FIXED STAGE TO TOP ELEVATOR
 
         double MASS_KG = 10.0;
         double DRUM_RADIUS_METERS =

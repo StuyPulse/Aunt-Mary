@@ -47,9 +47,7 @@ public class ArmVisualizer {
         // Mechanism2d
         arm2d = new Mechanism2d(Units.inchesToMeters(36), Units.inchesToMeters(150));
         
-       
-
-                // Stage One
+        // Stage One
         // Bottom Left Node
         elevatorBL =
                 arm2d.getRoot(
@@ -180,7 +178,7 @@ public class ArmVisualizer {
                         0,
                         10,
                         new Color8Bit(Color.kPurple)));
-
+        
         // Top Right Node
         funnelTR = arm2d.getRoot(
                 "Funnel TR",
@@ -213,11 +211,11 @@ public class ArmVisualizer {
         Arm arm = Arm.getInstance();
 
         stageTwoBL.setPosition(
-                Units.inchesToMeters(4), 
+                Units.inchesToMeters(14), 
                 elevator.getCurrentHeight() + Units.inchesToMeters(4));
 
         stageTwoTR.setPosition(
-                Units.inchesToMeters(10), 
+                Units.inchesToMeters(22), 
                 elevator.getCurrentHeight() + Units.inchesToMeters(39));
 
         pivot.setPosition(
