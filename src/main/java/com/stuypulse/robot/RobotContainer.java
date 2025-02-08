@@ -23,13 +23,18 @@ import com.stuypulse.robot.commands.elevator.ElevatorToLvl3Front;
 import com.stuypulse.robot.commands.elevator.ElevatorToLvl4Front;
 import com.stuypulse.robot.commands.froggy.FroggyAlgaeGroundIntake;
 import com.stuypulse.robot.commands.froggy.FroggyCoralGroundIntake;
+import com.stuypulse.robot.commands.froggy.FroggyIntakeAlgae;
+import com.stuypulse.robot.commands.froggy.FroggyOuttakeAlgae;
 import com.stuypulse.robot.commands.froggy.FroggyProcessorScore;
 import com.stuypulse.robot.commands.froggy.FroggyScoreL1;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
+import com.stuypulse.robot.commands.led.LedRainbow;
+import com.stuypulse.robot.commands.led.LedSolidColor;
 import com.stuypulse.robot.commands.lokishooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.lokishooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.lokishooter.ShooterShootFront;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
@@ -39,8 +44,10 @@ import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
@@ -62,15 +69,28 @@ public class RobotContainer {
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
     // Robot container
-
     public RobotContainer() {
         configureDefaultCommands();
         configureButtonBindings();
         configureAutons();
+
+        new Trigger(() -> froggy.hasCoral() || shooter.hasCoral())
+            .onTrue(new LedSolidColor(Color.kRed));
+            
+        new Trigger(((FunnelDefaultCommand) funnel.getDefaultCommand())::isUnjamming)
+            .onTrue(new LedSolidColor(Color.kBlue));
+        
+        // Climb open, hooks go from stow to intake angle 
+        new Trigger(() -> Math.abs(climb.getAngle().getDegrees() - Settings.Climb.OPEN_ANGLE) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE)
+            .onTrue(new LedRainbow());
+
+        new Trigger(() -> Math.abs(climb.getAngle().getDegrees() - Settings.Climb.CLIMBED_ANGLE) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE)
+            .onTrue(new LedSolidColor(Color.kGreen));
+
     }
 
     /****************/
-    /*** DEFAULTS ***/
+    /*** DEFAULT ***/
     /****************/
 
     private void configureDefaultCommands() {
@@ -78,7 +98,7 @@ public class RobotContainer {
     }
 
     /***************/
-    /*** BUTTONS ***/
+    /*** BUTTON ***/
     /***************/
 
     private void configureButtonBindings() {

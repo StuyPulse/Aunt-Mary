@@ -218,7 +218,7 @@ public interface Settings {
         double RAMP_RATE = 0;
 
         double STOW_ANGLE = 0.0;
-        double INTAKE_ANGLE = 0.0;
+        double OPEN_ANGLE = 0.0;
         double ACQUIRED_ANGLE = 0.0;
         double CLIMBED_ANGLE = 0.0;
         double CLIMB_ANGLE_TOLERANCE = 2.0;
