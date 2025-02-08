@@ -8,18 +8,14 @@ package com.stuypulse.robot;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-import com.stuypulse.robot.commands.arm.algae.ArmToBarge;
-import com.stuypulse.robot.commands.arm.front_side.ArmToL2Front;
-import com.stuypulse.robot.commands.arm.front_side.ArmToL3Front;
-import com.stuypulse.robot.commands.arm.front_side.ArmToL4Front;
+import com.stuypulse.robot.commands.arm_elevator.*;
+import com.stuypulse.robot.commands.arm_elevator.front_side.*;
+import com.stuypulse.robot.commands.arm_elevator.funnel_side.*;
+import com.stuypulse.robot.commands.arm_elevator.algae.*;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.ClimbDriveToClimb;
 import com.stuypulse.robot.commands.climb.ClimbDriveToIntake;
 import com.stuypulse.robot.commands.climb.ClimbDriveToStow;
-import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL2Front;
-import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL3Front;
-import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL4Front;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
 import com.stuypulse.robot.commands.froggy.FroggyAlgaeGroundIntake;
 import com.stuypulse.robot.commands.froggy.FroggyCoralGroundIntake;
 import com.stuypulse.robot.commands.froggy.FroggyProcessorScore;
@@ -82,30 +78,26 @@ public class RobotContainer {
     // BOTTOM BUTTON -> LVL 2 FRONT
     driver.getBottomButton()
         .whileTrue(new SequentialCommandGroup(
-            new ElevatorToL2Front()
-            .andThen(new ArmToL2Front())
+            new MoveToL2Front()
             .andThen(new ShooterShootFront()))); 
     
     // RIGHT BUTTON -> LVL 3 FRONT
     driver.getRightButton()
         .whileTrue(new SequentialCommandGroup(
-            new ElevatorToL3Front()
-            .andThen(new ArmToL3Front())
+            new MoveToL3Front()
             .andThen(new ShooterShootFront()))); 
     
     // TOP BUTTON -> LVL 4 FRONT
     driver.getTopButton()
         .whileTrue(new SequentialCommandGroup(
-            new ElevatorToL4Front()
-            .andThen(new ArmToL4Front())
+            new MoveToL4Front()
             .andThen(new ShooterShootFront()))); 
 
     // LEFT BUTTON -> BARGE SCORE
     driver.getLeftButton()
         .whileTrue(new SequentialCommandGroup(
-            new ElevatorToBarge()
-            .andThen(new ArmToBarge()
-            .andThen(new ShooterShootAlgae()))));
+            new MoveToBarge()
+            .andThen(new ShooterShootAlgae())));
     
     /* PADDLES */
     
@@ -124,15 +116,13 @@ public class RobotContainer {
     // LEFT TOP PADDLE -> L3 REEF ALGAE INTAKE
     driver.getDPadLeft()
         .whileTrue(new SequentialCommandGroup(
-            new ElevatorToL3Front()
-            .andThen(new ArmToL3Front())
+            new MoveToAlgaeL3()
             .andThen(new ShooterAcquireAlgae()))); // left top paddle -> get algae
         
     // LEFT BOTTOM PADDLE -> L2 REEF ALGAE INTAKE
     driver.getDPadDown()
         .whileTrue(new SequentialCommandGroup(
-            new ElevatorToL2Front()
-            .andThen(new ArmToL3Front())
+            new MoveToAlgaeL2()
             .andThen(new ShooterAcquireAlgae())));
     
     /* TRIGGERS */
