@@ -6,8 +6,6 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
-import com.stuypulse.robot.subsystems.arm.ArmVisualizer;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

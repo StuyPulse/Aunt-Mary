@@ -11,11 +11,6 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/Visualizers/Elevator": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
@@ -24,6 +19,23 @@
       "SmartDashboard": {
         "Elevator": {
           "open": true
+        },
+        "Froggy": {
+          "open": true
+        },
+        "Funnel": {
+          "open": true
+        },
+        "Shooter": {
+          "open": true
+        },
+        "Visualizers": {
+          "Arm": {
+            "open": true
+          },
+          "Elevator": {
+            "open": true
+          }
         },
         "open": true
       }

@@ -1,22 +1,22 @@
-package com.stuypulse.robot.commands.arm_elevator.algae;
+package com.stuypulse.robot.commands.routines;
 
 import com.stuypulse.robot.subsystems.elevator.Elevator;
-import com.stuypulse.robot.commands.arm.algae.*;
-import com.stuypulse.robot.commands.elevator.algae.*;
+import com.stuypulse.robot.commands.arm.*;
+import com.stuypulse.robot.commands.elevator.*;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class MoveToAlgaeL2 extends SequentialCommandGroup {
+public class MoveToFeedReverse extends SequentialCommandGroup {
     private Arm arm;
     private Elevator elevator;
-    public MoveToAlgaeL2() {
+    public MoveToFeedReverse() {
         arm = Arm.getInstance();
         elevator = Elevator.getInstance();
         addRequirements(arm, elevator);
 
         addCommands(
-          new ElevatorToAlgaeL2(),
-          new ArmToAlgaeL2()
+          new ArmToFeedReverse(),
+          new ElevatorToFeed()
         );
-    }   
+    }
 }

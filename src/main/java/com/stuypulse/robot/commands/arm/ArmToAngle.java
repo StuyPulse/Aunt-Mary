@@ -6,9 +6,11 @@
 
 package com.stuypulse.robot.commands.arm;
 
+import com.stuypulse.robot.commands.led.LedSolidColor;
 import com.stuypulse.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ArmToAngle extends InstantCommand{
@@ -23,5 +25,15 @@ public class ArmToAngle extends InstantCommand{
     @Override
     public void initialize() {
         arm.setTargetAngle(angle);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return arm.atTargetAngle();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        if (interrupted) new LedSolidColor(Color.kBlue).schedule();
     }
 }

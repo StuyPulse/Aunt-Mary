@@ -6,9 +6,11 @@
 
 package com.stuypulse.robot.commands.lokishooter;
 
+import com.stuypulse.robot.commands.led.LedSolidColor;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ShooterShootAlgae extends Command {
@@ -26,12 +28,18 @@ public class ShooterShootAlgae extends Command {
     }
 
     @Override
+    public void execute() {
+        new LedSolidColor(Color.kGreen).schedule();
+    }
+
+    @Override
     public boolean isFinished() {
         return !shooter.hasAlgae();
     }
 
     @Override
     public void end(boolean interrupted) {
+        if (interrupted) new LedSolidColor(Color.kBlue).schedule();
         shooter.setSpeed(0);
     }
 }

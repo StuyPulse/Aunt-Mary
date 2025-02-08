@@ -45,7 +45,7 @@ public class ArmVisualizer {
     public ArmVisualizer() {
 
         // Mechanism2d
-        arm2d = new Mechanism2d(Units.inchesToMeters(14), Units.inchesToMeters(150));
+        arm2d = new Mechanism2d(Units.inchesToMeters(36), Units.inchesToMeters(150));
         
        
 
@@ -54,7 +54,7 @@ public class ArmVisualizer {
         elevatorBL =
                 arm2d.getRoot(
                         "Elevator BL",
-                        Units.inchesToMeters(2),
+                        Units.inchesToMeters(13),
                         Constants.Elevator.MIN_HEIGHT_METERS);
 
         elevatorBL.append(
@@ -77,7 +77,7 @@ public class ArmVisualizer {
         elevatorTR =
                 arm2d.getRoot(
                         "Elevator TR",
-                        Units.inchesToMeters(12),
+                        Units.inchesToMeters(23),
                         Units.inchesToMeters(39) + Constants.Elevator.MIN_HEIGHT_METERS);
 
         elevatorTR.append(
@@ -100,7 +100,7 @@ public class ArmVisualizer {
         // Bottom Left Node
         stageTwoBL =
                 arm2d.getRoot(
-                        "Outer BL", Units.inchesToMeters(3), Constants.Elevator.MIN_HEIGHT_METERS);
+                        "Outer BL", Units.inchesToMeters(14), Constants.Elevator.MIN_HEIGHT_METERS);
 
         stageTwoBL.append(
                 new MechanismLigament2d(
@@ -122,8 +122,8 @@ public class ArmVisualizer {
         stageTwoTR =
                 arm2d.getRoot(
                         "Outer TR",
-                        Units.inchesToMeters(12),
-                        Units.inchesToMeters(47) + Constants.Elevator.MIN_HEIGHT_METERS);
+                        Units.inchesToMeters(22),
+                        Units.inchesToMeters(35) + Constants.Elevator.MIN_HEIGHT_METERS);
 
         stageTwoTR.append(
                 new MechanismLigament2d(
@@ -145,14 +145,15 @@ public class ArmVisualizer {
         
         pivot = arm2d.getRoot(
                 "Arm Origin",
-                Units.inchesToMeters(7),
+                Units.inchesToMeters(18),
                 Units.inchesToMeters(39));
+
         pivot.append(
                 new MechanismLigament2d(
                         "arm",
-                        Units.inchesToMeters(10),
+                        Units.inchesToMeters(20),
                         270,
-                        1,
+                        10,
                         new Color8Bit(Color.kAqua)));
                         
         // Funnel 

@@ -43,5 +43,3 @@ public class LEDController extends SubsystemBase {
         leds.setData(ledsBuffer);
     }
 }
-
-// applyPattern()

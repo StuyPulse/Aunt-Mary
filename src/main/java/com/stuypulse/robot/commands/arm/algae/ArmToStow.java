@@ -10,7 +10,7 @@ public class ArmToStow extends ArmToAngle {
 
     @Override
     public void initialize() {
-        arm.setRotateBoolean(true);
+        arm.setRotateBoolean(false);
         super.initialize();
     }
 }

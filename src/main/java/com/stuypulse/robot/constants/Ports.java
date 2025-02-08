@@ -50,6 +50,6 @@ public interface Ports {
     }
 
     public interface LED {
-        int LED_PORT = 10;
+        int LED_PORT = 9; // cannot be greater than 10 for PWM Header Port
     }
 }

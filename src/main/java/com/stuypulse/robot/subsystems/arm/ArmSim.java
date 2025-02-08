@@ -8,6 +8,8 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -79,9 +81,12 @@ public class ArmSim extends SubsystemBase{
     public void periodic() {
         super.periodic();
 
-        ArmVisualizer.getInstance().update();
+        controller.update(getTargetAngle(), getArmAngle());
+        sim.setInputVoltage(controller.getOutput());
+        sim.update(Settings.DT);
+        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
-        sim.update(0.020);
+        ArmVisualizer.getInstance().update();
 
         SmartDashboard.putNumber("Arm/Arm Angle", getArmAngle());
         SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle());

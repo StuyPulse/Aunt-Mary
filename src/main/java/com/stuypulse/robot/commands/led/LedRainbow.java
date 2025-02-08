@@ -10,7 +10,6 @@ public class LedRainbow extends Command{
 
     public LedRainbow() {
         leds = LEDController.getInstance();
-        
         addRequirements(leds);
     }
 

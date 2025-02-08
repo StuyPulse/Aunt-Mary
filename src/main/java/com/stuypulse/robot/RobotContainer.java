@@ -9,18 +9,15 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-import com.stuypulse.robot.commands.arm_elevator.*;
-import com.stuypulse.robot.commands.arm_elevator.front_side.*;
-import com.stuypulse.robot.commands.arm_elevator.funnel_side.*;
-import com.stuypulse.robot.commands.arm_elevator.algae.*;
+import com.stuypulse.robot.commands.routines.*;
+import com.stuypulse.robot.commands.routines.front_side.*;
+import com.stuypulse.robot.commands.routines.funnel_side.*;
+import com.stuypulse.robot.commands.routines.algae.*;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
-import com.stuypulse.robot.commands.climb.ClimbDriveToClimb;
-import com.stuypulse.robot.commands.climb.ClimbDriveToIntake;
-import com.stuypulse.robot.commands.climb.ClimbDriveToStow;
+import com.stuypulse.robot.commands.climb.*;
 import com.stuypulse.robot.commands.froggy.FroggyAlgaeGroundIntake;
 import com.stuypulse.robot.commands.froggy.FroggyCoralGroundIntake;
-import com.stuypulse.robot.commands.froggy.FroggyIntakeAlgae;
-import com.stuypulse.robot.commands.froggy.FroggyOuttakeAlgae;
+import com.stuypulse.robot.commands.froggy.*;
 import com.stuypulse.robot.commands.froggy.FroggyProcessorScore;
 import com.stuypulse.robot.commands.froggy.FroggyScoreL1;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
@@ -29,6 +26,8 @@ import com.stuypulse.robot.commands.led.LedSolidColor;
 import com.stuypulse.robot.commands.lokishooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.lokishooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.lokishooter.ShooterShootFront;
+import com.stuypulse.robot.commands.routines.MoveToFeed;
+import com.stuypulse.robot.commands.routines.front_side.ScoreL2Front;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
@@ -102,29 +101,26 @@ public class RobotContainer {
     /* RIGHT SIDE BUTTONS */
     // ADD ALIGNMENT TO ALL SCORING ROUTINES
 
+    // Pls determine which side to use for each lvl
     // BOTTOM BUTTON -> LVL 2 FRONT
     driver.getBottomButton()
-        .whileTrue(new SequentialCommandGroup(
-            new MoveToL2Front()
-            .andThen(new ShooterShootFront()))); 
+        .whileTrue(new ScoreL2Front())
+        .onFalse(new MoveToFeed());     
     
     // RIGHT BUTTON -> LVL 3 FRONT
     driver.getRightButton()
-        .whileTrue(new SequentialCommandGroup(
-            new MoveToL3Front()
-            .andThen(new ShooterShootFront()))); 
+        .whileTrue(new ScoreL3Front())
+        .onFalse(new MoveToFeed()); 
     
     // TOP BUTTON -> LVL 4 FRONT
     driver.getTopButton()
-        .whileTrue(new SequentialCommandGroup(
-            new MoveToL4Front()
-            .andThen(new ShooterShootFront()))); 
+        .whileTrue(new ScoreL4Front())
+        .onFalse(new MoveToFeedReverse());
 
     // LEFT BUTTON -> BARGE SCORE
     driver.getLeftButton()
-        .whileTrue(new SequentialCommandGroup(
-            new MoveToBarge()
-            .andThen(new ShooterShootAlgae())));
+        .whileTrue(new ScoreBarge())
+        .onFalse(new MoveToFeed());
     
     /* PADDLES */
     
@@ -142,15 +138,13 @@ public class RobotContainer {
     
     // LEFT TOP PADDLE -> L3 REEF ALGAE INTAKE
     driver.getDPadLeft()
-        .whileTrue(new SequentialCommandGroup(
-            new MoveToAlgaeL3()
-            .andThen(new ShooterAcquireAlgae()))); // left top paddle -> get algae
+        .whileTrue(new AcquireAlgaeL3())
+        .onFalse(new MoveToStow());
         
     // LEFT BOTTOM PADDLE -> L2 REEF ALGAE INTAKE
     driver.getDPadDown()
-        .whileTrue(new SequentialCommandGroup(
-            new MoveToAlgaeL2()
-            .andThen(new ShooterAcquireAlgae())));
+        .whileTrue(new AcquireAlgaeL2())
+        .onFalse(new MoveToStow());
     
     /* TRIGGERS */
     // RIGHT BUMPER -> L1 SCORE

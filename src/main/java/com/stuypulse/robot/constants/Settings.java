@@ -136,6 +136,8 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
 
+        Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(0);
+
         double GEAR_RATIO = 0.833333330333;
         double ARM_OFFSET = 0.0;
         double ENCODER_OFFSET = 0.0;

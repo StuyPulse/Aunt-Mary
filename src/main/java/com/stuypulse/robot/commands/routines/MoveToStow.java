@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.arm_elevator.algae;
+package com.stuypulse.robot.commands.routines;
 
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.commands.arm.algae.*;
