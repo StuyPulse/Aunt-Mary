@@ -49,13 +49,14 @@ public class ClimbImpl extends Climb {
         this.targetAngle = targetAngle;
     }
 
-    private Rotation2d getCurrentAngle() {
+    @Override
+    public Rotation2d getAngle() {
         return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     }
 
     @Override
     public boolean atTargetAngle() {
-        return Math.abs(getCurrentAngle().getDegrees() - targetAngle.getDegrees()) < Settings.Climb.ANGLE_TOLERANCE;
+        return Math.abs(getAngle().getDegrees() - targetAngle.getDegrees()) < Settings.Climb.ANGLE_TOLERANCE;
     }
     
     @Override
@@ -67,12 +68,13 @@ public class ClimbImpl extends Climb {
     public void periodic() {
         if (isClimbing) {
             motor.setVoltage(Settings.Climb.CLIMB_VOLTAGE);
-        }
-        else {
+        } else if (atTargetAngle()) {
+            motor.stopMotor();
+        } else {
             motor.setControl(new PositionVoltage(targetAngle.getDegrees()).withSlot(0));
         }
 
-        SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Climb/Current Angle (deg)", getAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", targetAngle.getDegrees());
 
         SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());

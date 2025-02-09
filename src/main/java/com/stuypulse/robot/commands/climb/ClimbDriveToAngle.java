@@ -9,6 +9,7 @@ package com.stuypulse.robot.commands.climb;
 import com.stuypulse.robot.subsystems.climb.Climb;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ClimbDriveToAngle extends InstantCommand {

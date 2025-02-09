@@ -28,11 +28,11 @@ public interface Settings {
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
 
-        double BB_DEBOUNCE = 0.0;
-        double CORAL_STALLING_DEBOUNCE = 0.0;
-        double ALGAE_DEBOUNCE = 0.0;
+        double BB_DEBOUNCE = 0.1;
+        double CORAL_STALLING_DEBOUNCE = 0.5;
+        double ALGAE_DEBOUNCE = 0.1;
 
-        double RAMP_RATE = 0.0;
+        double RAMP_RATE = 0.25;
 
         double DRIVE_CURRENT_THRESHOLD = 30;
         double DRIVE_CURRENT_LIMIT = 40;
@@ -161,12 +161,12 @@ public interface Settings {
     }
 
     public interface Climb {
-
+        
         double CLIMB_VOLTAGE = 6.0;
 
         double STOW_ANGLE = 0.0;
         double OPEN_ANGLE = 0.0;
-        double ACQUIRED_ANGLE = 0.0;
+        double CLOSED_ANGLE = 0;
         double ANGLE_TOLERANCE = 2.0;
 
         public interface PID {

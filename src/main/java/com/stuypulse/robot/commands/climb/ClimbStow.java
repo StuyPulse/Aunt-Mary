@@ -8,9 +8,9 @@ package com.stuypulse.robot.commands.climb;
 
 import com.stuypulse.robot.constants.Settings;
 
-public class ClimbDriveToIntake extends ClimbDriveToAngle {
+public class ClimbStow extends ClimbDriveToAngle {
 
-    public ClimbDriveToIntake() {
-        super(Settings.Climb.OPEN_ANGLE);
+    public ClimbStow() {
+        super(Settings.Climb.STOW_ANGLE);
     }
 }

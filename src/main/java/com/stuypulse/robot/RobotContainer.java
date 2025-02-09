@@ -65,10 +65,13 @@ public class RobotContainer {
             .onTrue(new LedSolidColor(LED.UNJAM_COLOR));
         
         // Climb open, hooks go from stow to intake angle 
-        new Trigger(() -> Math.abs(climb.getAngle().getDegrees() - Settings.Climb.OPEN_ANGLE) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE)
+        new Trigger(() -> (Math.abs(climb.getAngle().getDegrees() - Settings.Climb.OPEN_ANGLE) <= Settings.Climb.ANGLE_TOLERANCE))
             .onTrue(new LedRainbow());
 
-        new Trigger(() -> Math.abs(climb.getAngle().getDegrees() - Settings.Climb.CLIMBED_ANGLE) <= Settings.Climb.CLIMB_ANGLE_TOLERANCE)
+        new Trigger(() -> (Math.abs(climb.getAngle().getDegrees() - Settings.Climb.CLOSED_ANGLE) <= Settings.Climb.ANGLE_TOLERANCE))
+            .onTrue(new LedRainbow());
+
+        new Trigger(() -> Math.abs(climb.getAngle().getDegrees() - Settings.Climb.CLIMBED_ANGLE) <= Settings.Climb.ANGLE_TOLERANCE)
             .onTrue(new LedSolidColor(LED.CLIMB_COLOR));
 
     }
@@ -115,11 +118,11 @@ public class RobotContainer {
     
     // RIGHT TOP PADDLE -> CLIMB CLOSE
     driver.getLeftMenuButton()
-        .onTrue(new ClimbDriveToStow());
+        .onTrue(new ClimbStow());
 
     // RIGHT BOTTOM PADDLE -> CLIMB OPEN
     driver.getDPadRight()
-        .onTrue(new ClimbDriveToIntake());
+        .onTrue(new ClimbOpen());
 
     // RIGHT MENU BUTTON -> CLIMB DRIVE
     driver.getRightMenuButton()
