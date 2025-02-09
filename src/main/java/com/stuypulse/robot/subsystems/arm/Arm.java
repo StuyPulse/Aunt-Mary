@@ -27,12 +27,7 @@ public abstract class Arm extends SubsystemBase {
     }
 
     public abstract void setTargetAngle(Rotation2d TargetAngle);
-
-    public abstract Rotation2d getTargetAngle();
-
-    public abstract Rotation2d getArmAngle();
+    public abstract boolean atTargetAngle();
 
     public abstract void setRotateBoolean(boolean overElevator);
-
-    public abstract boolean atTargetAngle();
 }

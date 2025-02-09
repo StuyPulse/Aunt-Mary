@@ -24,7 +24,7 @@ import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
-import com.stuypulse.robot.subsystems.funnel.CoralFunnel;
+import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 import com.stuypulse.robot.constants.Settings.LED;
 
@@ -40,7 +40,7 @@ public class RobotContainer {
     public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
     // Subsystem
-    private final CoralFunnel funnel = CoralFunnel.getInstance();
+    private final Funnel funnel = Funnel.getInstance();
     private final LokiShooter shooter = LokiShooter.getInstance();
     private final Arm arm = Arm.getInstance();
     private final Elevator elevator = Elevator.getInstance();
@@ -123,7 +123,7 @@ public class RobotContainer {
 
     // RIGHT MENU BUTTON -> CLIMB DRIVE
     driver.getRightMenuButton()
-        .onTrue(new ClimbDriveToClimb());
+        .onTrue(new ClimbClimb());
     
     // LEFT TOP PADDLE -> L3 REEF ALGAE INTAKE
     driver.getDPadLeft()

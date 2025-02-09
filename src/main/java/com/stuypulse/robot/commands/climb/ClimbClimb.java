@@ -6,11 +6,20 @@
 
 package com.stuypulse.robot.commands.climb;
 
-import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.climb.Climb;
 
-public class ClimbDriveToClimb extends ClimbDriveToAngle {
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-    public ClimbDriveToClimb() {
-        super(Settings.Climb.CLIMBED_ANGLE);
+public class ClimbClimb extends InstantCommand {
+    private final Climb climb;
+
+    public ClimbClimb() {
+        climb = Climb.getInstance();        
+        addRequirements(climb);
+    }
+
+    @Override
+    public void initialize() {
+        climb.climb();
     }
 }

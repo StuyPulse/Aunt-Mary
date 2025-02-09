@@ -12,32 +12,29 @@ public interface Ports {
         int DRIVER = 0;
         int OPERATOR = 1;
         int DEBUGGER = 2;
-        // should these be final?
     }
 
     public interface Froggy {
-        int ROLLER_PORT = 3; // CHANGE
-        int PIVOT_PORT = 4; // CHANGE
-        int PIVOT_ENCODER = 5;
+        int ROLLER = 3;
+        int PIVOT = 4;
+        int ABSOLUTE_ENCODER = 5;
     }
 
     public interface Climb {
-        int CLIMB_MOTOR = 6;
-        int CLIMB_ENCODER = 7;
+        int MOTOR = 6;
+        int ABSOLUTE_ENCODER = 7;
     }
 
     public interface Arm {
-        int ARM_MOTOR = 8;
-        int ARM_ENCODER = 9;
+        int MOTOR = 8;
+        int ABSOLUTE_ENCODER = 9;
     }
 
-    // Set values later
     public interface Shooter {
         int MOTOR = 17;
         int RECEIVER = 11;
     }
 
-    // Set values later
     public interface Funnel {
         int MOTOR = 12;
         int IR = 13;
@@ -46,7 +43,6 @@ public interface Ports {
     public interface Elevator {
         int MOTOR = 14;
         int BOTTOM_SWITCH = 15;
-        int TOP_SWITCH = 16;
     }
 
     public interface LED {

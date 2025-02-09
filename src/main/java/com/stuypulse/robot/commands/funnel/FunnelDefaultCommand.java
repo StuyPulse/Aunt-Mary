@@ -6,21 +6,21 @@
 
 package com.stuypulse.robot.commands.funnel;
 
-import com.stuypulse.robot.subsystems.funnel.CoralFunnel;
+import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class FunnelDefaultCommand extends Command {
-    private final CoralFunnel funnel;
+    private final Funnel funnel;
     private final LokiShooter shooter;
 
     private boolean stopped = false;
     private boolean reversed = false;
 
     public FunnelDefaultCommand() {
-        funnel = CoralFunnel.getInstance();
+        funnel = Funnel.getInstance();
         shooter = LokiShooter.getInstance();
 
         addRequirements(funnel);

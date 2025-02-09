@@ -8,25 +8,23 @@ package com.stuypulse.robot.subsystems.funnel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class CoralFunnel extends SubsystemBase {
+public abstract class Funnel extends SubsystemBase {
 
-    private static final CoralFunnel instance;
+    private static final Funnel instance;
 
     static {
-        instance = new CoralFunnelImpl();
+        instance = new FunnelImpl();
     }
 
-    public static CoralFunnel getInstance() {
+    public static Funnel getInstance() {
         return instance;
     }
 
     public abstract void forward();
-
     public abstract void reverse();
+    public abstract void stop();
 
     public abstract boolean isStalling();
 
     public abstract boolean hasCoral();
-
-    public abstract void stop();
 }
