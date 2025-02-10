@@ -127,8 +127,8 @@ public interface Settings {
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(123.0);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(53.0);
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(125.0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(0.0);
-        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(127.0);
+        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(166.0);
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
 
@@ -138,11 +138,11 @@ public interface Settings {
         double CORAL_INTAKE_SPEED = 0.5;
         double CORAL_OUTTAKE_SPEED = 0.5;
 
-        double HOLD_ALGAE_SPEED = 0.0;
+        double HOLD_ALGAE_SPEED = 0.1;
 
         double CORAL_CURRENT_THRESHOLD = 1.0;
         double ALGAE_CURRENT_THRESHOLD = 1.0;
-        double STALL_DEBOUNCE_TIME = 0.0;
+        double STALL_DEBOUNCE_TIME = 0.0; // what units
 
         public interface PID {
             double kP = 0.0;
