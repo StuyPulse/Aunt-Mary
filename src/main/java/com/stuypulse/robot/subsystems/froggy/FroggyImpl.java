@@ -9,6 +9,7 @@ package com.stuypulse.robot.subsystems.froggy;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
+
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
@@ -43,19 +44,28 @@ public class FroggyImpl extends Froggy {
 
         absoluteEncoder = new CANcoder(Ports.Froggy.ABSOLUTE_ENCODER);
 
-        MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-            .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
-            .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
+        MagnetSensorConfigs magnetSensorConfigs =
+                new MagnetSensorConfigs()
+                        .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
+                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
 
         absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
         targetAngle = Rotation2d.fromDegrees(Settings.Froggy.STOW_ANGLE.getDegrees());
 
-        hasCoral = BStream.create(() -> Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble()) > Settings.Froggy.CORAL_CURRENT_THRESHOLD)
-                    .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
+        hasCoral =
+                BStream.create(
+                                () ->
+                                        Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble())
+                                                > Settings.Froggy.CORAL_CURRENT_THRESHOLD)
+                        .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
-        hasAlgae = BStream.create(() -> Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble()) > Settings.Froggy.ALGAE_CURRENT_THRESHOLD)
-                    .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
+        hasAlgae =
+                BStream.create(
+                                () ->
+                                        Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble())
+                                                > Settings.Froggy.ALGAE_CURRENT_THRESHOLD)
+                        .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
     }
 
     @Override
@@ -68,13 +78,18 @@ public class FroggyImpl extends Froggy {
                                 Constants.Froggy.MAXIMUM_ANGLE));
     }
 
-    private Rotation2d getCurrentAngle() {
+    public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+    }
+
+    public Rotation2d getTargetAngle() {
+        return targetAngle;
     }
 
     @Override
     public boolean isAtTargetAngle() {
-        return Math.abs(targetAngle.getDegrees() - getCurrentAngle().getDegrees()) < Settings.Froggy.ANGLE_TOLERANCE.getDegrees();
+        return Math.abs(targetAngle.getDegrees() - getCurrentAngle().getDegrees())
+                < Settings.Froggy.ANGLE_TOLERANCE.getDegrees();
     }
 
     @Override
@@ -120,10 +135,13 @@ public class FroggyImpl extends Froggy {
         MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getRotations());
         rollerMotor.setControl(controllerOutput);
 
-        SmartDashboard.putNumber("Froggy/Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Target Angle (deg)", targetAngle.getDegrees());
+        SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
+
         SmartDashboard.putBoolean("Froggy/Has Algae", hasAlgae());
         SmartDashboard.putBoolean("Froggy/Has Coral", hasCoral());
+        
+        SmartDashboard.putNumber("Froggy/Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
     }
 }

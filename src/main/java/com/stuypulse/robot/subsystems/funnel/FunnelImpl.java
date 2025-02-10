@@ -8,6 +8,7 @@ package com.stuypulse.robot.subsystems.funnel;
 
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
+
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -31,10 +32,16 @@ public class FunnelImpl extends Funnel {
 
         irSensor = new DigitalInput(Ports.Funnel.IR);
 
-        hasCoral = BStream.create(irSensor).not()
-                    .filtered(new BDebounce.Rising(Settings.Funnel.HAS_CORAL_DEBOUNCE));
-                    
-        isStalling = BStream.create(() -> Math.abs(motor.getSupplyCurrent().getValueAsDouble()) > Settings.Funnel.STALL_CURRENT)
+        hasCoral =
+                BStream.create(irSensor)
+                        .not()
+                        .filtered(new BDebounce.Rising(Settings.Funnel.HAS_CORAL_DEBOUNCE));
+
+        isStalling =
+                BStream.create(
+                                () ->
+                                        Math.abs(motor.getSupplyCurrent().getValueAsDouble())
+                                                > Settings.Funnel.STALL_CURRENT)
                         .filtered(new BDebounce.Rising(Settings.Funnel.STALL_DETECTION_TIME));
     }
 

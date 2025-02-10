@@ -33,8 +33,9 @@ public class ClimbImpl extends Climb {
 
         absoluteEncoder = new CANcoder(Ports.Climb.ABSOLUTE_ENCODER);
 
-        MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-            .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations());
+        MagnetSensorConfigs magnetSensorConfigs =
+                new MagnetSensorConfigs()
+                        .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations());
 
         absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
@@ -55,10 +56,16 @@ public class ClimbImpl extends Climb {
     }
 
     @Override
-    public boolean atTargetAngle() {
-        return Math.abs(getAngle().getDegrees() - targetAngle.getDegrees()) < Settings.Climb.ANGLE_TOLERANCE;
+    public Rotation2d getTargetAngle() {
+        return targetAngle;
     }
-    
+
+    @Override
+    public boolean atTargetAngle() {
+        return Math.abs(getAngle().getDegrees() - targetAngle.getDegrees())
+                < Settings.Climb.ANGLE_TOLERANCE.getDegrees();
+    }
+
     @Override
     public void climb() {
         this.isClimbing = true;
@@ -75,11 +82,12 @@ public class ClimbImpl extends Climb {
         }
 
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getAngle().getDegrees());
-        SmartDashboard.putNumber("Climb/Target Angle (deg)", targetAngle.getDegrees());
+        SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Climb/Motor Current", motor.getStatorCurrent().getValueAsDouble());
+
+        SmartDashboard.putNumber("Climb/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
     }
 }

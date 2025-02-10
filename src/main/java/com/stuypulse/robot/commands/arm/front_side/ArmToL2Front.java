@@ -6,8 +6,8 @@
 
 package com.stuypulse.robot.commands.arm.front_side;
 
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.arm.ArmToAngle;
+import com.stuypulse.robot.constants.Settings;
 
 public class ArmToL2Front extends ArmToAngle {
     public ArmToL2Front() {

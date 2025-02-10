@@ -40,13 +40,13 @@ public interface Settings {
 
     public interface Funnel {
         SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 0.4);
-        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", 0.4); 
+        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", 0.4);
 
         double STALL_CURRENT = 30;
         double STALL_DETECTION_TIME = 0.25;
         double MIN_REVERSE_TIME = 1.0;
 
-        double HAS_CORAL_DEBOUNCE = 0.0;
+        double HAS_CORAL_DEBOUNCE = 0.5;
     }
 
     public interface Elevator {
@@ -55,7 +55,7 @@ public interface Settings {
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0.0;
 
         double FEED_HEIGHT_METERS = 1.0;
-        
+
         // Front and Funnel
         double FRONT_L2_HEIGHT_METERS = 1.609;
         double FRONT_L3_HEIGHT_METERS = 1.073;
@@ -68,7 +68,7 @@ public interface Settings {
         double BARGE_HEIGHT_METERS = 2.073;
         double ALGAE_L2_HEIGHT_METERS = 1.4; // estimate
         double ALGAE_L3_HEIGHT_METERS = 1.8; // estimate
-        
+
         double HEIGHT_TOLERANCE_METERS = 0.02;
 
         public interface PID {
@@ -161,13 +161,13 @@ public interface Settings {
     }
 
     public interface Climb {
-        
+
         double CLIMB_VOLTAGE = 6.0;
 
-        double STOW_ANGLE = 0.0;
-        double OPEN_ANGLE = 0.0;
-        double CLOSED_ANGLE = 0;
-        double ANGLE_TOLERANCE = 2.0;
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(180.0);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0);
 
         public interface PID {
             double kP = 0.0;
@@ -182,7 +182,7 @@ public interface Settings {
             double kG = 0.0;
         }
     }
-    
+
     public interface LED {
         Color SHOOT_COLOR = Color.kGreen;
         Color ABORT_COLOR = Color.kBlue;
@@ -191,5 +191,4 @@ public interface Settings {
         Color UNJAM_COLOR = Color.kBlue;
         Color CLIMB_COLOR = Color.kGreen;
     }
-
 }

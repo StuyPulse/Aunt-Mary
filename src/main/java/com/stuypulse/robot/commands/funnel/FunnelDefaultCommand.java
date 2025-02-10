@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.commands.funnel;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
@@ -29,7 +30,6 @@ public class FunnelDefaultCommand extends Command {
     @Override
     public void execute() {
         setState();
-
         runState();
     }
 
@@ -39,7 +39,7 @@ public class FunnelDefaultCommand extends Command {
         if (funnel.isStalling() && !reversed) {
             reversed = true;
 
-            new WaitCommand(1)
+            new WaitCommand(Settings.Funnel.MIN_REVERSE_TIME)
                     .andThen(
                             () -> {
                                 reversed = false;
@@ -58,7 +58,7 @@ public class FunnelDefaultCommand extends Command {
         }
     }
 
-    public boolean isUnjamming(){
+    public boolean isUnjamming() {
         return reversed;
     }
 }

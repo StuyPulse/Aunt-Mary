@@ -18,18 +18,19 @@ public class Constants {
         double MASS_KG = 10.0; // unconfirmed
         double DRUM_RADIUS_METERS =
                 (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEARING)
-                        / 2 / Math.PI;
+                        / 2
+                        / Math.PI;
 
         // FIND OUT REAL GEAR RATIO
         double GEAR_RATIO = 1.0 / 5.0;
-
 
         public interface Encoders {
             double GEARING = 4.0;
 
             double NUM_ROTATIONS_TO_REACH_TOP =
                     (6 + 9.0 / 24)
-                            * GEARING; // Number of rotations that the motor has to spin, NOT the gear
+                            * GEARING; // Number of rotations that the motor has to spin, NOT the
+            // gear
 
             double POSITION_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP;
             double VELOCITY_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP / 60;
@@ -48,7 +49,7 @@ public class Constants {
         double AREA = 3; // meters squared
         double ARM_LENGTH = Units.inchesToMeters(3);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
-        
+
         double LOWER_ANGLE_LIMIT = 0;
         double UPPER_ANGLE_LIMIT = 360;
     }

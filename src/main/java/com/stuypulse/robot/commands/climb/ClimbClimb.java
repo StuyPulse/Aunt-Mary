@@ -14,7 +14,7 @@ public class ClimbClimb extends InstantCommand {
     private final Climb climb;
 
     public ClimbClimb() {
-        climb = Climb.getInstance();        
+        climb = Climb.getInstance();
         addRequirements(climb);
     }
 

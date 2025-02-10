@@ -40,7 +40,7 @@ public class ShooterShootFront extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        if (interrupted) new LedSolidColor(LED.ABORT_COLOR).schedule();        
+        if (interrupted) new LedSolidColor(LED.ABORT_COLOR).schedule();
         shooter.setSpeed(0);
     }
 }

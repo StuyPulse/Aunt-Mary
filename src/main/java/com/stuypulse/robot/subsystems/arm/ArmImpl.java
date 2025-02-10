@@ -22,25 +22,25 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class ArmImpl extends Arm {
 
-    private TalonFX armMotor;
-    private CANcoder armEncoder;
+    private TalonFX motor;
+    private CANcoder absoluteEncoder;
 
     private Rotation2d targetAngle;
 
     private boolean rotateOverElevator;
 
     public ArmImpl() {
+        motor = new TalonFX(Ports.Arm.MOTOR);
+        Motors.Arm.MOTOR_CONFIG.configure(motor);
 
-        armMotor = new TalonFX(Ports.Arm.MOTOR);
-        Motors.Arm.MOTOR_CONFIG.configure(armMotor);
+        absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
 
-        armEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
+        MagnetSensorConfigs magnet_config =
+                new MagnetSensorConfigs()
+                        .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
+                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
 
-        MagnetSensorConfigs magnet_config = new MagnetSensorConfigs()
-            .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
-            .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
-
-        armEncoder.getConfigurator().apply(magnet_config);
+        absoluteEncoder.getConfigurator().apply(magnet_config);
 
         targetAngle = Rotation2d.fromDegrees(0.0);
 
@@ -56,7 +56,7 @@ public class ArmImpl extends Arm {
     }
 
     public Rotation2d getArmAngle() {
-        return Rotation2d.fromRotations(armMotor.getPosition().getValueAsDouble());
+        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
     }
 
     public boolean getRotateBoolean() {
@@ -68,22 +68,30 @@ public class ArmImpl extends Arm {
     }
 
     public boolean atTargetAngle() {
-        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees()) < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
+        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees())
+                < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
     }
 
     @Override
     public void periodic() {
-        
+
         // check?
         if (!getRotateBoolean()) {
             MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
-            armMotor.setControl(armOutput);
+            motor.setControl(armOutput);
         } else {
-            MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations()-1);
-            armMotor.setControl(armOutput);
+            MotionMagicVoltage armOutput =
+                    new MotionMagicVoltage(getTargetAngle().getRotations() - 1);
+            motor.setControl(armOutput);
         }
+
+        SmartDashboard.putNumber("Arm/Current Angle (deg)", getArmAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
+
+        SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Motor Current", motor.getStatorCurrent().getValueAsDouble());
         
-        SmartDashboard.putNumber("Arm/targetAngle", getTargetAngle().getDegrees());
-        SmartDashboard.putNumber("Arm/currentAngle", getArmAngle().getDegrees());
+        SmartDashboard.putNumber("Climb/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
     }
 }

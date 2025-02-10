@@ -24,12 +24,15 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public abstract void setTargetAngle(Rotation2d targetAngle);
+
     public abstract boolean isAtTargetAngle();
 
     public abstract void intakeAlgae();
+
     public abstract void outakeAlgae();
 
     public abstract void intakeCoral();
+
     public abstract void outakeCoral();
 
     public abstract void holdAlgae();
@@ -37,6 +40,6 @@ public abstract class Froggy extends SubsystemBase {
     public abstract void stopRoller();
 
     public abstract boolean hasCoral();
-    public abstract boolean hasAlgae();
 
+    public abstract boolean hasAlgae();
 }

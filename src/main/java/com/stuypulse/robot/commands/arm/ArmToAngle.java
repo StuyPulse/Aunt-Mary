@@ -13,11 +13,11 @@ import com.stuypulse.robot.subsystems.arm.Arm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ArmToAngle extends InstantCommand{
+public class ArmToAngle extends InstantCommand {
     protected final Arm arm;
     protected final Rotation2d angle;
 
-    public ArmToAngle(Rotation2d angle){
+    public ArmToAngle(Rotation2d angle) {
         arm = Arm.getInstance();
         this.angle = angle;
     }

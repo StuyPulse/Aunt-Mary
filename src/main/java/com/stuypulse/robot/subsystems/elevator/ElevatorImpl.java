@@ -1,16 +1,24 @@
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.subsystems.elevator;
 
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.network.SmartNumber;
 
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.network.SmartNumber;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
@@ -23,7 +31,8 @@ public class ElevatorImpl extends Elevator {
 
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
 
-        targetHeight = new SmartNumber("Elevator/Target Height", Constants.Elevator.MIN_HEIGHT_METERS);
+        targetHeight =
+                new SmartNumber("Elevator/Target Height", Constants.Elevator.MIN_HEIGHT_METERS);
     }
 
     @Override
@@ -42,12 +51,14 @@ public class ElevatorImpl extends Elevator {
 
     @Override
     public double getCurrentHeight() {
-        return motor.getPosition().getValueAsDouble() * Constants.Elevator.Encoders.DISTANCE_PER_ROTATION;
+        return motor.getPosition().getValueAsDouble()
+                * Constants.Elevator.Encoders.DISTANCE_PER_ROTATION;
     }
 
     @Override
     public boolean atTargetHeight() {
-        return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+        return Math.abs(getTargetHeight() - getCurrentHeight())
+                < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
     }
 
     @Override
@@ -59,14 +70,24 @@ public class ElevatorImpl extends Elevator {
     public void periodic() {
         super.periodic();
 
-        motor.setControl(new MotionMagicVoltage( getTargetHeight() / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR));
+        motor.setControl(
+                new MotionMagicVoltage(
+                        getTargetHeight()
+                                / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR));
 
         if (atBottom()) {
-            motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
+            motor.setPosition(
+                    Constants.Elevator.MIN_HEIGHT_METERS
+                            / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
         }
 
-        SmartDashboard.putNumber("Elevator/Current Height", getCurrentHeight());
-        SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator/Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());
+        SmartDashboard.putNumber("Elevator/Target Height (m)", getTargetHeight());
+
+        SmartDashboard.putNumber("Elevator/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Motor Current", motor.getStatorCurrent().getValueAsDouble());
+
+        SmartDashboard.putNumber("Elevator/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
     }
 }

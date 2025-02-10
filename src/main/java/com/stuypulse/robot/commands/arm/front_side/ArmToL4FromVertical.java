@@ -1,14 +1,21 @@
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.commands.arm.front_side;
 
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.arm.ArmToAngle;
+import com.stuypulse.robot.constants.Settings;
 
-public class ArmToL4FromVertical extends ArmToAngle{
-    public ArmToL4FromVertical(){
+public class ArmToL4FromVertical extends ArmToAngle {
+    public ArmToL4FromVertical() {
         super(Settings.Arm.L4_ANGLE_FRONT);
     }
+
     @Override
-    public void initialize(){
+    public void initialize() {
         arm.setRotateBoolean(false);
         super.initialize();
     }

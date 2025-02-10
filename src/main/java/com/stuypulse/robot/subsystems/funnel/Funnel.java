@@ -21,7 +21,9 @@ public abstract class Funnel extends SubsystemBase {
     }
 
     public abstract void forward();
+
     public abstract void reverse();
+
     public abstract void stop();
 
     public abstract boolean isStalling();
