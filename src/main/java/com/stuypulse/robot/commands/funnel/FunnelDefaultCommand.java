@@ -6,21 +6,22 @@
 
 package com.stuypulse.robot.commands.funnel;
 
-import com.stuypulse.robot.subsystems.funnel.CoralFunnel;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class FunnelDefaultCommand extends Command {
-    private final CoralFunnel funnel;
+    private final Funnel funnel;
     private final LokiShooter shooter;
 
     private boolean stopped = false;
     private boolean reversed = false;
 
     public FunnelDefaultCommand() {
-        funnel = CoralFunnel.getInstance();
+        funnel = Funnel.getInstance();
         shooter = LokiShooter.getInstance();
 
         addRequirements(funnel);
@@ -29,7 +30,6 @@ public class FunnelDefaultCommand extends Command {
     @Override
     public void execute() {
         setState();
-
         runState();
     }
 
@@ -39,7 +39,7 @@ public class FunnelDefaultCommand extends Command {
         if (funnel.isStalling() && !reversed) {
             reversed = true;
 
-            new WaitCommand(1)
+            new WaitCommand(Settings.Funnel.MIN_REVERSE_TIME)
                     .andThen(
                             () -> {
                                 reversed = false;
@@ -56,5 +56,9 @@ public class FunnelDefaultCommand extends Command {
         } else {
             funnel.forward();
         }
+    }
+
+    public boolean isUnjamming() {
+        return reversed;
     }
 }

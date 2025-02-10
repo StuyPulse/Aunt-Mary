@@ -16,7 +16,6 @@ public class FroggyStopRoller extends InstantCommand {
 
     public FroggyStopRoller() {
         froggy = Froggy.getInstance();
-
         addRequirements(froggy);
     }
 

@@ -40,7 +40,9 @@ public class Robot extends TimedRobot {
     public void disabledInit() {}
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        // put your pregame LED check in here
+    }
 
     /***********************/
     /*** AUTONOMOUS MODE ***/
