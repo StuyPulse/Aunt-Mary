@@ -57,7 +57,7 @@ public class FroggyImpl extends Froggy {
                 BStream.create(
                                 () ->
                                         rollerMotor.getSupplyCurrent().getValueAsDouble()
-                                                < -Settings.Froggy.CORAL_CURRENT_THRESHOLD) // coral stalls in the negative direction
+                                                < Settings.Froggy.CORAL_CURRENT_THRESHOLD) // coral stalls in the negative direction
                         .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
         isAlgaeStalling =
