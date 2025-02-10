@@ -33,6 +33,6 @@ public class FroggyIntakeAlgae extends Command {
 
     @Override
     public boolean isFinished() {
-        return froggy.hasAlgae();
+        return froggy.isAlgaeStalling();
     }
 }

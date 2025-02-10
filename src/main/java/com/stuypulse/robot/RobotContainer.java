@@ -58,7 +58,7 @@ public class RobotContainer {
         configureButtonBindings();
         configureAutons();
 
-        new Trigger(() -> froggy.hasCoral() || shooter.hasCoral())
+        new Trigger(() -> froggy.isCoralStalling() || shooter.hasCoral())
                 .onTrue(new LedSolidColor(LED.HAS_CORAL_COLOR));
 
         new Trigger(((FunnelDefaultCommand) funnel.getDefaultCommand())::isUnjamming)

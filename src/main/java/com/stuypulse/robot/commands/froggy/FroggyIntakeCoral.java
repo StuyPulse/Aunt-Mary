@@ -33,6 +33,6 @@ public class FroggyIntakeCoral extends Command {
 
     @Override
     public boolean isFinished() {
-        return froggy.hasCoral();
+        return froggy.isCoralStalling();
     }
 }

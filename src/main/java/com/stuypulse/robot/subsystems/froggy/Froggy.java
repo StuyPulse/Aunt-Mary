@@ -39,7 +39,7 @@ public abstract class Froggy extends SubsystemBase {
 
     public abstract void stopRoller();
 
-    public abstract boolean hasCoral();
+    public abstract boolean isCoralStalling();
 
-    public abstract boolean hasAlgae();
+    public abstract boolean isAlgaeStalling();
 }

@@ -30,8 +30,8 @@ public class FroggyImpl extends Froggy {
     private TalonFX pivotMotor;
     private CANcoder absoluteEncoder;
 
-    private final BStream hasCoral;
-    private final BStream hasAlgae;
+    private final BStream isCoralStalling;
+    private final BStream isAlgaeStalling;
 
     public Rotation2d targetAngle;
 
@@ -53,17 +53,17 @@ public class FroggyImpl extends Froggy {
 
         targetAngle = Rotation2d.fromDegrees(Settings.Froggy.STOW_ANGLE.getDegrees());
 
-        hasCoral =
+        isCoralStalling =
                 BStream.create(
                                 () ->
-                                        Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble())
-                                                > Settings.Froggy.CORAL_CURRENT_THRESHOLD)
+                                        rollerMotor.getSupplyCurrent().getValueAsDouble()
+                                                < -Settings.Froggy.CORAL_CURRENT_THRESHOLD) // coral stalls in the negative direction
                         .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
-        hasAlgae =
+        isAlgaeStalling =
                 BStream.create(
                                 () ->
-                                        Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble())
+                                        rollerMotor.getSupplyCurrent().getValueAsDouble()
                                                 > Settings.Froggy.ALGAE_CURRENT_THRESHOLD)
                         .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
     }
@@ -116,13 +116,13 @@ public class FroggyImpl extends Froggy {
     }
 
     @Override
-    public boolean hasAlgae() {
-        return hasAlgae.get();
+    public boolean isAlgaeStalling() {
+        return isAlgaeStalling.get();
     }
 
     @Override
-    public boolean hasCoral() {
-        return hasCoral.get();
+    public boolean isCoralStalling() {
+        return isCoralStalling.get();
     }
 
     @Override
@@ -138,8 +138,8 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putBoolean("Froggy/Has Algae", hasAlgae());
-        SmartDashboard.putBoolean("Froggy/Has Coral", hasCoral());
+        SmartDashboard.putBoolean("Froggy/Has Algae", isAlgaeStalling());
+        SmartDashboard.putBoolean("Froggy/Has Coral", isCoralStalling());
         
         SmartDashboard.putNumber("Froggy/Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());

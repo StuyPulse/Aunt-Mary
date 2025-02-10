@@ -31,6 +31,6 @@ public class FroggyOuttakeAlgae extends Command {
 
     @Override
     public boolean isFinished() {
-        return !froggy.hasAlgae();
+        return !froggy.isAlgaeStalling();
     }
 }
