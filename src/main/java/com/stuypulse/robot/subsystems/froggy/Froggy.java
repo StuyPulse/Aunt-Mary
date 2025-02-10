@@ -23,6 +23,8 @@ public abstract class Froggy extends SubsystemBase {
         return instance;
     }
 
+    public abstract Rotation2d getTargetAngle();
+
     public abstract void setTargetAngle(Rotation2d targetAngle);
 
     public abstract boolean isAtTargetAngle();

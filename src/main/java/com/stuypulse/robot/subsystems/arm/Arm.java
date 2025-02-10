@@ -26,6 +26,8 @@ public abstract class Arm extends SubsystemBase {
         visualizer = ArmVisualizer.getInstance();
     }
 
+    public abstract Rotation2d getTargetAngle();
+
     public abstract void setTargetAngle(Rotation2d TargetAngle);
 
     public abstract boolean atTargetAngle();
