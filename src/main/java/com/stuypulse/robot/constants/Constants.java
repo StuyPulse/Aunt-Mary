@@ -43,7 +43,7 @@ public class Constants {
 
         double GEAR_RATIO = 0.833333330333;
 
-        double ANGLE_OFFSET = 0.0;
+        double ANGLE_OFFSET = 0.0; // rotations
         double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
 
         double AREA = 3; // meters squared

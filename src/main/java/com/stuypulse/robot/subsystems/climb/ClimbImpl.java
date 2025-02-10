@@ -12,6 +12,7 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
@@ -21,7 +22,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbImpl extends Climb {
     private final TalonFX motor;
-    private final CANcoder absoluteEncoder;
+    private final DutyCycleEncoder absoluteEncoder;
 
     private Rotation2d targetAngle;
 
@@ -31,13 +32,15 @@ public class ClimbImpl extends Climb {
         motor = new TalonFX(Ports.Climb.MOTOR);
         Motors.Climb.MOTOR_CONFIG.configure(motor);
 
-        absoluteEncoder = new CANcoder(Ports.Climb.ABSOLUTE_ENCODER);
+        absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER, 1.0, Constants.Climb.ANGLE_OFFSET.getRotations());
 
-        MagnetSensorConfigs magnetSensorConfigs =
-                new MagnetSensorConfigs()
-                        .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations());
+        // MagnetSensorConfigs magnetSensorConfigs =
+        //         new MagnetSensorConfigs()
+        //                 .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations());
 
-        absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+        
+        absoluteEncoder.setInverted(false);
 
         targetAngle = new Rotation2d();
 
@@ -52,7 +55,7 @@ public class ClimbImpl extends Climb {
 
     @Override
     public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        return Rotation2d.fromRotations(absoluteEncoder.get());
     }
 
     @Override

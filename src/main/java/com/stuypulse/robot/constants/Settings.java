@@ -51,8 +51,8 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND = 0.0;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0.0;
+        double MAX_VELOCITY_METERS_PER_SECOND = 1.0;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 1.0;
 
         double FEED_HEIGHT_METERS = 1.0;
 
@@ -122,11 +122,12 @@ public interface Settings {
     }
 
     public interface Froggy {
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(0);
+        // estimates
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(30.0);
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(123.0);
+        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(53.0);
+        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(125.0);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(0.0);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(0);
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);

@@ -12,18 +12,19 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class ArmImpl extends Arm {
 
     private TalonFX motor;
-    private CANcoder absoluteEncoder;
+    
+    private DutyCycleEncoder absoluteEncoder;
 
     private Rotation2d targetAngle;
 
@@ -33,15 +34,17 @@ public class ArmImpl extends Arm {
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
 
-        absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
+        absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER, 1.0, Constants.Arm.ANGLE_OFFSET);
 
-        MagnetSensorConfigs magnet_config =
-                new MagnetSensorConfigs()
-                        .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
-                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+        // MagnetSensorConfigs magnet_config =
+        //         new MagnetSensorConfigs()
+        //                 .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
+        //                 .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
 
-        absoluteEncoder.getConfigurator().apply(magnet_config);
-
+        // absoluteEncoder.getConfigurator().apply(magnet_config);
+                        
+        absoluteEncoder.setInverted(true); // check
+        
         targetAngle = Rotation2d.fromDegrees(0.0);
 
         rotateOverElevator = false;
@@ -67,7 +70,7 @@ public class ArmImpl extends Arm {
         rotateOverElevator = overElevator;
     }
 
-    public boolean atTargetAngle() {
+    public boolean atTargetAngle() { 
         return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees())
                 < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
     }
@@ -85,8 +88,8 @@ public class ArmImpl extends Arm {
             motor.setControl(armOutput);
         }
 
-        SmartDashboard.putNumber("Arm/Current Angle (deg)", getArmAngle().getDegrees());
-        SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Current Angle (Deg)", getArmAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Target Angle (Deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Climb/Motor Current", motor.getStatorCurrent().getValueAsDouble());
