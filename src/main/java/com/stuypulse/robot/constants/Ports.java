@@ -12,40 +12,40 @@ public interface Ports {
         int DRIVER = 0;
         int OPERATOR = 1;
         int DEBUGGER = 2;
-        // should these be final?
     }
 
     public interface Froggy {
-        int ROLLER_PORT = 0; // CHANGE
-        int PIVOT_PORT = 0; // CHANGE
-        int PIVOT_ENCODER = 0;
+        int ROLLER = 3;
+        int PIVOT = 4;
+        int ABSOLUTE_ENCODER = 5;
     }
 
     public interface Climb {
-        int CLIMB_MOTOR = 0;
-        int CLIMB_ENCODER = 0;
+        int MOTOR = 6;
+        int ABSOLUTE_ENCODER = 7;
     }
 
     public interface Arm {
-        int ARM_MOTOR = 0;
-        int ARM_ENCODER = 0;
+        int MOTOR = 8;
+        int ABSOLUTE_ENCODER = 9;
     }
 
-    // Set values later
     public interface Shooter {
-        int MOTOR = 0;
-        int RECEIVER = 1;
+        int MOTOR = 17;
+        int RECEIVER = 11;
     }
 
-    // Set values later
     public interface Funnel {
-        int MOTOR = 0;
-        int IR = 1;
+        int MOTOR = 12;
+        int IR = 13;
     }
 
     public interface Elevator {
-        int MOTOR = 0;
-        int BOTTOM_SWITCH = 1;
-        int TOP_SWITCH = 2;
+        int MOTOR = 14;
+        int BOTTOM_SWITCH = 15;
+    }
+
+    public interface LED {
+        int LED_PORT = 9; // cannot be greater than 10 for PWM Header Port
     }
 }

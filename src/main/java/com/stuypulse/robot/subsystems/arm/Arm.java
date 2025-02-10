@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public abstract class Arm extends SubsystemBase {
 
     public static final Arm instance;
+    public final ArmVisualizer visualizer;
 
     static {
         instance = new ArmImpl();
@@ -21,9 +22,13 @@ public abstract class Arm extends SubsystemBase {
         return instance;
     }
 
+    public Arm() {
+        visualizer = ArmVisualizer.getInstance();
+    }
+
     public abstract void setTargetAngle(Rotation2d TargetAngle);
 
-    public abstract Rotation2d getTargetAngle();
+    public abstract boolean atTargetAngle();
 
-    public abstract Rotation2d getArmAngle();
+    public abstract void setRotateBoolean(boolean overElevator);
 }

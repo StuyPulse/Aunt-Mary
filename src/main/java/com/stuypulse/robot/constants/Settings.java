@@ -9,6 +9,7 @@ package com.stuypulse.robot.constants;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Color;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -27,115 +28,97 @@ public interface Settings {
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
 
-        double BB_DEBOUNCE = 0.0;
-        double CORAL_STALLING_DEBOUNCE = 0.0;
-        double ALGAE_DEBOUNCE = 0.0;
+        double BB_DEBOUNCE = 0.1;
+        double CORAL_STALLING_DEBOUNCE = 0.5;
+        double ALGAE_DEBOUNCE = 0.1;
 
-        double RAMP_RATE = 0.0;
+        double RAMP_RATE = 0.25;
 
         double DRIVE_CURRENT_THRESHOLD = 30;
         double DRIVE_CURRENT_LIMIT = 40;
     }
 
     public interface Funnel {
-        SmartNumber MOTOR_SPEED = new SmartNumber("Funnel Speed", 0.0);
-        double IR_DEBOUNCE = 0.0;
-        double FUNNEL_STALLING = 0.0;
+        SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 0.4);
+        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", 0.4);
 
-        double RAMP_RATE = 0.0;
+        double STALL_CURRENT = 30;
+        double STALL_DETECTION_TIME = 0.25;
+        double MIN_REVERSE_TIME = 1.0;
 
-        double GEAR_RATIO = 0.0;
-        double DRIVE_CURRENT_THRESHOLD = 30;
-        double DRIVE_CURRENT_LIMIT = 40;
+        double HAS_CORAL_DEBOUNCE = 0.5;
     }
 
     public interface Elevator {
-        SmartNumber MAX_VELOCITY_METERS_PER_SECOND =
-                new SmartNumber("Elevator/Max Velocity (m per s)", 1.0);
-        SmartNumber MAX_ACCEL_METERS_PER_SECOND_PER_SECOND =
-                new SmartNumber("Elevator/Max Accel (m per s^2)", 2.0);
 
-        // CHANGE
-        double HANDOFF_HEIGHT_METERS = 0.1;
-        // front and funnel
-        double ALT_L2_HEIGHT_METERS = 0.25;
-        double ALT_L3_HEIGHT_METERS = 0.5;
-        double ALT_L4_HEIGHT_METERS = 0.75;
-        double FUNNEL_L2_HEIGHT_METERS = 0.3; // funnel side; should be higher than L2
-        double FUNNEL_L3_HEIGHT_METERS = 0.55; // funnel side; should be higher than L3
-        double FUNNEL_L4_HEIGHT_METERS = 0.8;
+        double MAX_VELOCITY_METERS_PER_SECOND = 0.0;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0.0;
 
-        double RAMP_RATE_CURRENT = 1.0;
-        double RAMP_RATE_VOLTAGE = 0.1;
+        double FEED_HEIGHT_METERS = 1.0;
 
-        // FIND OUT REAL GEAR RATIO
-        double GEAR_RATIO = 1.0 / 5.0;
-        double CURRENT_LIMIT = 5.0;
+        // Front and Funnel
+        double FRONT_L2_HEIGHT_METERS = 1.609;
+        double FRONT_L3_HEIGHT_METERS = 1.073;
+        double FRONT_L4_HEIGHT_METERS = 1.708;
+        double FUNNEL_L2_HEIGHT_METERS = 1.106; // funnel side; should be higher than L2
+        double FUNNEL_L3_HEIGHT_METERS = 1.161; // funnel side; should be higher than L3
+        double FUNNEL_L4_HEIGHT_METERS = 1.836;
 
-        // Magic motion, change RPS
-        double TARGET_CRUISE_VELOCITY = 0.0; // Rotations Per Second
-        double TARGET_ACCELERATION = 0.0; // Rotations Per Second^2
-        double TARGET_JERK = 0.0; // Rotations Per Second^3
+        // Algae
+        double BARGE_HEIGHT_METERS = 2.073;
+        double ALGAE_L2_HEIGHT_METERS = 1.4; // estimate
+        double ALGAE_L3_HEIGHT_METERS = 1.8; // estimate
 
-        SmartNumber HEIGHT_TOLERANCE_METERS =
-                new SmartNumber("Elevator/Height Tolerance (m)", 0.02);
+        double HEIGHT_TOLERANCE_METERS = 0.02;
 
         public interface PID {
-            // tune
-            SmartNumber kP = new SmartNumber("Elevator/Controller/kP", 0.0);
-            SmartNumber kI = new SmartNumber("Elevator/Controller/kI", 0.0);
-            SmartNumber kD = new SmartNumber("Elevator/Controller/kD", 0.0);
+            double kP = 0.0;
+            double kI = 0.0;
+            double kD = 0.0;
         }
 
         public interface FF {
-            SmartNumber kS = new SmartNumber("Elevator/Controller/kS", 0.20506);
-            SmartNumber kV = new SmartNumber("Elevator/Controller/kV", 3.7672);
-            SmartNumber kA = new SmartNumber("Elevator/Controller/kA", 0.27);
-            SmartNumber kG = new SmartNumber("Elevator/Controller/kG", 1.37);
-        }
-
-        public interface Simulation {
-            double SCALE_FACTOR = 0.5 + 2.5 / 77;
+            double kS = 0.0;
+            double kV = 0.0;
+            double kA = 0.0;
+            double kG = 0.0;
         }
     }
 
     public interface Arm {
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0);
+
+        Rotation2d L2_ANGLE_FUNNEL = Rotation2d.fromDegrees(261.5);
+        Rotation2d L3_ANGLE_FUNNEL = Rotation2d.fromDegrees(236.1);
+        Rotation2d L4_ANGLE_FUNNEL = Rotation2d.fromDegrees(240.0);
+
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7); // estimate
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9); // estimate
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(150.0);
+
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-8.0); // estimate
+        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(-9.8);
+
+        Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(180.0);
 
         public interface PID {
-            SmartNumber kP = new SmartNumber("Arm/PID/kP", 0.0);
-            SmartNumber kI = new SmartNumber("Arm/PID/kI", 0);
-            SmartNumber kD = new SmartNumber("Arm/PID/kD", 0);
+            double kP = 0.0;
+            double kI = 0.0;
+            double kD = 0.0;
         }
 
         public interface FF {
-            SmartNumber kS = new SmartNumber("Arm/PID/kP", 0.0);
-            SmartNumber kV = new SmartNumber("Arm/PID/kI", 0);
-            SmartNumber kA = new SmartNumber("Arm/PID/kD", 0);
-            SmartNumber kG = new SmartNumber("Arm/PID/kG", 0);
+            double kS = 0.0;
+            double kV = 0.0;
+            double kA = 0.0;
+            double kG = 0.0;
         }
 
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(0);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(0);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(0);
-
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(0);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(0);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(0);
-
-        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(0);
-        double GEAR_RATIO = 0;
-        double ARM_OFFSET = 0;
-        double ENCODER_OFFSET = 0;
-        SmartNumber PID_RAMPING = new SmartNumber("Arm/PID_RAMP", 0);
-        SmartNumber FF_RAMPING = new SmartNumber("Arm/FF_RAMP", 0);
-        SmartNumber CURRENT_RAMPING = new SmartNumber("Arm/CURRENT_RAMP", 0);
-
-        public interface MotionMagic {
-            double MAX_VEL = 0;
-            double MAX_ACCEL = 0;
-            double JERK = 0;
-        }
+        double MAX_VEL_ROTATIONS_PER_S = 1.0;
+        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;
+        double ANGLE_TOLERANCE_DEGREES = 1.0;
     }
 
     public interface Froggy {
@@ -146,69 +129,67 @@ public interface Settings {
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(0);
 
-        double ALGAE_INTAKE_SPEED = 0.0;
-        double ALGAE_OUTTAKE_SPEED = 0.0;
-        double CORAL_INTAKE_SPEED = 0.0;
-        double CORAL_OUTTAKE_SPEED = 0.0;
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
 
-        double CORAL_CURRENT_THRESHOLD = 0.0;
-        double ALGAE_CURRENT_THRESHOLD = 0.0;
+        double ALGAE_INTAKE_SPEED = 0.5;
+        double ALGAE_OUTTAKE_SPEED = 0.5;
 
-        double GEAR_RATIO = 0.0;
-        double PIVOT_CURRENT_LIMIT = 0.0;
-        double STATOR_CURRENT_LIMIT = 0.0;
-        double ROLLER_CURRENT_THRESHOLD = 0.0;
-        double ANGLE_OFFSET = 0.0;
+        double CORAL_INTAKE_SPEED = 0.5;
+        double CORAL_OUTTAKE_SPEED = 0.5;
 
-        double ROLLER_FF_RAMPING = 0.0;
-        double PIVOT_FF_RAMPING = 0.0;
-        double ROLLER_PID_RAMPING = 0.0;
-        double PIVOT_PID_RAMPING = 0.0;
-        double ROLLER_DEBOUNCE_TIME = 0.0;
+        double HOLD_ALGAE_SPEED = 0.0;
 
-        double MINIMUM_ANGLE = 0.0;
-        double MAXIMUM_ANGLE = 0.0;
-        double MAGNET_OFFSET = 0.0;
-        double ENCODER_GEAR_RATIO = 0.0;
-        double HOLD_SPEED = 0.0;
+        double CORAL_CURRENT_THRESHOLD = 1.0;
+        double ALGAE_CURRENT_THRESHOLD = 1.0;
+        double STALL_DEBOUNCE_TIME = 0.0;
 
         public interface PID {
-            SmartNumber kP = new SmartNumber("kP", 0.0);
-            SmartNumber kI = new SmartNumber("kI", 0.0);
-            SmartNumber kD = new SmartNumber("kD", 0.0);
-            SmartNumber kG = new SmartNumber("kG", 0.0);
+            double kP = 0.0;
+            double kI = 0.0;
+            double kD = 0.0;
         }
 
         public interface FF {
-            SmartNumber kA = new SmartNumber("kA", 0.0);
-            SmartNumber kS = new SmartNumber("kS", 0.0);
-            SmartNumber kV = new SmartNumber("kV", 0.0);
+            double kS = 0.0;
+            double kV = 0.0;
+            double kA = 0.0;
+            double kG = 0.0;
         }
 
-        public interface MotionMagic {
-            double MAX_VELOCITY = 0.0;
-            double MAX_ACCELERATION = 0.0;
-            double MAX_JERK = 0.0;
-        }
+        double MAX_VEL_ROTATIONS_PER_S = 1.0;
+        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;
     }
 
     public interface Climb {
-        double kS = 0.0;
-        double kV = 0.0;
-        double kA = 0.0;
-        double kP = 0.0;
-        double kI = 0.0;
-        double kD = 0.0;
 
-        int CURRENT_LIMIT = 0;
-        double GEAR_RATIO = 25;
-        double RAMP_RATE = 0;
+        double CLIMB_VOLTAGE = 6.0;
 
-        double STOW_ANGLE = 0.0;
-        double INTAKE_ANGLE = 0.0;
-        double ACQUIRED_ANGLE = 0.0;
-        double CLIMBED_ANGLE = 0.0;
-        double CLIMB_ANGLE_TOLERANCE = 2.0;
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(180.0);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0);
+
+        public interface PID {
+            double kP = 0.0;
+            double kI = 0.0;
+            double kD = 0.0;
+        }
+
+        public interface FF {
+            double kS = 0.0;
+            double kV = 0.0;
+            double kA = 0.0;
+            double kG = 0.0;
+        }
+    }
+
+    public interface LED {
+        Color SHOOT_COLOR = Color.kGreen;
+        Color ABORT_COLOR = Color.kBlue;
+        Color HAS_CORAL_COLOR = Color.kRed;
+        Color ALIGN_COLOR = Color.kYellow;
+        Color UNJAM_COLOR = Color.kBlue;
+        Color CLIMB_COLOR = Color.kGreen;
     }
 
     public interface Auton {
