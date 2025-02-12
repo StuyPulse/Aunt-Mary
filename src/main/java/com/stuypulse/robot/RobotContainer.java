@@ -11,6 +11,11 @@ import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.*;
+import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
+import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL2Front;
+import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL3Front;
+import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.*;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.led.LedRainbow;
@@ -27,8 +32,8 @@ import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.ArmImpl;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
-import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
+import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 
@@ -103,7 +108,7 @@ public class RobotContainer {
         // ADD ALIGNMENT TO ALL SCORING ROUTINES
 
         // BOTTOM BUTTON -> LVL 2 FRONT
-        driver.getBottomButton().whileTrue(new ScoreL2Front()).onFalse(new MoveToFeed());
+        driver.getBottomButton().onTrue(new ScoreL2Front()).onFalse(new MoveToFeed());
 
         // RIGHT BUTTON -> LVL 3 FRONT
         driver.getRightButton().whileTrue(new ScoreL3Front()).onFalse(new MoveToFeed());
@@ -150,6 +155,62 @@ public class RobotContainer {
 
         // LEFT TRIGGER -> GROUND ALGAE INTAKE
         driver.getLeftTriggerButton().whileTrue(new FroggyAlgaeGroundIntake());
+
+
+        /* OPERATOR BUTTON BINDINGS */
+
+        // BOTTOM BUTTON -> LVL 2 FRONT
+        operator.getBottomButton().whileTrue(new ElevatorToL2Front()).onFalse(new ElevatorToFeed());
+
+        // RIGHT BUTTON -> LVL 3 FRONT
+        operator.getRightButton().whileTrue(new ElevatorToL3Front()).onFalse(new ElevatorToFeed());
+
+        // TOP BUTTON -> LVL 4 FRONT
+        operator.getTopButton().whileTrue(new ElevatorToL4Front()).onFalse(new ElevatorToFeed());
+
+        // LEFT BUTTON -> BARGE SCORE
+        operator.getLeftButton().whileTrue(new ElevatorToBarge()).onFalse(new ElevatorToFeed());
+
+        // TOP RIGHT PADDLE -> CLIMB OPEN
+        operator.getLeftMenuButton().onTrue(new ClimbOpen()); //change, need a manual climb
+
+        // BOTTOM RIGHT PADDLE -> SCORE (IN GENERAL)
+        if (Arm.getInstance().getTargetAngle() == Settings.Arm.BARGE_ANGLE) {
+            driver.getDPadRight().whileTrue(new ShooterShootAlgae());
+        }
+        else if (Froggy.getInstance().getTargetAngle() == Settings.Froggy.L1_SCORING_ANGLE) {
+            driver.getDPadRight().whileTrue(new FroggyOuttakeCoral());
+        }
+        else if (Froggy.getInstance().isAlgaeStalling()) {
+            driver.getDPadRight().whileTrue(new FroggyOuttakeAlgae());
+        }
+        else { 
+            driver.getDPadRight().whileTrue(new ShooterShootFront());
+        }
+        // RIGHT MENU BUTTON -> CLIMB DRIVE
+        operator.getRightMenuButton().onTrue(new ClimbClimb());
+
+        // TOP LEFT PADDLE -> L3 REEF ALGAE INTAKE
+        operator.getDPadLeft().whileTrue(new AcquireAlgaeL3()).onFalse(new MoveToStow());
+
+        // BOTTOM LEFT PADDLE -> L2 REEF ALGAE INTAKE
+        operator.getDPadDown().whileTrue(new AcquireAlgaeL2()).onFalse(new MoveToStow());
+
+        // RIGHT BUMPER -> TO L1
+        operator.getRightBumper().whileTrue(new FroggyToL1());
+
+        // RIGHT TRIGGER -> GROUND CORAL INTAKE
+        operator.getRightTriggerButton().whileTrue(new FroggyCoralGroundIntake());
+
+        // LEFT BUMPER -> PROCESSOR SCORE
+        operator.getLeftBumper().whileTrue(new FroggyProcessorScore());
+
+        // LEFT TRIGGER -> GROUND ALGAE INTAKE
+        operator.getLeftTriggerButton().whileTrue(new FroggyAlgaeGroundIntake());
+
+        
+
+
     }
 
     /**************/

@@ -24,20 +24,20 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmSim extends SubsystemBase {
+public class ArmSim extends Arm {
 
     private final SingleJointedArmSim sim;
     private final Controller controller;
 
     private final SmartNumber targetAngle;
-
+    private boolean rotateOverElevator;
     private static final ArmSim instance;
 
     static {
         instance = new ArmSim();
     }
 
-    protected ArmSim() {
+    public ArmSim() {
         sim =
                 new SingleJointedArmSim(
                         DCMotor.getKrakenX60(1),
@@ -73,8 +73,9 @@ public class ArmSim extends SubsystemBase {
         return instance;
     }
 
-    public double getTargetAngle() {
-        return targetAngle.getAsDouble();
+    @Override
+    public Rotation2d getTargetAngle() {
+        return Rotation2d.fromDegrees(targetAngle.getAsDouble());
     }
 
     public double getArmAngle() {
@@ -82,18 +83,38 @@ public class ArmSim extends SubsystemBase {
     }
 
     @Override
+    public boolean atTargetAngle() { 
+        return Math.abs(getArmAngle() - getTargetAngle().getDegrees())
+                < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
+    }
+
+    @Override
+    public void setTargetAngle(Rotation2d targetAngle) {
+        this.targetAngle.set(targetAngle.getDegrees());
+    }
+
+    public boolean getRotateBoolean() {
+        return rotateOverElevator;
+    }
+
+    @Override
+    public void setRotateBoolean(boolean overElevator) {
+        rotateOverElevator = overElevator;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
-        controller.update(getTargetAngle(), getArmAngle());
+        controller.update(getTargetAngle().getDegrees(), getArmAngle());
         sim.setInputVoltage(controller.getOutput());
-        sim.update(Settings.DT);
         RoboRioSim.setVInVoltage(
                 BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
         ArmVisualizer.getInstance().update();
+        sim.update(Settings.DT);
 
         SmartDashboard.putNumber("Arm/Arm Angle", getArmAngle());
-        SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle());
+        SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle().getDegrees());
     }
 }

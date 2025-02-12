@@ -8,6 +8,8 @@ package com.stuypulse.robot.subsystems.elevator;
 
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartNumber;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
+import com.stuypulse.stuylib.control.Controller;
 
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
@@ -20,8 +22,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ElevatorFeedforward;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
+
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
+    private final Controller controller;
     private final SmartNumber targetHeight;
     private final DigitalInput bumpSwitchBottom;
 
@@ -29,6 +36,14 @@ public class ElevatorImpl extends Elevator {
         motor = new TalonFX(Ports.Elevator.MOTOR);
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
 
+        MotionProfile motionProfile = new MotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+
+        controller = new MotorFeedforward(Settings.Elevator.FF.kS, Settings.Elevator.FF.kV, Settings.Elevator.FF.kA).position()
+            .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
+            .add(new PIDController(Settings.Elevator.PID.kP, Settings.Elevator.PID.kI, Settings.Elevator.PID.kD))
+            .setSetpointFilter(motionProfile)
+            .setOutputFilter(x -> SLMath.clamp(x, Settings.Elevator.MIN_VOLTAGE, Settings.Elevator.MAX_VOLTAGE));
+            
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
 
         targetHeight =
@@ -39,9 +54,9 @@ public class ElevatorImpl extends Elevator {
     public void setTargetHeight(double height) {
         targetHeight.set(
                 SLMath.clamp(
-                        height,
-                        Constants.Elevator.MIN_HEIGHT_METERS,
-                        Constants.Elevator.MAX_HEIGHT_METERS));
+                    height,
+                    Constants.Elevator.MIN_HEIGHT_METERS,
+                    Constants.Elevator.MAX_HEIGHT_METERS));
     }
 
     @Override
@@ -70,15 +85,14 @@ public class ElevatorImpl extends Elevator {
     public void periodic() {
         super.periodic();
 
-        motor.setControl(
-                new MotionMagicVoltage(
-                        getTargetHeight()
-                                / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR));
+        // motor.setControl(
+        //     new MotionMagicVoltage(getTargetHeight() / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR));
+
+        controller.update(getTargetHeight(), getCurrentHeight());
+        motor.setVoltage(controller.getOutput());
 
         if (atBottom()) {
-            motor.setPosition(
-                    Constants.Elevator.MIN_HEIGHT_METERS
-                            / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
+            motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
         }
 
         SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());

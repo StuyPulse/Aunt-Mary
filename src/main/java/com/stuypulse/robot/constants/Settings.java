@@ -71,6 +71,9 @@ public interface Settings {
 
         double HEIGHT_TOLERANCE_METERS = 0.02;
 
+        double MIN_VOLTAGE = -12.0;
+        double MAX_VOLTAGE = 12.0;
+
         public interface PID {
             double kP = 0.0;
             double kI = 0.0;
@@ -86,22 +89,25 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615 + 270);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6 - 90);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0 - 90);
 
-        Rotation2d L2_ANGLE_FUNNEL = Rotation2d.fromDegrees(261.5);
-        Rotation2d L3_ANGLE_FUNNEL = Rotation2d.fromDegrees(236.1);
-        Rotation2d L4_ANGLE_FUNNEL = Rotation2d.fromDegrees(240.0);
+        Rotation2d L2_ANGLE_FUNNEL = Rotation2d.fromDegrees(261.5 - 90);
+        Rotation2d L3_ANGLE_FUNNEL = Rotation2d.fromDegrees(236.1 - 90);
+        Rotation2d L4_ANGLE_FUNNEL = Rotation2d.fromDegrees(240.0 - 90);
 
-        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7); // estimate
-        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9); // estimate
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(150.0);
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7 + 270); // estimate
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9 + 270); // estimate
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(150.0 - 90);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-8.0); // estimate
-        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(-9.8);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-8.0 + 270); // estimate
+        Rotation2d FUNNEL_ANGLE = Rotation2d.fromDegrees(-9.8 + 270); // estimate
 
-        Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(180.0);
+        Rotation2d VERTICAL_ANGLE = Rotation2d.fromDegrees(180.0 - 90);
+
+        double MIN_VOLTAGE = -12.0;
+        double MAX_VOLTAGE = 12.0;
 
         public interface PID {
             double kP = 0.0;
@@ -123,12 +129,12 @@ public interface Settings {
 
     public interface Froggy {
         // estimates
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(30.0);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(123.0);
-        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(53.0);
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(125.0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(127.0);
-        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(166.0);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(30.0 + 270);
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(123.0 - 90);
+        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(53.0 + 270);
+        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(125.0 - 90);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(127.0 - 90);
+        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(166.0 - 90);
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
 
@@ -143,6 +149,9 @@ public interface Settings {
         double CORAL_CURRENT_THRESHOLD = 1.0;
         double ALGAE_CURRENT_THRESHOLD = 1.0;
         double STALL_DEBOUNCE_TIME = 0.0; // what units
+
+        double MIN_VOLTAGE = -12.0;
+        double MAX_VOLTAGE = 12.0;
 
         public interface PID {
             double kP = 0.0;
@@ -164,11 +173,14 @@ public interface Settings {
     public interface Climb {
 
         double CLIMB_VOLTAGE = 6.0;
+        
+        double MIN_VOLTAGE = -12.0;
+        double MAX_VOLTAGE = 12.0;
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0.0);
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(180.0);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0.0 + 270);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(180.0 - 90);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0 - 90);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0 + 270);
 
         public interface PID {
             double kP = 0.0;

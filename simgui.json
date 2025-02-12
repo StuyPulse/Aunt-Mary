@@ -11,12 +11,23 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/Visualizers/Elevator": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Arm": {
+          "open": true
+        },
+        "Autonomous": {
+          "open": true
+        },
         "Elevator": {
           "open": true
         },
@@ -42,9 +53,15 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "Server": {
       "open": true
     },
     "visible": true
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }

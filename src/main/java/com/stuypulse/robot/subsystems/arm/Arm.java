@@ -6,6 +6,11 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.subsystems.arm.ArmVisualizer;
+import com.stuypulse.robot.subsystems.elevator.ElevatorImpl;
+import com.stuypulse.robot.subsystems.elevator.ElevatorSimu;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,7 +20,11 @@ public abstract class Arm extends SubsystemBase {
     public final ArmVisualizer visualizer;
 
     static {
-        instance = new ArmImpl();
+        if (Robot.isReal()) {
+            instance = new ArmImpl();
+        } else {
+            instance = new ArmSim();
+        }
     }
 
     public static Arm getInstance() {
@@ -31,6 +40,8 @@ public abstract class Arm extends SubsystemBase {
     public abstract void setTargetAngle(Rotation2d TargetAngle);
 
     public abstract boolean atTargetAngle();
+
+    public abstract boolean getRotateBoolean();
 
     public abstract void setRotateBoolean(boolean overElevator);
 }

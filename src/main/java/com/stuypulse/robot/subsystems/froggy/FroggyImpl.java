@@ -23,11 +23,17 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.stuypulse.stuylib.control.Controller;
+
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 
 public class FroggyImpl extends Froggy {
 
     private TalonFX rollerMotor;
     private TalonFX pivotMotor;
+    private Controller pivotController;
     private CANcoder absoluteEncoder;
 
     private final BStream isCoralStalling;
@@ -49,6 +55,11 @@ public class FroggyImpl extends Froggy {
                         .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
                         .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
 
+        pivotController = new MotorFeedforward(Settings.Froggy.FF.kS, Settings.Froggy.FF.kV, Settings.Froggy.FF.kA).position()
+            .add(new ArmFeedforward(Settings.Froggy.FF.kG))
+            .add(new PIDController(Settings.Froggy.PID.kP, Settings.Froggy.PID.kI, Settings.Froggy.PID.kD))
+            .setOutputFilter(x -> SLMath.clamp(x, Settings.Froggy.MIN_VOLTAGE, Settings.Froggy.MAX_VOLTAGE));
+        
         absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
         targetAngle = Rotation2d.fromDegrees(Settings.Froggy.STOW_ANGLE.getDegrees());
@@ -132,8 +143,11 @@ public class FroggyImpl extends Froggy {
 
     @Override
     public void periodic() {
-        MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getRotations());
-        rollerMotor.setControl(controllerOutput);
+        // MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getRotations());
+        // rollerMotor.setControl(controllerOutput);
+
+        pivotController.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations());
+        pivotMotor.setVoltage(pivotController.getOutput());
 
         SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());

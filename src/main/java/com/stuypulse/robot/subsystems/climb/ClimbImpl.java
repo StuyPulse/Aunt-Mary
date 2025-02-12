@@ -10,11 +10,17 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
+import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.controls.DutyCycleOut; 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -22,7 +28,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbImpl extends Climb {
     private final TalonFX motor;
+
     private final DutyCycleEncoder absoluteEncoder;
+
+    private final Controller controller;
 
     private Rotation2d targetAngle;
 
@@ -31,6 +40,11 @@ public class ClimbImpl extends Climb {
     public ClimbImpl() {
         motor = new TalonFX(Ports.Climb.MOTOR);
         Motors.Climb.MOTOR_CONFIG.configure(motor);
+
+        controller = new MotorFeedforward(Settings.Climb.FF.kS, Settings.Climb.FF.kV, Settings.Climb.FF.kA).position()
+            .add(new ArmFeedforward(Settings.Climb.FF.kG))
+            .add(new PIDController(Settings.Climb.PID.kP, Settings.Climb.PID.kI, Settings.Climb.PID.kD))
+            .setOutputFilter(x -> SLMath.clamp(x, Settings.Climb.MIN_VOLTAGE, Settings.Climb.MAX_VOLTAGE));
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER, 1.0, Constants.Climb.ANGLE_OFFSET.getRotations());
 
@@ -63,6 +77,10 @@ public class ClimbImpl extends Climb {
         return targetAngle;
     }
 
+    public void setDutyCycle(double speed){
+        motor.setControl(new DutyCycleOut(speed));
+    }
+
     @Override
     public boolean atTargetAngle() {
         return Math.abs(getAngle().getDegrees() - targetAngle.getDegrees())
@@ -81,7 +99,8 @@ public class ClimbImpl extends Climb {
         } else if (atTargetAngle()) {
             motor.stopMotor();
         } else {
-            motor.setControl(new PositionVoltage(targetAngle.getDegrees()).withSlot(0));
+            controller.update(getTargetAngle().getRotations(), getAngle().getRotations());
+            motor.setVoltage(controller.getOutput());
         }
 
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getAngle().getDegrees());

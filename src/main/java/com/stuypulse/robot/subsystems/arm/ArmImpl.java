@@ -10,11 +10,16 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
+import com.stuypulse.stuylib.math.SLMath;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -23,6 +28,8 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 public class ArmImpl extends Arm {
 
     private TalonFX motor;
+
+    private final Controller controller;
     
     private DutyCycleEncoder absoluteEncoder;
 
@@ -42,6 +49,14 @@ public class ArmImpl extends Arm {
         //                 .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
 
         // absoluteEncoder.getConfigurator().apply(magnet_config);
+
+        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL_ROTATIONS_PER_S, Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+        
+        controller = new MotorFeedforward(Settings.Arm.FF.kS, Settings.Arm.FF.kV, Settings.Arm.FF.kA).position()
+            .add(new ArmFeedforward(Settings.Arm.FF.kG))
+            .add(new PIDController(Settings.Arm.PID.kP, Settings.Arm.PID.kI, Settings.Arm.PID.kD))
+            .setSetpointFilter(motionProfile)
+            .setOutputFilter(x -> SLMath.clamp(x, Settings.Arm.MIN_VOLTAGE, Settings.Arm.MAX_VOLTAGE));
                         
         absoluteEncoder.setInverted(true); // check
         
@@ -78,14 +93,22 @@ public class ArmImpl extends Arm {
     @Override
     public void periodic() {
 
-        // check?
+        // // check?
+        // if (!getRotateBoolean()) {
+        //     MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
+        //     motor.setControl(armOutput);
+        // } else {
+        //     MotionMagicVoltage armOutput =
+        //             new MotionMagicVoltage(getTargetAngle().getRotations() - 1);
+        //     motor.setControl(armOutput);
+        // }
+
         if (!getRotateBoolean()) {
-            MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
-            motor.setControl(armOutput);
+            controller.update(getTargetAngle().getRotations(), getArmAngle().getRotations());
+            motor.setVoltage(controller.getOutput());
         } else {
-            MotionMagicVoltage armOutput =
-                    new MotionMagicVoltage(getTargetAngle().getRotations() - 1);
-            motor.setControl(armOutput);
+            controller.update(getTargetAngle().getRotations() - 1, getArmAngle().getRotations());
+            motor.setVoltage(controller.getOutput());
         }
 
         SmartDashboard.putNumber("Arm/Current Angle (Deg)", getArmAngle().getDegrees());
