@@ -12,7 +12,7 @@ import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
-
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 
@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSim extends Arm {
 
@@ -32,6 +31,8 @@ public class ArmSim extends Arm {
     private final SmartNumber targetAngle;
     private boolean rotateOverElevator;
     private static final ArmSim instance;
+
+    private static ArmVisualizer armVisualizer = ArmVisualizer.getInstance();
 
     static {
         instance = new ArmSim();
@@ -47,7 +48,6 @@ public class ArmSim extends Arm {
                         Constants.Arm.LOWER_ANGLE_LIMIT,
                         Constants.Arm.UPPER_ANGLE_LIMIT,
                         true,
-                        0,
                         0);
 
         MotionProfile motionProfile =
@@ -69,7 +69,7 @@ public class ArmSim extends Arm {
         targetAngle = new SmartNumber("Arm/Target Angle", 0.0);
     }
 
-    public static ArmSim getInstance() {
+    public static ArmSim getSim() {
         return instance;
     }
 
@@ -78,13 +78,14 @@ public class ArmSim extends Arm {
         return Rotation2d.fromDegrees(targetAngle.getAsDouble());
     }
 
-    public double getArmAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads()).getDegrees();
+    @Override
+    public Rotation2d getCurrentAngle() {
+        return Rotation2d.fromRadians(sim.getAngleRads());
     }
 
     @Override
     public boolean atTargetAngle() { 
-        return Math.abs(getArmAngle() - getTargetAngle().getDegrees())
+        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees())
                 < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
     }
 
@@ -106,15 +107,16 @@ public class ArmSim extends Arm {
     public void periodic() {
         super.periodic();
 
-        controller.update(getTargetAngle().getDegrees(), getArmAngle());
+        controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees());
         sim.setInputVoltage(controller.getOutput());
-        RoboRioSim.setVInVoltage(
-                BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
-
-        ArmVisualizer.getInstance().update();
         sim.update(Settings.DT);
+        
+        // RoboRioSim.setVInVoltage(
+        //         BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
-        SmartDashboard.putNumber("Arm/Arm Angle", getArmAngle());
+        armVisualizer.update();
+
+        SmartDashboard.putNumber("Arm/Current Arm Angle", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle().getDegrees());
     }
 }

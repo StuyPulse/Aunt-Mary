@@ -65,28 +65,34 @@ public class ArmImpl extends Arm {
         rotateOverElevator = false;
     }
 
+    @Override
     public void setTargetAngle(Rotation2d targetAngle) {
         this.targetAngle = targetAngle;
     }
 
+    @Override
     public Rotation2d getTargetAngle() {
         return targetAngle;
     }
 
-    public Rotation2d getArmAngle() {
+    @Override
+    public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
     }
 
+    @Override
     public boolean getRotateBoolean() {
         return rotateOverElevator;
     }
 
+    @Override
     public void setRotateBoolean(boolean overElevator) {
         rotateOverElevator = overElevator;
     }
 
+    @Override
     public boolean atTargetAngle() { 
-        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees())
+        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees())
                 < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
     }
 
@@ -104,14 +110,14 @@ public class ArmImpl extends Arm {
         // }
 
         if (!getRotateBoolean()) {
-            controller.update(getTargetAngle().getRotations(), getArmAngle().getRotations());
+            controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations());
             motor.setVoltage(controller.getOutput());
         } else {
-            controller.update(getTargetAngle().getRotations() - 1, getArmAngle().getRotations());
+            controller.update(getTargetAngle().getRotations() - 1, getCurrentAngle().getRotations());
             motor.setVoltage(controller.getOutput());
         }
 
-        SmartDashboard.putNumber("Arm/Current Angle (Deg)", getArmAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Current Angle (Deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle (Deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());

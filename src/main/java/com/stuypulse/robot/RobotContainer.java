@@ -8,10 +8,13 @@ package com.stuypulse.robot;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-
+import com.stuypulse.robot.commands.arm.ArmToAngle;
+import com.stuypulse.robot.commands.arm.front_side.ArmToL2Front;
+import com.stuypulse.robot.commands.arm.front_side.ArmToL3Front;
+import com.stuypulse.robot.commands.arm.front_side.ArmToL4Front;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.*;
-import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.*;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
 import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL2Front;
 import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL3Front;
@@ -42,6 +45,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 
 public class RobotContainer {
 
@@ -132,7 +137,7 @@ public class RobotContainer {
         else if (Froggy.getInstance().isAlgaeStalling()) {
             driver.getDPadRight().whileTrue(new FroggyOuttakeAlgae());
         }
-        else { 
+        else if (Arm.getInstance().getTargetAngle() == Settings.Arm.L2_ANGLE_FRONT || Arm.getInstance().getTargetAngle() == Settings.Arm.L3_ANGLE_FRONT || Arm.getInstance().getTargetAngle() == Settings.Arm.L4_ANGLE_FRONT){ 
             driver.getDPadRight().whileTrue(new ShooterShootFront());
         }
         // RIGHT MENU BUTTON -> CLIMB DRIVE
@@ -145,7 +150,7 @@ public class RobotContainer {
         driver.getDPadDown().whileTrue(new AcquireAlgaeL2()).onFalse(new MoveToStow());
 
         // RIGHT BUMPER -> TO L1
-        driver.getRightBumper().whileTrue(new FroggyToL1());
+        driver.getRightBumper().onTrue(new FroggyToL1());
 
         // RIGHT TRIGGER -> GROUND CORAL INTAKE
         driver.getRightTriggerButton().whileTrue(new FroggyCoralGroundIntake());
@@ -159,42 +164,50 @@ public class RobotContainer {
 
         /* OPERATOR BUTTON BINDINGS */
 
-        // BOTTOM BUTTON -> LVL 2 FRONT
-        operator.getBottomButton().whileTrue(new ElevatorToL2Front()).onFalse(new ElevatorToFeed());
+        // BOTTOM BUTTON -> GO TO LVL 2 HEIGHT
+        operator.getBottomButton().whileTrue(
+            new SequentialCommandGroup(
+                new ElevatorToL2Front()
+                .andThen(new ArmToL2Front()))
+                    ).onFalse(new MoveToFeed()
+            );
 
-        // RIGHT BUTTON -> LVL 3 FRONT
-        operator.getRightButton().whileTrue(new ElevatorToL3Front()).onFalse(new ElevatorToFeed());
+        // RIGHT BUTTON -> GO TO LVL 3 HEIGHT
+        operator.getBottomButton().whileTrue(
+            new SequentialCommandGroup(
+                new ElevatorToL3Front()
+                .andThen(new ArmToL3Front()))
+                    ).onFalse(new MoveToFeed()
+            );
 
-        // TOP BUTTON -> LVL 4 FRONT
-        operator.getTopButton().whileTrue(new ElevatorToL4Front()).onFalse(new ElevatorToFeed());
+        // TOP BUTTON -> GO TO LVL 4 HEIGHT
+        operator.getBottomButton().whileTrue(
+            new SequentialCommandGroup(
+                new ElevatorToL4Front()
+                .andThen(new ArmToL4Front()))
+                    ).onFalse(new MoveToFeedReverse()
+            );
 
-        // LEFT BUTTON -> BARGE SCORE
+        // LEFT BUTTON -> ELEVATOR TO BARGE
         operator.getLeftButton().whileTrue(new ElevatorToBarge()).onFalse(new ElevatorToFeed());
 
         // TOP RIGHT PADDLE -> CLIMB OPEN
-        operator.getLeftMenuButton().onTrue(new ClimbOpen()); //change, need a manual climb
+        operator.getLeftMenuButton().onTrue(new ManualClimb(Settings.Climb.MANUAL_CLIMB_SPEED)); //change, need a manual climb
+
+        // RIGHT MENU BUTTON -> CLIMB DRIVE
+        operator.getRightMenuButton().onTrue(new ManualClimb(-Settings.Climb.MANUAL_CLIMB_SPEED));
 
         // BOTTOM RIGHT PADDLE -> SCORE (IN GENERAL)
-        if (Arm.getInstance().getTargetAngle() == Settings.Arm.BARGE_ANGLE) {
-            driver.getDPadRight().whileTrue(new ShooterShootAlgae());
-        }
-        else if (Froggy.getInstance().getTargetAngle() == Settings.Froggy.L1_SCORING_ANGLE) {
-            driver.getDPadRight().whileTrue(new FroggyOuttakeCoral());
-        }
-        else if (Froggy.getInstance().isAlgaeStalling()) {
-            driver.getDPadRight().whileTrue(new FroggyOuttakeAlgae());
-        }
-        else { 
-            driver.getDPadRight().whileTrue(new ShooterShootFront());
-        }
-        // RIGHT MENU BUTTON -> CLIMB DRIVE
-        operator.getRightMenuButton().onTrue(new ClimbClimb());
+        operator.getDPadRight().onTrue(new ArmToAngle(Rotation2d.fromDegrees(arm.getCurrentAngle().getDegrees() + 5)));
 
         // TOP LEFT PADDLE -> L3 REEF ALGAE INTAKE
-        operator.getDPadLeft().whileTrue(new AcquireAlgaeL3()).onFalse(new MoveToStow());
+        operator.getDPadLeft().onTrue(new ArmToAngle(Rotation2d.fromDegrees(arm.getCurrentAngle().getDegrees() - 5)));
+
+        // 
+        operator.getDPadUp().onTrue(new ElevatorToHeight(elevator.getCurrentHeight() - Units.inchesToMeters(2)));
 
         // BOTTOM LEFT PADDLE -> L2 REEF ALGAE INTAKE
-        operator.getDPadDown().whileTrue(new AcquireAlgaeL2()).onFalse(new MoveToStow());
+        operator.getDPadDown().onTrue(new ElevatorToHeight(elevator.getCurrentHeight() + Units.inchesToMeters(2)));
 
         // RIGHT BUMPER -> TO L1
         operator.getRightBumper().whileTrue(new FroggyToL1());
@@ -207,10 +220,6 @@ public class RobotContainer {
 
         // LEFT TRIGGER -> GROUND ALGAE INTAKE
         operator.getLeftTriggerButton().whileTrue(new FroggyAlgaeGroundIntake());
-
-        
-
-
     }
 
     /**************/

@@ -31,6 +31,7 @@ public class FroggyOuttakeCoral extends Command {
 
     @Override
     public boolean isFinished() {
-        return !froggy.isCoralStalling();
+        froggy.setCoralFalse();
+        return froggy.hasCoral();
     }
 }

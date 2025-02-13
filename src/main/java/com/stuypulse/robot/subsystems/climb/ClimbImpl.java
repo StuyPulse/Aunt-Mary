@@ -77,6 +77,7 @@ public class ClimbImpl extends Climb {
         return targetAngle;
     }
 
+    @Override
     public void setDutyCycle(double speed){
         motor.setControl(new DutyCycleOut(speed));
     }

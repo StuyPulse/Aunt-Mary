@@ -41,6 +41,8 @@ public abstract class Arm extends SubsystemBase {
 
     public abstract boolean atTargetAngle();
 
+    public abstract Rotation2d getCurrentAngle();
+        
     public abstract boolean getRotateBoolean();
 
     public abstract void setRotateBoolean(boolean overElevator);

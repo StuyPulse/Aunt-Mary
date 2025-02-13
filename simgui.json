@@ -25,9 +25,6 @@
         "Arm": {
           "open": true
         },
-        "Autonomous": {
-          "open": true
-        },
         "Elevator": {
           "open": true
         },
@@ -60,8 +57,5 @@
       "open": true
     },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

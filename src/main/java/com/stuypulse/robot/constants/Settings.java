@@ -75,16 +75,16 @@ public interface Settings {
         double MAX_VOLTAGE = 12.0;
 
         public interface PID {
-            double kP = 0.0;
+            double kP = 10.0;
             double kI = 0.0;
-            double kD = 0.0;
+            double kD = 0.2;
         }
 
         public interface FF {
-            double kS = 0.0;
-            double kV = 0.0;
-            double kA = 0.0;
-            double kG = 0.0;
+            double kS = 0.20506;
+            double kV = 3.7672;
+            double kA = 0.27;
+            double kG = 1.37;
         }
     }
 
@@ -110,16 +110,16 @@ public interface Settings {
         double MAX_VOLTAGE = 12.0;
 
         public interface PID {
-            double kP = 0.0;
+            double kP = 10.0;
             double kI = 0.0;
-            double kD = 0.0;
+            double kD = 0.2;
         }
 
         public interface FF {
-            double kS = 0.0;
-            double kV = 0.0;
-            double kA = 0.0;
-            double kG = 0.0;
+            double kS = 0.20506;
+            double kV = 3.7672;
+            double kA = 0.27;
+            double kG = 1.37;
         }
 
         double MAX_VEL_ROTATIONS_PER_S = 1.0;
@@ -153,6 +153,9 @@ public interface Settings {
         double MIN_VOLTAGE = -12.0;
         double MAX_VOLTAGE = 12.0;
 
+        double ALGAE_DEBOUNCE_TIME = 0.5;
+        double CORAL_DEBOUNCE_TIME = 0.5;
+
         public interface PID {
             double kP = 0.0;
             double kI = 0.0;
@@ -173,7 +176,7 @@ public interface Settings {
     public interface Climb {
 
         double CLIMB_VOLTAGE = 6.0;
-        
+        double MANUAL_CLIMB_SPEED = 1.0;
         double MIN_VOLTAGE = -12.0;
         double MAX_VOLTAGE = 12.0;
 

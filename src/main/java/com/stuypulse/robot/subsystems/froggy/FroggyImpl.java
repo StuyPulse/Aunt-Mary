@@ -18,6 +18,7 @@ import com.stuypulse.robot.constants.Settings;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -38,6 +39,9 @@ public class FroggyImpl extends Froggy {
 
     private final BStream isCoralStalling;
     private final BStream isAlgaeStalling;
+
+    private boolean hasCoral;
+    private boolean hasAlgae;
 
     public Rotation2d targetAngle;
 
@@ -126,6 +130,22 @@ public class FroggyImpl extends Froggy {
         rollerMotor.set(Settings.Froggy.HOLD_ALGAE_SPEED);
     }
 
+    public boolean hasAlgae() {
+        return isAlgaeStalling();
+    }
+
+    public boolean hasCoral() {
+        return isCoralStalling();
+    }
+
+    public void setCoralFalse() {
+        hasCoral = false;
+    }
+
+    public void setAlgaeFalse() {
+        hasAlgae = false;
+    }
+    
     @Override
     public boolean isAlgaeStalling() {
         return isAlgaeStalling.get();
@@ -152,8 +172,8 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putBoolean("Froggy/Has Algae", isAlgaeStalling());
-        SmartDashboard.putBoolean("Froggy/Has Coral", isCoralStalling());
+        SmartDashboard.putBoolean("Froggy/Has Algae", hasAlgae());
+        SmartDashboard.putBoolean("Froggy/Has Coral", hasCoral());
         
         SmartDashboard.putNumber("Froggy/Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());

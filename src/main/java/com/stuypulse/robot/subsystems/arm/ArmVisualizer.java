@@ -32,7 +32,7 @@ public class ArmVisualizer {
         pivot = arm2d.getRoot(
             "Pivot",
             Units.inchesToMeters(33),
-            Units.inchesToMeters(66)
+            Units.inchesToMeters(33)
         );
 
         arm = new MechanismLigament2d(
@@ -48,7 +48,7 @@ public class ArmVisualizer {
         SmartDashboard.putData("Visualizers/Arm", arm2d);
     }
 
-    public void update() {
-        arm.setAngle(Arm.getInstance().getTargetAngle());
+    public void update() { 
+        arm.setAngle(Arm.getInstance().getCurrentAngle());
     }
 }

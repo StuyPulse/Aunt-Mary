@@ -63,11 +63,10 @@ public class ElevatorSimu extends Elevator {
                                 Settings.Elevator.FF.kA)
                         .position()
                         .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
-                        .add(
-                                new PIDController(
-                                        Settings.Elevator.PID.kP,
-                                        Settings.Elevator.PID.kI,
-                                        Settings.Elevator.PID.kD))
+                        .add(new PIDController(
+                                Settings.Elevator.PID.kP,
+                                Settings.Elevator.PID.kI,
+                                Settings.Elevator.PID.kD))
                         .setSetpointFilter(motionProfile);
     }
 
@@ -93,7 +92,7 @@ public class ElevatorSimu extends Elevator {
     @Override
     public boolean atTargetHeight() {
         return Math.abs(getTargetHeight() - getCurrentHeight())
-                < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+                < Settings.Elevator.HEIGHT_TOLERANCE_METERS;    
     }
 
     @Override
