@@ -36,8 +36,7 @@ public interface Constants {
     public interface Arm {
         double GEAR_RATIO = 0.833333330333;
 
-        double ANGLE_OFFSET = 0.0;
-        double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
 
         double AREA = 3; // meters squared
         double ARM_LENGTH = Units.inchesToMeters(3);
@@ -50,10 +49,10 @@ public interface Constants {
     public interface Froggy {
         double GEAR_RATIO = 0.0;
 
-        double MINIMUM_ANGLE = 0.0;
-        double MAXIMUM_ANGLE = 0.0;
+        Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(0);
 
-        double ANGLE_OFFSET = 0.0;
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
     }
 
     public interface Climb {

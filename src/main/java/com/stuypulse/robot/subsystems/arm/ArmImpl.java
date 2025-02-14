@@ -13,6 +13,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
@@ -24,19 +25,22 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 public class ArmImpl extends Arm {
 
     private TalonFX motor;
-    private CANcoder absoluteEncoder;
+    // private CANcoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     public ArmImpl() {
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
 
-        absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
+        // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
+        absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
+        absoluteEncoder.setInverted(true);
 
-        MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs()
-            .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
-            .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+        // MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs()
+        //     .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
+        //     .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
 
-        absoluteEncoder.getConfigurator().apply(magnetConfig);
+        // absoluteEncoder.getConfigurator().apply(magnetConfig);
     }
 
     @Override
@@ -92,7 +96,8 @@ public class ArmImpl extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        // return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
     }
 
     @Override

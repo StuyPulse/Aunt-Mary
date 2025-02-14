@@ -12,27 +12,34 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class ClimbImpl extends Climb {
-    private final TalonFX motor;
-    private final CANcoder absoluteEncoder;
+    private TalonFX motor;
+    // private CANcoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     public ClimbImpl() {
         motor = new TalonFX(Ports.Climb.MOTOR);
         Motors.Climb.MOTOR_CONFIG.configure(motor);
 
-        absoluteEncoder = new CANcoder(Ports.Climb.ABSOLUTE_ENCODER);
+        // absoluteEncoder = new CANcoder(Ports.Climb.ABSOLUTE_ENCODER);
 
-        MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-            .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations());
+        // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
+        //     .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations())
+        //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
 
-        absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+
+        absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
+        absoluteEncoder.setInverted(false);
     }
 
     private Rotation2d getTargetAngle() {
@@ -49,7 +56,8 @@ public class ClimbImpl extends Climb {
     }
 
     private Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        // return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
@@ -28,7 +29,8 @@ public class FroggyImpl extends Froggy {
 
     private TalonFX rollerMotor;
     private TalonFX pivotMotor;
-    private CANcoder absoluteEncoder;
+    // private CANcoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     private BStream isStalling;
 
@@ -39,13 +41,16 @@ public class FroggyImpl extends Froggy {
         pivotMotor = new TalonFX(Ports.Froggy.PIVOT);
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
 
-        absoluteEncoder = new CANcoder(Ports.Froggy.ABSOLUTE_ENCODER);
+        // absoluteEncoder = new CANcoder(Ports.Froggy.ABSOLUTE_ENCODER);
 
-        MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-            .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
-            .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
+        // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
+        //     .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
+        //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
 
-        absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+       
+        absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
+        absoluteEncoder.setInverted(true);
 
         isStalling = BStream.create(() -> {
             switch (getRollerState()) {
@@ -84,7 +89,8 @@ public class FroggyImpl extends Froggy {
     }
 
     private Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        // return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations());
     }
 
     private Rotation2d getTargetAngle() {
@@ -105,7 +111,7 @@ public class FroggyImpl extends Froggy {
             default:
                 targetAngle = Settings.Froggy.STOW_ANGLE;
         }
-        targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Froggy.MINIMUM_ANGLE, Constants.Froggy.MAXIMUM_ANGLE));
+        targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Froggy.MINIMUM_ANGLE.getDegrees(), Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
         return targetAngle;
     }
 
