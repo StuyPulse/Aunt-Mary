@@ -10,6 +10,7 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,73 +26,84 @@ public class ArmImpl extends Arm {
     private TalonFX motor;
     private CANcoder absoluteEncoder;
 
-    private Rotation2d targetAngle;
-
-    private boolean rotateOverElevator;
-
     public ArmImpl() {
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
 
         absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
 
-        MagnetSensorConfigs magnet_config =
-                new MagnetSensorConfigs()
-                        .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
-                        .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+        MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs()
+            .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
+            .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
 
-        absoluteEncoder.getConfigurator().apply(magnet_config);
-
-        targetAngle = Rotation2d.fromDegrees(0.0);
-
-        rotateOverElevator = false;
+        absoluteEncoder.getConfigurator().apply(magnetConfig);
     }
 
-    public void setTargetAngle(Rotation2d targetAngle) {
-        this.targetAngle = targetAngle;
-    }
-
-    public Rotation2d getTargetAngle() {
-        return targetAngle;
-    }
-
-    public Rotation2d getArmAngle() {
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
-    }
-
-    public boolean getRotateBoolean() {
-        return rotateOverElevator;
-    }
-
-    public void setRotateBoolean(boolean overElevator) {
-        rotateOverElevator = overElevator;
-    }
-
+    @Override
     public boolean atTargetAngle() {
-        return Math.abs(getArmAngle().getDegrees() - getTargetAngle().getDegrees())
-                < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
+        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
+    }
+
+    private Rotation2d getTargetAngle() {
+        Rotation2d targetAngle;
+        switch (getState()) {
+            case STOW:
+                targetAngle = Settings.Arm.STOW_ANGLE;
+                break;
+            case FEED:
+                targetAngle = Settings.Arm.FEED_ANGLE;
+                break;
+            case L2_FRONT:
+                targetAngle = Settings.Arm.L2_ANGLE_FRONT;
+                break;
+            case L3_FRONT:
+                targetAngle = Settings.Arm.L3_ANGLE_FRONT;
+                break;
+            case L4_FRONT:
+                targetAngle = Settings.Arm.L4_ANGLE_FRONT;
+                break;
+            case L2_BACK:
+                targetAngle = Settings.Arm.L2_ANGLE_BACK;
+                break;
+            case L3_BACK:
+                targetAngle = Settings.Arm.L3_ANGLE_BACK;
+                break;
+            case L4_BACK:
+                targetAngle = Settings.Arm.L4_ANGLE_BACK;
+                break;
+            case ALGAE_L2:
+                targetAngle = Settings.Arm.ALGAE_L2_ANGLE;
+                break;
+            case ALGAE_L3:
+                targetAngle = Settings.Arm.ALGAE_L3_ANGLE;
+                break;
+            case BARGE:
+                targetAngle = Settings.Arm.BARGE_ANGLE;
+                break;
+            case VERTICAL:
+                targetAngle = Rotation2d.fromDegrees(90); // could also be -270...
+                break;
+            default:
+                targetAngle = Settings.Arm.STOW_ANGLE;
+                break;
+        }
+        return Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
+    }
+
+    private Rotation2d getCurrentAngle() {
+        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
     }
 
     @Override
     public void periodic() {
+        super.periodic();
+        
+        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
 
-        // check?
-        if (!getRotateBoolean()) {
-            MotionMagicVoltage armOutput = new MotionMagicVoltage(getTargetAngle().getRotations());
-            motor.setControl(armOutput);
-        } else {
-            MotionMagicVoltage armOutput =
-                    new MotionMagicVoltage(getTargetAngle().getRotations() - 1);
-            motor.setControl(armOutput);
-        }
-
-        SmartDashboard.putNumber("Arm/Current Angle (deg)", getArmAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putNumber("Climb/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Motor Current", motor.getStatorCurrent().getValueAsDouble());
-        
-        SmartDashboard.putNumber("Climb/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Current", motor.getStatorCurrent().getValueAsDouble());
     }
 }

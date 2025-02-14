@@ -1,64 +1,32 @@
-/************************ PROJECT MARY *************************/
-/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
-/* Use of this source code is governed by an MIT-style license */
-/* that can be found in the repository LICENSE file.           */
-/***************************************************************/
-
 package com.stuypulse.robot.commands.funnel;
 
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
-import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
+import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class FunnelDefaultCommand extends Command {
+public class FunnelDefaultCommand extends Command{
+    
     private final Funnel funnel;
-    private final LokiShooter shooter;
-
-    private boolean stopped = false;
-    private boolean reversed = false;
+    private final Shooter lokiShooter;
 
     public FunnelDefaultCommand() {
-        funnel = Funnel.getInstance();
-        shooter = LokiShooter.getInstance();
-
+        this.funnel = Funnel.getInstance();
+        this.lokiShooter = Shooter.getInstance();
         addRequirements(funnel);
     }
 
     @Override
     public void execute() {
-        setState();
-        runState();
-    }
-
-    private void setState() {
-        stopped = shooter.hasCoral();
-
-        if (funnel.isStalling() && !reversed) {
-            reversed = true;
-
-            new WaitCommand(Settings.Funnel.MIN_REVERSE_TIME)
-                    .andThen(
-                            () -> {
-                                reversed = false;
-                            })
-                    .schedule();
+        if (lokiShooter.hasCoral()) {
+            funnel.setState(FunnelState.STOP);
         }
-    }
-
-    private void runState() {
-        if (stopped) {
-            funnel.stop();
-        } else if (reversed) {
-            funnel.reverse();
-        } else {
-            funnel.forward();
+        else if (funnel.shouldReverse()) {
+            funnel.setState(FunnelState.REVERSE);
         }
-    }
-
-    public boolean isUnjamming() {
-        return reversed;
+        else {
+            funnel.setState(FunnelState.FORWARD);
+        }
     }
 }

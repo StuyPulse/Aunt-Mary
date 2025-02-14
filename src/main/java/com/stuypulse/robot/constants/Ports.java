@@ -32,7 +32,7 @@ public interface Ports {
 
     public interface Shooter {
         int MOTOR = 17;
-        int RECEIVER = 11;
+        int IR_SENSOR = 11;
     }
 
     public interface Funnel {
@@ -46,6 +46,6 @@ public interface Ports {
     }
 
     public interface LED {
-        int LED_PORT = 9; // cannot be greater than 10 for PWM Header Port
+        int LED_PORT = 9;
     }
 }

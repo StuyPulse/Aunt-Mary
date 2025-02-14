@@ -31,121 +31,84 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
  */
 public interface Motors {
 
+    public interface LokiShooter {
+		TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
+			.withCurrentLimitAmps(40)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive);
+	}
+
     public interface Funnel {
-        TalonFXConfig MOTOR_CONFIG =
-                new TalonFXConfig()
-                        .withCurrentLimitAmps(40)
-                        .withRampRate(0.25)
-                        .withNeutralMode(NeutralModeValue.Brake)
-                        .withInvertedValue(InvertedValue.Clockwise_Positive);
+        TalonFXConfig MOTOR_CONFIG =    new TalonFXConfig()
+			.withCurrentLimitAmps(40)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive);
     }
 
     public interface Arm {
-        TalonFXConfig MOTOR_CONFIG =
-                new TalonFXConfig()
-                        .withCurrentLimitAmps(80)
-                        .withRampRate(0.25)
-                        .withNeutralMode(NeutralModeValue.Brake)
-                        .withInvertedValue(InvertedValue.Clockwise_Positive)
-                        .withPIDConstants(
-                                Settings.Arm.PID.kP, Settings.Arm.PID.kI, Settings.Arm.PID.kD)
-                        .withFFConstants(
-                                Settings.Arm.FF.kS,
-                                Settings.Arm.FF.kV,
-                                Settings.Arm.FF.kA,
-                                Settings.Arm.FF.kG)
-                        .withGravityType(GravityTypeValue.Arm_Cosine)
-                        .withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
-                        .withRemoteSensor(
-                                Ports.Arm.ABSOLUTE_ENCODER,
-                                FeedbackSensorSourceValue.FusedCANcoder,
-                                Constants.Arm.GEAR_RATIO)
-                        .withMotionProfile(
-                                Settings.Arm.MAX_VEL_ROTATIONS_PER_S,
-                                Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+        TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
+			.withCurrentLimitAmps(80)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive)
+			.withPIDConstants(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD)
+			.withFFConstants(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA, Gains.Arm.FF.kG)
+			.withGravityType(GravityTypeValue.Arm_Cosine)
+			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
+			.withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
+			.withMotionProfile(Settings.Arm.MAX_VEL_ROTATIONS_PER_S, Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
     }
 
     public interface Froggy {
-        TalonFXConfig ROLLER_MOTOR_CONFIG =
-                new TalonFXConfig()
-                        .withCurrentLimitAmps(40)
-                        .withRampRate(0.25)
-                        .withNeutralMode(NeutralModeValue.Brake)
-                        .withInvertedValue(InvertedValue.Clockwise_Positive);
+        TalonFXConfig ROLLER_MOTOR_CONFIG = new TalonFXConfig()
+			.withCurrentLimitAmps(40)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive);
 
-        TalonFXConfig PIVOT_MOTOR_CONFIG =
-                new TalonFXConfig()
-                        .withCurrentLimitAmps(80)
-                        .withRampRate(0.25)
-                        .withNeutralMode(NeutralModeValue.Brake)
-                        .withInvertedValue(InvertedValue.Clockwise_Positive)
-                        .withPIDConstants(
-                                Settings.Froggy.PID.kP,
-                                Settings.Froggy.PID.kI,
-                                Settings.Froggy.PID.kD)
-                        .withFFConstants(
-                                Settings.Froggy.FF.kS,
-                                Settings.Froggy.FF.kV,
-                                Settings.Froggy.FF.kA,
-                                Settings.Froggy.FF.kG)
-                        .withGravityType(GravityTypeValue.Arm_Cosine)
-                        .withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO)
-                        .withRemoteSensor(
-                                Ports.Froggy.ABSOLUTE_ENCODER,
-                                FeedbackSensorSourceValue.FusedCANcoder,
-                                Constants.Froggy.GEAR_RATIO)
-                        .withMotionProfile(
-                                Settings.Froggy.MAX_VEL_ROTATIONS_PER_S,
-                                Settings.Froggy.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+        TalonFXConfig PIVOT_MOTOR_CONFIG = new TalonFXConfig()
+			.withCurrentLimitAmps(80)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive)
+			.withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD)
+			.withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.kG)
+			.withGravityType(GravityTypeValue.Arm_Cosine)
+			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO)
+			.withRemoteSensor(Ports.Froggy.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO)
+			.withMotionProfile(Settings.Froggy.MAX_VEL_ROTATIONS_PER_S, Settings.Froggy.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
     }
 
     public interface Elevator {
-        TalonFXConfig MOTOR_CONFIG =
-                new TalonFXConfig()
-                        .withCurrentLimitAmps(80)
-                        .withRampRate(0.25)
-                        .withNeutralMode(NeutralModeValue.Brake)
-                        .withInvertedValue(InvertedValue.Clockwise_Positive)
-                        .withPIDConstants(
-                                Settings.Elevator.PID.kP,
-                                Settings.Elevator.PID.kI,
-                                Settings.Elevator.PID.kD)
-                        .withFFConstants(
-                                Settings.Elevator.FF.kS,
-                                Settings.Elevator.FF.kV,
-                                Settings.Elevator.FF.kA,
-                                Settings.Elevator.FF.kG)
-                        .withGravityType(GravityTypeValue.Elevator_Static)
-                        .withSensorToMechanismRatio(Constants.Elevator.GEAR_RATIO)
-                        .withMotionProfile(
-                                Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND,
-                                Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+        TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
+			.withCurrentLimitAmps(80)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive)
+			.withPIDConstants(Gains.Elevator.PID.kP, Gains.Elevator.PID.kI, Gains.Elevator.PID.kD)
+			.withFFConstants(Gains.Elevator.FF.kS, Gains.Elevator.FF.kV, Gains.Elevator.FF.kA, Gains.Elevator.FF.kG)
+			.withGravityType(GravityTypeValue.Elevator_Static)
+			.withSensorToMechanismRatio(Constants.Elevator.Encoders.GEAR_RATIO)
+			.withMotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
     }
 
     public interface Climb {
-        TalonFXConfig MOTOR_CONFIG =
-                new TalonFXConfig()
-                        .withCurrentLimitAmps(80)
-                        .withRampRate(0.25)
-                        .withNeutralMode(NeutralModeValue.Brake)
-                        .withInvertedValue(InvertedValue.Clockwise_Positive)
-                        .withPIDConstants(
-                                Settings.Climb.PID.kP, Settings.Climb.PID.kI, Settings.Climb.PID.kD)
-                        .withFFConstants(
-                                Settings.Climb.FF.kS,
-                                Settings.Climb.FF.kV,
-                                Settings.Climb.FF.kA,
-                                Settings.Climb.FF.kG)
-                        .withGravityType(GravityTypeValue.Arm_Cosine)
-                        .withSensorToMechanismRatio(Constants.Climb.GEAR_RATIO)
-                        .withRemoteSensor(
-                                Ports.Climb.ABSOLUTE_ENCODER,
-                                FeedbackSensorSourceValue.FusedCANcoder,
-                                Constants.Froggy.GEAR_RATIO);
+        TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
+			.withCurrentLimitAmps(80)
+			.withRampRate(0.25)
+			.withNeutralMode(NeutralModeValue.Brake)
+			.withInvertedValue(InvertedValue.Clockwise_Positive)
+			.withPIDConstants(Gains.Climb.PID.kP, Gains.Climb.PID.kI, Gains.Climb.PID.kD)
+			.withFFConstants(Gains.Climb.FF.kS, Gains.Climb.FF.kV, Gains.Climb.FF.kA, Gains.Climb.FF.kG)
+			.withGravityType(GravityTypeValue.Arm_Cosine)
+			.withSensorToMechanismRatio(Constants.Climb.GEAR_RATIO)
+			.withRemoteSensor(Ports.Climb.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO);
     }
 
     public static class TalonFXConfig {
-        public final TalonFXConfiguration configuration = new TalonFXConfiguration();
+        private final TalonFXConfiguration configuration = new TalonFXConfiguration();
         private final Slot0Configs slot0Configs = new Slot0Configs();
         private final MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
         private final ClosedLoopRampsConfigs closedLoopRampsConfigs = new ClosedLoopRampsConfigs();
@@ -238,7 +201,7 @@ public interface Motors {
         // CURRENT LIMIT CONFIGS
 
         public TalonFXConfig withCurrentLimitAmps(double currentLimitAmps) {
-            currentLimitsConfigs.StatorCurrentLimit = currentLimitAmps;
+			currentLimitsConfigs.StatorCurrentLimit = currentLimitAmps;
             currentLimitsConfigs.StatorCurrentLimitEnable = true;
 
             configuration.withCurrentLimits(currentLimitsConfigs);

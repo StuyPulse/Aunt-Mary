@@ -22,7 +22,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
-    private final SmartNumber targetHeight;
     private final DigitalInput bumpSwitchBottom;
 
     public ElevatorImpl() {
@@ -30,39 +29,23 @@ public class ElevatorImpl extends Elevator {
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
 
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
-
-        targetHeight =
-                new SmartNumber("Elevator/Target Height", Constants.Elevator.MIN_HEIGHT_METERS);
-    }
-
-    @Override
-    public void setTargetHeight(double height) {
-        targetHeight.set(
-                SLMath.clamp(
-                        height,
-                        Constants.Elevator.MIN_HEIGHT_METERS,
-                        Constants.Elevator.MAX_HEIGHT_METERS));
-    }
-
-    @Override
-    public double getTargetHeight() {
-        return targetHeight.getAsDouble();
     }
 
     @Override
     public double getCurrentHeight() {
-        return motor.getPosition().getValueAsDouble()
-                * Constants.Elevator.Encoders.DISTANCE_PER_ROTATION;
+        return motor.getPosition().getValueAsDouble();
+    }
+
+    private double getTargetHeight() {
+        return getState().getTargetHeight();
     }
 
     @Override
     public boolean atTargetHeight() {
-        return Math.abs(getTargetHeight() - getCurrentHeight())
-                < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+        return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
     }
 
-    @Override
-    public boolean atBottom() {
+    private boolean atBottom() {
         return !bumpSwitchBottom.get();
     }
 
@@ -70,22 +53,14 @@ public class ElevatorImpl extends Elevator {
     public void periodic() {
         super.periodic();
 
-        motor.setControl(
-                new MotionMagicVoltage(
-                        getTargetHeight()
-                                / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR));
-
         if (atBottom()) {
-            motor.setPosition(
-                    Constants.Elevator.MIN_HEIGHT_METERS
-                            / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR);
+            motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
         }
 
-        SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());
-        SmartDashboard.putNumber("Elevator/Target Height (m)", getTargetHeight());
+        motor.setControl(new MotionMagicVoltage(getTargetHeight()));
 
         SmartDashboard.putNumber("Elevator/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator/Motor Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
 
         SmartDashboard.putNumber("Elevator/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());

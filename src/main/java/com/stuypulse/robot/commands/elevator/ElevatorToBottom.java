@@ -6,10 +6,10 @@
 
 package com.stuypulse.robot.commands.elevator;
 
-import com.stuypulse.robot.constants.Constants.Elevator;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
 public class ElevatorToBottom extends ElevatorToHeight {
     public ElevatorToBottom() {
-        super(Elevator.MIN_HEIGHT_METERS);
+        super(ElevatorState.BOTTOM);
     }
 }

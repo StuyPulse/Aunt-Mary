@@ -30,10 +30,7 @@ public class FroggyImpl extends Froggy {
     private TalonFX pivotMotor;
     private CANcoder absoluteEncoder;
 
-    private final BStream isCoralStalling;
-    private final BStream isAlgaeStalling;
-
-    public Rotation2d targetAngle;
+    private BStream isStalling;
 
     public FroggyImpl() {
         rollerMotor = new TalonFX(Ports.Froggy.ROLLER);
@@ -44,102 +41,99 @@ public class FroggyImpl extends Froggy {
 
         absoluteEncoder = new CANcoder(Ports.Froggy.ABSOLUTE_ENCODER);
 
-        MagnetSensorConfigs magnetSensorConfigs =
-                new MagnetSensorConfigs()
-                        .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
-                        .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
+        MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
+            .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
+            .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
 
         absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
-        targetAngle = Rotation2d.fromDegrees(Settings.Froggy.STOW_ANGLE.getDegrees());
-
-        isCoralStalling =
-                BStream.create(
-                                () ->
-                                        rollerMotor.getSupplyCurrent().getValueAsDouble()
-                                                < Settings.Froggy.CORAL_CURRENT_THRESHOLD) // coral stalls in the negative direction
-                        .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
-
-        isAlgaeStalling =
-                BStream.create(
-                                () ->
-                                        rollerMotor.getSupplyCurrent().getValueAsDouble()
-                                                > Settings.Froggy.ALGAE_CURRENT_THRESHOLD)
-                        .filtered(new BDebounce.Rising(Settings.Froggy.STALL_DEBOUNCE_TIME));
+        isStalling = BStream.create(() -> {
+            switch (getRollerState()) {
+                case INTAKE_CORAL:
+                    return Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble()) > Settings.Froggy.CORAL_STALL_CURRENT_THRESHOLD;
+                case INTAKE_ALGAE:
+                    return Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble()) > Settings.Froggy.ALGAE_STALL_CURRENT_THRESHOLD;
+                default:
+                    return false;
+            }
+        }).filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
     }
 
-    @Override
-    public void setTargetAngle(Rotation2d targetAngle) {
-        this.targetAngle =
-                Rotation2d.fromDegrees(
-                        SLMath.clamp(
-                                targetAngle.getDegrees(),
-                                Constants.Froggy.MINIMUM_ANGLE,
-                                Constants.Froggy.MAXIMUM_ANGLE));
+    private void setRollerBasedOnState() {
+        switch (getRollerState()) {
+            case INTAKE_CORAL:
+                rollerMotor.set(-Settings.Froggy.CORAL_INTAKE_SPEED);
+                break;
+            case INTAKE_ALGAE:
+                rollerMotor.set(Settings.Froggy.ALGAE_INTAKE_SPEED);
+                break;
+            case SHOOT_ALGAE:
+                rollerMotor.set(-Settings.Froggy.ALGAE_OUTTAKE_SPEED);
+                break;
+            case SHOOT_CORAL:
+                rollerMotor.set(Settings.Froggy.CORAL_OUTTAKE_SPEED);
+                break;
+            case HOLD_ALGAE:
+                rollerMotor.set(Settings.Froggy.HOLD_ALGAE_SPEED);
+                break;
+            case STOP:
+                rollerMotor.set(0);
+            default:
+                break;
+        }
     }
 
-    public Rotation2d getCurrentAngle() {
+    private Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     }
 
-    public Rotation2d getTargetAngle() {
+    private Rotation2d getTargetAngle() {
+        Rotation2d targetAngle;
+        switch (getPivotState()) {
+            case STOW:
+                targetAngle = Settings.Froggy.STOW_ANGLE;
+            case ALGAE_GROUND_PICKUP:
+                targetAngle = Settings.Froggy.ALGAE_GROUND_PICKUP_ANGLE;
+            case CORAL_GROUND_PICKUP:
+                targetAngle = Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE;
+            case GOLF_TEE_ALGAE_PICKUP:
+                targetAngle = Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE;
+            case L1_SCORE_ANGLE:
+                targetAngle = Settings.Froggy.L1_SCORING_ANGLE;
+            case PROCESSOR_SCORE_ANGLE:
+                targetAngle = Settings.Froggy.PROCESSOR_SCORE_ANGLE;
+            default:
+                targetAngle = Settings.Froggy.STOW_ANGLE;
+        }
+        targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Froggy.MINIMUM_ANGLE, Constants.Froggy.MAXIMUM_ANGLE));
         return targetAngle;
     }
 
     @Override
     public boolean isAtTargetAngle() {
-        return Math.abs(targetAngle.getDegrees() - getCurrentAngle().getDegrees())
-                < Settings.Froggy.ANGLE_TOLERANCE.getDegrees();
+        return Math.abs(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees()) < Settings.Froggy.ANGLE_TOLERANCE.getDegrees();
     }
 
     @Override
-    public void intakeAlgae() {
-        rollerMotor.set(Settings.Froggy.ALGAE_INTAKE_SPEED);
-    }
-
-    @Override
-    public void outakeAlgae() {
-        rollerMotor.set(-Settings.Froggy.ALGAE_OUTTAKE_SPEED);
-    }
-
-    @Override
-    public void intakeCoral() {
-        rollerMotor.set(-Settings.Froggy.CORAL_INTAKE_SPEED);
-    }
-
-    public void outakeCoral() {
-        rollerMotor.set(Settings.Froggy.CORAL_OUTTAKE_SPEED);
-    }
-
-    public void holdAlgae() {
-        rollerMotor.set(Settings.Froggy.HOLD_ALGAE_SPEED);
-    }
-
-    @Override
-    public boolean isAlgaeStalling() {
-        return isAlgaeStalling.get();
-    }
-
-    @Override
-    public boolean isCoralStalling() {
-        return isCoralStalling.get();
-    }
-
-    @Override
-    public void stopRoller() {
-        rollerMotor.set(0);
+    public boolean isStalling() {
+        return isStalling.get();
     }
 
     @Override
     public void periodic() {
-        MotionMagicVoltage controllerOutput = new MotionMagicVoltage(targetAngle.getRotations());
-        rollerMotor.setControl(controllerOutput);
+        super.periodic();
+
+        setRollerBasedOnState();
+
+        MotionMagicVoltage pivotControlRequest = new MotionMagicVoltage(getTargetAngle().getRotations());
+        pivotMotor.setControl(pivotControlRequest);
+
+        SmartDashboard.putBoolean("Froggy/At Target Angle", isAtTargetAngle());
 
         SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putBoolean("Froggy/Has Algae", isAlgaeStalling());
-        SmartDashboard.putBoolean("Froggy/Has Coral", isCoralStalling());
+        SmartDashboard.putBoolean("Froggy/Is Stalling", isStalling());
         
         SmartDashboard.putNumber("Froggy/Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());

@@ -1,45 +1,23 @@
-/************************ PROJECT MARY *************************/
-/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
-/* Use of this source code is governed by an MIT-style license */
-/* that can be found in the repository LICENSE file.           */
-/***************************************************************/
-
 package com.stuypulse.robot.commands.elevator;
 
-import com.stuypulse.robot.commands.led.LedSolidColor;
-import com.stuypulse.robot.constants.Settings.LED;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ElevatorToHeight extends InstantCommand {
-
-    // public static Command untilDone(double height) {
-    //     return new ElevatorToHeight(height)
-    //             .andThen(new WaitUntilCommand(() -> Elevator.getInstance().atTargetHeight()));
-    // }
+public abstract class ElevatorToHeight extends InstantCommand{
 
     private final Elevator elevator;
-    private final double targetHeight;
+    private final ElevatorState state;
 
-    public ElevatorToHeight(double targetHeight) {
-        elevator = Elevator.getInstance();
-        this.targetHeight = targetHeight;
-
+    public ElevatorToHeight(ElevatorState state) {
+        this.elevator = Elevator.getInstance();
+        this.state = state;
         addRequirements(elevator);
     }
 
+    @Override
     public void initialize() {
-        elevator.setTargetHeight(targetHeight);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return elevator.atTargetHeight();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        if (interrupted) new LedSolidColor(LED.ABORT_COLOR).schedule();
+        elevator.setState(state);
     }
 }

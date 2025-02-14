@@ -17,11 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDController extends SubsystemBase {
 
-    private static LEDController instance;
-    private AddressableLED leds;
-    private AddressableLEDBuffer ledsBuffer;
-
-    private final LEDPattern defaultPattern = LEDPattern.kOff;
+    private final static LEDController instance;
 
     static {
         instance = new LEDController(Ports.LED.LED_PORT, Constants.LED.LED_LENGTH);
@@ -30,6 +26,11 @@ public class LEDController extends SubsystemBase {
     public static LEDController getInstance() {
         return instance;
     }
+
+    private AddressableLED leds;
+    private AddressableLEDBuffer ledsBuffer;
+
+    private final LEDPattern defaultPattern = LEDPattern.kOff;
 
     protected LEDController(int port, int length) {
         leds = new AddressableLED(port);
@@ -47,9 +48,5 @@ public class LEDController extends SubsystemBase {
     public void applyPattern(LEDPattern pattern) {
         pattern.applyTo(ledsBuffer);
         leds.setData(ledsBuffer);
-    }
-
-    @Override
-    public void periodic() {
     }
 }

@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Funnel extends SubsystemBase {
@@ -20,13 +21,31 @@ public abstract class Funnel extends SubsystemBase {
         return instance;
     }
 
-    public abstract void forward();
+    public enum FunnelState {
+        FORWARD,
+        REVERSE,
+        STOP
+    }
 
-    public abstract void reverse();
+    private FunnelState state;
 
-    public abstract void stop();
+    protected Funnel() {
+        this.state = FunnelState.STOP;
+    }
 
-    public abstract boolean isStalling();
+    public FunnelState getState() {
+        return state;
+    }
 
+    public void setState(FunnelState state) {
+        this.state = state;
+    }
+
+    public abstract boolean shouldReverse();
     public abstract boolean hasCoral();
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putString("Funnel/State", getState().toString());
+    }
 }

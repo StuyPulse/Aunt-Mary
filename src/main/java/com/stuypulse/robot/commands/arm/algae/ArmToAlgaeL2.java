@@ -6,17 +6,11 @@
 
 package com.stuypulse.robot.commands.arm.algae;
 
-import com.stuypulse.robot.commands.arm.ArmToAngle;
-import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.commands.arm.ArmSetState;
+import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 
-public class ArmToAlgaeL2 extends ArmToAngle {
+public class ArmToAlgaeL2 extends ArmSetState {
     public ArmToAlgaeL2() {
-        super(Settings.Arm.ALGAE_L2_ANGLE);
-    }
-
-    @Override
-    public void initialize() {
-        arm.setRotateBoolean(false);
-        super.initialize();
+        super(ArmState.ALGAE_L2);
     }
 }
