@@ -61,49 +61,7 @@ public class ArmSim extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-        Rotation2d targetAngle;
-        switch (getState()) {
-            case STOW:
-                targetAngle = Settings.Arm.STOW_ANGLE;
-                break;
-            case FEED:
-                targetAngle = Settings.Arm.FEED_ANGLE;
-                break;
-            case L2_FRONT:
-                targetAngle = Settings.Arm.L2_ANGLE_FRONT;
-                break;
-            case L3_FRONT:
-                targetAngle = Settings.Arm.L3_ANGLE_FRONT;
-                break;
-            case L4_FRONT:
-                targetAngle = Settings.Arm.L4_ANGLE_FRONT;
-                break;
-            case L2_BACK:
-                targetAngle = Settings.Arm.L2_ANGLE_BACK;
-                break;
-            case L3_BACK:
-                targetAngle = Settings.Arm.L3_ANGLE_BACK;
-                break;
-            case L4_BACK:
-                targetAngle = Settings.Arm.L4_ANGLE_BACK;
-                break;
-            case ALGAE_L2:
-                targetAngle = Settings.Arm.ALGAE_L2_ANGLE;
-                break;
-            case ALGAE_L3:
-                targetAngle = Settings.Arm.ALGAE_L3_ANGLE;
-                break;
-            case BARGE:
-                targetAngle = Settings.Arm.BARGE_ANGLE;
-                break;
-            case VERTICAL:
-                targetAngle = Rotation2d.fromDegrees(90); // could also be -270...
-                break;
-            default:
-                targetAngle = Settings.Arm.STOW_ANGLE;
-                break;
-        }
-        return Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
+        return getState().getTargetAngle();
     }
 
     @Override

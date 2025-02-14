@@ -20,7 +20,7 @@ public interface Constants {
         double MIN_HEIGHT_METERS = 0.889; // FROM FLOOR TO TOP OF ELEVATOR
         double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
 
-        double MASS_KG = 10.0; // unconfirmed
+        double MASS_KG = 10.0;
         double DRUM_RADIUS_METERS = (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEAR_RATIO) / 2 / Math.PI;
 
         public interface Encoders {
@@ -38,7 +38,6 @@ public interface Constants {
 
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
 
-        double AREA = 3; // meters squared
         double ARM_LENGTH = Units.inchesToMeters(3);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
 

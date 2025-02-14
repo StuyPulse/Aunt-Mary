@@ -7,6 +7,9 @@
 package com.stuypulse.robot.subsystems.arm;
 
 import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,18 +33,32 @@ public abstract class Arm extends SubsystemBase {
     }
 
     public enum ArmState {
-        STOW,
-        FEED,
-        L2_FRONT,
-        L3_FRONT,
-        L4_FRONT,
-        L2_BACK,
-        L3_BACK,
-        L4_BACK,
-        ALGAE_L2,
-        ALGAE_L3,
-        BARGE,
-        VERTICAL,
+        STOW(Settings.Arm.STOW_ANGLE),
+        FEED(Settings.Arm.FEED_ANGLE),
+        L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
+        L2_BACK(Settings.Arm.L2_ANGLE_BACK),
+        L3_FRONT(Settings.Arm.L3_ANGLE_FRONT),
+        L3_BACK(Settings.Arm.L3_ANGLE_BACK),
+        L4_FRONT(Settings.Arm.L4_ANGLE_FRONT),
+        L4_BACK(Settings.Arm.L4_ANGLE_BACK),
+        ALGAE_L2(Settings.Arm.ALGAE_L2_ANGLE),
+        ALGAE_L3(Settings.Arm.ALGAE_L3_ANGLE),
+        BARGE(Settings.Arm.BARGE_ANGLE),
+        VERTICAL_DOWN(Rotation2d.fromDegrees(-90));
+
+        private Rotation2d targetAngle;
+
+        private ArmState(Rotation2d targetAngle) {
+            this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
+        }
+
+        public Rotation2d getTargetAngle() {
+            return this.targetAngle;
+        }
+
+        public boolean isFrontSide() {
+            return getTargetAngle().getDegrees() > -90;
+        }
     }
 
     private ArmState state;
