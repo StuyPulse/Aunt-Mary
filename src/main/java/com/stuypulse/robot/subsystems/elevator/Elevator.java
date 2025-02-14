@@ -57,11 +57,9 @@ public abstract class Elevator extends SubsystemBase {
     }
 
     private ElevatorState state;
-    private ElevatorVisualizer visualizer;
 
     public Elevator() {
         this.state = ElevatorState.STOW;
-        this.visualizer = ElevatorVisualizer.getInstance();
     }
 
     public void setState(ElevatorState state) {
@@ -77,8 +75,6 @@ public abstract class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        visualizer.update();
-
         SmartDashboard.putString("Elevator/State", state.toString());
         SmartDashboard.putNumber("Elevator/Target Height (m)", getState().getTargetHeight());
         SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());

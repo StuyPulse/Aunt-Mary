@@ -40,8 +40,7 @@ public class ArmSim extends Arm {
             Constants.Arm.MIN_ANGLE.getRadians(),
             Constants.Arm.MAX_ANGLE.getRadians(),
             true,
-            Settings.Arm.STOW_ANGLE.getRadians(),
-            0
+            Settings.Arm.STOW_ANGLE.getRadians()
         );
 
         MotionProfile motionProfile = new MotionProfile(

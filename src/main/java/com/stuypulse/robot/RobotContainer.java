@@ -20,6 +20,7 @@ import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,6 +37,7 @@ public class RobotContainer {
     private final Shooter shooter = Shooter.getInstance();
     private final Arm arm = Arm.getInstance();
     private final Elevator elevator = Elevator.getInstance();
+    private final SuperStructure superStructure = SuperStructure.getInstance();
     private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
     private final LEDController leds = LEDController.getInstance();

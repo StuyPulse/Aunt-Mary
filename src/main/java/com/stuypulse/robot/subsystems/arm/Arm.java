@@ -80,8 +80,6 @@ public abstract class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        ArmVisualizer.getInstance().update();
-
         SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());
     }

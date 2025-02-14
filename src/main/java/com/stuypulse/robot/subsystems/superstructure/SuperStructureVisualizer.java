@@ -37,7 +37,7 @@ public class SuperStructureVisualizer {
     private double height;
 
     private SuperStructureVisualizer() {
-        width = Constants.Arm.ARM_LENGTH + Units.inchesToMeters(3);
+        width = Constants.Arm.ARM_LENGTH * 2 + Units.inchesToMeters(3);
         height = Constants.Elevator.MAX_HEIGHT_METERS + Constants.Arm.ARM_LENGTH + Units.inchesToMeters(3);
 
         superStructure = new Mechanism2d(width, height);
