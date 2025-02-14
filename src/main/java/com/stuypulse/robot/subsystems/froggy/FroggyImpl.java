@@ -6,11 +6,16 @@
 
 package com.stuypulse.robot.subsystems.froggy;
 
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
-
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -32,6 +37,8 @@ public class FroggyImpl extends Froggy {
     // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
 
+    private Controller controller;
+
     private BStream isStalling;
 
     public FroggyImpl() {
@@ -51,6 +58,11 @@ public class FroggyImpl extends Froggy {
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
+
+        controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
+            .add(new ArmFeedforward(Gains.Froggy.FF.kG))
+            .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
+            .setSetpointFilter(new MotionProfile(Settings.Froggy.MAX_VEL_ROTATIONS_PER_S, Settings.Froggy.MAX_ACCEL_ROTATIONS_PER_S_PER_S));
 
         isStalling = BStream.create(() -> {
             switch (getRollerState()) {
@@ -131,8 +143,9 @@ public class FroggyImpl extends Froggy {
 
         setRollerBasedOnState();
 
-        MotionMagicVoltage pivotControlRequest = new MotionMagicVoltage(getTargetAngle().getRotations());
-        pivotMotor.setControl(pivotControlRequest);
+        // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+
+        pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
 
         SmartDashboard.putBoolean("Froggy/At Target Angle", isAtTargetAngle());
 

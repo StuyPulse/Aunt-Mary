@@ -7,10 +7,16 @@
 package com.stuypulse.robot.subsystems.arm;
 
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -28,6 +34,8 @@ public class ArmImpl extends Arm {
     // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
 
+    private Controller controller;
+
     public ArmImpl() {
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
@@ -41,6 +49,11 @@ public class ArmImpl extends Arm {
         //     .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
 
         // absoluteEncoder.getConfigurator().apply(magnetConfig);
+
+        controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
+            .add(new ArmFeedforward(Gains.Arm.FF.kG))
+            .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
+            .setSetpointFilter(new MotionProfile(Settings.Arm.MAX_VEL_ROTATIONS_PER_S, Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S));
     }
 
     @Override
@@ -105,6 +118,7 @@ public class ArmImpl extends Arm {
         super.periodic();
         
         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+        motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
 
         SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
