@@ -52,4 +52,6 @@ public abstract class Froggy extends SubsystemBase {
     public abstract void setAlgaeFalse();
 
     public abstract void setCoralFalse();
+
+    public abstract void setDutyCycle(double speed);
 }

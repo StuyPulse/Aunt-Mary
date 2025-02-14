@@ -36,6 +36,9 @@ public interface Settings {
 
         double DRIVE_CURRENT_THRESHOLD = 30;
         double DRIVE_CURRENT_LIMIT = 40;
+
+        double MANUAL_SHOOT_SPEED = 0.5;
+        double MANUAL_REVERSE_SHOOT_SPEED = -0.5;
     }
 
     public interface Funnel {
@@ -70,6 +73,9 @@ public interface Settings {
         double ALGAE_L3_HEIGHT_METERS = 1.8; // estimate
 
         double HEIGHT_TOLERANCE_METERS = 0.02;
+
+        double MANUAL_ELEVATOR_DISPLACEMENT_UP = 2.0;
+        double MANUAL_ELEVATOR_DISPLACEMENT_DOWN = 2.0;
 
         double MIN_VOLTAGE = -12.0;
         double MAX_VOLTAGE = 12.0;
@@ -109,6 +115,9 @@ public interface Settings {
         double MIN_VOLTAGE = -12.0;
         double MAX_VOLTAGE = 12.0;
 
+        double MANUAL_ARM_DISPLACEMENT_FORWARD = 5.0;
+        double MANUAL_ARM_DISPLACEMENT_BACK = 5.0;
+
         public interface PID {
             double kP = 10.0;
             double kI = 0.0;
@@ -146,6 +155,9 @@ public interface Settings {
 
         double HOLD_ALGAE_SPEED = 0.1;
 
+        double MANUAL_MOVE_SPEED = 0.5;
+        double MANUAL_REVERSE_MOVE_SPEED = -0.5;
+
         double CORAL_CURRENT_THRESHOLD = 1.0;
         double ALGAE_CURRENT_THRESHOLD = 1.0;
         double STALL_DEBOUNCE_TIME = 0.0; // what units
@@ -176,7 +188,8 @@ public interface Settings {
     public interface Climb {
 
         double CLIMB_VOLTAGE = 6.0;
-        double MANUAL_CLIMB_SPEED = 1.0;
+        double MANUAL_CLIMB_SPEED = 0.5;
+        double MANUAL_REVERSE_CLIMB_SPEED = -0.5;
         double MIN_VOLTAGE = -12.0;
         double MAX_VOLTAGE = 12.0;
 

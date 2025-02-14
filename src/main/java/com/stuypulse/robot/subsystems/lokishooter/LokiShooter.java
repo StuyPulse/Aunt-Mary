@@ -27,4 +27,6 @@ public abstract class LokiShooter extends SubsystemBase {
     public abstract boolean hasCoral();
 
     public abstract boolean hasAlgae();
+
+    public abstract void setDutyCycle(double speed);
 }

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -93,6 +94,11 @@ public class FroggyImpl extends Froggy {
                                 Constants.Froggy.MAXIMUM_ANGLE));
     }
 
+    @Override
+    public void setDutyCycle(double speed){
+        pivotMotor.setControl(new DutyCycleOut(speed));
+    }
+
     public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     }
@@ -146,6 +152,8 @@ public class FroggyImpl extends Froggy {
         hasAlgae = false;
     }
     
+
+
     @Override
     public boolean isAlgaeStalling() {
         return isAlgaeStalling.get();

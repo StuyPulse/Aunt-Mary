@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -59,6 +60,11 @@ public class LokiShooterImpl extends LokiShooter {
         shooterConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Settings.Shooter.RAMP_RATE;
 
         shooterMotor.getConfigurator().apply(shooterConfig);
+    }
+
+    @Override
+    public void setDutyCycle(double speed){
+        shooterMotor.setControl(new DutyCycleOut(speed));
     }
 
     @Override

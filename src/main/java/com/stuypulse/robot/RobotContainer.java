@@ -21,8 +21,10 @@ import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL3Front;
 import com.stuypulse.robot.commands.elevator.front_side.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.*;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
+import com.stuypulse.robot.commands.funnel.FunnelManualReverse;
 import com.stuypulse.robot.commands.led.LedRainbow;
 import com.stuypulse.robot.commands.led.LedSolidColor;
+import com.stuypulse.robot.commands.lokishooter.ShooterManual;
 import com.stuypulse.robot.commands.lokishooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.lokishooter.ShooterShootFront;
 import com.stuypulse.robot.commands.routines.*;
@@ -43,6 +45,7 @@ import com.stuypulse.robot.subsystems.lokishooter.LokiShooter;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -191,35 +194,39 @@ public class RobotContainer {
         // LEFT BUTTON -> ELEVATOR TO BARGE
         operator.getLeftButton().whileTrue(new ElevatorToBarge()).onFalse(new ElevatorToFeed());
 
-        // TOP RIGHT PADDLE -> CLIMB OPEN
-        operator.getLeftMenuButton().onTrue(new ManualClimb(Settings.Climb.MANUAL_CLIMB_SPEED)); //change, need a manual climb
+        // LEFT MENU BUTTON -> CLIMB DOWN
+        operator.getLeftMenuButton().onTrue(new ClimbManual(Settings.Climb.MANUAL_CLIMB_SPEED)); 
 
-        // RIGHT MENU BUTTON -> CLIMB DRIVE
-        operator.getRightMenuButton().onTrue(new ManualClimb(-Settings.Climb.MANUAL_CLIMB_SPEED));
+        // RIGHT MENU BUTTON -> CLIMB UP
+        operator.getRightMenuButton().onTrue(new ClimbManual(Settings.Climb.MANUAL_REVERSE_CLIMB_SPEED));
 
-        // BOTTOM RIGHT PADDLE -> SCORE (IN GENERAL)
-        operator.getDPadRight().onTrue(new ArmToAngle(Rotation2d.fromDegrees(arm.getCurrentAngle().getDegrees() + 5)));
+        // BOTTOM RIGHT PADDLE -> ARM FORWARD 5 DEGREES
+        operator.getDPadRight().onTrue(new ArmToAngle(Rotation2d.fromDegrees(arm.getCurrentAngle().getDegrees() + Settings.Arm.MANUAL_ARM_DISPLACEMENT_FORWARD)));
 
-        // TOP LEFT PADDLE -> L3 REEF ALGAE INTAKE
-        operator.getDPadLeft().onTrue(new ArmToAngle(Rotation2d.fromDegrees(arm.getCurrentAngle().getDegrees() - 5)));
+        // TOP LEFT PADDLE -> ARM BACKWARD 5 DEGREES
+        operator.getDPadLeft().onTrue(new ArmToAngle(Rotation2d.fromDegrees(arm.getCurrentAngle().getDegrees() - Settings.Arm.MANUAL_ARM_DISPLACEMENT_BACK)));
 
-        // 
-        operator.getDPadUp().onTrue(new ElevatorToHeight(elevator.getCurrentHeight() - Units.inchesToMeters(2)));
+        // TOP RIGHT PADDLE -> ELEVATOR UP 2 INCHES
+        operator.getDPadUp().onTrue(new ElevatorToHeight(elevator.getCurrentHeight() - Units.inchesToMeters(Settings.Elevator.MANUAL_ELEVATOR_DISPLACEMENT_UP)));
 
-        // BOTTOM LEFT PADDLE -> L2 REEF ALGAE INTAKE
-        operator.getDPadDown().onTrue(new ElevatorToHeight(elevator.getCurrentHeight() + Units.inchesToMeters(2)));
+        // BOTTOM LEFT PADDLE -> ELEVATOR DOWN 2 INCHES
+        operator.getDPadDown().onTrue(new ElevatorToHeight(elevator.getCurrentHeight() + Units.inchesToMeters(Settings.Elevator.MANUAL_ELEVATOR_DISPLACEMENT_DOWN)));
 
-        // RIGHT BUMPER -> TO L1
-        operator.getRightBumper().whileTrue(new FroggyToL1());
+        // RIGHT BUMPER -> GROUND INTAKE DOWN
+        operator.getRightBumper().whileTrue(new FroggyManual(Settings.Froggy.MANUAL_REVERSE_MOVE_SPEED));
 
-        // RIGHT TRIGGER -> GROUND CORAL INTAKE
-        operator.getRightTriggerButton().whileTrue(new FroggyCoralGroundIntake());
+        // RIGHT TRIGGER -> SHOOTER WHEELS FORWARD
+        operator.getRightTriggerButton().whileTrue(new ShooterManual(Settings.Shooter.MANUAL_SHOOT_SPEED));
 
-        // LEFT BUMPER -> PROCESSOR SCORE
-        operator.getLeftBumper().whileTrue(new FroggyProcessorScore());
+        // LEFT BUMPER -> GROUND INTAKE UP
+        operator.getLeftBumper().whileTrue(new FroggyManual(Settings.Froggy.MANUAL_MOVE_SPEED));
 
-        // LEFT TRIGGER -> GROUND ALGAE INTAKE
-        operator.getLeftTriggerButton().whileTrue(new FroggyAlgaeGroundIntake());
+        // LEFT TRIGGER -> SHOOTER WHEELS REVERSED, FUNNEL REVERSED
+        operator.getLeftTriggerButton().whileTrue(
+            new ParallelCommandGroup(
+            new ShooterManual(Settings.Shooter.MANUAL_REVERSE_SHOOT_SPEED),
+            new FunnelManualReverse())
+            );
     }
 
     /**************/
