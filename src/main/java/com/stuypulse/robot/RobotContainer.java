@@ -191,10 +191,10 @@ public class RobotContainer {
         // LEFT BUTTON -> ELEVATOR TO BARGE
         operator.getLeftButton().whileTrue(new ElevatorToBarge()).onFalse(new ElevatorToFeed());
 
-        // TOP RIGHT PADDLE -> CLIMB OPEN
+        // LEFT MENU BUTTON -> CLIMB DOWN
         operator.getLeftMenuButton().onTrue(new ManualClimb(Settings.Climb.MANUAL_CLIMB_SPEED)); //change, need a manual climb
 
-        // RIGHT MENU BUTTON -> CLIMB DRIVE
+        // RIGHT MENU BUTTON -> CLIMB UP
         operator.getRightMenuButton().onTrue(new ManualClimb(-Settings.Climb.MANUAL_CLIMB_SPEED));
 
         // BOTTOM RIGHT PADDLE -> SCORE (IN GENERAL)
