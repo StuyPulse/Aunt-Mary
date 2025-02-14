@@ -55,11 +55,15 @@ public class SuperStructure extends SubsystemBase{
     private Arm arm;
     private Elevator elevator;
 
+    private SuperStructureVisualizer visualizer;
+
     protected SuperStructure() {
         this.targetState = SuperStructureTargetState.STOW;
 
         this.arm = Arm.getInstance();
         this.elevator = Elevator.getInstance();
+
+        visualizer = SuperStructureVisualizer.getInstance();
     }
 
     public void setTargetState(SuperStructureTargetState state) {
@@ -123,5 +127,7 @@ public class SuperStructure extends SubsystemBase{
                 elevator.setState(ElevatorState.CLEAR_FUNNEL);
             }
         }
+
+        visualizer.update(elevator.getCurrentHeight(), arm.getCurrentAngle());
     }
 }

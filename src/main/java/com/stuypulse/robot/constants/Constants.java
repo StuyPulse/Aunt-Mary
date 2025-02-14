@@ -20,6 +20,10 @@ public interface Constants {
         double MIN_HEIGHT_METERS = 0.889; // FROM FLOOR TO TOP OF ELEVATOR
         double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
 
+        double WIDTH = Units.inchesToMeters(10); // Currently for simulation purposes only
+        double FIXED_STAGE_LENGTH = Units.inchesToMeters(50); // Currently for simulation purposes only
+        double CARRIAGE_LENGTH = Units.inchesToMeters(50); // Currently for simulation purposes only
+
         double FUNNEL_CLEAR_HEIGHT = 2.0; // Height needed for the arm to rotate without hitting the funnel
 
         double MASS_KG = 10.0;
@@ -38,9 +42,11 @@ public interface Constants {
     public interface Arm {
         double GEAR_RATIO = 0.833333330333;
 
+        double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
+
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
 
-        double ARM_LENGTH = Units.inchesToMeters(3);
+        double ARM_LENGTH = Units.inchesToMeters(20);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
 
         Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL = Rotation2d.fromDegrees(0); // Minimum angle at which the elevator can move up and down without hitting the funnel
