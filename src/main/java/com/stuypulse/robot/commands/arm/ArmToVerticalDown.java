@@ -8,8 +8,8 @@ package com.stuypulse.robot.commands.arm;
 
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 
-public class ArmToVertical extends ArmSetState {
-    public ArmToVertical() {
-        super(ArmState.VERTICAL);
+public class ArmToVerticalDown extends ArmSetState {
+    public ArmToVerticalDown() {
+        super(ArmState.VERTICAL_DOWN);
     }
 }

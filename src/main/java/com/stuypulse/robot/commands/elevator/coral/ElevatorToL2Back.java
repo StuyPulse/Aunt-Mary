@@ -11,6 +11,6 @@ import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
 public class ElevatorToL2Back extends ElevatorToHeight {
     public ElevatorToL2Back() {
-        super(ElevatorState.CORAL_L2_BACK);
+        super(ElevatorState.L2_BACK);
     }
 }

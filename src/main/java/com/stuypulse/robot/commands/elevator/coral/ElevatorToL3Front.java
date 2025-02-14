@@ -11,6 +11,6 @@ import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
 public class ElevatorToL3Front extends ElevatorToHeight {
     public ElevatorToL3Front() {
-        super(ElevatorState.CORAL_L3_FRONT);
+        super(ElevatorState.L3_FRONT);
     }
 }
