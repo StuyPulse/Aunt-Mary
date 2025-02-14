@@ -1,232 +1,240 @@
-// /************************ PROJECT MARY *************************/
-// /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
-// /* Use of this source code is governed by an MIT-style license */
-// /* that can be found in the repository LICENSE file.           */
-// /***************************************************************/
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
 
-// package com.stuypulse.robot.util;
+package com.stuypulse.robot.util;
 
-// import com.stuypulse.robot.constants.Constants;
-// import com.stuypulse.robot.subsystems.elevator.Elevator;
-// import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.arm.Arm;
 
-// import edu.wpi.first.math.util.Units;
-// import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-// import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-// import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj.util.Color;
-// import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
-// public class ArmElevatorVisualizer {
+public class ArmElevatorVisualizer {
 
-//     private static final ArmElevatorVisualizer instance;
+    private static final ArmElevatorVisualizer instance;
 
-//     static {
-//         instance = new ArmElevatorVisualizer();
-//     }
+    static {
+        instance = new ArmElevatorVisualizer();
+    }
 
-//     // Canvas
-//     private final Mechanism2d armElevator2d;
+    // Canvas
+    private final Mechanism2d armElevator2d;
 
-//     // Elevator
-//     private final MechanismRoot2d elevatorBL;
-//     private final MechanismRoot2d elevatorTR;
+    // Elevator
+    private final MechanismRoot2d elevatorBL;
+    private final MechanismRoot2d elevatorTR;
 
-//     private final MechanismRoot2d stageTwoBL;
-//     private final MechanismRoot2d stageTwoTR;
+    private final MechanismRoot2d stageTwoBL;
+    private final MechanismRoot2d stageTwoTR;
 
-//     // Arm
-//     private final MechanismRoot2d pivot;
+    // Arm
+    private final MechanismRoot2d pivot;
+    private final MechanismLigament2d stick;
 
-//     // Funnel
-//     private final MechanismRoot2d funnelBL;
-//     private final MechanismRoot2d funnelTR;
+    // Funnel
+    private final MechanismRoot2d funnelBL;
+    private final MechanismRoot2d funnelTR;
 
-//     public static ArmElevatorVisualizer getInstance() {
-//         return instance;
-//     }
+    public static ArmElevatorVisualizer getInstance() {
+        return instance;
+    }
 
-//     public ArmElevatorVisualizer() {
+    public ArmElevatorVisualizer() {
 
-//         // Mechanism2d
-//         armElevator2d = new Mechanism2d(Units.inchesToMeters(70), Units.inchesToMeters(150));
+        // Mechanism2d
+        armElevator2d = new Mechanism2d(Units.inchesToMeters(70), Units.inchesToMeters(150));
 
-//         // Stage One
-//         // Bottom Left Node
-//         elevatorBL =
-//                 armElevator2d.getRoot(
-//                         "Elevator BL",
-//                         Units.inchesToMeters(18.5),
-//                         Constants.Elevator.MIN_HEIGHT_METERS);
+        // Stage One
+        // Bottom Left Node
+        elevatorBL =
+                armElevator2d.getRoot(
+                        "Elevator BL",
+                        Units.inchesToMeters(18.5),
+                        Constants.Elevator.MIN_HEIGHT_METERS);
 
-//         elevatorBL.append(
-//                 new MechanismLigament2d(
-//                         "Left Tower",
-//                         Units.inchesToMeters(39),
-//                         90,
-//                         10,
-//                         new Color8Bit(Color.kOrange)));
+        elevatorBL.append(
+                new MechanismLigament2d(
+                        "Left Tower",
+                        Units.inchesToMeters(39),
+                        90,
+                        10,
+                        new Color8Bit(Color.kOrange)));
 
-//         elevatorBL.append(
-//                 new MechanismLigament2d(
-//                         "Bottom Tower",
-//                         Units.inchesToMeters(10), // Change
-//                         0,
-//                         10,
-//                         new Color8Bit(Color.kOrange)));
+        elevatorBL.append(
+                new MechanismLigament2d(
+                        "Bottom Tower",
+                        Units.inchesToMeters(10), // Change
+                        0,
+                        10,
+                        new Color8Bit(Color.kOrange)));
 
-//         // Top Right Node
-//         elevatorTR =
-//                 armElevator2d.getRoot(
-//                         "Elevator TR",
-//                         Units.inchesToMeters(23),
-//                         Units.inchesToMeters(39) + Constants.Elevator.MIN_HEIGHT_METERS);
+        // Top Right Node
+        elevatorTR =
+                armElevator2d.getRoot(
+                        "Elevator TR",
+                        Units.inchesToMeters(23),
+                        Units.inchesToMeters(39) + Constants.Elevator.MIN_HEIGHT_METERS);
 
-//         elevatorTR.append(
-//                 new MechanismLigament2d(
-//                         "Right Tower",
-//                         Units.inchesToMeters(39),
-//                         -90,
-//                         10,
-//                         new Color8Bit(Color.kOrange)));
+        elevatorTR.append(
+                new MechanismLigament2d(
+                        "Right Tower",
+                        Units.inchesToMeters(39),
+                        -90,
+                        10,
+                        new Color8Bit(Color.kOrange)));
 
-//         elevatorTR.append(
-//                 new MechanismLigament2d(
-//                         "Top Side",
-//                         Units.inchesToMeters(10), // Change
-//                         180,
-//                         10,
-//                         new Color8Bit(Color.kOrange)));
+        elevatorTR.append(
+                new MechanismLigament2d(
+                        "Top Side",
+                        Units.inchesToMeters(10), // Change
+                        180,
+                        10,
+                        new Color8Bit(Color.kOrange)));
 
-//         // Stage Two
-//         // Bottom Left Node
-//         stageTwoBL =
-//                 armElevator2d.getRoot(
-//                         "Outer BL", Units.inchesToMeters(14), Constants.Elevator.MIN_HEIGHT_METERS);
+        // Stage Two
+        // Bottom Left Node
+        stageTwoBL =
+                armElevator2d.getRoot(
+                        "Outer BL", Units.inchesToMeters(14), Constants.Elevator.MIN_HEIGHT_METERS);
 
-//         stageTwoBL.append(
-//                 new MechanismLigament2d(
-//                         "Left Side",
-//                         Units.inchesToMeters(35),
-//                         90,
-//                         10,
-//                         new Color8Bit(Color.kYellow)));
+        stageTwoBL.append(
+                new MechanismLigament2d(
+                        "Left Side",
+                        Units.inchesToMeters(35),
+                        90,
+                        10,
+                        new Color8Bit(Color.kYellow)));
 
-//         stageTwoBL.append(
-//                 new MechanismLigament2d(
-//                         "Bottom Side",
-//                         Units.inchesToMeters(6),
-//                         0,
-//                         10,
-//                         new Color8Bit(Color.kYellow)));
+        stageTwoBL.append(
+                new MechanismLigament2d(
+                        "Bottom Side",
+                        Units.inchesToMeters(6),
+                        0,
+                        10,
+                        new Color8Bit(Color.kYellow)));
 
-//         // Top Right Node
-//         stageTwoTR =
-//                 armElevator2d.getRoot(
-//                         "Outer TR",
-//                         Units.inchesToMeters(22),
-//                         Units.inchesToMeters(35) + Constants.Elevator.MIN_HEIGHT_METERS);
+        // Top Right Node
+        stageTwoTR =
+                armElevator2d.getRoot(
+                        "Outer TR",
+                        Units.inchesToMeters(22),
+                        Units.inchesToMeters(35) + Constants.Elevator.MIN_HEIGHT_METERS);
 
-//         stageTwoTR.append(
-//                 new MechanismLigament2d(
-//                         "Right Side",
-//                         Units.inchesToMeters(35),
-//                         -90,
-//                         10,
-//                         new Color8Bit(Color.kYellow)));
+        stageTwoTR.append(
+                new MechanismLigament2d(
+                        "Right Side",
+                        Units.inchesToMeters(35),
+                        -90,
+                        10,
+                        new Color8Bit(Color.kYellow)));
 
-//         stageTwoTR.append(
-//                 new MechanismLigament2d(
-//                         "Top Side",
-//                         Units.inchesToMeters(6),
-//                         180,
-//                         10,
-//                         new Color8Bit(Color.kYellow)));
+        stageTwoTR.append(
+                new MechanismLigament2d(
+                        "Top Side",
+                        Units.inchesToMeters(6),
+                        180,
+                        10,
+                        new Color8Bit(Color.kYellow)));
 
-//         // Arm
-//         pivot = armElevator2d.getRoot(
-//                 "Arm Origin", 
-//                 Units.inchesToMeters(18), 
-//                 Units.inchesToMeters(39));
+        // Arm
+        pivot = armElevator2d.getRoot(
+                "Arm Origin", 
+                Units.inchesToMeters(18), 
+                Units.inchesToMeters(39));
 
-//         pivot.append(
-//                 new MechanismLigament2d(
-//                         "arm", Units.inchesToMeters(20), 270, 10, new Color8Bit(Color.kAqua)));
+        stick = new MechanismLigament2d(
+            "Stick", 
+            Units.inchesToMeters(20), 
+            270, 
+            10, 
+            new Color8Bit(Color.kAqua));
 
-//         // Funnel
-//         // Bottom Left Node
-//         funnelBL =
-//                 armElevator2d.getRoot(
-//                         "Funnel BL",
-//                         Units.inchesToMeters(-15), // Change
-//                         Units.inchesToMeters(22.5));
+        pivot.append(stick);
 
-//         funnelBL.append(
-//                 new MechanismLigament2d(
-//                         "Left Side",
-//                         Units.inchesToMeters(6.5), // Change
-//                         60,
-//                         10,
-//                         new Color8Bit(Color.kPurple)));
+        // Funnel
+        // Bottom Left Node
+        funnelBL =
+                armElevator2d.getRoot(
+                        "Funnel BL",
+                        Units.inchesToMeters(-15), // Change
+                        Units.inchesToMeters(22.5));
 
-//         funnelBL.append(
-//                 new MechanismLigament2d(
-//                         "Bottom Side",
-//                         Units.inchesToMeters(12.5),
-//                         0,
-//                         10,
-//                         new Color8Bit(Color.kPurple)));
+        funnelBL.append(
+                new MechanismLigament2d(
+                        "Left Side",
+                        Units.inchesToMeters(6.5), // Change
+                        60,
+                        10,
+                        new Color8Bit(Color.kPurple)));
 
-//         // Top Right Node
-//         funnelTR =
-//                 armElevator2d.getRoot(
-//                         "Funnel TR",
-//                         Units.inchesToMeters(0.5), // Change
-//                         Units.inchesToMeters(28) // Change
-//                         );
+        funnelBL.append(
+                new MechanismLigament2d(
+                        "Bottom Side",
+                        Units.inchesToMeters(12.5),
+                        0,
+                        10,
+                        new Color8Bit(Color.kPurple)));
 
-//         funnelTR.append(
-//                 new MechanismLigament2d(
-//                         "Right Side",
-//                         Units.inchesToMeters(6.5), // Change
-//                         240,
-//                         10,
-//                         new Color8Bit(Color.kPurple)));
+        // Top Right Node
+        funnelTR =
+                armElevator2d.getRoot(
+                        "Funnel TR",
+                        Units.inchesToMeters(0.5), // Change
+                        Units.inchesToMeters(28) // Change
+                        );
 
-//         funnelTR.append(
-//                 new MechanismLigament2d(
-//                         "Top Side",
-//                         Units.inchesToMeters(12.5), // Change
-//                         180,
-//                         10,
-//                         new Color8Bit(Color.kPurple)));
+        funnelTR.append(
+                new MechanismLigament2d(
+                        "Right Side",
+                        Units.inchesToMeters(6.5), // Change
+                        240,
+                        10,
+                        new Color8Bit(Color.kPurple)));
 
-//         SmartDashboard.putData("Visualizers/ArmElevator", armElevator2d);
-//     }
+        funnelTR.append(
+                new MechanismLigament2d(
+                        "Top Side",
+                        Units.inchesToMeters(12.5), // Change
+                        180,
+                        10,
+                        new Color8Bit(Color.kPurple)));
 
-//     public void update() {
-//         // Top of Stage Two is target height
-//         Elevator elevator = Elevator.getInstance();
-//         Arm arm = Arm.getInstance();
+        SmartDashboard.putData("Visualizers/Arm-Elevator", armElevator2d);
+    }
 
-//         stageTwoBL.setPosition(
-//                 Units.inchesToMeters(14), elevator.getCurrentHeight() + Units.inchesToMeters(4));
+    public void update() {
+        // Top of Stage Two is target height
+        Elevator elevator = Elevator.getInstance();
+        Arm arm = Arm.getInstance();
 
-//         stageTwoTR.setPosition(
-//                 Units.inchesToMeters(22), elevator.getCurrentHeight() + Units.inchesToMeters(39));
+        stageTwoBL.setPosition(
+                Units.inchesToMeters(14), elevator.getCurrentHeight() + Units.inchesToMeters(4));
 
-//         pivot.setPosition(
-//                 Units.inchesToMeters(7),
-//                 elevator.getCurrentHeight() + Units.inchesToMeters(39) // Change
-//                 );
+        stageTwoTR.setPosition(
+                Units.inchesToMeters(22), elevator.getCurrentHeight() + Units.inchesToMeters(39));
 
-//         funnelBL.setPosition(
-//                 Units.inchesToMeters(0), Units.inchesToMeters(22.5) // Change
-//                 );
+        pivot.setPosition(
+                Units.inchesToMeters(7),
+                elevator.getCurrentHeight() + Units.inchesToMeters(39) // Change
+            );
 
-//         funnelBL.setPosition(
-//                 Units.inchesToMeters(12.5), Units.inchesToMeters(30) // Change
-//                 );
-//     }
-// }
+        stick.setAngle(arm.getCurrentAngle());
+
+        funnelBL.setPosition(
+                Units.inchesToMeters(0), Units.inchesToMeters(22.5) // Change
+                );
+
+        funnelBL.setPosition(
+                Units.inchesToMeters(12.5), Units.inchesToMeters(30) // Change
+                );
+    }
+}

@@ -10,6 +10,7 @@ import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.arm.ArmVisualizer;
 import com.stuypulse.robot.subsystems.elevator.ElevatorImpl;
 import com.stuypulse.robot.subsystems.elevator.ElevatorSimu;
+import com.stuypulse.robot.util.ArmElevatorVisualizer;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,4 +47,9 @@ public abstract class Arm extends SubsystemBase {
     public abstract boolean getRotateBoolean();
 
     public abstract void setRotateBoolean(boolean overElevator);
+
+    public void periodic() {
+        visualizer.update();
+        ArmElevatorVisualizer.getInstance().update();
+    }
 }

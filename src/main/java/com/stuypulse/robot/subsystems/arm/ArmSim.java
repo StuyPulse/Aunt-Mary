@@ -15,6 +15,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.ArmElevatorVisualizer;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -109,12 +110,9 @@ public class ArmSim extends Arm {
 
         controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees());
         sim.setInputVoltage(controller.getOutput());
-        sim.update(Settings.DT);
-        
-        // RoboRioSim.setVInVoltage(
-        //         BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
-
-        armVisualizer.update();
+        sim.update(Settings.DT);    
+        RoboRioSim.setVInVoltage(
+                BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
         SmartDashboard.putNumber("Arm/Current Arm Angle", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle().getDegrees());
