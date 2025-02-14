@@ -86,7 +86,7 @@ public interface Settings {
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(150.0);
 
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-8.0); // estimate
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-9.8);
+        Rotation2d FEED_ANGLE = Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL;
 
         double MAX_VEL_ROTATIONS_PER_S = 1.0;
         double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;

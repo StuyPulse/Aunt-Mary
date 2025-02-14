@@ -20,6 +20,8 @@ public interface Constants {
         double MIN_HEIGHT_METERS = 0.889; // FROM FLOOR TO TOP OF ELEVATOR
         double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
 
+        double FUNNEL_CLEAR_HEIGHT = 2.0; // Height needed for the arm to rotate without hitting the funnel
+
         double MASS_KG = 10.0;
         double DRUM_RADIUS_METERS = (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEAR_RATIO) / 2 / Math.PI;
 
@@ -40,6 +42,8 @@ public interface Constants {
 
         double ARM_LENGTH = Units.inchesToMeters(3);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
+
+        Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL = Rotation2d.fromDegrees(0); // Minimum angle at which the elevator can move up and down without hitting the funnel
 
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-360);
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(360);

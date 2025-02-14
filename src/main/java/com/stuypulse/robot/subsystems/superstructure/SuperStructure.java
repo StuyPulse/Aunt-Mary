@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.superstructure;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
@@ -51,8 +52,14 @@ public class SuperStructure extends SubsystemBase{
 
     private SuperStructureTargetState targetState;
 
+    private Arm arm;
+    private Elevator elevator;
+
     protected SuperStructure() {
         this.targetState = SuperStructureTargetState.STOW;
+
+        this.arm = Arm.getInstance();
+        this.elevator = Elevator.getInstance();
     }
 
     public void setTargetState(SuperStructureTargetState state) {
@@ -63,15 +70,58 @@ public class SuperStructure extends SubsystemBase{
         return this.targetState;
     }
 
-    @Override
-    public void periodic() {
-        Arm arm = Arm.getInstance();
-        Elevator elevator = Elevator.getInstance();
-
-        ArmState currentArmState = arm.getState();
-        ElevatorState currentElevatorState = elevator.getState();
+    private boolean canMoveArmToNextTarget() {
+        ArmState targetArmState = getTargetState().getTargetArmState();
 
         Rotation2d currentArmAngle = arm.getCurrentAngle();
         double currentElevatorHeight = elevator.getCurrentHeight();
+
+        return (targetArmState.getTargetAngle().getDegrees() >= 0 && currentArmAngle.getDegrees() >= 0)
+            || (currentElevatorHeight >= Constants.Elevator.FUNNEL_CLEAR_HEIGHT);
+    }
+
+    private boolean canMoveElevatorToNextTarget() {
+        ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
+
+        Rotation2d currentArmAngle = arm.getCurrentAngle();
+        
+        return (currentArmAngle.getDegrees() >= 0)
+            || (targetElevatorState.getTargetHeight() >= Constants.Elevator.FUNNEL_CLEAR_HEIGHT && currentArmAngle.getDegrees() >= 0);
+    }
+
+    private boolean mustRaiseElevatorFirst() {
+        ArmState targetArmState = getTargetState().getTargetArmState();
+
+        Rotation2d currentArmAngle = arm.getCurrentAngle();
+        double currentElevatorHeight = elevator.getCurrentHeight();
+
+        return (currentArmAngle.getDegrees() > Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL.getDegrees() 
+                && targetArmState.getTargetAngle().getDegrees() < Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL.getDegrees()
+                && currentElevatorHeight < Constants.Elevator.FUNNEL_CLEAR_HEIGHT
+                )
+            || (currentElevatorHeight < Constants.Elevator.FUNNEL_CLEAR_HEIGHT
+                && targetArmState.getTargetAngle().getDegrees() < Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL.getDegrees()
+                );
+    }
+
+    @Override
+    public void periodic() {
+        ArmState currentArmState = arm.getState();
+        ArmState targetArmState = getTargetState().getTargetArmState();
+
+        ElevatorState currentElevatorState = elevator.getState();
+        ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
+
+        if (targetArmState != currentArmState || targetElevatorState != currentElevatorState) {
+            if (canMoveArmToNextTarget() && elevator.atTargetHeight()) {
+                arm.setState(targetArmState);
+            }
+            else if (canMoveElevatorToNextTarget() && arm.atTargetAngle()) {
+                elevator.setState(targetElevatorState);
+            }
+            else if (mustRaiseElevatorFirst()) {
+                elevator.setState(ElevatorState.CLEAR_FUNNEL);
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ public interface Motors {
 	}
 
     public interface Funnel {
-        TalonFXConfig MOTOR_CONFIG =    new TalonFXConfig()
+        TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
 			.withCurrentLimitAmps(40)
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
