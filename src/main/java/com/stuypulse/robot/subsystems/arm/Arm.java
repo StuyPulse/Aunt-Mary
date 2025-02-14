@@ -8,6 +8,7 @@ package com.stuypulse.robot.subsystems.arm;
 
 import com.stuypulse.robot.Robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -57,6 +58,7 @@ public abstract class Arm extends SubsystemBase {
         this.state = state;
     }
 
+    public abstract Rotation2d getCurrentAngle();
     public abstract boolean atTargetAngle();
 
     @Override

@@ -106,7 +106,8 @@ public class ArmSim extends Arm {
         return Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
     }
 
-    private Rotation2d getCurrentAngle() {
+    @Override
+    public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRadians(sim.getAngleRads());
     }
 

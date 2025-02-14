@@ -24,10 +24,6 @@ public class ElevatorVisualizer {
         instance = new ElevatorVisualizer();
     }
 
-    public static ElevatorVisualizer getInstance() {
-        return instance;
-    }
-
     private final Mechanism2d elevator2d;
 
     private final MechanismRoot2d elevatorBL;
@@ -35,6 +31,10 @@ public class ElevatorVisualizer {
 
     private final MechanismRoot2d stageTwoBL;
     private final MechanismRoot2d stageTwoTR;
+
+    public static ElevatorVisualizer getInstance() {
+        return instance;
+    }
 
     public ElevatorVisualizer() {
 
@@ -137,6 +137,7 @@ public class ElevatorVisualizer {
     }
 
     public void update() {
+        // Top of Stage Two is target height
         Elevator elevator = Elevator.getInstance();
         stageTwoBL.setPosition(Units.inchesToMeters(4), elevator.getCurrentHeight() + Units.inchesToMeters(4));
         stageTwoTR.setPosition(Units.inchesToMeters(10), elevator.getCurrentHeight() + Units.inchesToMeters(39));
