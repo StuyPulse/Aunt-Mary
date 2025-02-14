@@ -47,8 +47,8 @@ public class Constants {
         double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
 
         double AREA = 3; // meters squared
-        double ARM_LENGTH = Units.inchesToMeters(3);
-        double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
+        double ARM_LENGTH = Units.inchesToMeters(33);
+        double MOMENT_OF_INERTIA = Units.lbsToKilograms(12.8) * ARM_LENGTH * ARM_LENGTH / 3;
 
         double LOWER_ANGLE_LIMIT = 0;
         double UPPER_ANGLE_LIMIT = 360;

@@ -121,14 +121,17 @@ public interface Settings {
         public interface PID {
             double kP = 10.0;
             double kI = 0.0;
-            double kD = 0.2;
+            double kD = 0.25;
         }
 
-        public interface FF {
-            double kS = 0.20506;
-            double kV = 3.7672;
-            double kA = 0.27;
-            double kG = 1.37;
+        public interface FF { //Change
+            double kS = 0.1; 
+            double kV = 5.0;
+            double kA = 1.0;
+            double kG = 3.0;
+
+            double kGCoral = 0.0; // Change
+            double kGAlgae = 0.0; // Change
         }
 
         double MAX_VEL_ROTATIONS_PER_S = 1.0;

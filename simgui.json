@@ -4,10 +4,21 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Arm-Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d"
     },
     "windows": {
+      "/SmartDashboard/Autonomous": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Visualizers/Arm": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Visualizers/Arm-Elevator": {
         "window": {
           "visible": true
         }
@@ -28,21 +39,12 @@
         "Elevator": {
           "open": true
         },
-        "Froggy": {
-          "open": true
-        },
-        "Funnel": {
-          "open": true
-        },
-        "Shooter": {
-          "open": true
-        },
         "Visualizers": {
           "Arm": {
-            "open": true
+            "open": false
           },
           "Elevator": {
-            "open": true
+            "open": false
           }
         },
         "open": true
@@ -50,12 +52,6 @@
     }
   },
   "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Server": {
-      "open": true
-    },
     "visible": true
   }
 }

@@ -49,6 +49,7 @@ public class ArmVisualizer {
     }
 
     public void update() { 
+        
         arm.setAngle(Arm.getInstance().getCurrentAngle());
     }
 }
