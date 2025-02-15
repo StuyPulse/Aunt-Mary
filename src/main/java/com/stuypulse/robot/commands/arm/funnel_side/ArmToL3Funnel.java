@@ -16,7 +16,7 @@ public class ArmToL3Funnel extends ArmToAngle {
 
     @Override
     public void initialize() {
-        arm.setRotateBoolean(true);
+        arm.setRotateBoolean(false);
         super.initialize();
     }
 }

@@ -15,7 +15,7 @@ public class ArmToFeedReverse extends ArmToAngle {
 
     @Override
     public void initialize() {
-        arm.setRotateBoolean(true);
+        arm.setRotateBoolean(false);
         super.initialize();
     }
 }
