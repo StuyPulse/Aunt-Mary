@@ -6,7 +6,7 @@
 
 package com.stuypulse.robot.subsystems.froggy;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Froggy extends SubsystemBase {
@@ -17,29 +17,58 @@ public abstract class Froggy extends SubsystemBase {
         instance = new FroggyImpl();
     }
 
-    protected Froggy() {}
-
     public static Froggy getInstance() {
         return instance;
     }
 
-    public abstract void setTargetAngle(Rotation2d targetAngle);
+    public enum PivotState {
+        STOW,
+        ALGAE_GROUND_PICKUP,
+        CORAL_GROUND_PICKUP,
+        GOLF_TEE_ALGAE_PICKUP,
+        L1_SCORE_ANGLE,
+        PROCESSOR_SCORE_ANGLE
+    }
+
+    public enum RollerState {
+        INTAKE_CORAL,
+        INTAKE_ALGAE,
+        SHOOT_CORAL,
+        SHOOT_ALGAE,
+        HOLD_ALGAE,
+        STOP
+    }
+
+    private PivotState pivotState;
+    private RollerState rollerState;
+
+    protected Froggy() {
+        this.pivotState = PivotState.STOW;
+        this.rollerState = RollerState.STOP;
+    }
+
+    public PivotState getPivotState() {
+        return pivotState;
+    }
+
+    public void setPivotState(PivotState state) {
+        this.pivotState = state;
+    }
+
+    public RollerState getRollerState() {
+        return rollerState;
+    }
+
+    public void setRollerState(RollerState state) {
+        this.rollerState = state;
+    }
 
     public abstract boolean isAtTargetAngle();
+    public abstract boolean isStalling();
 
-    public abstract void intakeAlgae();
-
-    public abstract void outakeAlgae();
-
-    public abstract void intakeCoral();
-
-    public abstract void outakeCoral();
-
-    public abstract void holdAlgae();
-
-    public abstract void stopRoller();
-
-    public abstract boolean isCoralStalling();
-
-    public abstract boolean isAlgaeStalling();
+    @Override
+    public void periodic() {
+        SmartDashboard.putString("Froggy/Pivot State", getPivotState().toString());
+        SmartDashboard.putString("Froggy/Roller State", getRollerState().toString());
+    }
 }

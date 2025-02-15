@@ -6,7 +6,7 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Climb extends SubsystemBase {
@@ -20,13 +20,31 @@ public abstract class Climb extends SubsystemBase {
         return instance;
     }
 
-    public abstract void setTargetAngle(Rotation2d targetAngle);
+    public enum ClimbState {
+        STOW,
+        OPEN,
+        CLIMBING,
+    }
+
+    private ClimbState state;
+
+    protected Climb() {
+        this.state = ClimbState.STOW;
+    }
+
+    public ClimbState getState() {
+        return this.state;
+    }
+
+    public void setState(ClimbState state) {
+        this.state = state;
+    }
 
     public abstract boolean atTargetAngle();
 
-    public abstract void climb();
-
-    public abstract Rotation2d getAngle();
-
-    public abstract Rotation2d getTargetAngle();
+    @Override
+    public void periodic() {
+        SmartDashboard.putString("Climb/State", state.toString());
+        SmartDashboard.putBoolean("Climb/At Target Angle", atTargetAngle());
+    }
 }

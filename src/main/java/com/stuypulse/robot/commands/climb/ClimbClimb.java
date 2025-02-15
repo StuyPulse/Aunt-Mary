@@ -6,20 +6,10 @@
 
 package com.stuypulse.robot.commands.climb;
 
-import com.stuypulse.robot.subsystems.climb.Climb;
+import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-public class ClimbClimb extends InstantCommand {
-    private final Climb climb;
-
+public class ClimbClimb extends ClimbToState {
     public ClimbClimb() {
-        climb = Climb.getInstance();
-        addRequirements(climb);
-    }
-
-    @Override
-    public void initialize() {
-        climb.climb();
+        super(ClimbState.CLIMBING);
     }
 }

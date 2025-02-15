@@ -10,10 +10,12 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,78 +24,61 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmSim extends SubsystemBase {
+public class ArmSim extends Arm {
 
     private final SingleJointedArmSim sim;
     private final Controller controller;
 
-    private final SmartNumber targetAngle;
-
-    private static final ArmSim instance;
-
-    static {
-        instance = new ArmSim();
-    }
-
     protected ArmSim() {
-        sim =
-                new SingleJointedArmSim(
-                        DCMotor.getKrakenX60(1),
-                        Constants.Arm.GEAR_RATIO,
-                        Constants.Arm.MOMENT_OF_INERTIA,
-                        Constants.Arm.ARM_LENGTH,
-                        Constants.Arm.LOWER_ANGLE_LIMIT,
-                        Constants.Arm.UPPER_ANGLE_LIMIT,
-                        true,
-                        0,
-                        0);
+        sim = new SingleJointedArmSim(
+            DCMotor.getKrakenX60(1),
+            Constants.Arm.GEAR_RATIO,
+            Constants.Arm.MOMENT_OF_INERTIA,
+            Constants.Arm.ARM_LENGTH,
+            Constants.Arm.MIN_ANGLE.getRadians(),
+            Constants.Arm.MAX_ANGLE.getRadians(),
+            true,
+            Settings.Arm.STOW_ANGLE.getRadians()
+        );
 
-        MotionProfile motionProfile =
-                new MotionProfile(
-                        Settings.Arm.MAX_VEL_ROTATIONS_PER_S,
-                        Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+        MotionProfile motionProfile = new MotionProfile(
+            Settings.Arm.MAX_VEL_DEG_PER_S,
+            Settings.Arm.MAX_ACCEL_DEG_PER_S_PER_S
+        );
 
-        controller =
-                new MotorFeedforward(Settings.Arm.FF.kS, Settings.Arm.FF.kV, Settings.Arm.FF.kA)
-                        .position()
-                        .add(new ArmFeedforward(Settings.Arm.FF.kG))
-                        .add(
-                                new PIDController(
-                                        Settings.Arm.PID.kP,
-                                        Settings.Arm.PID.kI,
-                                        Settings.Arm.PID.kD))
-                        .setSetpointFilter(motionProfile);
-
-        targetAngle = new SmartNumber("Arm/Target Angle", 0.0);
+        controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
+            .add(new ArmFeedforward(Gains.Arm.FF.kG_EMPTY))
+            .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
+            .setSetpointFilter(motionProfile);
     }
 
-    public static ArmSim getInstance() {
-        return instance;
+    @Override
+    public boolean atTargetAngle() {
+        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
     }
 
-    public double getTargetAngle() {
-        return targetAngle.getAsDouble();
+    private Rotation2d getTargetAngle() {
+        return getState().getTargetAngle();
     }
 
-    public double getArmAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads()).getDegrees();
+    @Override
+    public Rotation2d getCurrentAngle() {
+        return Rotation2d.fromRadians(sim.getAngleRads());
     }
 
     @Override
     public void periodic() {
         super.periodic();
 
-        controller.update(getTargetAngle(), getArmAngle());
+        controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees());
+
         sim.setInputVoltage(controller.getOutput());
         sim.update(Settings.DT);
-        RoboRioSim.setVInVoltage(
-                BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
-        ArmVisualizer.getInstance().update();
+        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
-        SmartDashboard.putNumber("Arm/Arm Angle", getArmAngle());
-        SmartDashboard.putNumber("Arm/Target Angle", getTargetAngle());
+        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
     }
 }

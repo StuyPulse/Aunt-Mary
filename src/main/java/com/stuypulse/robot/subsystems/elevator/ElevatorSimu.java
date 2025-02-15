@@ -15,6 +15,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -26,63 +27,34 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ElevatorSimu extends Elevator {
 
     private final ElevatorSim sim;
-    private final double minHeight, maxHeight;
-
-    private final SmartNumber targetHeight;
 
     private final Controller controller;
 
-    ElevatorSimu() {
+    protected ElevatorSimu() {
+        sim = new ElevatorSim(
+            DCMotor.getKrakenX60(1),
+            Constants.Elevator.Encoders.GEAR_RATIO,
+            Constants.Elevator.MASS_KG,
+            Constants.Elevator.DRUM_RADIUS_METERS,
+            Constants.Elevator.MIN_HEIGHT_METERS,
+            Constants.Elevator.MAX_HEIGHT_METERS,
+            true,
+            Constants.Elevator.MIN_HEIGHT_METERS
+        );
 
-        sim =
-                new ElevatorSim(
-                        DCMotor.getNEO(2),
-                        Constants.Elevator.Encoders.GEARING,
-                        Constants.Elevator.MASS_KG,
-                        Constants.Elevator.DRUM_RADIUS_METERS,
-                        Constants.Elevator.MIN_HEIGHT_METERS,
-                        Constants.Elevator.MAX_HEIGHT_METERS,
-                        true,
-                        Constants.Elevator.MIN_HEIGHT_METERS);
+        MotionProfile motionProfile = new MotionProfile(
+            Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND,
+            Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND
+        );
 
-        minHeight = Constants.Elevator.MIN_HEIGHT_METERS;
-        maxHeight = Constants.Elevator.MAX_HEIGHT_METERS;
-
-        targetHeight =
-                new SmartNumber("Elevator/Target Height (m)", Constants.Elevator.MIN_HEIGHT_METERS);
-
-        MotionProfile motionProfile =
-                new MotionProfile(
-                        Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND,
-                        Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
-
-        controller =
-                new MotorFeedforward(
-                                Settings.Elevator.FF.kS,
-                                Settings.Elevator.FF.kV,
-                                Settings.Elevator.FF.kA)
-                        .position()
-                        .add(new ElevatorFeedforward(Settings.Elevator.FF.kG))
-                        .add(
-                                new PIDController(
-                                        Settings.Elevator.PID.kP,
-                                        Settings.Elevator.PID.kI,
-                                        Settings.Elevator.PID.kD))
-                        .setSetpointFilter(motionProfile);
+        controller = new MotorFeedforward(Gains.Elevator.FF.kS, Gains.Elevator.FF.kV, Gains.Elevator.FF.kA).position()
+            .add(new ElevatorFeedforward(Gains.Elevator.FF.kG))
+            .add(new PIDController(Gains.Elevator.PID.kP, Gains.Elevator.PID.kI, Gains.Elevator.PID.kD))
+            .setSetpointFilter(motionProfile);
     }
 
-    public ElevatorSim getSim() {
-        return sim;
-    }
-
-    @Override
-    public void setTargetHeight(double height) {
-        targetHeight.set(SLMath.clamp(height, minHeight, maxHeight));
-    }
-
-    @Override
-    public double getTargetHeight() {
-        return targetHeight.get();
+    private double getTargetHeight() {
+        return getState().getTargetHeight();
     }
 
     @Override
@@ -92,13 +64,7 @@ public class ElevatorSimu extends Elevator {
 
     @Override
     public boolean atTargetHeight() {
-        return Math.abs(getTargetHeight() - getCurrentHeight())
-                < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
-    }
-
-    @Override
-    public boolean atBottom() {
-        return false;
+        return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
     }
 
     @Override
@@ -106,13 +72,10 @@ public class ElevatorSimu extends Elevator {
         super.periodic();
 
         controller.update(getTargetHeight(), getCurrentHeight());
+
         sim.setInputVoltage(controller.getOutput());
         sim.update(Settings.DT);
-        RoboRioSim.setVInVoltage(
-                BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
 
-        ElevatorVisualizer.getInstance().update(); // delete this line later
-
-        SmartDashboard.putNumber("Elevator/Current Height", getCurrentHeight());
+        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(sim.getCurrentDrawAmps()));
     }
 }
