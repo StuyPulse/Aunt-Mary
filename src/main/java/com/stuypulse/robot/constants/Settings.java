@@ -125,17 +125,17 @@ public interface Settings {
         }
 
         public interface FF { //Change
-            double kS = 0.1; 
-            double kV = 5.0;
-            double kA = 1.0;
-            double kG = 3.0;
+            double kS = 0.06; 
+            double kV = 0.2;
+            double kA = 0.03;
+            double kG = 3.3;
 
             double kGCoral = 0.0; // Change
             double kGAlgae = 0.0; // Change
         }
 
-        double MAX_VEL_ROTATIONS_PER_S = 1.0;
-        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;
+        double MAX_VEL_ROTATIONS_PER_S = 75.0;
+        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 75.0;
         double ANGLE_TOLERANCE_DEGREES = 1.0;
     }
 

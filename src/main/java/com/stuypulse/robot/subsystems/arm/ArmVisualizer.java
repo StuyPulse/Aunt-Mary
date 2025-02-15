@@ -37,11 +37,11 @@ public class ArmVisualizer {
 
         arm = new MechanismLigament2d(
             "Arm", 
-            Units.inchesToMeters(33), 
+            Units.inchesToMeters(29), 
             0,
             10, 
             new Color8Bit(Color.kOrange)
-        );
+        );  
 
         pivot.append(arm);
 

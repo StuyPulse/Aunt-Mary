@@ -49,7 +49,6 @@ public abstract class Arm extends SubsystemBase {
     public abstract void setRotateBoolean(boolean overElevator);
 
     public void periodic() {
-        visualizer.update();
         ArmElevatorVisualizer.getInstance().update();
     }
 }
