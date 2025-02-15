@@ -12,6 +12,11 @@ import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToFeed;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Back;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Front;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Front;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
@@ -35,8 +40,6 @@ public class RobotContainer {
     // Subsystem
     private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
-    private final Arm arm = Arm.getInstance();
-    private final Elevator elevator = Elevator.getInstance();
     private final SuperStructure superStructure = SuperStructure.getInstance();
     private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
@@ -66,7 +69,10 @@ public class RobotContainer {
     /***************/
 
     private void configureButtonBindings() {
-
+        driver.getLeftButton().onTrue(new SuperStructureToFeed());
+        driver.getRightButton().onTrue(new SuperStructureToL2Back());
+        driver.getBottomButton().onTrue(new SuperStructureToL3Front());
+        driver.getTopButton().onTrue(new SuperStructureToL4Back());
     }
 
     /**************/

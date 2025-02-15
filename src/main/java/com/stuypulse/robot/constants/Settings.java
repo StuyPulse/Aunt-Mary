@@ -69,28 +69,28 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS = 1.4;
         double ALGAE_L3_HEIGHT_METERS = 1.8;
 
-        double HEIGHT_TOLERANCE_METERS = 0.02;
+        double HEIGHT_TOLERANCE_METERS = 0.04;
     }
 
     public interface Arm {
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615 + 270);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6 - 90);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0 - 90);
 
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(261.5);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(236.1);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(240.0);
+        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(261.5 - 90);
+        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(236.1 - 90);
+        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(240.0 - 90);
 
-        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7); // estimate
-        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9); // estimate
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(150.0);
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7);
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(60.0);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-8.0); // estimate
-        Rotation2d FEED_ANGLE = Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL;
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
+        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-93);
 
-        double MAX_VEL_ROTATIONS_PER_S = 1.0;
-        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;
-        double ANGLE_TOLERANCE_DEGREES = 1.0;
+        double MAX_VEL_DEG_PER_S = 100.0;
+        double MAX_ACCEL_DEG_PER_S_PER_S = 200.0;
+        double ANGLE_TOLERANCE_DEGREES = 3.0;
     }
 
     public interface Froggy {

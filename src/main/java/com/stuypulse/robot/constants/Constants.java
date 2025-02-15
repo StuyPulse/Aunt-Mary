@@ -17,14 +17,14 @@ public interface Constants {
     double SHOOTER_Y_OFFSET = Units.inchesToMeters(8.5);
 
     public interface Elevator {
-        double MIN_HEIGHT_METERS = 0.889; // FROM FLOOR TO TOP OF ELEVATOR
+        double MIN_HEIGHT_METERS = Units.inchesToMeters(41.089); // FROM FLOOR TO TOP OF ELEVATOR
         double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
 
-        double WIDTH = Units.inchesToMeters(10); // Currently for simulation purposes only
-        double FIXED_STAGE_LENGTH = Units.inchesToMeters(50); // Currently for simulation purposes only
-        double CARRIAGE_LENGTH = Units.inchesToMeters(50); // Currently for simulation purposes only
+        double WIDTH = Units.inchesToMeters(10.0); // Currently for simulation purposes only
+        double FIXED_STAGE_MAX_HEIGHT = Units.inchesToMeters(40.748); // Currently for simulation purposes only
+        double CARRIAGE_LENGTH = Units.inchesToMeters(35); // Currently for simulation purposes only
 
-        double FUNNEL_CLEAR_HEIGHT = 2.0; // Height needed for the arm to rotate without hitting the funnel
+        double FUNNEL_CLEAR_HEIGHT = 1.5; // Height needed for the arm to rotate without hitting the funnel
 
         double MASS_KG = 10.0;
         double DRUM_RADIUS_METERS = (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEAR_RATIO) / 2 / Math.PI;
@@ -49,7 +49,9 @@ public interface Constants {
         double ARM_LENGTH = Units.inchesToMeters(29);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(12.8) * ARM_LENGTH * ARM_LENGTH / 3;
 
-        Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL = Rotation2d.fromDegrees(0); // Minimum angle at which the elevator can move up and down without hitting the funnel
+        // Minimum angle at which the elevator can move up and down without hitting the funnel
+        Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL_BACK = Rotation2d.fromDegrees(-180);
+        Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL_FRONT = Rotation2d.fromDegrees(-93);
 
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-360);
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(360);

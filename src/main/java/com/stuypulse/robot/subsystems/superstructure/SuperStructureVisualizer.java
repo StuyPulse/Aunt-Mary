@@ -58,7 +58,7 @@ public class SuperStructureVisualizer {
 
         elevatorFixedStageBottomFront.append(new MechanismLigament2d(
             "Front Fixed Stage",
-            Constants.Elevator.FIXED_STAGE_LENGTH,
+            Constants.Elevator.FIXED_STAGE_MAX_HEIGHT,
             90,
             10,
             new Color8Bit(Color.kOrange)
@@ -66,7 +66,7 @@ public class SuperStructureVisualizer {
 
         elevatorFixedStageBottomBack.append(new MechanismLigament2d(
             "Back Fixed Stage",
-            Constants.Elevator.FIXED_STAGE_LENGTH,
+            Constants.Elevator.FIXED_STAGE_MAX_HEIGHT,
             90,
             10,
             new Color8Bit(Color.kOrange)
@@ -104,7 +104,7 @@ public class SuperStructureVisualizer {
 
         elevatorCarriageTopFront.append(new MechanismLigament2d(
             "Top Carriage",
-            Constants.Elevator.WIDTH,
+            Constants.Elevator.WIDTH - (2 * Units.inchesToMeters(2)),
             -180,
             10,
             new Color8Bit(Color.kOrange)
@@ -127,6 +127,8 @@ public class SuperStructureVisualizer {
     public void update(double elevatorHeight, Rotation2d armAngle) {
         elevatorCarriageTopFront.setPosition((width + Constants.Elevator.WIDTH) / 2 - Units.inchesToMeters(2), elevatorHeight);
         elevatorCarriageTopBack.setPosition((width - Constants.Elevator.WIDTH) / 2 + Units.inchesToMeters(2), elevatorHeight);
+
+        armPivot.setPosition(width/2, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
         arm.setAngle(armAngle);
 
         SmartDashboard.putData("Visualizers/Superstructure", superStructure);

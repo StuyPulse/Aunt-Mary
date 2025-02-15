@@ -1,12 +1,11 @@
 package com.stuypulse.robot.subsystems.superstructure;
 
-import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SuperStructure extends SubsystemBase{
@@ -74,40 +73,6 @@ public class SuperStructure extends SubsystemBase{
         return this.targetState;
     }
 
-    private boolean canMoveArmToNextTarget() {
-        ArmState targetArmState = getTargetState().getTargetArmState();
-
-        Rotation2d currentArmAngle = arm.getCurrentAngle();
-        double currentElevatorHeight = elevator.getCurrentHeight();
-
-        return (targetArmState.getTargetAngle().getDegrees() >= 0 && currentArmAngle.getDegrees() >= 0)
-            || (currentElevatorHeight >= Constants.Elevator.FUNNEL_CLEAR_HEIGHT);
-    }
-
-    private boolean canMoveElevatorToNextTarget() {
-        ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
-
-        Rotation2d currentArmAngle = arm.getCurrentAngle();
-        
-        return (currentArmAngle.getDegrees() >= 0)
-            || (targetElevatorState.getTargetHeight() >= Constants.Elevator.FUNNEL_CLEAR_HEIGHT && currentArmAngle.getDegrees() >= 0);
-    }
-
-    private boolean mustRaiseElevatorFirst() {
-        ArmState targetArmState = getTargetState().getTargetArmState();
-
-        Rotation2d currentArmAngle = arm.getCurrentAngle();
-        double currentElevatorHeight = elevator.getCurrentHeight();
-
-        return (currentArmAngle.getDegrees() > Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL.getDegrees() 
-                && targetArmState.getTargetAngle().getDegrees() < Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL.getDegrees()
-                && currentElevatorHeight < Constants.Elevator.FUNNEL_CLEAR_HEIGHT
-                )
-            || (currentElevatorHeight < Constants.Elevator.FUNNEL_CLEAR_HEIGHT
-                && targetArmState.getTargetAngle().getDegrees() < Constants.Arm.MIN_ANGLE_TO_CLEAR_FUNNEL.getDegrees()
-                );
-    }
-
     @Override
     public void periodic() {
         ArmState currentArmState = arm.getState();
@@ -116,18 +81,34 @@ public class SuperStructure extends SubsystemBase{
         ElevatorState currentElevatorState = elevator.getState();
         ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
 
-        if (targetArmState != currentArmState || targetElevatorState != currentElevatorState) {
-            if (canMoveArmToNextTarget() && elevator.atTargetHeight()) {
+        if (getTargetState() == SuperStructureTargetState.FEED) {
+            if (currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) {
+                arm.setState(ArmState.FEED);
+            }
+            else if (currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle() && currentElevatorState != ElevatorState.FEED) {
+                elevator.setState(ElevatorState.FEED);
+            }
+            else {
+                arm.setState(ArmState.VERTICAL_DOWN);
+            }
+        }
+        else {
+            if (targetElevatorState != currentElevatorState && arm.atTargetAngle()) {
+                if (currentArmState == ArmState.FEED) {
+                    arm.setState(ArmState.VERTICAL_DOWN);
+                }
+                else {
+                    elevator.setState(targetElevatorState);
+                }
+            }
+            else if (targetArmState != currentArmState && elevator.atTargetHeight()) {
                 arm.setState(targetArmState);
-            }
-            else if (canMoveElevatorToNextTarget() && arm.atTargetAngle()) {
-                elevator.setState(targetElevatorState);
-            }
-            else if (mustRaiseElevatorFirst()) {
-                elevator.setState(ElevatorState.CLEAR_FUNNEL);
             }
         }
 
         visualizer.update(elevator.getCurrentHeight(), arm.getCurrentAngle());
+
+        SmartDashboard.putString("Super Structure/Target Arm State", getTargetState().getTargetArmState().toString());
+        SmartDashboard.putString("Super Structure/Target Elevator State", getTargetState().getTargetElevatorState().toString());
     }
 }

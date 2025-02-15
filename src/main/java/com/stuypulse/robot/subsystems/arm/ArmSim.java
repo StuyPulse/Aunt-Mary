@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSim extends Arm {
 
@@ -44,8 +43,8 @@ public class ArmSim extends Arm {
         );
 
         MotionProfile motionProfile = new MotionProfile(
-            Settings.Arm.MAX_VEL_ROTATIONS_PER_S,
-            Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S
+            Settings.Arm.MAX_VEL_DEG_PER_S,
+            Settings.Arm.MAX_ACCEL_DEG_PER_S_PER_S
         );
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
@@ -72,7 +71,7 @@ public class ArmSim extends Arm {
     public void periodic() {
         super.periodic();
 
-        controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations());
+        controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees());
 
         sim.setInputVoltage(controller.getOutput());
         sim.update(Settings.DT);

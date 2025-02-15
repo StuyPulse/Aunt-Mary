@@ -60,7 +60,7 @@ public interface Motors {
 			.withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
 			.withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
-			.withMotionProfile(Settings.Arm.MAX_VEL_ROTATIONS_PER_S, Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+			.withMotionProfile(Settings.Arm.MAX_VEL_DEG_PER_S, Settings.Arm.MAX_ACCEL_DEG_PER_S_PER_S);
     }
 
     public interface Froggy {
