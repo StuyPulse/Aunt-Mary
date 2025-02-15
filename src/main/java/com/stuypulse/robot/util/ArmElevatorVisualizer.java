@@ -180,7 +180,7 @@ public class ArmElevatorVisualizer {
         funnelBL.append(
                 new MechanismLigament2d(
                         "Bottom Side",
-                        Units.inchesToMeters(12),
+                        Units.inchesToMeters(13),
                         -30,
                         10,
                         new Color8Bit(Color.kPurple)));
@@ -230,11 +230,11 @@ public class ArmElevatorVisualizer {
                 Units.inchesToMeters(38.5), elevator.getCurrentHeight() + Units.inchesToMeters(39));
 
         funnelBL.setPosition(
-                Units.inchesToMeters(17), Units.inchesToMeters(23) + Constants.Elevator.MIN_HEIGHT_METERS 
+                Units.inchesToMeters(15), Units.inchesToMeters(23) + Constants.Elevator.MIN_HEIGHT_METERS 
                 );
 
         funnelTR.setPosition(
-                Units.inchesToMeters(29), Units.inchesToMeters(23) + Constants.Elevator.MIN_HEIGHT_METERS
+                Units.inchesToMeters(27), Units.inchesToMeters(23) + Constants.Elevator.MIN_HEIGHT_METERS
                 );
     }
 }
