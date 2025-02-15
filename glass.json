@@ -1,0 +1,306 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "Pose": {
+        "double[]##v_/Pose/robotPose": {
+          "open": true
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "Alerts": {
+          "open": true
+        },
+        "Alignment": {
+          "open": true
+        },
+        "Arm": {
+          "open": true
+        },
+        "Beam Break": {
+          "open": true
+        },
+        "Driver Settings": {
+          "Drive": {
+            "open": true
+          }
+        },
+        "Elevator": {
+          "open": true
+        },
+        "Flywheel": {
+          "open": true
+        },
+        "Note Detection": {
+          "open": true
+        },
+        "Odometry": {
+          "open": true
+        },
+        "Robot Detection": {
+          "open": true
+        },
+        "Scheduler": {
+          "open": true,
+          "string[]##v_/SmartDashboard/Scheduler/Names": {
+            "open": true
+          }
+        },
+        "Shooter": {
+          "open": true
+        },
+        "Swerve": {
+          "Back Right": {
+            "open": true
+          },
+          "Front Left": {
+            "open": true
+          },
+          "Front Right": {
+            "open": true
+          },
+          "Modules": {
+            "Back Right": {
+              "open": true
+            },
+            "Front Left": {
+              "open": true
+            },
+            "Front Right": {
+              "open": true
+            },
+            "PID": {
+              "open": true
+            },
+            "open": true
+          },
+          "Motion": {
+            "open": true
+          },
+          "Turn": {
+            "open": true
+          },
+          "open": true
+        },
+        "Vision": {
+          "open": true,
+          "plate-cam": {
+            "open": true
+          },
+          "samera0": {
+            "open": true
+          },
+          "samera1": {
+            "open": true
+          },
+          "tower-cam": {
+            "open": true
+          }
+        },
+        "open": true,
+        "plate-cam": {
+          "open": true
+        },
+        "samera0": {
+          "open": true
+        },
+        "samera1": {
+          "open": true
+        },
+        "tower-cam": {
+          "open": true
+        }
+      },
+      "photonvision": {
+        "Arducam_OV2311_USB_Camera": {
+          "open": true
+        },
+        "Arducam_OV2311_USB_Camera (1)": {
+          "open": true
+        },
+        "plate-cam": {
+          "open": true
+        },
+        "samera1": {
+          "open": true
+        },
+        "tower-cam": {
+          "open": true
+        }
+      },
+      "plate-cam": {
+        "config": {
+          "open": true
+        },
+        "open": true,
+        "output": {
+          "open": true
+        }
+      },
+      "tower-cam": {
+        "config": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Pose": "Field2d",
+      "/SmartDashboard/Alerts": "Alerts",
+      "/SmartDashboard/Arm Mech2d": "Mechanism2d",
+      "/SmartDashboard/Autonomous": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Module 0": "Mechanism2d",
+      "/SmartDashboard/Module 1": "Mechanism2d",
+      "/SmartDashboard/Module 2": "Mechanism2d",
+      "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/Visualizers/Climber": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Intake": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Lift": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
+    },
+    "windows": {
+      "/Pose": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875
+      },
+      "/SmartDashboard/Autonomous": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 1638,
+        "builtin": "2025 Reefscape",
+        "height": 8.051901817321777,
+        "left": 534,
+        "right": 3466,
+        "top": 291,
+        "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Visualizers/Superstructure": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "plate-cam@1": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "tower-cam@2": {
+      "Publishers": {
+        "open": true
+      },
+      "open": true
+    },
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "694"
+  },
+  "Plots": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 290,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Elevator/Current Height (m)"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Elevator/Target Height (m)"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "name": "Elevator Target Vs Current Height"
+      }
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 326,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Arm/Current Angle (deg)"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Arm/Target Angle (deg)"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "name": "Arm Target Vs Current Angle"
+      }
+    }
+  }
+}
