@@ -73,7 +73,7 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615 + 270);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615 - 90);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6 - 90);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0 - 90);
 

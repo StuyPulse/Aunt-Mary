@@ -10,26 +10,51 @@ import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
-import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
+import com.stuypulse.robot.commands.climb.ClimbClimb;
+import com.stuypulse.robot.commands.climb.ClimbOpen;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilAtTargetAngle;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeAlgae;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
+import com.stuypulse.robot.commands.funnel.FunnelAcquire;
+import com.stuypulse.robot.commands.funnel.FunnelStop;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
+import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
+import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
+import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
+import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToAlgaeL2;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToAlgaeL3;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToBarge;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToFeed;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
+import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
+import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
+import com.stuypulse.robot.subsystems.superstructure.SuperStructure.SuperStructureTargetState;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
 public class RobotContainer {
 
@@ -60,7 +85,6 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        funnel.setDefaultCommand(new FunnelDefaultCommand());
         leds.setDefaultCommand(new LEDDefaultCommand());
     }
 
@@ -69,10 +93,82 @@ public class RobotContainer {
     /***************/
 
     private void configureButtonBindings() {
-        driver.getLeftButton().onTrue(new SuperStructureToFeed());
-        driver.getRightButton().onTrue(new SuperStructureToL2Back());
-        driver.getBottomButton().onTrue(new SuperStructureToL3Front());
-        driver.getTopButton().onTrue(new SuperStructureToL4Back());
+        driver.getDPadRight()
+            .onTrue(new ConditionalCommand(
+                new ConditionalCommand(
+                    new ShooterShootAlgae(), 
+                    new ConditionalCommand(
+                        new ShooterShootForwards(), 
+                        new ShooterShootBackwards().onlyIf(() -> shooter.shouldShootBackwards()), 
+                        () -> shooter.shouldShootForward()),
+                    () -> superStructure.getTargetState() == SuperStructureTargetState.BARGE), 
+                new ConditionalCommand(
+                    new FroggyRollerShootCoral(), 
+                    new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
+                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
+                () -> superStructure.isInScoreState()));
+
+        driver.getLeftTriggerButton()
+            .onTrue(new FroggyPivotToAlgaeGroundPickup())
+            .whileTrue(new FroggyRollerIntakeAlgae())
+            .onFalse(new FroggyPivotToStow());
+
+        driver.getLeftBumper()
+            .onTrue(new FroggyRollerShootAlgae())
+            .onFalse(new FroggyRollerStop());
+
+        driver.getRightTriggerButton()
+            .onTrue(new SuperStructureToFeed())
+            .whileTrue(new FunnelAcquire())
+            .onFalse(new FunnelStop())
+            .whileTrue(new ShooterAcquireCoral());
+
+        driver.getRightBumper()
+            .whileTrue(new FroggyPivotToL1()
+                .andThen(new FroggyPivotWaitUntilAtTargetAngle())
+                .andThen(new FroggyRollerShootCoral()))
+            .onFalse(new FroggyRollerStop().andThen(new FroggyPivotToStow()));
+
+        driver.getTopButton()
+            .whileTrue(new SuperStructureToL4Front()
+                .andThen(new SuperStructureWaitUntilAtTarget())
+                .andThen(new ShooterShootForwards()))
+            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ShooterStop());
+
+        driver.getRightButton()
+            .whileTrue(new SuperStructureToL3Front()
+                .andThen(new SuperStructureWaitUntilAtTarget())
+                .andThen(new ShooterShootForwards()))
+            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ShooterStop());
+
+        driver.getBottomButton()
+            .whileTrue(new SuperStructureToL2Front()
+                .andThen(new SuperStructureWaitUntilAtTarget())
+                .andThen(new ShooterShootForwards()))
+            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ShooterStop());
+
+        driver.getLeftButton()
+            .whileTrue(new SuperStructureToBarge()
+                .andThen(new SuperStructureWaitUntilAtTarget())
+                .andThen(new ShooterShootAlgae()))
+            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ShooterStop());
+
+        driver.getDPadLeft()
+            .whileTrue(new SuperStructureToAlgaeL3()
+                .andThen(new ShooterAcquireAlgae()))
+            .onFalse(new SuperStructureToFeed());
+        
+        driver.getDPadDown()
+            .whileTrue(new SuperStructureToAlgaeL2()
+                .andThen(new ShooterAcquireAlgae()))
+            .onFalse(new SuperStructureToFeed());
+
+        driver.getLeftMenuButton().onTrue(new ClimbOpen());
+        driver.getRightMenuButton().onTrue(new ClimbClimb());
     }
 
     /**************/

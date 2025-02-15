@@ -73,6 +73,23 @@ public class SuperStructure extends SubsystemBase{
         return this.targetState;
     }
 
+    public boolean isInScoreState() {
+        switch (getTargetState()) {
+            case L2_FRONT:
+            case L2_BACK:
+            case L3_FRONT:
+            case L3_BACK:
+            case L4_FRONT:
+            case L4_BACK:
+            case ALGAE_L2:
+            case ALGAE_L3:
+            case BARGE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     public void periodic() {
         ArmState currentArmState = arm.getState();

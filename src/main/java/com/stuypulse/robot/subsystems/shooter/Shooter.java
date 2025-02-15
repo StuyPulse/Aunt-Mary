@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.subsystems.shooter;
 
+import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -46,6 +48,24 @@ public abstract class Shooter extends SubsystemBase {
 
     public abstract boolean hasCoral();
     public abstract boolean isStalling();
+
+    public boolean shouldShootForward() {
+        switch (SuperStructure.getInstance().getTargetState()) {
+            case L2_FRONT, L2_BACK, L3_BACK, L4_BACK:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean shouldShootBackwards() {
+        switch (SuperStructure.getInstance().getTargetState()) {
+            case L3_FRONT, L4_FRONT:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     @Override
     public void periodic() {
