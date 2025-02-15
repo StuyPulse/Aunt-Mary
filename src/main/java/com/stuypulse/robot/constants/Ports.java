@@ -22,27 +22,27 @@ public interface Ports {
 
     public interface Climb {
         int MOTOR = 20;
-        int ABSOLUTE_ENCODER = 0;
+        // int ABSOLUTE_ENCODER = 0;
     }
 
     public interface Arm {
-        int MOTOR = 0;
-        int ABSOLUTE_ENCODER = 0;
+        int MOTOR = 32;
+        int ABSOLUTE_ENCODER = 7;
     }
 
     public interface Shooter {
-        int MOTOR = 0;
-        int IR_SENSOR = 0;
+        int MOTOR = 42;
+        int IR_SENSOR = 5;
     }
 
     public interface Funnel {
         int MOTOR = 61;
-        int IR = 0;
+        int IR = 9;
     }
 
     public interface Elevator {
-        int MOTOR = 30;
-        int BOTTOM_SWITCH = 0;
+        int MOTOR = 31;
+        int BOTTOM_SWITCH = 8;
     }
 
     public interface LED {

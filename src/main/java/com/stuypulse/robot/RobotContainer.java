@@ -39,7 +39,10 @@ import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
@@ -50,6 +53,8 @@ import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superstructure.SuperStructure.SuperStructureTargetState;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.subsystems.swerve.Telemetry;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,6 +68,8 @@ public class RobotContainer {
     public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
     // Subsystem
+    private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
+    private final Telemetry telemetry = new Telemetry(Settings.Swerve.Constraints.MAX_VELOCITY.get());
     private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final SuperStructure superStructure = SuperStructure.getInstance();
@@ -78,6 +85,8 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         configureAutons();
+
+        swerve.registerTelemetry(telemetry::telemeterize);
     }
 
     /****************/
@@ -85,6 +94,7 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
+        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         leds.setDefaultCommand(new LEDDefaultCommand());
     }
 
@@ -93,6 +103,9 @@ public class RobotContainer {
     /***************/
 
     private void configureButtonBindings() {
+
+        driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
+
         driver.getDPadRight()
             .onTrue(new ConditionalCommand(
                 new ConditionalCommand(

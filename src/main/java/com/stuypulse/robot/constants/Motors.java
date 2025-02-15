@@ -105,8 +105,8 @@ public interface Motors {
 			.withPIDConstants(Gains.Climb.PID.kP, Gains.Climb.PID.kI, Gains.Climb.PID.kD, 0)
 			.withFFConstants(Gains.Climb.FF.kS, Gains.Climb.FF.kV, Gains.Climb.FF.kA, Gains.Climb.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Arm_Cosine)
-			.withSensorToMechanismRatio(Constants.Climb.GEAR_RATIO)
-			.withRemoteSensor(Ports.Climb.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO);
+			.withSensorToMechanismRatio(Constants.Climb.GEAR_RATIO);
+			// .withRemoteSensor(Ports.Climb.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO);
     }
 
     public static class TalonFXConfig {

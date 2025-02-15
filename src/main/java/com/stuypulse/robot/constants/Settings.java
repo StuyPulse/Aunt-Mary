@@ -6,9 +6,11 @@
 
 package com.stuypulse.robot.constants;
 
+import com.pathplanner.lib.path.PathConstraints;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -143,5 +145,44 @@ public interface Settings {
         LEDPattern CLIMB_OPEN_COLOR = LEDPattern.rainbow(255, 255);
 
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
+    }
+
+    public interface Swerve {
+        public interface Constraints {
+            double MAX_MODULE_SPEED = 4.9;
+    
+            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 3.0);
+            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 5.0);
+            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
+            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
+    
+            PathConstraints DEFAULT_CONSTRAINTS =
+                new PathConstraints(
+                    MAX_VELOCITY.get(),
+                    MAX_ACCELERATION.get(),
+                    MAX_ANGULAR_VELOCITY.get(),
+                    MAX_ANGULAR_ACCELERATION.get());
+        }
+    }
+    public interface Driver {
+        public interface Drive {
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.05);
+
+            SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
+            SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
+
+            SmartNumber MAX_TELEOP_SPEED = new SmartNumber("Driver Settings/Drive/Max Speed", Swerve.Constraints.MAX_VELOCITY.get());
+            SmartNumber MAX_TELEOP_ACCEL = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.Constraints.MAX_ACCELERATION.get());
+        }
+
+        public interface Turn {
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.05);
+
+            SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
+            SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);
+
+            SmartNumber MAX_TELEOP_TURN_SPEED = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad per s)", Swerve.Constraints.MAX_ANGULAR_VELOCITY.get());
+            SmartNumber MAX_TELEOP_TURN_ACCEL = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", Swerve.Constraints.MAX_ANGULAR_ACCELERATION.get());
+        }
     }
 }
