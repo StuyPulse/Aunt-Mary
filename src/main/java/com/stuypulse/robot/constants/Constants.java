@@ -17,8 +17,8 @@ public interface Constants {
     double SHOOTER_Y_OFFSET = Units.inchesToMeters(8.5);
 
     public interface Elevator {
-        double MIN_HEIGHT_METERS = Units.inchesToMeters(41.089); // FROM FLOOR TO TOP OF ELEVATOR
-        double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
+        double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR
+        double MAX_HEIGHT_METERS = Units.inchesToMeters(69.85); // FROM FLOOR TO TOP OF ELEVATOR
 
         double WIDTH = Units.inchesToMeters(10.0); // Currently for simulation purposes only
         double FIXED_STAGE_MAX_HEIGHT = Units.inchesToMeters(40.748); // Currently for simulation purposes only
@@ -32,10 +32,10 @@ public interface Constants {
         public interface Encoders {
             double GEAR_RATIO = 50.0 / 14.0;
 
-            double NUM_ROTATIONS_TO_REACH_TOP = (6 + 9.0 / 24) * GEAR_RATIO; // Number of rotations that the motor has to spin, NOT the gear
+            double NUM_ROTATIONS_TO_REACH_TOP = 16.4427978257; // Number of rotations that the motor has to spin, NOT the gear
 
-            double POSITION_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP;
-            double VELOCITY_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP / 60;
+            double POSITION_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP;
+            double VELOCITY_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP / 60;
         }
     }
 
