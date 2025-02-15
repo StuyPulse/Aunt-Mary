@@ -24,8 +24,6 @@ public interface Constants {
         double FIXED_STAGE_MAX_HEIGHT = Units.inchesToMeters(40.748); // Currently for simulation purposes only
         double CARRIAGE_LENGTH = Units.inchesToMeters(35); // Currently for simulation purposes only
 
-        double FUNNEL_CLEAR_HEIGHT = 1.5; // Height needed for the arm to rotate without hitting the funnel
-
         double MASS_KG = 10.0;
         double DRUM_RADIUS_METERS = (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEAR_RATIO) / 2 / Math.PI;
 
