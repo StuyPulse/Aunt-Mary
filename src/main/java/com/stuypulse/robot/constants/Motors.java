@@ -92,7 +92,7 @@ public interface Motors {
 			.withPIDConstants(Gains.Elevator.PID.kP, Gains.Elevator.PID.kI, Gains.Elevator.PID.kD, 0)
 			.withFFConstants(Gains.Elevator.FF.kS, Gains.Elevator.FF.kV, Gains.Elevator.FF.kA, Gains.Elevator.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Elevator_Static)
-			.withSensorToMechanismRatio(Constants.Elevator.Encoders.GEAR_RATIO)
+			.withSensorToMechanismRatio(1 / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR)
 			.withMotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
     }
 

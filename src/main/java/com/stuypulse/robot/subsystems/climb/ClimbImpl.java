@@ -29,7 +29,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 public class ClimbImpl extends Climb {
     private TalonFX motor;
     // private CANcoder absoluteEncoder;
-    private DutyCycleEncoder absoluteEncoder;
+    // private DutyCycleEncoder absoluteEncoder;
     private Controller controller;
 
     public ClimbImpl() {
@@ -44,8 +44,8 @@ public class ClimbImpl extends Climb {
 
         // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
-        absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
-        absoluteEncoder.setInverted(false);
+        // absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
+        // absoluteEncoder.setInverted(false);
 
         controller = new MotorFeedforward(Gains.Climb.FF.kS, Gains.Climb.FF.kV, Gains.Climb.FF.kA).position()
             .add(new ArmFeedforward(Gains.Climb.FF.kG))
@@ -66,8 +66,8 @@ public class ClimbImpl extends Climb {
     }
 
     private Rotation2d getCurrentAngle() {
-        // return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
-        return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
+        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        // return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
     }
 
     @Override
@@ -77,8 +77,8 @@ public class ClimbImpl extends Climb {
 
     @Override
     public void periodic() {
-        // motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
-        motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+        motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+        // motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
 
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
