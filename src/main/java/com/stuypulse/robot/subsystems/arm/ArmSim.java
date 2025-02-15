@@ -49,7 +49,7 @@ public class ArmSim extends Arm {
         );
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Arm.FF.kG))
+            .add(new ArmFeedforward(Gains.Arm.FF.kG_EMPTY))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
     }

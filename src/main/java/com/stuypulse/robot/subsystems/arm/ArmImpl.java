@@ -51,7 +51,7 @@ public class ArmImpl extends Arm {
         // absoluteEncoder.getConfigurator().apply(magnetConfig);
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Arm.FF.kG))
+            .add(new ArmFeedforward(Gains.Arm.FF.kG_EMPTY))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(new MotionProfile(Settings.Arm.MAX_VEL_ROTATIONS_PER_S, Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S));
     }

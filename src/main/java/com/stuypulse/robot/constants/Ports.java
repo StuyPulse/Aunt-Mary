@@ -15,37 +15,37 @@ public interface Ports {
     }
 
     public interface Froggy {
-        int ROLLER = 3;
-        int PIVOT = 4;
-        int ABSOLUTE_ENCODER = 5;
+        int PIVOT = 7;
+        int ROLLER = 8;
+        int ABSOLUTE_ENCODER = 22;
     }
 
     public interface Climb {
-        int MOTOR = 6;
-        int ABSOLUTE_ENCODER = 7;
+        int MOTOR = 9;
+        int ABSOLUTE_ENCODER = 0;
     }
 
     public interface Arm {
-        int MOTOR = 8;
-        int ABSOLUTE_ENCODER = 9;
+        int MOTOR = 12;
+        int ABSOLUTE_ENCODER = 7;
     }
 
     public interface Shooter {
-        int MOTOR = 17;
-        int IR_SENSOR = 11;
+        int MOTOR = 13;
+        int IR_SENSOR = 5;
     }
 
     public interface Funnel {
-        int MOTOR = 12;
-        int IR = 13;
+        int MOTOR = 19;
+        int IR = 9;
     }
 
     public interface Elevator {
-        int MOTOR = 14;
-        int BOTTOM_SWITCH = 15;
+        int MOTOR = 10;
+        int BOTTOM_SWITCH = 8;
     }
 
     public interface LED {
-        int LED_PORT = 9;
+        int LED_PORT = 0;
     }
 }
