@@ -110,10 +110,10 @@ public class RobotContainer {
         // ADD ALIGNMENT TO ALL SCORING ROUTINES
 
         // BOTTOM BUTTON -> LVL 2 FRONT
-        driver.getBottomButton().onTrue(new ScoreL2Front()).onFalse(new MoveToFeed());
+        driver.getBottomButton().whileTrue(new ScoreL2Front()).onFalse(new MoveToFeedReverse());
 
         // RIGHT BUTTON -> LVL 3 FRONT
-        driver.getRightButton().whileTrue(new ScoreL3Front()).onFalse(new MoveToFeed());
+        driver.getRightButton().whileTrue(new ScoreL3Front()).onFalse(new MoveToFeedReverse());
 
         // TOP BUTTON -> LVL 4 FRONT
         driver.getTopButton().whileTrue(new ScoreL4FrontVertical()).onFalse(new MoveToFeedReverse());

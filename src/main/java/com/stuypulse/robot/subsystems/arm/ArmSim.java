@@ -12,10 +12,8 @@ import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
-import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.util.ArmElevatorVisualizer;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -32,8 +30,6 @@ public class ArmSim extends Arm {
     private final SmartNumber targetAngle;
     private boolean rotateOverElevator;
     private static final ArmSim instance;
-
-    private static ArmVisualizer armVisualizer = ArmVisualizer.getInstance();
 
     static {
         instance = new ArmSim();

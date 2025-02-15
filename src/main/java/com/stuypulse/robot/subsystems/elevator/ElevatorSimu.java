@@ -16,7 +16,6 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.util.ArmElevatorVisualizer;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.BatterySim;

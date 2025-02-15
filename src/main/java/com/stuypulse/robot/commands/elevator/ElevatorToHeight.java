@@ -10,6 +10,7 @@ import com.stuypulse.robot.commands.led.LedSolidColor;
 import com.stuypulse.robot.constants.Settings.LED;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ElevatorToHeight extends InstantCommand {
@@ -25,7 +26,6 @@ public class ElevatorToHeight extends InstantCommand {
     public ElevatorToHeight(double targetHeight) {
         elevator = Elevator.getInstance();
         this.targetHeight = targetHeight;
-
         addRequirements(elevator);
     }
 
