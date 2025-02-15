@@ -52,8 +52,8 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND = 0.0;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 0.0;
+        double MAX_VELOCITY_METERS_PER_SECOND = 1.0;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 1.0;
 
         double FEED_HEIGHT_METERS = 1.0;
 
@@ -75,13 +75,13 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(6.615 - 90);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(150.6 - 90);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(165.0 - 90);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-83.385);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(60.6);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(75.0);
 
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(261.5 - 90);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(236.1 - 90);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(240.0 - 90);
+        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(171.5);
+        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(146.1);
+        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.0);
 
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
