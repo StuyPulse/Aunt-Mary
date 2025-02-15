@@ -12,8 +12,8 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
     public interface Elevator {
         // unconfirmed
-        double MIN_HEIGHT_METERS = 0.889; // FROM FLOOR TO TOP OF ELEVATOR
-        double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
+        double MIN_HEIGHT_METERS = Units.inchesToMeters(46.315); // FROM FLOOR TO TOP OF ELEVATOR
+        double MAX_HEIGHT_METERS = Units.inchesToMeters(81.1); // FROM FLOOR TO TOP OF ELEVATOR (estimate)
 
         double MASS_KG = 10.0; // unconfirmed
         double DRUM_RADIUS_METERS =

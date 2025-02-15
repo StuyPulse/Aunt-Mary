@@ -7,7 +7,6 @@
 package com.stuypulse.robot.util;
 
 import com.stuypulse.robot.constants.Constants;
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.arm.Arm;
 
@@ -30,16 +29,16 @@ public class ArmElevatorVisualizer {
     // Canvas
     private final Mechanism2d armElevator2d;
 
+    // Arm
+    private final MechanismRoot2d pivot;
+    private final MechanismLigament2d stick;
+
     // Elevator
     private final MechanismRoot2d elevatorBL;
     private final MechanismRoot2d elevatorTR;
 
     private final MechanismRoot2d stageTwoBL;
     private final MechanismRoot2d stageTwoTR;
-
-    // Arm
-    private final MechanismRoot2d pivot;
-    private final MechanismLigament2d stick;
 
     // Funnel
     private final MechanismRoot2d funnelBL;

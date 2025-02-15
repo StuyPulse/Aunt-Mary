@@ -41,7 +41,10 @@ public class ArmImpl extends Arm {
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
 
-        absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER, 1.0, Constants.Arm.ANGLE_OFFSET);
+        absoluteEncoder = new DutyCycleEncoder(
+            Ports.Arm.ABSOLUTE_ENCODER, 
+            1.0, 
+            Constants.Arm.ANGLE_OFFSET);
 
         // MagnetSensorConfigs magnet_config =
         //         new MagnetSensorConfigs()
@@ -50,7 +53,9 @@ public class ArmImpl extends Arm {
 
         // absoluteEncoder.getConfigurator().apply(magnet_config);
 
-        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL_ROTATIONS_PER_S, Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+        MotionProfile motionProfile = new MotionProfile(
+            Settings.Arm.MAX_VEL_ROTATIONS_PER_S, 
+            Settings.Arm.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
         
         controller = new MotorFeedforward(Settings.Arm.FF.kS, Settings.Arm.FF.kV, Settings.Arm.FF.kA).position()
             .add(new ArmFeedforward(Settings.Arm.FF.kG))

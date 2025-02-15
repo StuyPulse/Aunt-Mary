@@ -78,12 +78,9 @@ public class RobotContainer {
         new Trigger(((FunnelDefaultCommand) funnel.getDefaultCommand())::isUnjamming)
                 .onTrue(new LedSolidColor(LED.UNJAM_COLOR));
 
-        new Trigger(
-                        () ->
-                                (Math.abs(
-                                                climb.getAngle().getDegrees()
-                                                        - Settings.Climb.OPEN_ANGLE.getDegrees())
-                                        <= Settings.Climb.ANGLE_TOLERANCE.getDegrees()))
+        new Trigger(() -> (Math.abs(climb.getAngle().getDegrees()
+                                    - Settings.Climb.OPEN_ANGLE.getDegrees())
+                                    <= Settings.Climb.ANGLE_TOLERANCE.getDegrees()))
                 .onTrue(new LedRainbow());
 
         new Trigger(
@@ -119,7 +116,7 @@ public class RobotContainer {
         driver.getRightButton().whileTrue(new ScoreL3Front()).onFalse(new MoveToFeed());
 
         // TOP BUTTON -> LVL 4 FRONT
-        driver.getTopButton().whileTrue(new ScoreL4Front()).onFalse(new MoveToFeedReverse());
+        driver.getTopButton().whileTrue(new ScoreL4FrontVertical()).onFalse(new MoveToFeedReverse());
 
         // LEFT BUTTON -> BARGE SCORE
         driver.getLeftButton().whileTrue(new ScoreBarge()).onFalse(new MoveToFeed());

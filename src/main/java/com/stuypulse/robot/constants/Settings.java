@@ -75,16 +75,16 @@ public interface Settings {
         double MAX_VOLTAGE = 12.0;
 
         public interface PID {
-            double kP = 10.0;
+            double kP = 5.0;
             double kI = 0.0;
-            double kD = 0.2;
+            double kD = 0.4;
         }
 
         public interface FF {
             double kS = 0.20506;
-            double kV = 3.7672;
+            double kV = 0.9;
             double kA = 0.27;
-            double kG = 1.37;
+            double kG = 2.905;
         }
     }
 
@@ -125,6 +125,7 @@ public interface Settings {
             double kGAlgae = 0.0; // Change
         }
 
+        // Double check
         double MAX_VEL_ROTATIONS_PER_S = 75.0;
         double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 75.0;
         double ANGLE_TOLERANCE_DEGREES = 1.0;

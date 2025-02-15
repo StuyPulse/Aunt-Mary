@@ -9,22 +9,26 @@ package com.stuypulse.robot.commands.arm;
 import com.stuypulse.robot.commands.led.LedSolidColor;
 import com.stuypulse.robot.constants.Settings.LED;
 import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.subsystems.arm.ArmSim;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ArmToAngle extends InstantCommand {
     protected final Arm arm;
+    protected final ArmSim sim;
     protected final Rotation2d angle;
 
     public ArmToAngle(Rotation2d angle) {
         arm = Arm.getInstance();
+        sim = ArmSim.getSim();
         this.angle = angle;
     }
 
     @Override
     public void initialize() {
         arm.setTargetAngle(angle);
+        sim.setTargetAngle(angle);
     }
 
     @Override
