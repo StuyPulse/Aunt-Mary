@@ -16,7 +16,7 @@ public class ArmToL2Front extends ArmToAngle {
 
     @Override
     public void initialize() {
-        arm.setRotateBoolean(false);
+        arm.setRotateBoolean(true);
         super.initialize();
     }
 }

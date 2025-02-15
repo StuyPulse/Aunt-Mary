@@ -81,12 +81,9 @@ public class RobotContainer {
         new Trigger(((FunnelDefaultCommand) funnel.getDefaultCommand())::isUnjamming)
                 .onTrue(new LedSolidColor(LED.UNJAM_COLOR));
 
-        new Trigger(
-                        () ->
-                                (Math.abs(
-                                                climb.getAngle().getDegrees()
-                                                        - Settings.Climb.OPEN_ANGLE.getDegrees())
-                                        <= Settings.Climb.ANGLE_TOLERANCE.getDegrees()))
+        new Trigger(() -> (Math.abs(climb.getAngle().getDegrees()
+                                    - Settings.Climb.OPEN_ANGLE.getDegrees())
+                                    <= Settings.Climb.ANGLE_TOLERANCE.getDegrees()))
                 .onTrue(new LedRainbow());
 
         new Trigger(
@@ -116,13 +113,13 @@ public class RobotContainer {
         // ADD ALIGNMENT TO ALL SCORING ROUTINES
 
         // BOTTOM BUTTON -> LVL 2 FRONT
-        driver.getBottomButton().onTrue(new ScoreL2Front()).onFalse(new MoveToFeed());
+        driver.getBottomButton().whileTrue(new ScoreL2Front()).onFalse(new MoveToFeedReverse());
 
         // RIGHT BUTTON -> LVL 3 FRONT
-        driver.getRightButton().whileTrue(new ScoreL3Front()).onFalse(new MoveToFeed());
+        driver.getRightButton().whileTrue(new ScoreL3Front()).onFalse(new MoveToFeedReverse());
 
         // TOP BUTTON -> LVL 4 FRONT
-        driver.getTopButton().whileTrue(new ScoreL4Front()).onFalse(new MoveToFeedReverse());
+        driver.getTopButton().whileTrue(new ScoreL4FrontVertical()).onFalse(new MoveToFeedReverse());
 
         // LEFT BUTTON -> BARGE SCORE
         driver.getLeftButton().whileTrue(new ScoreBarge()).onFalse(new MoveToFeed());

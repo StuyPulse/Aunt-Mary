@@ -1,7 +1,5 @@
 package com.stuypulse.robot.subsystems.arm;
 
-import com.stuypulse.stuylib.network.SmartNumber;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -49,7 +47,6 @@ public class ArmVisualizer {
     }
 
     public void update() { 
-        
         arm.setAngle(Arm.getInstance().getCurrentAngle());
     }
 }

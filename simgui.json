@@ -13,17 +13,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Visualizers/Arm": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Visualizers/Arm-Elevator": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Visualizers/Elevator": {
         "window": {
           "visible": true
         }
@@ -50,8 +40,5 @@
         "open": true
       }
     }
-  },
-  "NetworkTables Info": {
-    "visible": true
   }
 }
