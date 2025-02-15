@@ -22,7 +22,7 @@ public class Constants {
                         / Math.PI;
 
         // FIND OUT REAL GEAR RATIO
-        double GEAR_RATIO = 1.0 / 5.0;
+        double GEAR_RATIO = 50.0 / 14.0;
 
         public interface Encoders {
             double GEARING = 4.0;
@@ -41,21 +41,21 @@ public class Constants {
 
     public interface Arm {
 
-        double GEAR_RATIO = 0.833333330333;
+        double GEAR_RATIO = 50.0 / 3.0;
 
         double ANGLE_OFFSET = 0.0; // rotations
         double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
 
         double AREA = 3; // meters squared
-        double ARM_LENGTH = Units.inchesToMeters(33);
+        double ARM_LENGTH = Units.inchesToMeters(29);
         double MOMENT_OF_INERTIA = Units.lbsToKilograms(12.8) * ARM_LENGTH * ARM_LENGTH / 3;
 
-        double LOWER_ANGLE_LIMIT = 0;
+        double LOWER_ANGLE_LIMIT = -360;
         double UPPER_ANGLE_LIMIT = 360;
     }
 
     public interface Froggy {
-        double GEAR_RATIO = 0.0;
+        double GEAR_RATIO = 4.0 / 1.0;
 
         double MINIMUM_ANGLE = 0.0;
         double MAXIMUM_ANGLE = 0.0;
@@ -64,7 +64,7 @@ public class Constants {
     }
 
     public interface Climb {
-        double GEAR_RATIO = 25;
+        double GEAR_RATIO = 75.0;
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0.0);
     }
 
