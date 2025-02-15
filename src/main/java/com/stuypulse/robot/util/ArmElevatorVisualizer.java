@@ -7,6 +7,7 @@
 package com.stuypulse.robot.util;
 
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.arm.Arm;
 
@@ -53,12 +54,27 @@ public class ArmElevatorVisualizer {
         // Mechanism2d
         armElevator2d = new Mechanism2d(Units.inchesToMeters(70), Units.inchesToMeters(150));
 
+        // Arm
+        pivot = armElevator2d.getRoot(
+                "Arm Origin", 
+                Units.inchesToMeters(35), 
+                Units.inchesToMeters(39));
+
+        stick = new MechanismLigament2d(
+            "Stick", 
+            Units.inchesToMeters(29), 
+            270, 
+            10, 
+            new Color8Bit(Color.kAqua));
+
+        pivot.append(stick);
+
         // Stage One
         // Bottom Left Node
         elevatorBL =
                 armElevator2d.getRoot(
                         "Elevator BL",
-                        Units.inchesToMeters(18.5),
+                        Units.inchesToMeters(30),
                         Constants.Elevator.MIN_HEIGHT_METERS);
 
         elevatorBL.append(
@@ -72,7 +88,7 @@ public class ArmElevatorVisualizer {
         elevatorBL.append(
                 new MechanismLigament2d(
                         "Bottom Tower",
-                        Units.inchesToMeters(10), // Change
+                        Units.inchesToMeters(10),
                         0,
                         10,
                         new Color8Bit(Color.kOrange)));
@@ -81,7 +97,7 @@ public class ArmElevatorVisualizer {
         elevatorTR =
                 armElevator2d.getRoot(
                         "Elevator TR",
-                        Units.inchesToMeters(23),
+                        Units.inchesToMeters(40),
                         Units.inchesToMeters(39) + Constants.Elevator.MIN_HEIGHT_METERS);
 
         elevatorTR.append(
@@ -95,7 +111,7 @@ public class ArmElevatorVisualizer {
         elevatorTR.append(
                 new MechanismLigament2d(
                         "Top Side",
-                        Units.inchesToMeters(10), // Change
+                        Units.inchesToMeters(10),
                         180,
                         10,
                         new Color8Bit(Color.kOrange)));
@@ -104,7 +120,7 @@ public class ArmElevatorVisualizer {
         // Bottom Left Node
         stageTwoBL =
                 armElevator2d.getRoot(
-                        "Outer BL", Units.inchesToMeters(14), Constants.Elevator.MIN_HEIGHT_METERS);
+                        "Outer BL", Units.inchesToMeters(31.5), Constants.Elevator.MIN_HEIGHT_METERS);
 
         stageTwoBL.append(
                 new MechanismLigament2d(
@@ -117,7 +133,7 @@ public class ArmElevatorVisualizer {
         stageTwoBL.append(
                 new MechanismLigament2d(
                         "Bottom Side",
-                        Units.inchesToMeters(6),
+                        Units.inchesToMeters(7),
                         0,
                         10,
                         new Color8Bit(Color.kYellow)));
@@ -126,7 +142,7 @@ public class ArmElevatorVisualizer {
         stageTwoTR =
                 armElevator2d.getRoot(
                         "Outer TR",
-                        Units.inchesToMeters(22),
+                        Units.inchesToMeters(38.5),
                         Units.inchesToMeters(35) + Constants.Elevator.MIN_HEIGHT_METERS);
 
         stageTwoTR.append(
@@ -140,38 +156,23 @@ public class ArmElevatorVisualizer {
         stageTwoTR.append(
                 new MechanismLigament2d(
                         "Top Side",
-                        Units.inchesToMeters(6),
+                        Units.inchesToMeters(7),
                         180,
                         10,
                         new Color8Bit(Color.kYellow)));
-
-        // Arm
-        pivot = armElevator2d.getRoot(
-                "Arm Origin", 
-                Units.inchesToMeters(18), 
-                Units.inchesToMeters(39));
-
-        stick = new MechanismLigament2d(
-            "Stick", 
-            Units.inchesToMeters(20), 
-            270, 
-            10, 
-            new Color8Bit(Color.kAqua));
-
-        pivot.append(stick);
 
         // Funnel
         // Bottom Left Node
         funnelBL =
                 armElevator2d.getRoot(
                         "Funnel BL",
-                        Units.inchesToMeters(-15), // Change
-                        Units.inchesToMeters(22.5));
+                        Units.inchesToMeters(17), 
+                        Units.inchesToMeters(23)); 
 
         funnelBL.append(
                 new MechanismLigament2d(
                         "Left Side",
-                        Units.inchesToMeters(6.5), // Change
+                        Units.inchesToMeters(14),
                         60,
                         10,
                         new Color8Bit(Color.kPurple)));
@@ -179,8 +180,8 @@ public class ArmElevatorVisualizer {
         funnelBL.append(
                 new MechanismLigament2d(
                         "Bottom Side",
-                        Units.inchesToMeters(12.5),
-                        0,
+                        Units.inchesToMeters(12),
+                        -30,
                         10,
                         new Color8Bit(Color.kPurple)));
 
@@ -188,23 +189,23 @@ public class ArmElevatorVisualizer {
         funnelTR =
                 armElevator2d.getRoot(
                         "Funnel TR",
-                        Units.inchesToMeters(0.5), // Change
-                        Units.inchesToMeters(28) // Change
+                        Units.inchesToMeters(29), 
+                        Units.inchesToMeters(23)
                         );
 
         funnelTR.append(
                 new MechanismLigament2d(
                         "Right Side",
-                        Units.inchesToMeters(6.5), // Change
-                        240,
+                        Units.inchesToMeters(5.5),
+                        235,
                         10,
                         new Color8Bit(Color.kPurple)));
 
         funnelTR.append(
                 new MechanismLigament2d(
                         "Top Side",
-                        Units.inchesToMeters(12.5), // Change
-                        180,
+                        Units.inchesToMeters(14), 
+                        110,
                         10,
                         new Color8Bit(Color.kPurple)));
 
@@ -216,25 +217,24 @@ public class ArmElevatorVisualizer {
         Elevator elevator = Elevator.getInstance();
         Arm arm = Arm.getInstance();
 
-        stageTwoBL.setPosition(
-                Units.inchesToMeters(14), elevator.getCurrentHeight() + Units.inchesToMeters(4));
-
-        stageTwoTR.setPosition(
-                Units.inchesToMeters(22), elevator.getCurrentHeight() + Units.inchesToMeters(39));
-
         pivot.setPosition(
-                Units.inchesToMeters(7),
-                elevator.getCurrentHeight() + Units.inchesToMeters(39) // Change
-            );
+                Units.inchesToMeters(35),
+                elevator.getCurrentHeight() + Units.inchesToMeters(39));
 
         stick.setAngle(arm.getCurrentAngle());
 
-        funnelBL.setPosition(
-                Units.inchesToMeters(0), Units.inchesToMeters(22.5) // Change
-                );
+        stageTwoBL.setPosition(
+                Units.inchesToMeters(31.5), elevator.getCurrentHeight() + Units.inchesToMeters(4));
+
+        stageTwoTR.setPosition(
+                Units.inchesToMeters(38.5), elevator.getCurrentHeight() + Units.inchesToMeters(39));
 
         funnelBL.setPosition(
-                Units.inchesToMeters(12.5), Units.inchesToMeters(30) // Change
+                Units.inchesToMeters(17), Units.inchesToMeters(23) + Constants.Elevator.MIN_HEIGHT_METERS 
+                );
+
+        funnelTR.setPosition(
+                Units.inchesToMeters(29), Units.inchesToMeters(23) + Constants.Elevator.MIN_HEIGHT_METERS
                 );
     }
 }
