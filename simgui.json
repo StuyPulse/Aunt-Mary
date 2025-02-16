@@ -14,7 +14,6 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/Pose": "Field2d",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
@@ -26,18 +25,6 @@
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
     "windows": {
-      "/Pose": {
-        "bottom": 1638,
-        "builtin": "2025 Reefscape",
-        "height": 8.051901817321777,
-        "left": 534,
-        "right": 3466,
-        "top": 291,
-        "width": 17.54825210571289,
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
         "bottom": 1638,
         "builtin": "2025 Reefscape",

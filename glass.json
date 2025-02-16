@@ -1,12 +1,6 @@
 {
   "NetworkTables": {
     "transitory": {
-      "Pose": {
-        "double[]##v_/Pose/robotPose": {
-          "open": true
-        },
-        "open": true
-      },
       "SmartDashboard": {
         "Alerts": {
           "open": true
@@ -146,7 +140,6 @@
     },
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/Pose": "Field2d",
       "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/Arm Mech2d": "Mechanism2d",
       "/SmartDashboard/Autonomous": "String Chooser",
@@ -163,14 +156,6 @@
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
     "windows": {
-      "/Pose": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "width": 16.541748046875
-      },
       "/SmartDashboard/Autonomous": {
         "window": {
           "visible": true
