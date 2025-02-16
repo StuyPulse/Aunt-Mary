@@ -6,7 +6,16 @@
 
 package com.stuypulse.robot.constants;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 public interface Gains {
+
+    public interface Swerve {
+        public interface Alignment {
+            PIDConstants XY = new PIDConstants(3, 0, 0);
+            PIDConstants THETA = new PIDConstants(3, 0, 0.2);
+        }
+    }
 
     public interface Elevator {
         public interface PID {

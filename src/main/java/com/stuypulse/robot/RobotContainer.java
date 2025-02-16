@@ -41,6 +41,7 @@ import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
@@ -87,6 +88,7 @@ public class RobotContainer {
         configureAutons();
 
         swerve.registerTelemetry(telemetry::telemeterize);
+        SmartDashboard.putData("Field", Field.FIELD2D);
     }
 
     /****************/
