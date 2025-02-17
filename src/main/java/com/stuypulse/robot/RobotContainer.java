@@ -13,10 +13,12 @@ import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilAtTargetAngle;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeAlgae;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
@@ -138,10 +140,9 @@ public class RobotContainer {
             .onFalse(new FroggyRollerStop());
 
         driver.getRightTriggerButton()
-            .onTrue(new SuperStructureToFeed())
-            .whileTrue(new FunnelAcquire())
-            .onFalse(new FunnelStop())
-            .whileTrue(new ShooterAcquireCoral());
+            .onTrue(new FroggyPivotToCoralGroundPickup())
+            .whileTrue(new FroggyRollerIntakeCoral())
+            .onFalse(new FroggyPivotToStow());
 
         driver.getRightBumper()
             .whileTrue(new FroggyPivotToL1()
