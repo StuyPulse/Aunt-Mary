@@ -82,5 +82,8 @@ public abstract class Arm extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());
+
+        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Target Angle (deg)", getState().getTargetAngle().getDegrees());
     }
 }

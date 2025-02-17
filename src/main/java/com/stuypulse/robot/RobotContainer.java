@@ -35,12 +35,15 @@ import com.stuypulse.robot.commands.superstructure.SuperStructureToBarge;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToFeed;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Front;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
@@ -87,6 +90,7 @@ public class RobotContainer {
         configureAutons();
 
         swerve.registerTelemetry(telemetry::telemeterize);
+        SmartDashboard.putData("Field", Field.FIELD2D);
     }
 
     /****************/
@@ -143,23 +147,44 @@ public class RobotContainer {
             .onFalse(new FroggyRollerStop().andThen(new FroggyPivotToStow()));
 
         driver.getTopButton()
-            .whileTrue(new SuperStructureToL4Front()
-                .andThen(new SuperStructureWaitUntilAtTarget())
-                .andThen(new ShooterShootForwards()))
+            .whileTrue(
+                new ConditionalCommand(
+                    new SuperStructureToL4Front()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, true)))
+                        .andThen(new ShooterShootBackwards()), 
+                    new SuperStructureToL4Back()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, false)))
+                        .andThen(new ShooterShootForwards()), 
+                    () -> swerve.isFrontFacingReef())
+            )
             .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 
         driver.getRightButton()
-            .whileTrue(new SuperStructureToL3Front()
-                .andThen(new SuperStructureWaitUntilAtTarget())
-                .andThen(new ShooterShootForwards()))
+            .whileTrue(
+                new ConditionalCommand(
+                    new SuperStructureToL3Front()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, true)))
+                        .andThen(new ShooterShootBackwards()), 
+                    new SuperStructureToL3Back()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, false)))
+                        .andThen(new ShooterShootForwards()), 
+                    () -> swerve.isFrontFacingReef())
+            )
             .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 
         driver.getBottomButton()
-            .whileTrue(new SuperStructureToL2Front()
-                .andThen(new SuperStructureWaitUntilAtTarget())
-                .andThen(new ShooterShootForwards()))
+            .whileTrue(
+                new ConditionalCommand(
+                    new SuperStructureToL2Front()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, true)))
+                        .andThen(new ShooterShootForwards()), 
+                    new SuperStructureToL2Back()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, false)))
+                        .andThen(new ShooterShootForwards()), 
+                    () -> swerve.isFrontFacingReef())
+            )
             .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 

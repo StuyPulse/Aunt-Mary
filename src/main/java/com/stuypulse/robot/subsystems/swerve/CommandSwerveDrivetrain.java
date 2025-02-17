@@ -2,28 +2,45 @@ package com.stuypulse.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
+import com.stuypulse.robot.constants.Gains;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
+import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -44,17 +61,28 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
-    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
-    /* Red alliance sees forward as 0 degrees (toward blue alliance wall) */
-    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.kZero;
-    /* Keep track if we've ever applied the operator perspective before or not */
-    private boolean m_hasAppliedOperatorPerspective = false;
-
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    private final SwerveRequest.FieldCentric fieldCentricRequest = new SwerveRequest.FieldCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withDeadband(Settings.Swerve.MODULE_VELOCITY_DEADBAND_M_PER_S)
+        .withDesaturateWheelSpeeds(true);
+
+    private final SwerveRequest.RobotCentric robotCentricRequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withDeadband(Settings.Swerve.MODULE_VELOCITY_DEADBAND_M_PER_S)
+        .withDesaturateWheelSpeeds(true);
+
+    public SwerveRequest.FieldCentric getFieldCentricSwerveRequest() {
+        return this.fieldCentricRequest;
+    }
+
+    public SwerveRequest.RobotCentric getRobotCentricSwerveRequest() {
+        return this.robotCentricRequest;
+    }
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -226,27 +254,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
-    @Override
-    public void periodic() {
-        /*
-         * Periodically try to apply the operator perspective.
-         * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
-         * This allows us to correct the perspective in case the robot code restarts mid-match.
-         * Otherwise, only check and apply the operator perspective if the DS is disabled.
-         * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
-         */
-        if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
-                setOperatorPerspectiveForward(
-                    allianceColor == Alliance.Red
-                        ? kRedAlliancePerspectiveRotation
-                        : kBlueAlliancePerspectiveRotation
-                );
-                m_hasAppliedOperatorPerspective = true;
-            });
-        }
-    }
-
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -294,5 +301,76 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+
+    public Pose2d getPose() {
+        return getState().Pose;
+    }
+
+    public void configureAutoBuilder() {
+        try{
+            AutoBuilder.configure(
+                this::getPose,
+                this::resetPose,
+                this::getChassisSpeeds,
+                this::setChassisSpeeds,
+                new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
+                RobotConfig.fromGUISettings(),
+                () -> false,
+                instance
+            );
+            // PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Command followPathCommand(String pathName) {
+        try {
+            return followPathCommand(PathPlannerPath.fromPathFile(pathName));
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException(pathName + " does not exist");
+        }
+    }
+
+    public Command followPathCommand(PathPlannerPath path) {
+        return AutoBuilder.followPath(path);
+    }
+
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            moduleStates[i] = getModule(i).getCurrentState();
+        }
+        return moduleStates;
+    }
+
+    private ChassisSpeeds getChassisSpeeds() {
+        return getKinematics().toChassisSpeeds(getModuleStates());
+    }
+
+    private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
+        ChassisSpeeds speeds = new ChassisSpeeds(robotSpeeds.vxMetersPerSecond, robotSpeeds.vyMetersPerSecond, -robotSpeeds.omegaRadiansPerSecond);
+        setControl(new SwerveRequest.RobotCentric().withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(speeds.omegaRadiansPerSecond));
+    }
+
+    public boolean isFrontFacingReef() {
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.REEF_CENTER));
+        Rotation2d robotHeading = getPose().getRotation();
+        Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
+
+        return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
+
+        SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
+
+        Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }
 }

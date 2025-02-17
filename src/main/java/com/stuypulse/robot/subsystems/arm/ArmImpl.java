@@ -50,8 +50,8 @@ public class ArmImpl extends Arm {
 
         // absoluteEncoder.getConfigurator().apply(magnetConfig);
 
-        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL_DEG_PER_S, Settings.Arm.MAX_ACCEL_DEG_PER_S_PER_S);
-        motionProfile.reset(Settings.Arm.STOW_ANGLE.getDegrees());
+        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getRotations(), Settings.Arm.MAX_ACCEL.getRotations());
+        motionProfile.reset(Settings.Arm.STOW_ANGLE.getRotations());
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
             .add(new ArmFeedforward(Gains.Arm.FF.kG_EMPTY))
@@ -61,7 +61,7 @@ public class ArmImpl extends Arm {
 
     @Override
     public boolean atTargetAngle() {
-        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < Settings.Arm.ANGLE_TOLERANCE_DEGREES;
+        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < Settings.Arm.ANGLE_TOLERANCE.getDegrees();
     }
 
     private Rotation2d getTargetAngle() {
@@ -80,9 +80,6 @@ public class ArmImpl extends Arm {
         
         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
         motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
-
-        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Climb/Current", motor.getStatorCurrent().getValueAsDouble());

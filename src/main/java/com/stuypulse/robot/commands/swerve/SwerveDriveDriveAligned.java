@@ -1,33 +1,38 @@
 package com.stuypulse.robot.commands.swerve;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
+import java.util.function.Supplier;
+
+import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
-import com.stuypulse.robot.constants.Settings.Driver.Turn;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
-import com.stuypulse.stuylib.streams.numbers.IStream;
-import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDrive extends Command {
+public class SwerveDriveDriveAligned extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-
     private final Gamepad driver;
 
     private final VStream linearVelocity;
-    private final IStream angularVelocity;
 
-    public SwerveDriveDrive(Gamepad driver) {
+    private final Supplier<Rotation2d> targetAngle;
+    private final AngleController angleController;
+
+    public SwerveDriveDriveAligned(Gamepad driver, Supplier<Rotation2d> targetAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
+        this.driver = driver;
+
+        this.targetAngle = targetAngle;
 
         linearVelocity = VStream.create(this::getDriverInputAsVelocity)
             .filtered(
@@ -38,17 +43,13 @@ public class SwerveDriveDrive extends Command {
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
 
-        angularVelocity = IStream.create(driver::getRightX)
-            .filtered(
-                x -> -x,
-                x -> SLMath.deadband(x, Turn.DEADBAND.get()),
-                x -> SLMath.spow(x, Turn.POWER.get()),
-                x -> x * Turn.MAX_TELEOP_TURN_SPEED.get(),
-                new LowPassFilter(Turn.RC));
-
-        this.driver = driver;
-
+        angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD);
+                
         addRequirements(swerve);
+    }
+
+    public SwerveDriveDriveAligned(Gamepad driver, Rotation2d targetAngle) {
+        this(driver, () -> targetAngle);
     }
 
     private Vector2D getDriverInputAsVelocity() {
@@ -60,6 +61,8 @@ public class SwerveDriveDrive extends Command {
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withVelocityX(linearVelocity.get().x)
             .withVelocityY(linearVelocity.get().y)
-            .withRotationalRate(angularVelocity.getAsDouble()));
+            .withRotationalRate(angleController.update(
+                Angle.fromRotation2d(targetAngle.get()),
+                Angle.fromRotation2d(swerve.getPose().getRotation()))));
     }
 }

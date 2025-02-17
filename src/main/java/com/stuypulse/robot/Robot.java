@@ -28,9 +28,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robot = new RobotContainer();
-
-        // Check with Philip to automatically reset elevator encoder
-        // new ElevatorToBottom().schedule();
     }
 
     @Override

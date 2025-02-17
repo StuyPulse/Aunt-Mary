@@ -164,3 +164,6 @@ bin/
 # Logs
 *.wpilog
 *.log
+
+ctre_sim/
+logs/sim*
