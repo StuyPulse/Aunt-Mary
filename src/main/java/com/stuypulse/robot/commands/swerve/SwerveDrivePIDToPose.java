@@ -73,8 +73,7 @@ public class SwerveDrivePIDToPose extends Command {
 
         angularVelocity = IStream.create(() -> controller.getOutput().omegaRadiansPerSecond)
             .filtered(
-                x -> -x,
-                x -> SLMath.deadband(x, Settings.Swerve.Alignment.MAX_ANGULAR_VELOCITY.get()),
+                x -> SLMath.clamp(x, Settings.Swerve.Alignment.MAX_ANGULAR_VELOCITY.get()),
                 new RateLimit(Settings.Swerve.Alignment.MAX_ANGULAR_ACCELERATION.get()));
 
         this.poseSupplier = poseSupplier;
@@ -144,7 +143,7 @@ public class SwerveDrivePIDToPose extends Command {
 
         controller.update(targetPose, swerve.getPose());
         
-        swerve.setControl(swerve.getFieldCentricSwerveRequest()
+        swerve.setControl(swerve.getRobotCentricSwerveRequest()
             .withVelocityX(linearVelocity.get().x)
             .withVelocityY(linearVelocity.get().y)
             .withRotationalRate(angularVelocity.get()));
