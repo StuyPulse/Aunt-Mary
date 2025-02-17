@@ -22,6 +22,7 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -68,6 +69,7 @@ public class ArmSim extends Arm {
             Settings.Arm.MAX_VEL.getRadians(),
             Settings.Arm.MAX_ACCEL.getRadians()
         );
+        motionProfile.reset(Settings.Arm.STOW_ANGLE.getRadians());
     }
 
     @Override
@@ -87,7 +89,12 @@ public class ArmSim extends Arm {
     @Override
     public void periodic() {
         super.periodic();
-        controller.setNextR(VecBuilder.fill(motionProfile.get(getTargetAngle().getRadians()), 0));
+
+        double setpoint = motionProfile.get(getTargetAngle().getRadians());
+
+        SmartDashboard.putNumber("Arm/Setpoint (deg)", Units.radiansToDegrees(setpoint));
+
+        controller.setNextR(VecBuilder.fill(setpoint, 0));
         controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 

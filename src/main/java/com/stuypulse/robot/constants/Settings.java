@@ -165,7 +165,7 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-93);
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(100.0);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(150.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(200.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }

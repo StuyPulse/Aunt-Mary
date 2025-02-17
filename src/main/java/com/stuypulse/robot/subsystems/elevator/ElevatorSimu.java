@@ -66,6 +66,8 @@ public class ElevatorSimu extends Elevator {
         motionProfile = new MotionProfile(
             Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND,
             Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+
+        motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
     }
 
     private double getTargetHeight() {

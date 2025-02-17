@@ -161,6 +161,15 @@
                 1.0
               ],
               "id": "NT:/SmartDashboard/Arm/Target Angle (deg)"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Arm/Setpoint (deg)"
             }
           ]
         }
