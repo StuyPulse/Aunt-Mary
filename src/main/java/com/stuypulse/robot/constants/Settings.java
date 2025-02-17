@@ -48,18 +48,22 @@ public interface Settings {
         }
 
         public interface Alignment {
-            SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Max Velocity (m per s)", 3.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Max Acceleration (m per s^2)", 5.0);
-            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
-            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
-            
-            SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.02); 
-            SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.02);
-            SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Theta Tolerance (rad)", Units.degreesToRadians(4));
+            public interface Constraints {
+                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
+                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
+                SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
+                SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
+            }
 
-            SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Max Velocity When Aligned", 0.15);
+            public interface Tolerances {
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.02); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.02);
+                SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(4));
+    
+                SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
 
-            double ALIGNMENT_DEBOUNCE = 0.15;
+                double ALIGNMENT_DEBOUNCE = 0.15;
+            }
 
             public interface Targets {
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = 0.0;

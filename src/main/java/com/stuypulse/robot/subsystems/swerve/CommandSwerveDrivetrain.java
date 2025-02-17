@@ -2,8 +2,11 @@ package com.stuypulse.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -336,7 +339,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public SwerveModuleState[] getModuleStates() {
-        return (SwerveModuleState[]) Arrays.stream(getModules()).map((module) -> module.getCurrentState()).toArray();
+        SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            moduleStates[i] = getModule(i).getCurrentState();
+        }
+        return moduleStates;
     }
 
     private ChassisSpeeds getChassisSpeeds() {
@@ -358,7 +365,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
+
         SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
+
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }
 }
