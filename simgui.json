@@ -20,6 +20,10 @@
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 0": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 1": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 2": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 3": "Mechanism2d",
       "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
@@ -51,6 +55,9 @@
           "open": true
         },
         "Elevator": {
+          "open": true
+        },
+        "Enabled Subsystems": {
           "open": true
         },
         "Shooter": {

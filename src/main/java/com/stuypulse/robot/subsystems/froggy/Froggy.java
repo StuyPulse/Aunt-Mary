@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.subsystems.froggy;
 
+import com.stuypulse.robot.constants.Settings;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -31,12 +33,22 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public enum RollerState {
-        INTAKE_CORAL,
-        INTAKE_ALGAE,
-        SHOOT_CORAL,
-        SHOOT_ALGAE,
-        HOLD_ALGAE,
-        STOP
+        INTAKE_CORAL(-Settings.Froggy.CORAL_INTAKE_SPEED),
+        INTAKE_ALGAE(Settings.Froggy.ALGAE_INTAKE_SPEED),
+        SHOOT_CORAL(Settings.Froggy.CORAL_OUTTAKE_SPEED),
+        SHOOT_ALGAE(-Settings.Froggy.ALGAE_OUTTAKE_SPEED),
+        HOLD_ALGAE(Settings.Froggy.HOLD_ALGAE_SPEED),
+        STOP(0);
+
+        private Number speed;
+
+        private RollerState(Number speed) {
+            this.speed = speed;
+        }
+
+        public Number getTargetSpeed() {
+            return this.speed;
+        }
     }
 
     private PivotState pivotState;

@@ -59,7 +59,13 @@ public class ElevatorImpl extends Elevator {
             motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
         }
 
-        motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
+            motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+        }
+        else {
+            motor.setVoltage(0);
+        }
+
 
         SmartDashboard.putNumber("Elevator/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());

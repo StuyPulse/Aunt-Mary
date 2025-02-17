@@ -77,30 +77,6 @@ public class FroggyImpl extends Froggy {
         }).filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
     }
 
-    private void setRollerBasedOnState() {
-        switch (getRollerState()) {
-            case INTAKE_CORAL:
-                rollerMotor.set(-Settings.Froggy.CORAL_INTAKE_SPEED);
-                break;
-            case INTAKE_ALGAE:
-                rollerMotor.set(Settings.Froggy.ALGAE_INTAKE_SPEED);
-                break;
-            case SHOOT_ALGAE:
-                rollerMotor.set(-Settings.Froggy.ALGAE_OUTTAKE_SPEED);
-                break;
-            case SHOOT_CORAL:
-                rollerMotor.set(Settings.Froggy.CORAL_OUTTAKE_SPEED);
-                break;
-            case HOLD_ALGAE:
-                rollerMotor.set(Settings.Froggy.HOLD_ALGAE_SPEED);
-                break;
-            case STOP:
-                rollerMotor.set(0);
-            default:
-                break;
-        }
-    }
-
     private Rotation2d getCurrentAngle() {
         // return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations());
@@ -142,11 +118,15 @@ public class FroggyImpl extends Froggy {
     public void periodic() {
         super.periodic();
 
-        setRollerBasedOnState();
-
-        // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-
-        pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+        if (Settings.EnabledSubsystems.FROGGY.get()) {
+            rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
+            // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+            pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+        }
+        else {
+            rollerMotor.set(0);
+            pivotMotor.setVoltage(0);
+        }
 
         SmartDashboard.putBoolean("Froggy/At Target Angle", isAtTargetAngle());
 

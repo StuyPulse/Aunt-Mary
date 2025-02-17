@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.superstructure;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
@@ -99,10 +100,10 @@ public class SuperStructure extends SubsystemBase{
         ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
 
         if (getTargetState() == SuperStructureTargetState.FEED) {
-            if (currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) {
+            if ((currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
                 arm.setState(ArmState.FEED);
             }
-            else if (currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle() && currentElevatorState != ElevatorState.FEED) {
+            else if (((currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) && currentElevatorState != ElevatorState.FEED) {
                 elevator.setState(ElevatorState.FEED);
             }
             else {
@@ -110,7 +111,7 @@ public class SuperStructure extends SubsystemBase{
             }
         }
         else {
-            if (targetElevatorState != currentElevatorState && arm.atTargetAngle()) {
+            if ((targetElevatorState != currentElevatorState && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) {
                 if (currentArmState == ArmState.FEED) {
                     arm.setState(ArmState.VERTICAL_DOWN);
                 }
@@ -118,7 +119,7 @@ public class SuperStructure extends SubsystemBase{
                     elevator.setState(targetElevatorState);
                 }
             }
-            else if (targetArmState != currentArmState && elevator.atTargetHeight()) {
+            else if ((targetArmState != currentArmState && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
                 arm.setState(targetArmState);
             }
         }

@@ -222,14 +222,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
-    /**
-     * Returns a command that applies the specified control request to this swerve drivetrain.
-     *
-     * @param request Function returning the request to apply
-     * @return Command to run
-     */
-    public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        return run(() -> this.setControl(requestSupplier.get()));
+    @Override
+    public void setControl(SwerveRequest request) {
+        if (Settings.EnabledSubsystems.SWERVE.get()) {
+            super.setControl(request);
+        }
+        else {
+            super.setControl(new SwerveRequest.Idle());
+        }
     }
 
     /**

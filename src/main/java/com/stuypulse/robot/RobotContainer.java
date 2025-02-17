@@ -104,10 +104,7 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         leds.setDefaultCommand(new LEDDefaultCommand());
-        shooter.setDefaultCommand(new ConditionalCommand(
-            new ShooterAcquireCoral().andThen(new BuzzController(driver)), 
-            new ShooterStop(), 
-            () -> shooter.hasCoral()));
+        shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral()));
     }
 
     /***************/
@@ -132,7 +129,9 @@ public class RobotContainer {
                     new FroggyRollerShootCoral(), 
                     new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-                () -> superStructure.isInScoreState()));
+                () -> superStructure.isInScoreState()))
+            .onFalse(new ShooterStop())
+            .onFalse(new FroggyRollerStop());
 
         // ground algae pickup
         driver.getLeftTriggerButton()

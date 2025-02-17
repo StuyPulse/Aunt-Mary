@@ -7,6 +7,7 @@
 package com.stuypulse.robot.constants;
 
 import com.pathplanner.lib.path.PathConstraints;
+import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.VecBuilder;
@@ -27,6 +28,17 @@ import edu.wpi.first.wpilibj.util.Color;
 public interface Settings {
 
     double DT = 0.020;
+
+    public interface EnabledSubsystems {
+        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve", true);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm", true);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator", true);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel", true);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb", true);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy", true);
+        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision", true);
+    }
 
     public interface Swerve {
         double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.03;
@@ -109,10 +121,11 @@ public interface Settings {
         Vector<N3> MIN_STDDEVS = VecBuilder.fill(0.3, 0.3, 5);
     }
 
-    public interface LokiShooter {
-        SmartNumber CORAL_SHOOT_SPEED = new SmartNumber("Coral Shoot Speed", 0.75);
+    public interface Shooter {
+        SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Coral Shoot Speed Forward", 0.75);
+        SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Coral Shoot Speed Reverse", -0.75);
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.3);
-        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", 0.45);
+        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", -0.45);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
 
         double HAS_CORAL_DEBOUNCE = 0.1;
@@ -123,7 +136,7 @@ public interface Settings {
 
     public interface Funnel {
         SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 0.4);
-        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", 0.4);
+        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", -0.4);
 
         double STALL_CURRENT = 30;
         double STALL_DETECTION_TIME = 0.25;

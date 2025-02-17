@@ -98,8 +98,13 @@ public class ArmSim extends Arm {
         controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
-        sim.setInputVoltage(controller.getU(0));
-        sim.update(Settings.DT);
+        if (Settings.EnabledSubsystems.ARM.get()) {
+            sim.setInputVoltage(controller.getU(0));
+            sim.update(Settings.DT);
+        }
+        else {
+            sim.setInputVoltage(0);
+        }
 
         SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());

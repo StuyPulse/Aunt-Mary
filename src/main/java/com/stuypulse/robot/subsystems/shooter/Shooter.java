@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.shooter;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,12 +25,22 @@ public abstract class Shooter extends SubsystemBase {
     }
 
     public enum ShooterState {
-        ACQUIRE_CORAL,
-        ACQUIRE_ALGAE,
-        SHOOT_CORAL_FORWARD,
-        SHOOT_CORAL_REVERSE,
-        SHOOT_ALGAE,
-        STOP,
+        ACQUIRE_CORAL(Settings.Shooter.CORAL_ACQUIRE_SPEED),
+        ACQUIRE_ALGAE(Settings.Shooter.ALGAE_ACQUIRE_SPEED),
+        SHOOT_CORAL_FORWARD(Settings.Shooter.CORAL_SHOOT_SPEED_FORWARD),
+        SHOOT_CORAL_REVERSE(Settings.Shooter.CORAL_SHOOT_SPEED_REVERSE),
+        SHOOT_ALGAE(Settings.Shooter.ALGAE_SHOOT_SPEED),
+        STOP(0);
+
+        private Number speed;
+
+        private ShooterState(Number speed) {
+            this.speed = speed;
+        }
+
+        public double getSpeed() {
+            return this.speed.doubleValue();
+        }
     }
 
     private ShooterState state;

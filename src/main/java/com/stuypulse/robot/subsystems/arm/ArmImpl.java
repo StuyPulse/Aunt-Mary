@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -79,8 +80,13 @@ public class ArmImpl extends Arm {
     public void periodic() {
         super.periodic();
         
-        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-        motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+        if (Settings.EnabledSubsystems.ARM.get()) {
+            // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+            motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+        }
+        else {
+            motor.setVoltage(0);
+        }
 
         SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Climb/Current", motor.getStatorCurrent().getValueAsDouble());

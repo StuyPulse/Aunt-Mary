@@ -96,7 +96,12 @@ public class ElevatorSimu extends Elevator {
         controller.correct(VecBuilder.fill(sim.getPositionMeters(), sim.getVelocityMetersPerSecond()));
         controller.predict(Settings.DT);
 
-        sim.setInputVoltage(controller.getU(0));
-        sim.update(Settings.DT);
+        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
+            sim.setInputVoltage(controller.getU(0));
+            sim.update(Settings.DT);
+        }
+        else {
+            sim.setInputVoltage(0);
+        }
     }
 }
