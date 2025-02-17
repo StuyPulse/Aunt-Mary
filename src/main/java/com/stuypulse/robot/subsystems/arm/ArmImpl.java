@@ -22,6 +22,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -36,6 +38,8 @@ public class ArmImpl extends Arm {
     private DutyCycleEncoder absoluteEncoder;
 
     private Controller controller;
+
+    private Optional<Double> voltageOverride;
 
     public ArmImpl() {
         super();
@@ -59,6 +63,9 @@ public class ArmImpl extends Arm {
             .add(new ArmFeedforward(Gains.Arm.FF.kG_EMPTY))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
+
+        
+        voltageOverride = Optional.empty();
     }
 
     @Override
@@ -77,12 +84,22 @@ public class ArmImpl extends Arm {
     }
 
     @Override
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
         
         if (Settings.EnabledSubsystems.ARM.get()) {
-            // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-            motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+            if (voltageOverride.isPresent()) {
+                motor.setVoltage(voltageOverride.get());
+            }
+            else {
+                // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+            }
         }
         else {
             motor.setVoltage(0);

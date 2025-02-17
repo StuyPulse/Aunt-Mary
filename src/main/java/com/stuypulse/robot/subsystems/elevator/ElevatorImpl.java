@@ -17,12 +17,16 @@ import com.stuypulse.robot.constants.Settings;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
     private final DigitalInput bumpSwitchBottom;
+
+    private Optional<Double> voltageOverride;
 
     protected ElevatorImpl() {
         super();
@@ -31,6 +35,8 @@ public class ElevatorImpl extends Elevator {
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
+
+        voltageOverride = Optional.empty();
     }
 
     @Override
@@ -52,6 +58,11 @@ public class ElevatorImpl extends Elevator {
     }
 
     @Override
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
@@ -60,7 +71,12 @@ public class ElevatorImpl extends Elevator {
         }
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {
-            motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+            if (voltageOverride.isPresent()) {
+                motor.setVoltage(voltageOverride.get());
+            }
+            else {
+                motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+            }
         }
         else {
             motor.setVoltage(0);

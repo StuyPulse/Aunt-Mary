@@ -6,6 +6,9 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
+import java.lang.StackWalker.Option;
+import java.util.Optional;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
@@ -73,10 +76,13 @@ public abstract class Arm extends SubsystemBase {
 
     public void setState(ArmState state) {
         this.state = state;
+        setVoltageOverride(Optional.empty());
     }
 
     public abstract Rotation2d getCurrentAngle();
     public abstract boolean atTargetAngle();
+
+    public abstract void setVoltageOverride(Optional<Double> voltage);
 
     @Override
     public void periodic() {

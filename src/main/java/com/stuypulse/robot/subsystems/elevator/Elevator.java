@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.subsystems.elevator;
 
+import java.util.Optional;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
@@ -63,6 +65,7 @@ public abstract class Elevator extends SubsystemBase {
 
     public void setState(ElevatorState state) {
         this.state = state;
+        setVoltageOverride(Optional.empty());
     }
 
     public ElevatorState getState() {
@@ -71,6 +74,8 @@ public abstract class Elevator extends SubsystemBase {
 
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
+
+    public abstract void setVoltageOverride(Optional<Double> voltage);
 
     @Override
     public void periodic() {

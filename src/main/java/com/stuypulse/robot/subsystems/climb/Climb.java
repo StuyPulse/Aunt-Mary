@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -38,9 +40,12 @@ public abstract class Climb extends SubsystemBase {
 
     public void setState(ClimbState state) {
         this.state = state;
+        setVoltageOverride(Optional.empty());
     }
 
     public abstract boolean atTargetAngle();
+
+    public abstract void setVoltageOverride(Optional<Double> voltage);
 
     @Override
     public void periodic() {

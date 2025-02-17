@@ -8,6 +8,8 @@ package com.stuypulse.robot.subsystems.arm;
 
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
+import java.util.Optional;
+
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 
@@ -31,6 +33,8 @@ public class ArmSim extends Arm {
     private final SingleJointedArmSim sim;
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
+
+    private Optional<Double> voltageOverride;
 
     protected ArmSim() {
         sim = new SingleJointedArmSim(
@@ -70,6 +74,8 @@ public class ArmSim extends Arm {
             Settings.Arm.MAX_ACCEL.getRadians()
         );
         motionProfile.reset(Settings.Arm.STOW_ANGLE.getRadians());
+
+        voltageOverride = Optional.empty();
     }
 
     @Override
@@ -87,6 +93,11 @@ public class ArmSim extends Arm {
     }
 
     @Override
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
@@ -99,8 +110,14 @@ public class ArmSim extends Arm {
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ARM.get()) {
-            sim.setInputVoltage(controller.getU(0));
-            sim.update(Settings.DT);
+            if (voltageOverride.isPresent()) {
+                sim.setInputVoltage(voltageOverride.get());
+                sim.update(Settings.DT);
+            }
+            else {
+                sim.setInputVoltage(controller.getU(0));
+                sim.update(Settings.DT);
+            }
         }
         else {
             sim.setInputVoltage(0);

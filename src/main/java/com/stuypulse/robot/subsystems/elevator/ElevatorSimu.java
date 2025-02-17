@@ -8,6 +8,8 @@ package com.stuypulse.robot.subsystems.elevator;
 
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
+import java.util.Optional;
+
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 
@@ -29,6 +31,8 @@ public class ElevatorSimu extends Elevator {
     private final ElevatorSim sim;
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
+
+    private Optional<Double> voltageOverride;
 
     protected ElevatorSimu() {
         sim = new ElevatorSim(
@@ -68,6 +72,8 @@ public class ElevatorSimu extends Elevator {
             Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
 
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
+
+        voltageOverride = Optional.empty();
     }
 
     private double getTargetHeight() {
@@ -85,6 +91,11 @@ public class ElevatorSimu extends Elevator {
     }
 
     @Override
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
@@ -97,8 +108,14 @@ public class ElevatorSimu extends Elevator {
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {
-            sim.setInputVoltage(controller.getU(0));
-            sim.update(Settings.DT);
+            if (voltageOverride.isPresent()) {
+                sim.setInputVoltage(0);
+                sim.update(Settings.DT);
+            }
+            else {
+                sim.setInputVoltage(controller.getU(0));
+                sim.update(Settings.DT);
+            }
         }
         else {
             sim.setInputVoltage(0);

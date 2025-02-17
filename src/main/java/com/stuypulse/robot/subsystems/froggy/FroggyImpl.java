@@ -24,6 +24,8 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -40,6 +42,8 @@ public class FroggyImpl extends Froggy {
     private Controller controller;
 
     private BStream isStalling;
+
+    private Optional<Double> pivotVoltageOverride;
 
     protected FroggyImpl() {
         super();
@@ -75,6 +79,8 @@ public class FroggyImpl extends Froggy {
                     return false;
             }
         }).filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
+
+        pivotVoltageOverride = Optional.empty();
     }
 
     private Rotation2d getCurrentAngle() {
@@ -115,13 +121,23 @@ public class FroggyImpl extends Froggy {
     }
 
     @Override
+    public void setPivotVoltageOverride(Optional<Double> voltage) {
+        this.pivotVoltageOverride = voltage;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {
             rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
-            // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-            pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+            if (pivotVoltageOverride.isPresent()) {
+                pivotMotor.setVoltage(pivotVoltageOverride.get());
+            }
+            else {
+                // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+            }
         }
         else {
             rollerMotor.set(0);

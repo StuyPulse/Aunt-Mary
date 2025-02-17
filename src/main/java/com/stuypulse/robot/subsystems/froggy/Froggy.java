@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.subsystems.froggy;
 
+import java.util.Optional;
+
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -65,6 +67,7 @@ public abstract class Froggy extends SubsystemBase {
 
     public void setPivotState(PivotState state) {
         this.pivotState = state;
+        setPivotVoltageOverride(Optional.empty());
     }
 
     public RollerState getRollerState() {
@@ -77,6 +80,8 @@ public abstract class Froggy extends SubsystemBase {
 
     public abstract boolean isAtTargetAngle();
     public abstract boolean isStalling();
+
+    public abstract void setPivotVoltageOverride(Optional<Double> voltage);
 
     @Override
     public void periodic() {

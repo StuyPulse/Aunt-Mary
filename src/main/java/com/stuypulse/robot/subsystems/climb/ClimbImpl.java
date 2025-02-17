@@ -12,12 +12,16 @@ import com.stuypulse.robot.constants.Settings;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbImpl extends Climb {
     private TalonFX motor;
     // private CANcoder absoluteEncoder;
+
+    private Optional<Double> voltageOverride;
 
     protected ClimbImpl() {
         super();
@@ -32,6 +36,8 @@ public class ClimbImpl extends Climb {
         //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
 
         // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+
+        voltageOverride = Optional.empty();
     }
 
     private Rotation2d getTargetAngle() {
@@ -57,9 +63,19 @@ public class ClimbImpl extends Climb {
     }
 
     @Override
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
+    }
+
+    @Override
     public void periodic() {
         if (Settings.EnabledSubsystems.CLIMB.get()) {
-            motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+            if (voltageOverride.isPresent()) {
+                motor.setVoltage(voltageOverride.get());
+            }
+            else {
+                motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+            }
         }
         else {
             motor.setVoltage(0);
