@@ -5,16 +5,16 @@ import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class FunnelStop extends Command{
+public class FunnelReverse extends Command{
     private final Funnel funnel;
 
-    public FunnelStop() {
+    public FunnelReverse() {
         this.funnel = Funnel.getInstance();
         addRequirements(funnel);
     }
 
     @Override
     public void initialize() {
-        funnel.setState(FunnelState.STOP);
+        funnel.setState(FunnelState.REVERSE);
     }
 }

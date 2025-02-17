@@ -8,11 +8,13 @@ package com.stuypulse.robot;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
+import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
@@ -23,7 +25,8 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
-import com.stuypulse.robot.commands.funnel.FunnelAcquire;
+import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
+import com.stuypulse.robot.commands.funnel.FunnelReverse;
 import com.stuypulse.robot.commands.funnel.FunnelStop;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
@@ -67,6 +70,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
@@ -90,7 +94,8 @@ public class RobotContainer {
     // Robot container
     public RobotContainer() {
         configureDefaultCommands();
-        configureButtonBindings();
+        configureDriverButtonBindings();
+        configureOperatorButtonBindings();
         configureAutons();
 
         swerve.registerTelemetry(telemetry::telemeterize);
@@ -103,6 +108,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+        funnel.setDefaultCommand(new FunnelDefaultCommand());
         leds.setDefaultCommand(new LEDDefaultCommand());
         shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral()));
     }
@@ -111,7 +117,7 @@ public class RobotContainer {
     /*** BUTTON ***/
     /***************/
 
-    private void configureButtonBindings() {
+    private void configureDriverButtonBindings() {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
 
@@ -216,6 +222,26 @@ public class RobotContainer {
 
         driver.getLeftMenuButton().onTrue(new ClimbOpen());
         driver.getRightMenuButton().onTrue(new ClimbClimb());
+    }
+
+    private void configureOperatorButtonBindings() {
+        new Trigger(() -> Math.abs(operator.getLeftStick().y) > Settings.Operator.Elevator.VOLTAGE_OVERRIDE_DEADBAND)   
+            .whileTrue(new ElevatorOverrideVoltage(() -> -operator.getLeftStick().y > 0 
+                ? (-operator.getLeftStick().y * Settings.Operator.Elevator.MAX_VOLTAGE_UP) 
+                : (-operator.getLeftStick().y * Settings.Operator.Elevator.MAX_VOLTAGE_DOWN)));
+
+        operator.getLeftTriggerButton()
+            .whileTrue(new ShooterShootBackwards())
+            .whileTrue(new FunnelReverse())
+            .onFalse(new ShooterStop());
+
+        operator.getLeftBumper().onTrue(new FroggyPivotToStow());
+
+        operator.getLeftMenuButton()
+            .onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
+        
+        operator.getRightMenuButton()
+            .onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
     }
 
     /**************/
