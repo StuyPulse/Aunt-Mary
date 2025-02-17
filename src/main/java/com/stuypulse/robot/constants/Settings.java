@@ -48,8 +48,8 @@ public interface Settings {
         }
 
         public interface Alignment {
-            SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Max Velocity (m per s)", 1.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Max Acceleration (m per s^2)", 2.0);
+            SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Max Velocity (m per s)", 3.0);
+            SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Max Acceleration (m per s^2)", 5.0);
             SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
             SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
             
@@ -165,9 +165,9 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-93);
 
-        double MAX_VEL_DEG_PER_S = 100.0;
-        double MAX_ACCEL_DEG_PER_S_PER_S = 200.0;
-        double ANGLE_TOLERANCE_DEGREES = 3.0;
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(100.0);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(200.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 
     public interface Froggy {

@@ -24,8 +24,8 @@ public interface Constants {
         double FIXED_STAGE_MAX_HEIGHT = Units.inchesToMeters(40.748); // Currently for simulation purposes only
         double CARRIAGE_LENGTH = Units.inchesToMeters(35); // Currently for simulation purposes only
 
-        double MASS_KG = 10.0;
-        double DRUM_RADIUS_METERS = (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEAR_RATIO) / 2 / Math.PI;
+        double MASS_KG = Units.lbsToKilograms(10) + Arm.MASS_KG; // Currently for sim only, not confirmed
+        double DRUM_RADIUS_METERS = ((MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / (Encoders.NUM_ROTATIONS_TO_REACH_TOP / Encoders.GEAR_RATIO)) / 2 / Math.PI;
 
         public interface Encoders {
             double GEAR_RATIO = 50.0 / 14.0;
@@ -45,13 +45,10 @@ public interface Constants {
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
 
         double ARM_LENGTH = Units.inchesToMeters(29);
-        double MOMENT_OF_INERTIA = Units.lbsToKilograms(12.8) * ARM_LENGTH * ARM_LENGTH / 3;
+        double MASS_KG = Units.lbsToKilograms(12.8);
+        double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
 
-        // Minimum angle at which the elevator can move up and down without hitting the funnel
-        Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL_BACK = Rotation2d.fromDegrees(-180);
-        Rotation2d MIN_ANGLE_TO_CLEAR_FUNNEL_FRONT = Rotation2d.fromDegrees(-93);
-
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-360);
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-95);
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(360);
     }
 

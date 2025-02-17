@@ -62,13 +62,17 @@
         "SuperStructure": {
           "open": true
         },
+        "Swerve": {
+          "open": true
+        },
         "Visualizers": {
           "Arm": {
             "open": true
           },
           "Elevator": {
             "open": true
-          }
+          },
+          "open": true
         },
         "open": true
       }
@@ -112,6 +116,15 @@
                 1.0
               ],
               "id": "NT:/SmartDashboard/Elevator/Target Height (m)"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Elevator/Setpoint"
             }
           ]
         }

@@ -180,7 +180,7 @@ public interface Field {
             return correspondingAprilTagPose.toPose2d().transformBy(
                 new Transform2d(
                     Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 
-                    CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET, 
+                    CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1), 
                     isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
