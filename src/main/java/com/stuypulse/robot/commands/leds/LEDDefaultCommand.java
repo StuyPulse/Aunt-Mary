@@ -47,6 +47,9 @@ public class LEDDefaultCommand extends Command{
         else if (funnel.getState() == FunnelState.REVERSE) {
             leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
         }
+        else if (froggy.getRollerState() == RollerState.SHOOT_CORAL || froggy.getRollerState() == RollerState.SHOOT_ALGAE) {
+            leds.applyPattern(Settings.LED.L1_PROCESSOR_SCORING_COLOR);
+        }
         else if (climb.getState() == ClimbState.OPEN) {
             leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
         }
