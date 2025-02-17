@@ -2,6 +2,7 @@ package com.stuypulse.robot.commands.swerve;
 
 import java.util.function.Supplier;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -10,6 +11,8 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
+import com.stuypulse.stuylib.streams.angles.filters.AFilter;
+import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
@@ -43,7 +46,8 @@ public class SwerveDriveDriveAligned extends Command {
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
 
-        angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD);
+        angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
+            .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION));
                 
         addRequirements(swerve);
     }
