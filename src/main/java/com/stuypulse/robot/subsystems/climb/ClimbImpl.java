@@ -32,7 +32,8 @@ public class ClimbImpl extends Climb {
     // private DutyCycleEncoder absoluteEncoder;
     private Controller controller;
 
-    public ClimbImpl() {
+    protected ClimbImpl() {
+        super();
         motor = new TalonFX(Ports.Climb.MOTOR);
         Motors.Climb.MOTOR_CONFIG.configure(motor);
 

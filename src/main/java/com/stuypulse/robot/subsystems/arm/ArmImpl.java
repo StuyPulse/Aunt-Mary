@@ -37,6 +37,7 @@ public class ArmImpl extends Arm {
     private Controller controller;
 
     public ArmImpl() {
+        super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
 

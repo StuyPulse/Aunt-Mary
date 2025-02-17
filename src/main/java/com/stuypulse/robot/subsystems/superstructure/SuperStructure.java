@@ -56,7 +56,7 @@ public class SuperStructure extends SubsystemBase{
 
     private SuperStructureVisualizer visualizer;
 
-    protected SuperStructure() {
+    private SuperStructure() {
         this.targetState = SuperStructureTargetState.STOW;
 
         this.arm = Arm.getInstance();

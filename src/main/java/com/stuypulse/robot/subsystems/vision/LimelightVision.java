@@ -28,7 +28,7 @@ public class LimelightVision extends SubsystemBase{
     private SmartBoolean enabled;
     private SmartBoolean[] camerasEnabled;
 
-    public LimelightVision() {
+    private LimelightVision() {
         names = new String[Cameras.LimelightCameras.length];
         for (int i = 0; i < Cameras.LimelightCameras.length; i++) {
             names[i] = Cameras.LimelightCameras[i].getName();

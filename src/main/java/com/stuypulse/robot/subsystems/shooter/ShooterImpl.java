@@ -25,6 +25,7 @@ public class ShooterImpl extends Shooter {
     private final BStream isStalling;
 
     protected ShooterImpl() {
+        super();
         motor = new TalonFX(Ports.Shooter.MOTOR);
         Motors.LokiShooter.MOTOR_CONFIG.configure(motor);
 

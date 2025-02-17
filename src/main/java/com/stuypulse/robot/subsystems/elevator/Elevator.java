@@ -57,7 +57,7 @@ public abstract class Elevator extends SubsystemBase {
 
     private ElevatorState state;
 
-    public Elevator() {
+    protected Elevator() {
         this.state = ElevatorState.STOW;
     }
 

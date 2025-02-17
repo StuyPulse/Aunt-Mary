@@ -41,7 +41,8 @@ public class FroggyImpl extends Froggy {
 
     private BStream isStalling;
 
-    public FroggyImpl() {
+    protected FroggyImpl() {
+        super();
         rollerMotor = new TalonFX(Ports.Froggy.ROLLER);
         Motors.Froggy.ROLLER_MOTOR_CONFIG.configure(rollerMotor);
 

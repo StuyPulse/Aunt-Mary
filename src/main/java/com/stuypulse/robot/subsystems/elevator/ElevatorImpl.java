@@ -24,7 +24,8 @@ public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
     private final DigitalInput bumpSwitchBottom;
 
-    public ElevatorImpl() {
+    protected ElevatorImpl() {
+        super();
         motor = new TalonFX(Ports.Elevator.MOTOR);
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
