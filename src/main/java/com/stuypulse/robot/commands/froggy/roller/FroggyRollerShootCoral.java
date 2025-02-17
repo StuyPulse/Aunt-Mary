@@ -9,9 +9,10 @@ package com.stuypulse.robot.commands.froggy.roller;
 import com.stuypulse.robot.subsystems.froggy.*;
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class FroggyRollerShootCoral extends InstantCommand {
+
+public class FroggyRollerShootCoral extends Command {
 
     protected final Froggy froggy;
 

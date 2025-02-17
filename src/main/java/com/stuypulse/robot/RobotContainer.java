@@ -9,6 +9,7 @@ package com.stuypulse.robot;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
+import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
@@ -103,6 +104,10 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         leds.setDefaultCommand(new LEDDefaultCommand());
+        shooter.setDefaultCommand(new ConditionalCommand(
+            new ShooterAcquireCoral().andThen(new BuzzController(driver)), 
+            new ShooterStop(), 
+            () -> shooter.hasCoral()));
     }
 
     /***************/
@@ -113,9 +118,9 @@ public class RobotContainer {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
 
-        // manual shoot depending on whatever states robot is in
+        // manual shoot depending on whatever states robot is in: either score barge, forwards/backwards on reef, or processor/L1
         driver.getDPadRight()
-            .onTrue(new ConditionalCommand(
+            .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
                     new ShooterShootAlgae(), 
                     new ConditionalCommand(
@@ -132,7 +137,7 @@ public class RobotContainer {
         // ground algae pickup
         driver.getLeftTriggerButton()
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
-            .whileTrue(new FroggyRollerIntakeAlgae())
+            .whileTrue(new FroggyRollerIntakeAlgae().andThen(new BuzzController(driver)))
             .onFalse(new FroggyPivotToStow());
 
         driver.getLeftBumper()
