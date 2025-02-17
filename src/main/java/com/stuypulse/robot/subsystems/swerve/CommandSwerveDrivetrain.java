@@ -355,6 +355,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
     }
 
+    public boolean isAlignedToBargeX() {
+        return Math.abs((Field.LENGTH - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE) - getPose().getX())
+            < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE.get();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);

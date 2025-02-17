@@ -41,14 +41,14 @@ import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
-import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
@@ -63,6 +63,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class RobotContainer {
 
@@ -110,6 +111,7 @@ public class RobotContainer {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
 
+        // manual shoot depending on whatever states robot is in
         driver.getDPadRight()
             .onTrue(new ConditionalCommand(
                 new ConditionalCommand(
@@ -125,6 +127,7 @@ public class RobotContainer {
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
                 () -> superStructure.isInScoreState()));
 
+        // ground algae pickup
         driver.getLeftTriggerButton()
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .whileTrue(new FroggyRollerIntakeAlgae())
@@ -189,8 +192,9 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         driver.getLeftButton()
+            .whileTrue(new SwerveDriveDriveAlignedToBarge(driver))
             .whileTrue(new SuperStructureToBarge()
-                .andThen(new SuperStructureWaitUntilAtTarget())
+                .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToBarge()))
                 .andThen(new ShooterShootAlgae()))
             .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
