@@ -61,7 +61,9 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
@@ -92,6 +94,8 @@ public class RobotContainer {
     private final Telemetry telemetry = new Telemetry(Settings.Swerve.Constraints.MAX_VELOCITY.get());
     private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
+    private final Elevator elevator = Elevator.getInstance();
+    private final Arm arm = Arm.getInstance();
     private final SuperStructure superStructure = SuperStructure.getInstance();
     private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
@@ -106,6 +110,7 @@ public class RobotContainer {
         configureDriverButtonBindings();
         configureOperatorButtonBindings();
         configureAutons();
+        configureSysids();
 
         swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -296,12 +301,25 @@ public class RobotContainer {
 
     public void configureAutons() {
         autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+
+        SmartDashboard.putData("Autonomous", autonChooser);
+    }
+
+    public void configureSysids() {
         autonChooser.setDefaultOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
         autonChooser.setDefaultOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
         autonChooser.setDefaultOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
         autonChooser.setDefaultOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
 
-        SmartDashboard.putData("Autonomous", autonChooser);
+        autonChooser.setDefaultOption("Elevator Quasi Forward", elevator.getSysIdQuasistatic(Direction.kForward));
+        autonChooser.setDefaultOption("Elevator Quasi Backward", elevator.getSysIdQuasistatic(Direction.kReverse));
+        autonChooser.setDefaultOption("Elevator Dynamic Forward", elevator.getSysIdDynamic(Direction.kForward));
+        autonChooser.setDefaultOption("Elevator Dynamic Backward", elevator.getSysIdDynamic(Direction.kReverse));
+
+        autonChooser.setDefaultOption("Arm Quasi Forward", arm.getSysIdQuasistatic(Direction.kForward));
+        autonChooser.setDefaultOption("Arm Quasi Backward", arm.getSysIdQuasistatic(Direction.kReverse));
+        autonChooser.setDefaultOption("Arm Dynamic Forward", arm.getSysIdDynamic(Direction.kForward));
+        autonChooser.setDefaultOption("Arm Dynamic Backward", arm.getSysIdDynamic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() {
