@@ -8,13 +8,20 @@ package com.stuypulse.robot;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.robot.commands.BuzzController;
+import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Front;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Back;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
@@ -27,7 +34,6 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
-import com.stuypulse.robot.commands.funnel.FunnelStop;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
@@ -69,7 +75,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
@@ -229,11 +234,20 @@ public class RobotContainer {
             .whileTrue(new ElevatorOverrideVoltage(() -> -operator.getLeftStick().y > 0 
                 ? (-operator.getLeftStick().y * Settings.Operator.Elevator.MAX_VOLTAGE_UP) 
                 : (-operator.getLeftStick().y * Settings.Operator.Elevator.MAX_VOLTAGE_DOWN)));
+        
+        new Trigger(() -> Math.abs(operator.getRightStick().x) > Settings.Operator.Arm.VOLTAGE_OVERRIDE_DEADBAND)
+            .whileTrue(new ArmOverrideVoltage(() -> operator.getRightStick().x > 0 
+                ? (operator.getRightStick().x * Settings.Operator.Arm.MAX_VOLTAGE_UP)
+                : (operator.getRightStick().x * Settings.Operator.Arm.MAX_VOLTAGE_DOWN)));
 
         operator.getLeftTriggerButton()
-            .whileTrue(new ShooterShootBackwards())
-            .whileTrue(new FunnelReverse())
-            .onFalse(new ShooterStop());
+            .whileTrue(new ConditionalCommand(
+                new ShooterShootForwards().alongWith(new FunnelReverse()),
+                new ShooterShootBackwards().alongWith(new FunnelReverse()),
+                () -> shooter.shouldShootBackwards())
+                    .andThen(new ShooterStop()));
+
+        operator.getLeftBumper().onTrue(new FroggyPivotToStow());
 
         operator.getLeftBumper().onTrue(new FroggyPivotToStow());
 
@@ -242,6 +256,18 @@ public class RobotContainer {
         
         operator.getRightMenuButton()
             .onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
+
+        operator.getTopButton()
+            .onTrue(swerve.isFrontFacingReef() ? new ElevatorToL4Front() : new ElevatorToL4Back());
+
+        operator.getRightButton()
+            .onTrue(swerve.isFrontFacingReef() ? new ElevatorToL3Front() : new ElevatorToL3Back());
+
+        operator.getBottomButton()
+            .onTrue(swerve.isFrontFacingReef() ? new ElevatorToL2Front() : new ElevatorToL2Back());
+        
+        operator.getLeftButton()
+            .onTrue(new ElevatorToBarge());
     }
 
     /**************/

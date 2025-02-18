@@ -257,7 +257,10 @@ public interface Settings {
         }
 
         public interface Arm {
-            double MAX_VOLTAGE = 6.0;
+            double VOLTAGE_OVERRIDE_DEADBAND = 0;
+
+            double MAX_VOLTAGE_UP = 6.0;
+            double MAX_VOLTAGE_DOWN = -3.0;
         }
     }
 }

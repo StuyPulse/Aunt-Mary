@@ -5,7 +5,7 @@ import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class FunnelReverse extends Command{
+public class FunnelReverse extends Command {
     private final Funnel funnel;
 
     public FunnelReverse() {
