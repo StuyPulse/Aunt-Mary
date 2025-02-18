@@ -91,13 +91,14 @@ public class ElevatorSimu extends Elevator {
             new SysIdRoutine.Config(
                 null, 
                 Units.Volts.of(4), 
-                null), 
+                null,
+                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
             new SysIdRoutine.Mechanism(
                 output -> {
                     isRunningSysid = true;
                     sim.setInputVoltage(output.in(Units.Volts));
                 }, 
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
+                null, 
                 this));
     }
 

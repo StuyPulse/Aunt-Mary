@@ -56,13 +56,14 @@ public class ElevatorImpl extends Elevator {
             new SysIdRoutine.Config(
                 null, 
                 Units.Volts.of(5), 
-                null), 
+                null,
+                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
             new SysIdRoutine.Mechanism(
                 output -> {
                     motor.setVoltage(output.in(Units.Volts));
                     isRunningSysid = true;
                 }, 
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
+                null, 
                 this));
     }
 

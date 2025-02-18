@@ -76,13 +76,20 @@ public class ArmImpl extends Arm {
             new SysIdRoutine.Config(
                 null, 
                 edu.wpi.first.units.Units.Volts.of(5), 
-                null), 
+                null,
+                state -> {
+                    SignalLogger.writeString("SysIdArm_State", state.toString());
+                }),
             new SysIdRoutine.Mechanism(
                 output -> {
                     motor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
                     isRunningSysid = true;
                 }, 
-                state -> SignalLogger.writeString("SysIdArm_State", state.toString()), 
+                state -> {
+                    SignalLogger.writeDouble("Arm Position (rotations)", getCurrentAngle().getRotations());
+                    SignalLogger.writeDouble("Arm Velocity (rotations per s)", 0);
+                    SignalLogger.writeDouble("Arm Voltage", motor.getMotorVoltage().getValueAsDouble());
+                }, 
                 this));
     }
 

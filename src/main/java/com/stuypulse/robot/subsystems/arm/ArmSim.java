@@ -91,13 +91,18 @@ public class ArmSim extends Arm {
             new SysIdRoutine.Config(
                 null, 
                 edu.wpi.first.units.Units.Volts.of(5), 
-                null), 
+                null,
+                state -> SignalLogger.writeString("SysIdArm_State", state.toString())), 
             new SysIdRoutine.Mechanism(
                 output -> {
                     sim.setInputVoltage(output.in(edu.wpi.first.units.Units.Volts));
                     isRunningSysid = true;
                 }, 
-                state -> SignalLogger.writeString("SysIdArm_State", state.toString()), 
+                state -> {
+                    SignalLogger.writeDouble("Arm Position (rad)", getCurrentAngle().getRadians());
+                    SignalLogger.writeDouble("Arm Velocity (rad per s)", sim.getVelocityRadPerSec());
+                    SignalLogger.writeDouble("Arm Voltage", controller.getU(0));
+                }, 
                 this));
     }
 
