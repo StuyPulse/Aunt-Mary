@@ -27,7 +27,7 @@ public class ShooterImpl extends Shooter {
     protected ShooterImpl() {
         super();
         motor = new TalonFX(Ports.Shooter.MOTOR);
-        Motors.LokiShooter.MOTOR_CONFIG.configure(motor);
+        Motors.Shooter.MOTOR_CONFIG.configure(motor);
 
         IRSensor = new DigitalInput(Ports.Shooter.IR_SENSOR);
 

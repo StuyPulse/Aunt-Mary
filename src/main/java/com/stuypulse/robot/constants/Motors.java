@@ -33,12 +33,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
  */
 public interface Motors {
 
-    public interface LokiShooter {
+    public interface Shooter {
 		TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
 			.withCurrentLimitAmps(40)
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
-			.withInvertedValue(InvertedValue.Clockwise_Positive);
+			.withInvertedValue(InvertedValue.CounterClockwise_Positive);
 	}
 
     public interface Funnel {
