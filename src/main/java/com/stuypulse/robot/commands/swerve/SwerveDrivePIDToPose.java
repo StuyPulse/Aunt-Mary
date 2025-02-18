@@ -12,27 +12,12 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
-import com.pathplanner.lib.config.PIDConstants;
-import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.constants.Field;
-import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.util.HolonomicController;
-import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
-import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.math.Vector2D;
-
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounceRC;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VMotionProfile;
-import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
-import com.stuypulse.stuylib.streams.vectors.VStream;
-import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -43,9 +28,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class SwerveDrivePIDToPose extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-
-    private final VStream linearVelocity;
-    private final IStream angularVelocity;
 
     private final HolonomicController controller;
     private final Supplier<Pose2d> poseSupplier;
@@ -62,7 +44,6 @@ public class SwerveDrivePIDToPose extends Command {
     private Pose2d startingPose;
     private Pose2d targetPose;
     private VStream translationSetpoint;
-    private Pose2d targetPose;
 
     public SwerveDrivePIDToPose(Pose2d targetPose) {
         this(() -> targetPose);
@@ -78,17 +59,6 @@ public class SwerveDrivePIDToPose extends Command {
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION)));
 
         translationSetpoint = getNewTranslationSetpointGenerator();
-            new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD));
-
-        linearVelocity = VStream.create(() -> new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond))
-            .filtered(
-                x -> x.clamp(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY.get()),
-                new VRateLimit(Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION));
-
-        angularVelocity = IStream.create(() -> controller.getOutput().omegaRadiansPerSecond)
-            .filtered(
-                x -> SLMath.clamp(x, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY.get()),
-                new RateLimit(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION.get()));
 
         this.poseSupplier = poseSupplier;
 
@@ -107,26 +77,6 @@ public class SwerveDrivePIDToPose extends Command {
         maxVelocityWhenAligned = Settings.Swerve.Alignment.Tolerances.MAX_VELOCITY_WHEN_ALIGNED;
 
         addRequirements(swerve);
-    }
-
-    public SwerveDrivePIDToPose withTranslationConstants(PIDConstants pid) {
-        controller.setTranslationConstants(pid.kP, pid.kI, pid.kD);
-        return this;
-    }
-    
-    public SwerveDrivePIDToPose withRotationConstants(PIDConstants pid) {
-        controller.setRotationConstants(pid.kP, pid.kI, pid.kD);
-        return this;
-    }
-
-    public SwerveDrivePIDToPose withTranslationConstants(double p, double i, double d) {
-        controller.setTranslationConstants(p, i, d);
-        return this;
-    }
-    
-    public SwerveDrivePIDToPose withRotationConstants(double p, double i, double d) {
-        controller.setRotationConstants(p, i, d);
-        return this;
     }
 
     public SwerveDrivePIDToPose withTolerance(Number x, Number y, Number theta) {
@@ -157,14 +107,6 @@ public class SwerveDrivePIDToPose extends Command {
         return Math.abs(targetPose.getX() - robotPose.getX()) < xTolerance.doubleValue()
             && Math.abs(targetPose.getY() - robotPose.getY()) < yTolerance.doubleValue()
             && Math.abs(targetPose.getRotation().getRadians() - robotPose.getRotation().getRadians()) < thetaTolerance.doubleValue()
-          
-    @Override
-    public void initialize() {
-        targetPose = poseSupplier.get();
-    }
-
-    private boolean isAligned() {
-        return controller.isDone(xTolerance.doubleValue(), yTolerance.doubleValue(), Math.toDegrees(thetaTolerance.doubleValue()))
             && velocityError.get() < maxVelocityWhenAligned.doubleValue();
     }
 
@@ -178,13 +120,6 @@ public class SwerveDrivePIDToPose extends Command {
             .withVelocityX(controller.getOutput().vxMetersPerSecond)
             .withVelocityY(controller.getOutput().vyMetersPerSecond)
             .withRotationalRate(controller.getOutput().omegaRadiansPerSecond));
-      
-        controller.update(targetPose, swerve.getPose());
-        
-        swerve.setControl(swerve.getRobotCentricSwerveRequest()
-            .withVelocityX(linearVelocity.get().x)
-            .withVelocityY(linearVelocity.get().y)
-            .withRotationalRate(angularVelocity.get()));
         
         SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
@@ -193,9 +128,6 @@ public class SwerveDrivePIDToPose extends Command {
         SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
         SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
         SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", linearVelocity.get().x);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", linearVelocity.get().y);
-        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", angularVelocity.get());
 
         SmartDashboard.putBoolean("Alignment/Is Aligned", isAligned());
     }

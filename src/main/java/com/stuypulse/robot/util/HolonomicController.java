@@ -1,7 +1,6 @@
 package com.stuypulse.robot.util;
 
 import com.stuypulse.stuylib.control.angle.AngleController;
-import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
 
@@ -16,9 +15,6 @@ public class HolonomicController implements Sendable {
     private AngleController angleController;
 
     public HolonomicController(PIDController xController, PIDController yController, AngleController angleController) {
-    private AnglePIDController angleController;
-
-    public HolonomicController(PIDController xController, PIDController yController, AnglePIDController angleController) {
         this.xController = xController;
         this.yController = yController;
         this.angleController = angleController;
@@ -54,17 +50,6 @@ public class HolonomicController implements Sendable {
         return xController.isDone(xToleranceMeters)
                 && yController.isDone(yToleranceMeters)
                 && angleController.isDoneDegrees(angleToleranceDegrees);
-    }
-
-    public HolonomicController setTranslationConstants(double p, double i, double d) {
-        xController.setPID(p, i, d);
-        yController.setPID(p, i, d);
-        return this;
-    }
-    
-    public HolonomicController setRotationConstants(double p, double i, double d) {
-        angleController.setPID(p, i, d);
-        return this;
     }
 
     @Override

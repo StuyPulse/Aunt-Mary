@@ -49,9 +49,6 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
-              
-                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 2.0);
-                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 3.0);
 
                 SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
                 SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
