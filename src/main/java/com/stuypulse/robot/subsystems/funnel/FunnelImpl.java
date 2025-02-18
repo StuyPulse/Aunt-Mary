@@ -59,12 +59,12 @@ public class FunnelImpl extends Funnel {
     public void periodic() {
         super.periodic();
 
-        if (Settings.EnabledSubsystems.FUNNEL.get()) {
-            motor.set(getState().getSpeed());
-        } 
-        else {
-            motor.set(0);
-        }
+        // if (Settings.EnabledSubsystems.FUNNEL.get()) {
+        //     motor.set(getState().getSpeed());
+        // } 
+        // else {
+        //     motor.set(0);
+        // }
 
         SmartDashboard.putNumber("Funnel/Current", motor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putBoolean("Funnel/IR Sensor", irSensor.get());

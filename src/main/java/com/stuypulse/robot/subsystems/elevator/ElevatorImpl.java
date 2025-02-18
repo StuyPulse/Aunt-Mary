@@ -30,7 +30,7 @@ public class ElevatorImpl extends Elevator {
 
     protected ElevatorImpl() {
         super();
-        motor = new TalonFX(Ports.Elevator.MOTOR);
+        motor = new TalonFX(Ports.Elevator.MOTOR, "CANIVORE");
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 

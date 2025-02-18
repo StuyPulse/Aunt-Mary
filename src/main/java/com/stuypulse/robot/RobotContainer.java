@@ -125,35 +125,27 @@ public class RobotContainer {
     /****************/
 
     private void configureTestButtonBindings() {
-        driver.getDPadUp().onTrue(new ElevatorOverrideVoltage(1))
-            .onFalse(new ElevatorOverrideVoltage(0));
-        driver.getDPadDown().onTrue(new ElevatorOverrideVoltage(-1))
-            .onFalse(new ElevatorOverrideVoltage(0));
+        driver.getDPadUp().whileTrue(new ElevatorOverrideVoltage(6));
+        driver.getDPadDown().whileTrue(new ElevatorOverrideVoltage(-3));
 
-        driver.getDPadRight().onTrue(new ArmOverrideVoltage(1))
-            .onFalse(new ArmOverrideVoltage(0));
-        driver.getDPadLeft().onTrue(new ArmOverrideVoltage(-1))
-            .onFalse(new ArmOverrideVoltage(0));
+        driver.getDPadRight().whileTrue(new ArmOverrideVoltage(5));
+        driver.getDPadLeft().whileTrue(new ArmOverrideVoltage(-3));
 
         driver.getTopButton().onTrue(new ShooterSetSpeed(0.5))
             .onFalse(new ShooterSetSpeed(0));
         driver.getBottomButton().onTrue(new ShooterSetSpeed(-0.5))
             .onFalse(new ShooterSetSpeed(0));
 
-        driver.getRightBumper().onTrue(new FunnelSetSpeed(0.5))
+        driver.getRightBumper().onTrue(new FunnelSetSpeed(1.0))
             .onFalse(new FunnelSetSpeed(0));
-        driver.getLeftBumper().onTrue(new FunnelSetSpeed(-0.5))
+        driver.getLeftBumper().onTrue(new FunnelSetSpeed(-1.0))
             .onFalse(new FunnelSetSpeed(0));
 
-        driver.getRightButton().onTrue(new ClimbOverrideVoltage(1))
-            .onFalse(new ClimbOverrideVoltage(0));
-        driver.getLeftButton().onTrue(new ClimbOverrideVoltage(-1))
-            .onFalse(new ClimbOverrideVoltage(0));
+        driver.getRightButton().whileTrue(new ClimbOverrideVoltage(5));
+        driver.getLeftButton().whileTrue(new ClimbOverrideVoltage(-5));
 
-        driver.getRightTriggerButton().onTrue(new FroggyPivotOverrideVoltage(1))
-            .onFalse(new FroggyPivotOverrideVoltage(0));
-        driver.getLeftTriggerButton().onTrue(new FroggyPivotOverrideVoltage(-1))
-            .onFalse(new FroggyPivotOverrideVoltage(0));
+        driver.getRightTriggerButton().whileTrue(new FroggyPivotOverrideVoltage(16));
+        driver.getLeftTriggerButton().whileTrue(new FroggyPivotOverrideVoltage(-4));
         
         driver.getLeftMenuButton().onTrue(new SwerveDriveSeedFieldRelative());
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
