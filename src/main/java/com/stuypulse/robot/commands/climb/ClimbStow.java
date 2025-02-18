@@ -6,11 +6,10 @@
 
 package com.stuypulse.robot.commands.climb;
 
-import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 
-public class ClimbStow extends ClimbDriveToAngle {
-
+public class ClimbStow extends ClimbToState {
     public ClimbStow() {
-        super(Settings.Climb.STOW_ANGLE);
+        super(ClimbState.STOW);
     }
 }

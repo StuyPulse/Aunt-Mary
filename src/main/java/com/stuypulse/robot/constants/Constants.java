@@ -9,62 +9,60 @@ package com.stuypulse.robot.constants;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
-public class Constants {
+public interface Constants {
+
+    double LENGTH_WITH_BUMPERS_METERS = Units.inchesToMeters(30);
+    double WIDTH_WITH_BUMPERS_METERS = Units.inchesToMeters(30);
+
+    double SHOOTER_Y_OFFSET = Units.inchesToMeters(8.5);
+
     public interface Elevator {
-        // unconfirmed
-        double MIN_HEIGHT_METERS = 0.889; // FROM FLOOR TO TOP OF ELEVATOR
-        double MAX_HEIGHT_METERS = 2.1; // FROM FLOOR TO TOP OF ELEVATOR
+        double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR
+        double MAX_HEIGHT_METERS = Units.inchesToMeters(69.85); // FROM FLOOR TO TOP OF ELEVATOR
 
-        double MASS_KG = 10.0; // unconfirmed
-        double DRUM_RADIUS_METERS =
-                (MAX_HEIGHT_METERS / Encoders.NUM_ROTATIONS_TO_REACH_TOP * Encoders.GEARING)
-                        / 2
-                        / Math.PI;
+        double WIDTH = Units.inchesToMeters(10.0); // Currently for simulation purposes only
+        double FIXED_STAGE_MAX_HEIGHT = Units.inchesToMeters(40.748); // Currently for simulation purposes only
+        double CARRIAGE_LENGTH = Units.inchesToMeters(35); // Currently for simulation purposes only
 
-        // FIND OUT REAL GEAR RATIO
-        double GEAR_RATIO = 1.0 / 5.0;
+        double MASS_KG = Units.lbsToKilograms(10) + Arm.MASS_KG; // Currently for sim only, not confirmed
+        double DRUM_RADIUS_METERS = ((MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / (Encoders.NUM_ROTATIONS_TO_REACH_TOP / Encoders.GEAR_RATIO)) / 2 / Math.PI;
 
         public interface Encoders {
-            double GEARING = 4.0;
+            double GEAR_RATIO = 50.0 / 14.0;
 
-            double NUM_ROTATIONS_TO_REACH_TOP =
-                    (6 + 9.0 / 24)
-                            * GEARING; // Number of rotations that the motor has to spin, NOT the
-            // gear
+            double NUM_ROTATIONS_TO_REACH_TOP = 16.4427978257; // Number of rotations that the motor has to spin, NOT the gear
 
-            double POSITION_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP;
-            double VELOCITY_CONVERSION_FACTOR = MAX_HEIGHT_METERS / NUM_ROTATIONS_TO_REACH_TOP / 60;
-
-            double DISTANCE_PER_ROTATION = 0.0;
+            double POSITION_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP;
+            double VELOCITY_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP / 60;
         }
     }
 
     public interface Arm {
+        double GEAR_RATIO = 50.0 / 3.0;
 
-        double GEAR_RATIO = 0.833333330333;
+        double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
 
-        double ANGLE_OFFSET = 0.0;
-        double DELTA_MAX_ANGLE = 40.0; // Max angle clearance for arm funnel side
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
 
-        double AREA = 3; // meters squared
-        double ARM_LENGTH = Units.inchesToMeters(3);
-        double MOMENT_OF_INERTIA = Units.lbsToKilograms(20) * ARM_LENGTH * ARM_LENGTH / 3;
+        double ARM_LENGTH = Units.inchesToMeters(29);
+        double MASS_KG = Units.lbsToKilograms(12.8);
+        double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
 
-        double LOWER_ANGLE_LIMIT = 0;
-        double UPPER_ANGLE_LIMIT = 360;
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-95);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(360);
     }
 
     public interface Froggy {
-        double GEAR_RATIO = 0.0;
+        double GEAR_RATIO = 4.0 / 1.0;
 
-        double MINIMUM_ANGLE = 0.0;
-        double MAXIMUM_ANGLE = 0.0;
+        Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(0);
 
-        double ANGLE_OFFSET = 0.0;
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
     }
 
     public interface Climb {
-        double GEAR_RATIO = 25;
+        double GEAR_RATIO = 75.0;
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0.0);
     }
 

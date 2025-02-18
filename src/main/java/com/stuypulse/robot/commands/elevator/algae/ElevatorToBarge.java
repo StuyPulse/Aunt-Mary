@@ -7,10 +7,10 @@
 package com.stuypulse.robot.commands.elevator.algae;
 
 import com.stuypulse.robot.commands.elevator.*;
-import com.stuypulse.robot.constants.Settings.Elevator;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
 public class ElevatorToBarge extends ElevatorToHeight {
     public ElevatorToBarge() {
-        super(Elevator.BARGE_HEIGHT_METERS);
+        super(ElevatorState.BARGE);
     }
 }

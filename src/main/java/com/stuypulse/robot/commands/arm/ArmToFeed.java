@@ -6,16 +6,10 @@
 
 package com.stuypulse.robot.commands.arm;
 
-import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 
-public class ArmToFeed extends ArmToAngle {
+public class ArmToFeed extends ArmSetState {
     public ArmToFeed() {
-        super(Settings.Arm.FUNNEL_ANGLE);
-    }
-
-    @Override
-    public void initialize() {
-        arm.setRotateBoolean(false);
-        super.initialize();
+        super(ArmState.FEED);
     }
 }
