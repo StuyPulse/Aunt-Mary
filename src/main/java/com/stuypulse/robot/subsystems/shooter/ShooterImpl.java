@@ -31,7 +31,7 @@ public class ShooterImpl extends Shooter {
 
         beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);
 
-        hasCoral = BStream.create(beamBreak)
+        hasCoral = BStream.create(beamBreak).not()
                     .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
 
         isStalling = BStream.create(() -> Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Shooter.STALL_CURRENT_THRESHOLD)
