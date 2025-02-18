@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Bottom to E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue E to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue D to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue C to HP"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Bottom Autons",
+  "choreoAuto": false
+}

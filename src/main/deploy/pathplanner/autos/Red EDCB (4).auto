@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Bottom to E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red E to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red D to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red C to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to B"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Red Bottom Autons",
+  "choreoAuto": false
+}

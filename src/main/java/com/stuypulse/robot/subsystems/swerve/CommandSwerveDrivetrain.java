@@ -31,6 +31,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
@@ -313,7 +314,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 this::getPose,
                 this::resetPose,
                 this::getChassisSpeeds,
-                this::setChassisSpeeds,
+                (speeds, feedforwards) -> setChassisSpeeds(speeds),
                 new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
                 RobotConfig.fromGUISettings(),
                 () -> false,
@@ -337,7 +338,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command followPathCommand(PathPlannerPath path) {
         return AutoBuilder.followPath(path);
     }
-
+  
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] moduleStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
@@ -361,6 +362,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
 
         return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
+    }
+
+    public boolean isAlignedToBargeX() {
+        return Math.abs((Field.LENGTH - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE) - getPose().getX())
+            < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE.get();
     }
 
     @Override

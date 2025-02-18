@@ -49,8 +49,10 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
+
                 SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
                 SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
+
                 SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
                 SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
             }
@@ -81,6 +83,10 @@ public interface Settings {
         }
     }
     public interface Driver {
+
+        double BUZZ_TIME = 1.0;
+        double BUZZ_INTENSITY = 1.0;
+
         public interface Drive {
             SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.05);
 
@@ -225,4 +231,11 @@ public interface Settings {
 
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
     }
+
+    public interface Auton {
+
+        double SHOOTER_WAIT_TIME = 0.2;
+
+    }
+
 }

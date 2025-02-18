@@ -14,17 +14,27 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 0": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 1": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 2": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 3": "Mechanism2d",
       "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
     "windows": {
+      "/SmartDashboard/Autonomous": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "bottom": 1638,
         "builtin": "2025 Reefscape",
@@ -87,6 +97,9 @@
     },
     "visible": true
   },
+  "NetworkTables View": {
+    "visible": false
+  },
   "Plot": {
     "Plot <0>": {
       "plots": [
@@ -97,6 +110,7 @@
             0.0,
             0.8500000238418579
           ],
+          "height": 0,
           "height": 246,
           "series": [
             {
@@ -130,7 +144,8 @@
         }
       ],
       "window": {
-        "name": "Elevator Target Vs Current Height"
+        "name": "Elevator Target Vs Current Height",
+        "visible": false
       }
     },
     "Plot <1>": {
@@ -142,6 +157,7 @@
             0.0,
             0.8500000238418579
           ],
+          "height": 4,
           "height": 252,
           "series": [
             {
@@ -175,7 +191,8 @@
         }
       ],
       "window": {
-        "name": "Arm Target vs Current Angle"
+        "name": "Arm Target vs Current Angle",
+        "visible": false
       }
     }
   }

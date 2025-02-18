@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RSquare Top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RSquare Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RSquare Bottom"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RSquare Left"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Tests",
+  "choreoAuto": false
+}
