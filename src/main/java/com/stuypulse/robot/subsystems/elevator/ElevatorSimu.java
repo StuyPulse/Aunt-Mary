@@ -10,6 +10,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 
@@ -23,8 +24,12 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class ElevatorSimu extends Elevator {
 
@@ -34,6 +39,9 @@ public class ElevatorSimu extends Elevator {
 
     private Optional<Double> voltageOverride;
     private double operatorOffset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
 
     protected ElevatorSimu() {
         sim = new ElevatorSim(
@@ -76,6 +84,31 @@ public class ElevatorSimu extends Elevator {
 
         voltageOverride = Optional.empty();
         operatorOffset = 0;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, 
+                Units.Volts.of(4), 
+                null), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    isRunningSysid = true;
+                    sim.setInputVoltage(output.in(Units.Volts));
+                }, 
+                state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
+                getInstance()));
+    }
+
+    @Override
+    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     private double getTargetHeight() {
@@ -119,7 +152,7 @@ public class ElevatorSimu extends Elevator {
         controller.correct(VecBuilder.fill(sim.getPositionMeters(), sim.getVelocityMetersPerSecond()));
         controller.predict(Settings.DT);
 
-        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
+        if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 sim.setInputVoltage(0);
                 sim.update(Settings.DT);

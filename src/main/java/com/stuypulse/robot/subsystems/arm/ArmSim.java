@@ -10,6 +10,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 
@@ -27,6 +28,8 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ArmSim extends Arm {
 
@@ -36,6 +39,9 @@ public class ArmSim extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
 
     protected ArmSim() {
         sim = new SingleJointedArmSim(
@@ -78,6 +84,31 @@ public class ArmSim extends Arm {
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, 
+                edu.wpi.first.units.Units.Volts.of(5), 
+                null), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    sim.setInputVoltage(output.in(edu.wpi.first.units.Units.Volts));
+                    isRunningSysid = true;
+                }, 
+                state -> SignalLogger.writeString("SysIdArm_State", state.toString()), 
+                getInstance()));
+    }
+
+    @Override
+    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     @Override
@@ -121,7 +152,7 @@ public class ArmSim extends Arm {
         controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
-        if (Settings.EnabledSubsystems.ARM.get()) {
+        if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 sim.setInputVoltage(voltageOverride.get());
                 sim.update(Settings.DT);

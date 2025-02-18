@@ -22,9 +22,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ArmImpl extends Arm {
@@ -37,6 +40,9 @@ public class ArmImpl extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
 
     public ArmImpl() {
         super();
@@ -63,6 +69,31 @@ public class ArmImpl extends Arm {
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, 
+                edu.wpi.first.units.Units.Volts.of(5), 
+                null), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    motor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
+                    isRunningSysid = true;
+                }, 
+                state -> SignalLogger.writeString("SysIdArm_State", state.toString()), 
+                getInstance()));
+    }
+
+    @Override
+    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     @Override
@@ -102,7 +133,7 @@ public class ArmImpl extends Arm {
     public void periodic() {
         super.periodic();
         
-        if (Settings.EnabledSubsystems.ARM.get()) {
+        if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }

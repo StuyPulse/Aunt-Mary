@@ -14,11 +14,18 @@ import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -28,6 +35,9 @@ public class ElevatorImpl extends Elevator {
 
     private Optional<Double> voltageOverride;
     private double operatorOffset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
 
     protected ElevatorImpl() {
         super();
@@ -39,6 +49,31 @@ public class ElevatorImpl extends Elevator {
 
         voltageOverride = Optional.empty();
         operatorOffset = 0;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, 
+                Units.Volts.of(5), 
+                null), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    motor.setVoltage(output.in(Units.Volts));
+                    isRunningSysid = true;
+                }, 
+                state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
+                getInstance()));
+    }
+
+    @Override
+    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     @Override
@@ -82,7 +117,7 @@ public class ElevatorImpl extends Elevator {
             motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
         }
 
-        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
+        if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }
