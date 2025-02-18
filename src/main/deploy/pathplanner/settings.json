@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.74,
+  "robotLength": 0.74,
   "holonomicMode": true,
   "pathFolders": [
     "Blue To HP",
@@ -26,7 +26,7 @@
   "robotMass": 61.23,
   "robotMOI": 6.883,
   "robotTrackwidth": 0.546,
-  "driveWheelRadius": 0.048,
+  "driveWheelRadius": 0.051,
   "driveGearing": 6.48,
   "maxDriveSpeed": 5.45,
   "driveMotorType": "krakenX60",
@@ -43,7 +43,7 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Funnel\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.275,\"y\":-0.035},\"size\":{\"width\":0.4,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}",
-    "{\"name\":\"Shooter\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.3,\"y\":-0.165},\"size\":{\"width\":0.125,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+    "{\"name\":\"Funnel\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.225,\"y\":0.0},\"size\":{\"width\":0.4,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}",
+    "{\"name\":\"Shooter\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.225,\"y\":-0.15},\"size\":{\"width\":0.125,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
   ]
 }
