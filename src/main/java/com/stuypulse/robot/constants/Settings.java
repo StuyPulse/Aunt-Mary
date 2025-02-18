@@ -75,6 +75,8 @@ public interface Settings {
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
 
                 double ALIGNMENT_DEBOUNCE = 0.15;
+
+                SmartNumber BARGE_X_TOLERANCE = new SmartNumber("Alignment/Tolerances/Barge X Tolerance (m)", 0.5);
             }
 
             public interface Targets {

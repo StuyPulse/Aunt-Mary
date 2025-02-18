@@ -41,6 +41,9 @@ public class LEDDefaultCommand extends Command{
         if (shooter.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
         }
+        else if (shooter.getState() == ShooterState.SHOOT_CORAL_FORWARD || shooter.getState() == ShooterState.SHOOT_CORAL_REVERSE || shooter.getState() == ShooterState.SHOOT_ALGAE) {
+            leds.applyPattern(Settings.LED.SHOOT_COLOR);
+        }
         else if (isIntaking()) {
             leds.applyPattern(Settings.LED.INTAKE_COLOR);
         }

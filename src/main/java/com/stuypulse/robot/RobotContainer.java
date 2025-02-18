@@ -35,6 +35,7 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
+import com.stuypulse.robot.commands.leds.LEDSolidColor;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
@@ -73,6 +74,7 @@ import com.stuypulse.robot.subsystems.swerve.Telemetry;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -169,10 +171,14 @@ public class RobotContainer {
             .whileTrue(
                 new ConditionalCommand(
                     new SuperStructureToL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, true)))
+                        .andThen(new SuperStructureWaitUntilAtTarget()
+                            .alongWith(new SwerveDrivePIDToNearestBranch(4, true)
+                                .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootBackwards()), 
                     new SuperStructureToL4Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, false)))
+                        .andThen(new SuperStructureWaitUntilAtTarget()
+                            .alongWith(new SwerveDrivePIDToNearestBranch(4, false)
+                                .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
@@ -183,10 +189,14 @@ public class RobotContainer {
             .whileTrue(
                 new ConditionalCommand(
                     new SuperStructureToL3Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, true)))
+                        .andThen(new SuperStructureWaitUntilAtTarget()
+                            .alongWith(new SwerveDrivePIDToNearestBranch(3, true)
+                                .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootBackwards()), 
                     new SuperStructureToL3Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, false)))
+                        .andThen(new SuperStructureWaitUntilAtTarget()
+                            .alongWith(new SwerveDrivePIDToNearestBranch(3, false)
+                                .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
@@ -197,10 +207,14 @@ public class RobotContainer {
             .whileTrue(
                 new ConditionalCommand(
                     new SuperStructureToL2Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, true)))
+                        .andThen(new SuperStructureWaitUntilAtTarget()
+                            .alongWith(new SwerveDrivePIDToNearestBranch(2, true)
+                                .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     new SuperStructureToL2Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, false)))
+                        .andThen(new SuperStructureWaitUntilAtTarget()
+                            .alongWith(new SwerveDrivePIDToNearestBranch(2, false)
+                                .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
@@ -210,7 +224,9 @@ public class RobotContainer {
         driver.getLeftButton()
             .whileTrue(new SwerveDriveDriveAlignedToBarge(driver))
             .whileTrue(new SuperStructureToBarge()
-                .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToBarge()))
+                .andThen(new SuperStructureWaitUntilAtTarget()
+                    .alongWith(new SwerveDriveWaitUntilAlignedToBarge()
+                        .alongWith(new LEDSolidColor(Color.kYellow))))
                 .andThen(new ShooterShootAlgae()))
             .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
