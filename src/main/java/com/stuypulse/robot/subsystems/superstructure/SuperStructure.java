@@ -1,10 +1,12 @@
 package com.stuypulse.robot.subsystems.superstructure;
 
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -91,13 +93,21 @@ public class SuperStructure extends SubsystemBase{
         }
     }
 
-    @Override
-    public void periodic() {
+    private boolean canMoveDownFromBarge() {
+        double distanceFromCenterLine = Math.abs(Field.LENGTH / 2 - CommandSwerveDrivetrain.getInstance().getPose().getX());
+        return distanceFromCenterLine > Settings.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE;
+    }
+
+    private void updateArmElevatorTargetStates() {
         ArmState currentArmState = arm.getState();
         ArmState targetArmState = getTargetState().getTargetArmState();
 
         ElevatorState currentElevatorState = elevator.getState();
         ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
+
+        if (currentArmState == ArmState.BARGE && currentElevatorState == ElevatorState.BARGE && !canMoveDownFromBarge()) {
+            return;
+        }
 
         if (getTargetState() == SuperStructureTargetState.FEED) {
             if ((currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
@@ -123,6 +133,11 @@ public class SuperStructure extends SubsystemBase{
                 arm.setState(targetArmState);
             }
         }
+    }
+
+    @Override
+    public void periodic() {
+        updateArmElevatorTargetStates();
 
         visualizer.update(elevator.getCurrentHeight(), arm.getCurrentAngle());
 

@@ -29,6 +29,9 @@ public interface Settings {
 
     double DT = 0.020;
 
+    double CLEARANCE_DISTANCE_FROM_REEF = 0.4;
+    double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
+
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm", true);
@@ -75,8 +78,6 @@ public interface Settings {
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
 
                 double ALIGNMENT_DEBOUNCE = 0.15;
-
-                SmartNumber BARGE_X_TOLERANCE = new SmartNumber("Alignment/Tolerances/Barge X Tolerance (m)", 0.5);
             }
 
             public interface Targets {
