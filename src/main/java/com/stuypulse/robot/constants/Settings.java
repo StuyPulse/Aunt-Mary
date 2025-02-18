@@ -33,14 +33,14 @@ public interface Settings {
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {
-        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm", true);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator", true);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb", true);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy", true);
-        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision", true);
+        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
+        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
 
     public interface Swerve {
