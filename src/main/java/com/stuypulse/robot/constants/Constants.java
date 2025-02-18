@@ -67,6 +67,6 @@ public interface Constants {
     }
 
     public interface LED {
-        int LED_LENGTH = 0;
+        int LED_LENGTH = 106;
     }
 }
