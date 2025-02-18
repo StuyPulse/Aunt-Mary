@@ -40,7 +40,7 @@ public interface Settings {
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", false);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
     }
@@ -198,9 +198,12 @@ public interface Settings {
     }
 
     public interface Climb {
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0.0);
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(180.0);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
+        double RESET_STALL_CURRENT = 40;
+        double RESET_VOLTAGE = -1.0;
+
+        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(162.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(0.0);
         
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0);
     }

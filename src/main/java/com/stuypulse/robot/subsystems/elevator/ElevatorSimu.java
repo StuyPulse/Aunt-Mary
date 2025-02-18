@@ -98,7 +98,7 @@ public class ElevatorSimu extends Elevator {
                     sim.setInputVoltage(output.in(Units.Volts));
                 }, 
                 state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
-                getInstance()));
+                this));
     }
 
     @Override

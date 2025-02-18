@@ -83,7 +83,7 @@ public class ArmImpl extends Arm {
                     isRunningSysid = true;
                 }, 
                 state -> SignalLogger.writeString("SysIdArm_State", state.toString()), 
-                getInstance()));
+                this));
     }
 
     @Override

@@ -10,10 +10,14 @@ import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -22,6 +26,11 @@ public class ClimbImpl extends Climb {
     // private CANcoder absoluteEncoder;
 
     private Optional<Double> voltageOverride;
+
+    private boolean hasBeenReset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
 
     protected ClimbImpl() {
         super();
@@ -38,18 +47,45 @@ public class ClimbImpl extends Climb {
         // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
         voltageOverride = Optional.empty();
+
+        hasBeenReset = false;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, 
+                Units.Volts.of(6), 
+                null), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    motor.setVoltage(output.in(Units.Volts));
+                    isRunningSysid = true;
+                }, 
+                state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
+                this));
+    }
+
+    @Override
+    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     private Rotation2d getTargetAngle() {
         switch (getState()) {
             case STOW:
-                return Settings.Climb.STOW_ANGLE;
+                return Settings.Climb.CLOSED_ANGLE;
             case OPEN:
                 return Settings.Climb.OPEN_ANGLE;
             case CLIMBING:
                 return Settings.Climb.CLIMBED_ANGLE;
             default:
-                return Settings.Climb.STOW_ANGLE;
+                return Settings.Climb.CLOSED_ANGLE;
         }
     }
 
@@ -69,7 +105,14 @@ public class ClimbImpl extends Climb {
 
     @Override
     public void periodic() {
-        if (Settings.EnabledSubsystems.CLIMB.get()) {
+        if (!hasBeenReset  && !isRunningSysid) {
+            motor.setVoltage(Settings.Climb.RESET_VOLTAGE);
+            if (Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Climb.RESET_STALL_CURRENT) {
+                hasBeenReset = true;
+                motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
+            }
+        }
+        if (Settings.EnabledSubsystems.CLIMB.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }

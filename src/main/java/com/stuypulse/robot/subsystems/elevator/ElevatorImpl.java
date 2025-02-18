@@ -63,7 +63,7 @@ public class ElevatorImpl extends Elevator {
                     isRunningSysid = true;
                 }, 
                 state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
-                getInstance()));
+                this));
     }
 
     @Override

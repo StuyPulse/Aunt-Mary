@@ -9,7 +9,9 @@ package com.stuypulse.robot.subsystems.climb;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Climb extends SubsystemBase {
     private static final Climb instance;
@@ -46,6 +48,9 @@ public abstract class Climb extends SubsystemBase {
     public abstract boolean atTargetAngle();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
+
+    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
+    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
 
     @Override
     public void periodic() {
