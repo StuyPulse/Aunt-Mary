@@ -58,7 +58,7 @@ public interface Constants {
         Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(0);
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.420866);
     }
 
     public interface Climb {
