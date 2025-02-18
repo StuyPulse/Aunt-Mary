@@ -29,6 +29,8 @@ public interface Settings {
 
     double DT = 0.020;
 
+    String CANIVORE_NAME = "CANIVORE";
+
     double CLEARANCE_DISTANCE_FROM_REEF = 0.4;
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
