@@ -247,6 +247,10 @@ public interface Settings {
     }
 
     public interface Operator {
+        public interface Froggy {
+            Rotation2d MANUAL_ROTATION_VELOCITY = Rotation2d.fromDegrees(10);
+        }
+        
         public interface Climb {
             double CLIMB_UP_VOLTAGE = 0.0; // Claw is coming up, not robot
             double CLIMB_DOWN_VOLTAGE = -0.0; // Claw is going down, not robot

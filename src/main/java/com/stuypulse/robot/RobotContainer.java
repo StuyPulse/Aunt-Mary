@@ -19,14 +19,8 @@ import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Front;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Back;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
@@ -268,8 +262,8 @@ public class RobotContainer {
                 () -> shooter.shouldShootBackwards()))
             .onFalse(new ShooterStop());
 
-        operator.getLeftBumper().onTrue(new FroggyPivotToStow());
-        operator.getRightBumper().onTrue(new FroggyPivotToCoralGroundPickup());
+        operator.getLeftBumper().whileTrue(new FroggyPivotMoveOperatorOffsetUp());
+        operator.getRightBumper().whileTrue(new FroggyPivotMoveOperatorOffsetDown());
 
         operator.getLeftMenuButton().onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
         operator.getRightMenuButton().onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.stuypulse.robot.constants.Settings;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,12 +27,22 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public enum PivotState {
-        STOW,
-        ALGAE_GROUND_PICKUP,
-        CORAL_GROUND_PICKUP,
-        GOLF_TEE_ALGAE_PICKUP,
-        L1_SCORE_ANGLE,
-        PROCESSOR_SCORE_ANGLE
+        STOW(Settings.Froggy.STOW_ANGLE),
+        ALGAE_GROUND_PICKUP(Settings.Froggy.ALGAE_GROUND_PICKUP_ANGLE),
+        CORAL_GROUND_PICKUP(Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE),
+        GOLF_TEE_ALGAE_PICKUP(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE),
+        L1_SCORE_ANGLE(Settings.Froggy.L1_SCORING_ANGLE),
+        PROCESSOR_SCORE_ANGLE(Settings.Froggy.PROCESSOR_SCORE_ANGLE);
+
+        private Rotation2d targetAngle;
+
+        private PivotState(Rotation2d targetAngle) {
+            this.targetAngle = targetAngle;
+        }
+
+        public Rotation2d getTargetAngle() {
+            return this.targetAngle;
+        }
     }
 
     public enum RollerState {
@@ -68,6 +79,7 @@ public abstract class Froggy extends SubsystemBase {
     public void setPivotState(PivotState state) {
         this.pivotState = state;
         setPivotVoltageOverride(Optional.empty());
+        setPivotOperatorOffset(Rotation2d.kZero);
     }
 
     public RollerState getRollerState() {
@@ -82,6 +94,8 @@ public abstract class Froggy extends SubsystemBase {
     public abstract boolean isStalling();
 
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
+    public abstract void setPivotOperatorOffset(Rotation2d offset);
+    public abstract Rotation2d getPivotOperatorOffset();
 
     @Override
     public void periodic() {

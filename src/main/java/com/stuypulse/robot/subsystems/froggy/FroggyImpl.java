@@ -44,6 +44,7 @@ public class FroggyImpl extends Froggy {
     private BStream isStalling;
 
     private Optional<Double> pivotVoltageOverride;
+    private Rotation2d pivotOperatorOffset;
 
     protected FroggyImpl() {
         super();
@@ -81,6 +82,7 @@ public class FroggyImpl extends Froggy {
         }).filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
         pivotVoltageOverride = Optional.empty();
+        pivotOperatorOffset = Rotation2d.kZero;
     }
 
     private Rotation2d getCurrentAngle() {
@@ -89,25 +91,8 @@ public class FroggyImpl extends Froggy {
     }
 
     private Rotation2d getTargetAngle() {
-        Rotation2d targetAngle;
-        switch (getPivotState()) {
-            case STOW:
-                targetAngle = Settings.Froggy.STOW_ANGLE;
-            case ALGAE_GROUND_PICKUP:
-                targetAngle = Settings.Froggy.ALGAE_GROUND_PICKUP_ANGLE;
-            case CORAL_GROUND_PICKUP:
-                targetAngle = Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE;
-            case GOLF_TEE_ALGAE_PICKUP:
-                targetAngle = Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE;
-            case L1_SCORE_ANGLE:
-                targetAngle = Settings.Froggy.L1_SCORING_ANGLE;
-            case PROCESSOR_SCORE_ANGLE:
-                targetAngle = Settings.Froggy.PROCESSOR_SCORE_ANGLE;
-            default:
-                targetAngle = Settings.Froggy.STOW_ANGLE;
-        }
-        targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Froggy.MINIMUM_ANGLE.getDegrees(), Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
-        return targetAngle;
+        return Rotation2d.fromDegrees(SLMath.clamp(getPivotState().getTargetAngle().getDegrees(), Constants.Froggy.MINIMUM_ANGLE.getDegrees(), Constants.Froggy.MAXIMUM_ANGLE.getDegrees()))
+            .plus(pivotOperatorOffset);
     }
 
     @Override
@@ -123,6 +108,16 @@ public class FroggyImpl extends Froggy {
     @Override
     public void setPivotVoltageOverride(Optional<Double> voltage) {
         this.pivotVoltageOverride = voltage;
+    }
+
+    @Override
+    public void setPivotOperatorOffset(Rotation2d offset) {
+        this.pivotOperatorOffset = offset;
+    }
+
+    @Override
+    public Rotation2d getPivotOperatorOffset() {
+        return this.pivotOperatorOffset;
     }
 
     @Override
