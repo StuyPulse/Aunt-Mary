@@ -255,12 +255,12 @@ public interface Settings {
         public interface Elevator {
             double VOLTAGE_OVERRIDE_DEADBAND = 0.1;
             
-            double MAX_VOLTAGE_UP = 10.0;
+            double MAX_VOLTAGE_UP = 6.0;
             double MAX_VOLTAGE_DOWN = -3.0;
         }
 
         public interface Arm {
-            double VOLTAGE_OVERRIDE_DEADBAND = 0;
+            double VOLTAGE_OVERRIDE_DEADBAND = 0.1;
 
             double MAX_VOLTAGE_UP = 6.0;
             double MAX_VOLTAGE_DOWN = -3.0;

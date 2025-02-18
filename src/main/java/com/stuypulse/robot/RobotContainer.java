@@ -248,42 +248,37 @@ public class RobotContainer {
     private void configureOperatorButtonBindings() {
         new Trigger(() -> Math.abs(operator.getLeftStick().y) > Settings.Operator.Elevator.VOLTAGE_OVERRIDE_DEADBAND)   
             .whileTrue(new ElevatorOverrideVoltage(() -> -operator.getLeftStick().y > 0 
-                ? (-operator.getLeftStick().y * Settings.Operator.Elevator.MAX_VOLTAGE_UP) 
-                : (-operator.getLeftStick().y * Settings.Operator.Elevator.MAX_VOLTAGE_DOWN)));
+                ? (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_UP))
+                : (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_DOWN))));
         
         new Trigger(() -> Math.abs(operator.getRightStick().x) > Settings.Operator.Arm.VOLTAGE_OVERRIDE_DEADBAND)
             .whileTrue(new ArmOverrideVoltage(() -> operator.getRightStick().x > 0 
-                ? (operator.getRightStick().x * Settings.Operator.Arm.MAX_VOLTAGE_UP)
-                : (operator.getRightStick().x * Settings.Operator.Arm.MAX_VOLTAGE_DOWN)));
+                ? (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_UP))
+                : (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_DOWN))));
 
         operator.getLeftTriggerButton()
             .whileTrue(new ConditionalCommand(
                 new ShooterShootForwards().alongWith(new FunnelReverse()),
                 new ShooterShootBackwards().alongWith(new FunnelReverse()),
-                () -> shooter.shouldShootBackwards())
-                    .andThen(new ShooterStop()));
+                () -> shooter.shouldShootBackwards()))
+            .onFalse(new ShooterStop());
 
         operator.getLeftBumper().onTrue(new FroggyPivotToStow());
+        operator.getRightBumper().onTrue(new FroggyPivotToCoralGroundPickup());
 
-        operator.getLeftBumper().onTrue(new FroggyPivotToStow());
+        operator.getLeftMenuButton().onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
+        operator.getRightMenuButton().onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
 
-        operator.getLeftMenuButton()
-            .onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
-        
-        operator.getRightMenuButton()
-            .onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
+        operator.getTopButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL4Front() : new SuperStructureToL4Back());
+        operator.getRightButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL3Front() : new SuperStructureToL3Back());
+        operator.getBottomButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL2Front() : new SuperStructureToL2Back());
+        operator.getLeftButton().onTrue(new SuperStructureToBarge());
 
-        operator.getTopButton()
-            .onTrue(swerve.isFrontFacingReef() ? new ElevatorToL4Front() : new ElevatorToL4Back());
-
-        operator.getRightButton()
-            .onTrue(swerve.isFrontFacingReef() ? new ElevatorToL3Front() : new ElevatorToL3Back());
-
-        operator.getBottomButton()
-            .onTrue(swerve.isFrontFacingReef() ? new ElevatorToL2Front() : new ElevatorToL2Back());
-        
-        operator.getLeftButton()
-            .onTrue(new ElevatorToBarge());
+        operator.getRightTriggerButton()
+            .whileTrue(new ConditionalCommand(
+                new ShooterShootBackwards(), 
+                new ShooterShootForwards(), 
+                () -> shooter.shouldShootBackwards()));
     }
 
     /**************/
