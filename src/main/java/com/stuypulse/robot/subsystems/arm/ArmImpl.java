@@ -48,6 +48,7 @@ public class ArmImpl extends Arm {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
+        motor.setPosition(Constants.Arm.MIN_ANGLE.getRotations());
 
         // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
@@ -63,7 +64,7 @@ public class ArmImpl extends Arm {
         motionProfile.reset(Settings.Arm.STOW_ANGLE.getRotations());
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Arm.FF.kG_EMPTY))
+            .add(new ArmFeedforward(Gains.Arm.FF.kG))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
 
@@ -87,7 +88,7 @@ public class ArmImpl extends Arm {
                 }, 
                 state -> {
                     SignalLogger.writeDouble("Arm Position (rotations)", getCurrentAngle().getRotations());
-                    SignalLogger.writeDouble("Arm Velocity (rotations per s)", 0);
+                    SignalLogger.writeDouble("Arm Velocity (rotations per s)", motor.getVelocity().getValueAsDouble());
                     SignalLogger.writeDouble("Arm Voltage", motor.getMotorVoltage().getValueAsDouble());
                 }, 
                 this));
@@ -114,11 +115,12 @@ public class ArmImpl extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        double degrees = Units.rotationsToDegrees(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
-        if (degrees < Constants.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getDegrees()) {
-            degrees += 360;
-        }
-        return Rotation2d.fromDegrees(degrees);
+        // double degrees = Units.rotationsToDegrees(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
+        // if (degrees < Constants.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getDegrees()) {
+        //     degrees += 360;
+        // }
+        // return Rotation2d.fromDegrees(degrees);
+        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
     }
 
     @Override
