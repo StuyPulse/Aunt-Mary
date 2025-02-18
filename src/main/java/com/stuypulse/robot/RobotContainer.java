@@ -77,6 +77,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class RobotContainer {
 
@@ -292,6 +293,10 @@ public class RobotContainer {
 
     public void configureAutons() {
         autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+        autonChooser.setDefaultOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
+        autonChooser.setDefaultOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
+        autonChooser.setDefaultOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
+        autonChooser.setDefaultOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
