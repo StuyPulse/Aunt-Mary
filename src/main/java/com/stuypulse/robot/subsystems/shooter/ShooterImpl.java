@@ -20,7 +20,7 @@ public class ShooterImpl extends Shooter {
 
     private final TalonFX motor;
 
-    private final DigitalInput IRSensor;
+    private final DigitalInput beamBreak;
     private final BStream hasCoral;
     private final BStream isStalling;
 
@@ -29,9 +29,9 @@ public class ShooterImpl extends Shooter {
         motor = new TalonFX(Ports.Shooter.MOTOR);
         Motors.Shooter.MOTOR_CONFIG.configure(motor);
 
-        IRSensor = new DigitalInput(Ports.Shooter.IR_SENSOR);
+        beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);
 
-        hasCoral = BStream.create(IRSensor).not()
+        hasCoral = BStream.create(beamBreak)
                     .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
 
         isStalling = BStream.create(() -> Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Shooter.STALL_CURRENT_THRESHOLD)

@@ -35,14 +35,14 @@ public interface Settings {
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {
-        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
-        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
+        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", false);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", false);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", false);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
+        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
     }
 
     public interface Swerve {
@@ -109,7 +109,7 @@ public interface Settings {
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", -0.45);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
 
-        double HAS_CORAL_DEBOUNCE = 0.1;
+        double HAS_CORAL_DEBOUNCE = 0.2;
 
         double STALL_DETECTION_DEBOUNCE = 0.5;
         double STALL_CURRENT_THRESHOLD = 30;
