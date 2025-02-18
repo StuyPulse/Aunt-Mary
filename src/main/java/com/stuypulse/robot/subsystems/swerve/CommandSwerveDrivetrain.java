@@ -315,6 +315,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 this::resetPose,
                 this::getChassisSpeeds,
                 (speeds, feedforwards) -> setChassisSpeeds(speeds),
+                this::setChassisSpeeds,
                 new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
                 RobotConfig.fromGUISettings(),
                 () -> false,
@@ -341,6 +342,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private ChassisSpeeds getChassisSpeeds() {
         return getState().Speeds;
+}
+  
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            moduleStates[i] = getModule(i).getCurrentState();
+        }
+        return moduleStates;
+    }
+
+    private ChassisSpeeds getChassisSpeeds() {
+        return getKinematics().toChassisSpeeds(getModuleStates());
     }
 
     private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
