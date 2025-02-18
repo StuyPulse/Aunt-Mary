@@ -231,7 +231,7 @@ public interface Settings {
 
     public interface Auton {
 
-        double SHOOTER_WAIT_TIME = 0.0;
+        double SHOOTER_WAIT_TIME = 0.2;
 
     }
 

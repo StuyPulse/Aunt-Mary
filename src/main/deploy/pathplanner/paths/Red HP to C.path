@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.6892542362137726,
-        "y": 2.7351552996425363
+        "y": 2.735155299642536
       },
       "isLocked": false,
       "linkedName": "Red Bottom HP"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 5.5,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

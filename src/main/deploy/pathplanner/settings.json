@@ -18,8 +18,8 @@
     "Red Bottom Autons",
     "Red Top Autons"
   ],
-  "defaultMaxVel": 5.0,
-  "defaultMaxAccel": 5.5,
+  "defaultMaxVel": 4.0,
+  "defaultMaxAccel": 5.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
