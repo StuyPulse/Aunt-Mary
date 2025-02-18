@@ -53,6 +53,7 @@ import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAligned;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
@@ -71,6 +72,7 @@ import com.stuypulse.robot.subsystems.superstructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -127,24 +129,25 @@ public class RobotContainer {
     private void configureDriverButtonBindings() {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
+        driver.getDPadRight().whileTrue(new SwerveDriveDriveAligned(driver, Rotation2d.kZero));
 
         // manual shoot depending on whatever states robot is in: either score barge, forwards/backwards on reef, or processor/L1
-        driver.getDPadRight()
-            .whileTrue(new ConditionalCommand(
-                new ConditionalCommand(
-                    new ShooterShootAlgae(), 
-                    new ConditionalCommand(
-                        new ShooterShootForwards(), 
-                        new ShooterShootBackwards().onlyIf(() -> shooter.shouldShootBackwards()), 
-                        () -> shooter.shouldShootForward()),
-                    () -> superStructure.getTargetState() == SuperStructureTargetState.BARGE), 
-                new ConditionalCommand(
-                    new FroggyRollerShootCoral(), 
-                    new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
-                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-                () -> superStructure.isInScoreState()))
-            .onFalse(new ShooterStop())
-            .onFalse(new FroggyRollerStop());
+        // driver.getDPadRight()
+        //     .whileTrue(new ConditionalCommand(
+        //         new ConditionalCommand(
+        //             new ShooterShootAlgae(), 
+        //             new ConditionalCommand(
+        //                 new ShooterShootForwards(), 
+        //                 new ShooterShootBackwards().onlyIf(() -> shooter.shouldShootBackwards()), 
+        //                 () -> shooter.shouldShootForward()),
+        //             () -> superStructure.getTargetState() == SuperStructureTargetState.BARGE), 
+        //         new ConditionalCommand(
+        //             new FroggyRollerShootCoral(), 
+        //             new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
+        //             () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
+        //         () -> superStructure.isInScoreState()))
+        //     .onFalse(new ShooterStop())
+        //     .onFalse(new FroggyRollerStop());
 
         // ground algae pickup
         driver.getLeftTriggerButton()

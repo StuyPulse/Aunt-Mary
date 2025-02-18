@@ -12,7 +12,7 @@ public interface Gains {
 
     public interface Swerve {
         public interface Alignment {
-            PIDConstants XY = new PIDConstants(3, 0, 0);
+            PIDConstants XY = new PIDConstants(12.988, 0, 0.77717);
             PIDConstants THETA = new PIDConstants(3, 0, 0.2);
         }
     }

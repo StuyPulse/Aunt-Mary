@@ -53,7 +53,7 @@ public interface Constants {
     }
 
     public interface Froggy {
-        double GEAR_RATIO = 4.0 / 1.0;
+        double GEAR_RATIO = 8.0 / 1.0;
 
         Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-56.584441);
         Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(94.812699);

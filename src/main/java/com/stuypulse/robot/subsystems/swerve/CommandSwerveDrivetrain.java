@@ -136,7 +136,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 /* output is actually radians per second, but SysId only supports "volts" */
                 setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
                 /* also log the requested output for SysId */
-                SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
+                SignalLogger.writeDouble("Rotational_Target_Rate ('voltage')", output.in(Volts));
+                SignalLogger.writeDouble("Rotational Position ('position')", getPose().getRotation().getRadians());
+                SignalLogger.writeDouble("Rotational_Rate ('velocity')", getState().Speeds.omegaRadiansPerSecond);
             },
             null,
             this
@@ -144,7 +146,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.

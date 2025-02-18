@@ -1,5 +1,16 @@
 {
   "NetworkTables": {
+    "retained": {
+      "limelight": {
+        "double[]##v_/limelight/botpose": {
+          "open": false
+        },
+        "double[]##v_/limelight/botpose_targetspace": {
+          "open": false
+        },
+        "open": false
+      }
+    },
     "transitory": {
       "SmartDashboard": {
         "Alerts": {
@@ -25,6 +36,23 @@
         "Flywheel": {
           "open": true
         },
+        "Module 0": {
+          "RootDirection": {
+            "open": false
+          },
+          "RootSpeed": {
+            "Speed": {
+              "open": false
+            },
+            "open": false
+          },
+          "open": false
+        },
+        "Module 1": {
+          "RootDirection": {
+            "open": false
+          }
+        },
         "Note Detection": {
           "open": true
         },
@@ -44,8 +72,23 @@
           "open": true
         },
         "Swerve": {
+          "Alignment": {
+            "open": false
+          },
+          "BACK_LEFT": {
+            "open": false
+          },
           "Back Right": {
             "open": true
+          },
+          "Chassis": {
+            "PID": {
+              "Theta": {
+                "open": false
+              },
+              "open": false
+            },
+            "open": false
           },
           "Front Left": {
             "open": true
@@ -61,6 +104,9 @@
               "open": true
             },
             "Front Right": {
+              "open": true
+            },
+            "Module 0": {
               "open": true
             },
             "PID": {
@@ -90,6 +136,9 @@
           "tower-cam": {
             "open": true
           }
+        },
+        "ian": {
+          "open": false
         },
         "open": true,
         "plate-cam": {
@@ -149,6 +198,10 @@
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
       "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/Swerve/Module 0": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 1": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 2": "Mechanism2d",
+      "/SmartDashboard/Swerve/Module 3": "Mechanism2d",
       "/SmartDashboard/Visualizers/Climber": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Intake": "Mechanism2d",
@@ -181,6 +234,15 @@
     }
   },
   "NetworkTables Info": {
+    "-NT3@10.6.94.12:50296": {
+      "Publishers": {
+        "open": false
+      },
+      "Subscribers": {
+        "open": false
+      },
+      "open": false
+    },
     "Clients": {
       "open": true
     },
@@ -224,7 +286,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 290,
+          "height": -36,
           "series": [
             {
               "color": [
@@ -260,7 +322,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 326,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -286,6 +348,72 @@
       "window": {
         "name": "Arm Target Vs Current Angle"
       }
+    },
+    "Plot <2>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 332,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Swerve/Modules/Module 0/Speed (m per s)"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Swerve/Modules/Module 0/Target Speed (m per s)"
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <3>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 327,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Swerve/Modules/Module 0/Target Angle (deg)"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Swerve/Modules/Module 0/Angle (deg)"
+            }
+          ]
+        }
+      ]
     }
   }
 }
