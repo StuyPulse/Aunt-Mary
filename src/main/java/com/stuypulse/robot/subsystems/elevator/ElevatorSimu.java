@@ -33,6 +33,7 @@ public class ElevatorSimu extends Elevator {
     private final MotionProfile motionProfile;
 
     private Optional<Double> voltageOverride;
+    private double operatorOffset;
 
     protected ElevatorSimu() {
         sim = new ElevatorSim(
@@ -74,10 +75,11 @@ public class ElevatorSimu extends Elevator {
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
         voltageOverride = Optional.empty();
+        operatorOffset = 0;
     }
 
     private double getTargetHeight() {
-        return getState().getTargetHeight();
+        return getState().getTargetHeight() + operatorOffset;
     }
 
     @Override
@@ -93,6 +95,16 @@ public class ElevatorSimu extends Elevator {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public void setOperatorOffset(double offset) {
+        this.operatorOffset = offset;
+    }
+
+    @Override
+    public double getOperatorOffset() {
+        return this.operatorOffset;
     }
 
     @Override

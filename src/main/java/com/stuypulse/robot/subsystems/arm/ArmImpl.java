@@ -34,6 +34,7 @@ public class ArmImpl extends Arm {
     private Controller controller;
 
     private Optional<Double> voltageOverride;
+    private Rotation2d operatorOffset;
 
     public ArmImpl() {
         super();
@@ -58,8 +59,8 @@ public class ArmImpl extends Arm {
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
 
-        
         voltageOverride = Optional.empty();
+        operatorOffset = Rotation2d.kZero;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class ArmImpl extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-       return getState().getTargetAngle();
+       return getState().getTargetAngle().plus(operatorOffset);
     }
 
     @Override
@@ -80,6 +81,16 @@ public class ArmImpl extends Arm {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public void setOperatorOffset(Rotation2d offset) {
+        this.operatorOffset = offset;
+    }
+
+    @Override
+    public Rotation2d getOperatorOffset() {
+        return this.operatorOffset;
     }
 
     @Override

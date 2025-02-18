@@ -35,6 +35,7 @@ public class ArmSim extends Arm {
     private final MotionProfile motionProfile;
 
     private Optional<Double> voltageOverride;
+    private Rotation2d operatorOffset;
 
     protected ArmSim() {
         sim = new SingleJointedArmSim(
@@ -76,6 +77,7 @@ public class ArmSim extends Arm {
         motionProfile.reset(Settings.Arm.STOW_ANGLE.getRadians());
 
         voltageOverride = Optional.empty();
+        operatorOffset = Rotation2d.kZero;
     }
 
     @Override
@@ -84,7 +86,7 @@ public class ArmSim extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-        return getState().getTargetAngle();
+        return getState().getTargetAngle().plus(operatorOffset);
     }
 
     @Override
@@ -95,6 +97,16 @@ public class ArmSim extends Arm {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public void setOperatorOffset(Rotation2d offset) {
+        this.operatorOffset = offset;
+    }
+
+    @Override
+    public Rotation2d getOperatorOffset() {
+        return this.operatorOffset;
     }
 
     @Override

@@ -77,12 +77,15 @@ public abstract class Arm extends SubsystemBase {
     public void setState(ArmState state) {
         this.state = state;
         setVoltageOverride(Optional.empty());
+        setOperatorOffset(Rotation2d.kZero);
     }
 
     public abstract Rotation2d getCurrentAngle();
     public abstract boolean atTargetAngle();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
+    public abstract void setOperatorOffset(Rotation2d offset);
+    public abstract Rotation2d getOperatorOffset();
 
     @Override
     public void periodic() {

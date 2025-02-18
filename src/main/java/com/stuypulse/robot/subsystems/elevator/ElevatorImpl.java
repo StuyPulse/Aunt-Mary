@@ -27,6 +27,7 @@ public class ElevatorImpl extends Elevator {
     private final DigitalInput bumpSwitchBottom;
 
     private Optional<Double> voltageOverride;
+    private double operatorOffset;
 
     protected ElevatorImpl() {
         super();
@@ -37,6 +38,7 @@ public class ElevatorImpl extends Elevator {
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
 
         voltageOverride = Optional.empty();
+        operatorOffset = 0;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ElevatorImpl extends Elevator {
     }
 
     private double getTargetHeight() {
-        return getState().getTargetHeight();
+        return getState().getTargetHeight() + operatorOffset;
     }
 
     @Override
@@ -60,6 +62,16 @@ public class ElevatorImpl extends Elevator {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public void setOperatorOffset(double offset) {
+        this.operatorOffset = offset;
+    }
+
+    @Override
+    public double getOperatorOffset() {
+        return this.operatorOffset;
     }
 
     @Override

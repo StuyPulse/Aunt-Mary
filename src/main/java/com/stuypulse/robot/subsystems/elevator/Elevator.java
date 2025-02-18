@@ -66,6 +66,7 @@ public abstract class Elevator extends SubsystemBase {
     public void setState(ElevatorState state) {
         this.state = state;
         setVoltageOverride(Optional.empty());
+        setOperatorOffset(0);
     }
 
     public ElevatorState getState() {
@@ -76,6 +77,8 @@ public abstract class Elevator extends SubsystemBase {
     public abstract boolean atTargetHeight();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
+    public abstract void setOperatorOffset(double offset);
+    public abstract double getOperatorOffset();
 
     @Override
     public void periodic() {
