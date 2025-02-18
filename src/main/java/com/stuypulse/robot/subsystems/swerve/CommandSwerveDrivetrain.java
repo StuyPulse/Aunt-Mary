@@ -366,6 +366,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
         SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
+        for (int i = 0; i < 4; i++) {
+            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Speed (m/s)", getModule(i).getCurrentState().speedMetersPerSecond);
+            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Angle (deg)", getModule(i).getCurrentState().angle.getDegrees());
+        }
+
         SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
