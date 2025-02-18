@@ -257,6 +257,8 @@ public interface Settings {
             
             double MAX_VOLTAGE_UP = 6.0;
             double MAX_VOLTAGE_DOWN = -3.0;
+
+            double HEIGHT_OFFSET_PER_CLICK = Units.inchesToMeters(2);
         }
 
         public interface Arm {
@@ -264,6 +266,8 @@ public interface Settings {
 
             double MAX_VOLTAGE_UP = 6.0;
             double MAX_VOLTAGE_DOWN = -3.0;
+
+            Rotation2d ANGLE_OFFSET_PER_CLICK = Rotation2d.fromDegrees(5);
         }
     }
 }

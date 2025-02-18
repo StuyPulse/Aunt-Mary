@@ -9,12 +9,17 @@ package com.stuypulse.robot;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 import com.stuypulse.robot.commands.BuzzController;
+import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
+import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
+import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
@@ -273,6 +278,12 @@ public class RobotContainer {
         operator.getRightButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL3Front() : new SuperStructureToL3Back());
         operator.getBottomButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL2Front() : new SuperStructureToL2Back());
         operator.getLeftButton().onTrue(new SuperStructureToBarge());
+
+        operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());
+        operator.getDPadDown().onTrue(new ElevatorOffsetTargetDown());
+
+        operator.getDPadLeft().onTrue(new ArmOffsetTargetDown());
+        operator.getDPadRight().onTrue(new ArmOffsetTargetUp());
 
         operator.getRightTriggerButton()
             .whileTrue(new ConditionalCommand(
