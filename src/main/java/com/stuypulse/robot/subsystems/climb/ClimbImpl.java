@@ -37,7 +37,7 @@ public class ClimbImpl extends Climb {
 
         // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
-        voltageOverride = Optional.empty();
+        voltageOverride = Optional.of(0.0);
     }
 
     private Rotation2d getTargetAngle() {

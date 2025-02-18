@@ -80,7 +80,7 @@ public class FroggyImpl extends Froggy {
             }
         }).filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
-        pivotVoltageOverride = Optional.empty();
+        pivotVoltageOverride = Optional.of(0.0);
     }
 
     private Rotation2d getCurrentAngle() {

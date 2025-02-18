@@ -57,6 +57,7 @@ public abstract class Shooter extends SubsystemBase {
         this.state = state;
     }
 
+    public abstract void setSpeed(double speed);
     public abstract boolean hasCoral();
     public abstract boolean isStalling();
 

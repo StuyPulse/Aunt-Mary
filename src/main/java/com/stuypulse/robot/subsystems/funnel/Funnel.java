@@ -55,6 +55,7 @@ public abstract class Funnel extends SubsystemBase {
 
     public abstract boolean shouldReverse();
     public abstract boolean hasCoral();
+    public abstract void setSpeed(double speed);
 
     @Override
     public void periodic() {

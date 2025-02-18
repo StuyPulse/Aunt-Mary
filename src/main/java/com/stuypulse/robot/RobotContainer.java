@@ -8,6 +8,9 @@ package com.stuypulse.robot;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
+
+import java.util.Optional;
+
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
@@ -22,6 +25,7 @@ import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Front;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotOverrideVoltage;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
@@ -34,10 +38,12 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
+import com.stuypulse.robot.commands.funnel.FunnelSetSpeed;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.leds.LEDSolidColor;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterSetSpeed;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
@@ -61,7 +67,9 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.climb.Climb;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
@@ -87,6 +95,8 @@ public class RobotContainer {
 
     // Subsystem
     private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
+    private final Arm arm = Arm.getInstance();
+    private final Elevator elevator = Elevator.getInstance();
     private final Telemetry telemetry = new Telemetry(Settings.Swerve.Constraints.MAX_VELOCITY.get());
     private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
@@ -100,15 +110,55 @@ public class RobotContainer {
 
     // Robot container
     public RobotContainer() {
-        configureDefaultCommands();
-        configureDriverButtonBindings();
-        configureOperatorButtonBindings();
-        configureAutons();
+        // configureDefaultCommands();
+        // configureDriverButtonBindings();
+        // configureOperatorButtonBindings();
+        // configureAutons();
+        configureTestButtonBindings();
 
         swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
     }
 
+    /****************/
+    /***** TEST *****/
+    /****************/
+
+    private void configureTestButtonBindings() {
+        driver.getDPadUp().onTrue(new ElevatorOverrideVoltage(1))
+            .onFalse(new ElevatorOverrideVoltage(0));
+        driver.getDPadDown().onTrue(new ElevatorOverrideVoltage(-1))
+            .onFalse(new ElevatorOverrideVoltage(0));
+
+        driver.getDPadRight().onTrue(new ArmOverrideVoltage(1))
+            .onFalse(new ArmOverrideVoltage(0));
+        driver.getDPadLeft().onTrue(new ArmOverrideVoltage(-1))
+            .onFalse(new ArmOverrideVoltage(0));
+
+        driver.getTopButton().onTrue(new ShooterSetSpeed(0.5))
+            .onFalse(new ShooterSetSpeed(0));
+        driver.getBottomButton().onTrue(new ShooterSetSpeed(-0.5))
+            .onFalse(new ShooterSetSpeed(0));
+
+        driver.getRightBumper().onTrue(new FunnelSetSpeed(0.5))
+            .onFalse(new FunnelSetSpeed(0));
+        driver.getLeftBumper().onTrue(new FunnelSetSpeed(-0.5))
+            .onFalse(new FunnelSetSpeed(0));
+
+        driver.getRightButton().onTrue(new ClimbOverrideVoltage(1))
+            .onFalse(new ClimbOverrideVoltage(0));
+        driver.getLeftButton().onTrue(new ClimbOverrideVoltage(-1))
+            .onFalse(new ClimbOverrideVoltage(0));
+
+        driver.getRightTriggerButton().onTrue(new FroggyPivotOverrideVoltage(1))
+            .onFalse(new FroggyPivotOverrideVoltage(0));
+        driver.getLeftTriggerButton().onTrue(new FroggyPivotOverrideVoltage(-1))
+            .onFalse(new FroggyPivotOverrideVoltage(0));
+        
+        driver.getLeftMenuButton().onTrue(new SwerveDriveSeedFieldRelative());
+        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+    }
+    
     /****************/
     /*** DEFAULT ***/
     /****************/

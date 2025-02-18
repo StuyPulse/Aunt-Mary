@@ -48,16 +48,20 @@ public class ShooterImpl extends Shooter {
         return isStalling.get();
     }
 
+    public void setSpeed(double speed) {
+        motor.set(speed);
+    }
+
     @Override
     public void periodic() {
         super.periodic();
 
-        if (Settings.EnabledSubsystems.SHOOTER.get()) {
-            motor.set(getState().getSpeed());
-        }
-        else {
-            motor.set(0);
-        }
+        // if (Settings.EnabledSubsystems.SHOOTER.get()) {
+        //     motor.set(getState().getSpeed());
+        // }
+        // else {
+        //     motor.set(0);
+        // }
 
         SmartDashboard.putNumber("Shooter/Voltage", motor.getMotorVoltage().getValueAsDouble());
 

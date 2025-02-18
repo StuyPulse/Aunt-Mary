@@ -51,6 +51,10 @@ public class FunnelImpl extends Funnel {
         return shouldReverse.get();
     }
 
+    public void setSpeed(double speed) {
+        motor.set(speed);
+    }
+
     @Override
     public void periodic() {
         super.periodic();

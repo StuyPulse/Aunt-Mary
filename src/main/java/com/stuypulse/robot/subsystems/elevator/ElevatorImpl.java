@@ -36,7 +36,7 @@ public class ElevatorImpl extends Elevator {
 
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
 
-        voltageOverride = Optional.empty();
+        voltageOverride = Optional.of(0.0);
     }
 
     @Override

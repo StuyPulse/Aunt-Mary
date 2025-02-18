@@ -30,14 +30,14 @@ public interface Settings {
     double DT = 0.020;
 
     public interface EnabledSubsystems {
-        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm", true);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator", true);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb", true);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy", true);
-        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision", true);
+        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve", false);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm", false);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator", false);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter", false);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb", false);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy", false);
+        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision", false);
     }
 
     public interface Swerve {

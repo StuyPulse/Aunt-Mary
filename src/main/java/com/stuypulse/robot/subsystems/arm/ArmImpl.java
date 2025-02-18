@@ -59,7 +59,7 @@ public class ArmImpl extends Arm {
             .setSetpointFilter(motionProfile);
 
         
-        voltageOverride = Optional.empty();
+        voltageOverride = Optional.of(0.0);
     }
 
     @Override
