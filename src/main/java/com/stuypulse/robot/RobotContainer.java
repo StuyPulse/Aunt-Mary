@@ -35,8 +35,6 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
-import com.stuypulse.robot.commands.leds.LEDRainbow;
-import com.stuypulse.robot.commands.leds.LEDSolidColor;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
@@ -47,6 +45,10 @@ import com.stuypulse.robot.commands.superstructure.SuperStructureToAlgaeL2;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToAlgaeL3;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToBarge;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToFeed;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Back;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Front;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Back;
+import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
 import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
 import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
@@ -71,7 +73,6 @@ import com.stuypulse.robot.subsystems.swerve.Telemetry;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -101,7 +102,6 @@ public class RobotContainer {
         configureDriverButtonBindings();
         configureOperatorButtonBindings();
         configureAutons();
-        configureLEDs();
 
         swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -115,10 +115,7 @@ public class RobotContainer {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         funnel.setDefaultCommand(new FunnelDefaultCommand());
         leds.setDefaultCommand(new LEDDefaultCommand());
-        shooter.setDefaultCommand(new ShooterAcquireCoral()
-            .andThen(new BuzzController(driver))
-            .alongWith(new LEDRainbow())
-            .onlyIf(() -> !shooter.hasCoral()));
+        shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral()));
     }
 
     /***************/
@@ -149,99 +146,83 @@ public class RobotContainer {
 
         // ground algae pickup
         driver.getLeftTriggerButton()
-            .onTrue(new FroggyPivotToAlgaeGroundPickup().alongWith(new LEDRainbow()))
+            .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .whileTrue(new FroggyRollerIntakeAlgae().andThen(new BuzzController(driver)))
             .onFalse(new FroggyPivotToStow());
 
         driver.getLeftBumper()
-            .onTrue(new FroggyRollerShootAlgae().alongWith(new LEDSolidColor(Color.kGreen)))
+            .onTrue(new FroggyRollerShootAlgae())
             .onFalse(new FroggyRollerStop());
 
         driver.getRightTriggerButton()
-            .onTrue(new FroggyPivotToCoralGroundPickup().alongWith(new LEDRainbow()))
-            .whileTrue(new FroggyRollerIntakeCoral().andThen(new BuzzController(driver)))
+            .onTrue(new FroggyPivotToCoralGroundPickup())
+            .whileTrue(new FroggyRollerIntakeCoral())
             .onFalse(new FroggyPivotToStow());
 
         driver.getRightBumper()
             .whileTrue(new FroggyPivotToL1()
                 .andThen(new FroggyPivotWaitUntilAtTargetAngle())
-                .andThen(new FroggyRollerShootCoral()).alongWith(new LEDSolidColor(Color.kGreen)))
+                .andThen(new FroggyRollerShootCoral()))
             .onFalse(new FroggyRollerStop().andThen(new FroggyPivotToStow()));
 
         driver.getTopButton()
             .whileTrue(
                 new ConditionalCommand(
                     new SuperStructureToL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, true))
-                            .alongWith(new LEDSolidColor(Color.kYellow)))
-                        .andThen(new ShooterShootBackwards()
-                            .alongWith(new LEDSolidColor(Color.kGreen))), 
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, true)))
+                        .andThen(new ShooterShootBackwards()), 
                     new SuperStructureToL4Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, false))
-                            .alongWith(new LEDSolidColor(Color.kYellow)))
-                        .andThen(new ShooterShootForwards()
-                            .alongWith(new LEDSolidColor(Color.kGreen))), 
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(4, false)))
+                        .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
-            .onFalse(new SuperStructureToFeed().alongWith(new LEDSolidColor(Color.kBlue)))
+            .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 
         driver.getRightButton()
             .whileTrue(
                 new ConditionalCommand(
-                    new SuperStructureToL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, true))
-                            .alongWith(new LEDSolidColor(Color.kYellow)))
-                        .andThen(new ShooterShootBackwards()
-                            .alongWith(new LEDSolidColor(Color.kGreen))), 
-                    new SuperStructureToL4Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, false))
-                            .alongWith(new LEDSolidColor(Color.kYellow)))
-                        .andThen(new ShooterShootForwards()
-                            .alongWith(new LEDSolidColor(Color.kGreen))), 
+                    new SuperStructureToL3Front()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, true)))
+                        .andThen(new ShooterShootBackwards()), 
+                    new SuperStructureToL3Back()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(3, false)))
+                        .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
-            .onFalse(new SuperStructureToFeed().alongWith(new LEDSolidColor(Color.kBlue)))
+            .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 
         driver.getBottomButton()
             .whileTrue(
                 new ConditionalCommand(
-                    new SuperStructureToL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, true))
-                            .alongWith(new LEDSolidColor(Color.kYellow)))
-                        .andThen(new ShooterShootBackwards()
-                            .alongWith(new LEDSolidColor(Color.kGreen))), 
-                    new SuperStructureToL4Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, false))
-                            .alongWith(new LEDSolidColor(Color.kYellow)))
-                        .andThen(new ShooterShootForwards()
-                            .alongWith(new LEDSolidColor(Color.kGreen))), 
+                    new SuperStructureToL2Front()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, true)))
+                        .andThen(new ShooterShootForwards()), 
+                    new SuperStructureToL2Back()
+                        .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDrivePIDToNearestBranch(2, false)))
+                        .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
-            .onFalse(new SuperStructureToFeed().alongWith(new LEDSolidColor(Color.kBlue)))
+            .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 
         driver.getLeftButton()
             .whileTrue(new SwerveDriveDriveAlignedToBarge(driver))
             .whileTrue(new SuperStructureToBarge()
-                .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToBarge())
-                    .alongWith(new LEDSolidColor(Color.kYellow)))
-                .andThen(new ShooterShootAlgae()
-                    .alongWith(new LEDSolidColor(Color.kGreen))))
-            .onFalse(new SuperStructureToFeed().onlyIf(() -> (
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE - swerve.getPose().getX()) > 
-                Settings.Swerve.Alignment.Tolerances.X_BARGE_CLEARANCE.get()))
+                .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToBarge()))
+                .andThen(new ShooterShootAlgae()))
+            .onFalse(new SuperStructureToFeed())
             .onFalse(new ShooterStop());
 
         driver.getDPadLeft()
             .whileTrue(new SuperStructureToAlgaeL3()
-                .andThen(new ShooterAcquireAlgae().alongWith(new LEDRainbow())))
+                .andThen(new ShooterAcquireAlgae()))
             .onFalse(new SuperStructureToFeed());
         
         driver.getDPadDown()
             .whileTrue(new SuperStructureToAlgaeL2()
-                .andThen(new ShooterAcquireAlgae().alongWith(new LEDRainbow())))
+                .andThen(new ShooterAcquireAlgae()))
             .onFalse(new SuperStructureToFeed());
 
         driver.getLeftMenuButton().onTrue(new ClimbOpen());
@@ -263,8 +244,8 @@ public class RobotContainer {
             .whileTrue(new ConditionalCommand(
                 new ShooterShootForwards().alongWith(new FunnelReverse()),
                 new ShooterShootBackwards().alongWith(new FunnelReverse()),
-                () -> shooter.shouldShootBackwards()))
-            .onFalse(new ShooterStop());
+                () -> shooter.shouldShootBackwards())
+                    .andThen(new ShooterStop()));
 
         operator.getLeftBumper().onTrue(new FroggyPivotToStow());
 
@@ -299,20 +280,6 @@ public class RobotContainer {
         SmartDashboard.putData("Autonomous", autonChooser);
     }
 
-    /**************/
-    /*** LEDs ***/
-    /**************/
-
-    public void configureLEDs() {
-        new Trigger(() -> shooter.hasCoral() || froggy.isStalling())
-            .whileTrue(new LEDSolidColor(Color.kRed));
-
-        new Trigger(() -> climb.atTargetAngle() && climb.getState() == Climb.ClimbState.OPEN)
-            .whileTrue(new LEDRainbow());
-
-        new Trigger(() -> climb.atTargetAngle() && climb.getState() == Climb.ClimbState.CLIMBING)
-            .whileTrue(new LEDSolidColor(Color.kGreen));
-    }
     public Command getAutonomousCommand() {
         return autonChooser.getSelected();
     }
