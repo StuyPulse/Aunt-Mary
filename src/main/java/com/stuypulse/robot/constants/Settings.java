@@ -36,12 +36,12 @@ public interface Settings {
 
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", false);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", false);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
     }
 
@@ -106,11 +106,11 @@ public interface Settings {
     public interface Shooter {
         SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Coral Shoot Speed Forward", 0.75);
         SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Coral Shoot Speed Reverse", -0.75);
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.3);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.13);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", -0.45);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
 
-        double HAS_CORAL_DEBOUNCE = 0.2;
+        double HAS_CORAL_DEBOUNCE = 0.05;
 
         double STALL_DETECTION_DEBOUNCE = 0.5;
         double STALL_CURRENT_THRESHOLD = 30;
@@ -132,7 +132,7 @@ public interface Settings {
         double MAX_VELOCITY_METERS_PER_SECOND = 2.0;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
-        double FEED_HEIGHT_METERS = 1.0;
+        double FEED_HEIGHT_METERS = 1.145752;
 
         // Coral
         double FRONT_L2_HEIGHT_METERS = 1.609;
@@ -194,8 +194,8 @@ public interface Settings {
         double ALGAE_STALL_CURRENT_THRESHOLD = 20.0;
         double STALL_DEBOUNCE_TIME = 0.0;
 
-        double MAX_VEL_ROTATIONS_PER_S = 1.0;
-        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(100);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(100);
     }
 
     public interface Climb {
@@ -205,9 +205,9 @@ public interface Settings {
         double DEFAULT_VOLTAGE = 4; // Used for normal movement
         double CLIMB_VOLTAGE = 8; // Used when climbing
 
-        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(162.0);
+        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(170.0);
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0); // When pressing against the hardstop
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(180.0);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
         
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.0);
     }

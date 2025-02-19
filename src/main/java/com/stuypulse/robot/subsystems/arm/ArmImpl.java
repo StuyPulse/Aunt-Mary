@@ -78,8 +78,8 @@ public class ArmImpl extends Arm {
 
         sysidRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
-                edu.wpi.first.units.Units.Volts.of(2).per(Second), 
-                edu.wpi.first.units.Units.Volts.of(5), 
+                edu.wpi.first.units.Units.Volts.of(3).per(Second), 
+                edu.wpi.first.units.Units.Volts.of(7), 
                 null,
                 state -> SignalLogger.writeString("SysIdArm_State", state.toString())),
             new SysIdRoutine.Mechanism(
@@ -88,8 +88,8 @@ public class ArmImpl extends Arm {
                     isRunningSysid = true;
                 }, 
                 state -> {
-                    SignalLogger.writeDouble("Arm Position (radians)", getCurrentAngle().getRadians());
-                    SignalLogger.writeDouble("Arm Velocity (radians per s)", Units.rotationsToRadians(motor.getVelocity().getValueAsDouble()));
+                    SignalLogger.writeDouble("Arm Position (degrees)", getCurrentAngle().getDegrees());
+                    SignalLogger.writeDouble("Arm Velocity (degrees per s)", Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()));
                     SignalLogger.writeDouble("Arm Voltage", motor.getMotorVoltage().getValueAsDouble());
                 }, 
                 this));
@@ -184,6 +184,6 @@ public class ArmImpl extends Arm {
         SmartDashboard.putNumber("Arm/Absolute Encoder Value not offset (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
         SmartDashboard.putNumber("Arm/Absolute Encoder Value offset (deg)", absoluteEncoderAngle.getDegrees());
         SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Arm/Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
     }
 }

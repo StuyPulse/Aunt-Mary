@@ -21,11 +21,17 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import static edu.wpi.first.units.Units.Second;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -45,6 +51,9 @@ public class FroggyImpl extends Froggy {
 
     private Optional<Double> pivotVoltageOverride;
     private Rotation2d pivotOperatorOffset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
 
     protected FroggyImpl() {
         super();
@@ -68,7 +77,7 @@ public class FroggyImpl extends Froggy {
         controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
             .add(new ArmFeedforward(Gains.Froggy.FF.kG))
             .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
-            .setSetpointFilter(new MotionProfile(Settings.Froggy.MAX_VEL_ROTATIONS_PER_S, Settings.Froggy.MAX_ACCEL_ROTATIONS_PER_S_PER_S));
+            .setSetpointFilter(new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees()));
 
         isStalling = BStream.create(() -> {
             switch (getRollerState()) {
@@ -83,6 +92,36 @@ public class FroggyImpl extends Froggy {
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                edu.wpi.first.units.Units.Volts.of(5).per(Second), 
+                edu.wpi.first.units.Units.Volts.of(12), 
+                null,
+                state -> SignalLogger.writeString("SysIdPivot_State", state.toString())), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    pivotMotor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
+                    isRunningSysid = true;
+                }, 
+                state -> {
+                    SignalLogger.writeDouble("Froggy Pivot Position (degrees)", getCurrentAngle().getDegrees());
+                    SignalLogger.writeDouble("Froggy Pivot Velocity (degrees per s)", Units.rotationsToDegrees(pivotMotor.getVelocity().getValueAsDouble()));
+                    SignalLogger.writeDouble("Arm Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
+                }, 
+                this));
+    }
+
+    @Override
+    public Command getPivotSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getPivotSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     private Rotation2d getCurrentAngle() {
@@ -125,13 +164,15 @@ public class FroggyImpl extends Froggy {
         super.periodic();
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {
-            rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
-            if (pivotVoltageOverride.isPresent()) {
-                pivotMotor.setVoltage(pivotVoltageOverride.get());
-            }
-            else {
-                // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+            if (!isRunningSysid) {
+                rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
+                if (pivotVoltageOverride.isPresent()) {
+                    pivotMotor.setVoltage(pivotVoltageOverride.get());
+                }
+                else {
+                    // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                    pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+                }
             }
         }
         else {
@@ -142,6 +183,7 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putBoolean("Froggy/At Target Angle", isAtTargetAngle());
 
         SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Setpoint (deg)", controller.getSetpoint());
         SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putBoolean("Froggy/Is Stalling", isStalling());
