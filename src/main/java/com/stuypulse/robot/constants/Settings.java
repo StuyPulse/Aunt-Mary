@@ -35,13 +35,13 @@ public interface Settings {
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {
-        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", false);
+        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", false);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
     }
 
@@ -185,16 +185,16 @@ public interface Settings {
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
 
-        double ALGAE_INTAKE_SPEED = 0.5;
-        double ALGAE_OUTTAKE_SPEED = 0.5;
+        double ALGAE_INTAKE_SPEED = 1.0;
+        double ALGAE_OUTTAKE_SPEED = 1.0;
 
-        double CORAL_INTAKE_SPEED = 0.5;
-        double CORAL_OUTTAKE_SPEED = 0.5;
+        double CORAL_INTAKE_SPEED = 1.0;
+        double CORAL_OUTTAKE_SPEED = 1.0;
 
         double HOLD_ALGAE_SPEED = 0.0;
 
-        double CORAL_STALL_CURRENT_THRESHOLD = 20.0;
-        double ALGAE_STALL_CURRENT_THRESHOLD = 20.0;
+        double CORAL_STALL_CURRENT_THRESHOLD = 80.0;
+        double ALGAE_STALL_CURRENT_THRESHOLD = 80.0;
         double STALL_DEBOUNCE_TIME = 0.0;
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(100);

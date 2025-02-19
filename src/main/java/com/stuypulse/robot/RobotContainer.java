@@ -148,13 +148,11 @@ public class RobotContainer {
     /****************/
 
     private void configureTestButtons() {
-        driver.getTopButton().onTrue(new SuperStructureToL3Front());
+        driver.getTopButton().onTrue(new SuperStructureToL4Front());
+        driver.getRightButton().onTrue(new SuperStructureToL3Front());
         driver.getBottomButton().onTrue(new SuperStructureToFeed());
 
-        driver.getLeftMenuButton().onTrue(new ClimbOpen());
-        driver.getRightMenuButton().onTrue(new ClimbClimb());
-
-        driver.getLeftTriggerButton().onTrue(new SuperStructureToFeed());
+        driver.getRightTriggerButton().whileTrue(new FroggyRollerIntakeCoral());
     }
 
     private void configureDefaultCommands() {
