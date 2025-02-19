@@ -41,21 +41,6 @@ public class FunnelImpl extends Funnel {
             .filtered(new BDebounce.Falling(Settings.Funnel.MIN_REVERSE_TIME));
     }
 
-    private void setMotorBasedOnState() {
-        switch (getState()) {
-            case FORWARD:
-                motor.set(Settings.Funnel.FORWARD_SPEED.get());
-                break;
-            case REVERSE:
-                motor.set(-Settings.Funnel.REVERSE_SPEED.get());
-            case STOP:
-                motor.set(0);
-            default:
-                motor.set(0);
-                break;
-        }
-    }
-
     @Override
     public boolean hasCoral() {
         return hasCoral.get();
@@ -70,7 +55,12 @@ public class FunnelImpl extends Funnel {
     public void periodic() {
         super.periodic();
 
-        setMotorBasedOnState();
+        if (Settings.EnabledSubsystems.FUNNEL.get()) {
+            motor.set(getState().getSpeed());
+        } 
+        else {
+            motor.set(0);
+        }
 
         SmartDashboard.putNumber("Funnel/Current", motor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putBoolean("Funnel/IR Sensor", irSensor.get());

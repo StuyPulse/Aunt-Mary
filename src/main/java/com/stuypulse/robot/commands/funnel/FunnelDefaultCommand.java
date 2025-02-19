@@ -6,12 +6,12 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class FunnelAcquire extends Command{
+public class FunnelDefaultCommand extends Command{
     
     private final Funnel funnel;
     private final Shooter lokiShooter;
 
-    public FunnelAcquire() {
+    public FunnelDefaultCommand() {
         this.funnel = Funnel.getInstance();
         this.lokiShooter = Shooter.getInstance();
         addRequirements(funnel);

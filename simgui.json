@@ -63,6 +63,9 @@
         "Elevator": {
           "open": true
         },
+        "Enabled Subsystems": {
+          "open": true
+        },
         "Shooter": {
           "open": true
         },

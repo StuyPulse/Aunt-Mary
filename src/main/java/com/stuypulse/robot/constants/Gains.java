@@ -12,41 +12,38 @@ public interface Gains {
 
     public interface Swerve {
         public interface Alignment {
-            PIDConstants XY = new PIDConstants(3, 0, 0);
-            PIDConstants THETA = new PIDConstants(3, 0, 0.2);
+            PIDConstants XY = new PIDConstants(1.0, 0, 0.0);
+            PIDConstants THETA = new PIDConstants(12.988, 0, 0.77717);
         }
     }
 
     public interface Elevator {
         public interface PID {
-            double kP = 4.0;
+            double kP = 17.185;
             double kI = 0.0;
-            double kD = 0.15;
+            double kD = 1.4344;
         }
 
         public interface FF {
-            double kS = 0.0;
-            double kV = 0.0;
-            double kA = 0.0;
-            double kG = 2.5;
+            double kS = 0.28562;
+            double kV = 2.8012;
+            double kA = 0.16141;
+            double kG = 0.81505;
         }
     }
 
     public interface Arm {
         public interface PID {
-            double kP = 0.045;
+            double kP = 9.2822;
             double kI = 0.0;
-            double kD = 0.008;
+            double kD = 1.1381;
         }
 
         public interface FF {
-            double kS = 0.0; 
-            double kV = 0.0;
-            double kA = 0.0;
-
-            double kG_EMPTY = 2.1;
-            double kG_Coral = 2.1; 
-            double kG_Algae = 2.1;
+            double kS = 0.084998; 
+            double kV = 2.095;
+            double kA = 0.59073;
+            double kG = 0.90574;
         }
     }
 

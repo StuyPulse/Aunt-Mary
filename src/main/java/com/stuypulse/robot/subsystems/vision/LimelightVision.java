@@ -25,10 +25,9 @@ public class LimelightVision extends SubsystemBase{
     }
 
     private String[] names;
-    private SmartBoolean enabled;
     private SmartBoolean[] camerasEnabled;
 
-    public LimelightVision() {
+    private LimelightVision() {
         names = new String[Cameras.LimelightCameras.length];
         for (int i = 0; i < Cameras.LimelightCameras.length; i++) {
             names[i] = Cameras.LimelightCameras[i].getName();
@@ -51,8 +50,6 @@ public class LimelightVision extends SubsystemBase{
             SmartDashboard.putBoolean("Vision/" + names[i] + " Has Data", false);
         }
 
-        enabled = new SmartBoolean("Vision/Is Enabled", true);
-
         CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MIN_STDDEVS);
     }
 
@@ -60,14 +57,6 @@ public class LimelightVision extends SubsystemBase{
         for (String name : names) {
             LimelightHelpers.SetFiducialIDFiltersOverride(name, ids);
         }
-    }
-
-    public void enable() {
-        enabled.set(true);
-    }
-
-    public void disable() {
-        enabled.set(false);
     }
 
     public void setCameraEnabled(String name, boolean enabled) {
@@ -86,7 +75,7 @@ public class LimelightVision extends SubsystemBase{
 
     @Override
     public void periodic() {
-        if (enabled.get()) {
+        if (Settings.EnabledSubsystems.VISION.get()) {
             for (int i = 0; i < names.length; i++) {
                 if (camerasEnabled[i].get()) {
                     String limelightName = names[i];

@@ -33,12 +33,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
  */
 public interface Motors {
 
-    public interface LokiShooter {
+    public interface Shooter {
 		TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
 			.withCurrentLimitAmps(40)
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
-			.withInvertedValue(InvertedValue.Clockwise_Positive);
+			.withInvertedValue(InvertedValue.CounterClockwise_Positive);
 	}
 
     public interface Funnel {
@@ -56,11 +56,11 @@ public interface Motors {
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
 			.withPIDConstants(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD, 0)
-			.withFFConstants(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA, Gains.Arm.FF.kG_EMPTY, 0)
+			.withFFConstants(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA, Gains.Arm.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Arm_Cosine)
-			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
-			.withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
-			.withMotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
+			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO);
+			// .withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
+			// .withMotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
     }
 
     public interface Froggy {

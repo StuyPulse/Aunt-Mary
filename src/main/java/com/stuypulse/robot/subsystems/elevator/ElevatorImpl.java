@@ -14,9 +14,18 @@ import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 
+import java.util.Optional;
+
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -24,12 +33,48 @@ public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
     private final DigitalInput bumpSwitchBottom;
 
-    public ElevatorImpl() {
-        motor = new TalonFX(Ports.Elevator.MOTOR);
+    private Optional<Double> voltageOverride;
+    private double operatorOffset;
+
+    private SysIdRoutine sysidRoutine;
+    private boolean isRunningSysid;
+
+    protected ElevatorImpl() {
+        super();
+        motor = new TalonFX(Ports.Elevator.MOTOR, Settings.CANIVORE_NAME);
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
+
+        voltageOverride = Optional.empty();
+        operatorOffset = 0;
+
+        isRunningSysid = false;
+
+        sysidRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, 
+                Units.Volts.of(5), 
+                null,
+                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
+            new SysIdRoutine.Mechanism(
+                output -> {
+                    motor.setVoltage(output.in(Units.Volts));
+                    isRunningSysid = true;
+                }, 
+                null, 
+                this));
+    }
+
+    @Override
+    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.quasistatic(direction);
+    }
+
+    @Override
+    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysidRoutine.dynamic(direction);
     }
 
     @Override
@@ -38,7 +83,7 @@ public class ElevatorImpl extends Elevator {
     }
 
     private double getTargetHeight() {
-        return getState().getTargetHeight();
+        return getState().getTargetHeight() + operatorOffset;
     }
 
     @Override
@@ -51,6 +96,21 @@ public class ElevatorImpl extends Elevator {
     }
 
     @Override
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
+    }
+
+    @Override
+    public void setOperatorOffset(double offset) {
+        this.operatorOffset = offset;
+    }
+
+    @Override
+    public double getOperatorOffset() {
+        return this.operatorOffset;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 
@@ -58,7 +118,18 @@ public class ElevatorImpl extends Elevator {
             motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
         }
 
-        motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+        if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
+            if (voltageOverride.isPresent()) {
+                motor.setVoltage(voltageOverride.get());
+            }
+            else {
+                motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+            }
+        }
+        else {
+            motor.setVoltage(0);
+        }
+
 
         SmartDashboard.putNumber("Elevator/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());

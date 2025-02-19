@@ -1,9 +1,12 @@
 package com.stuypulse.robot.subsystems.superstructure;
 
+import com.stuypulse.robot.constants.Field;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -56,7 +59,7 @@ public class SuperStructure extends SubsystemBase{
 
     private SuperStructureVisualizer visualizer;
 
-    protected SuperStructure() {
+    private SuperStructure() {
         this.targetState = SuperStructureTargetState.STOW;
 
         this.arm = Arm.getInstance();
@@ -90,19 +93,27 @@ public class SuperStructure extends SubsystemBase{
         }
     }
 
-    @Override
-    public void periodic() {
+    private boolean canMoveDownFromBarge() {
+        double distanceFromCenterLine = Math.abs(Field.LENGTH / 2 - CommandSwerveDrivetrain.getInstance().getPose().getX());
+        return distanceFromCenterLine > Settings.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE;
+    }
+
+    private void updateArmElevatorTargetStates() {
         ArmState currentArmState = arm.getState();
         ArmState targetArmState = getTargetState().getTargetArmState();
 
         ElevatorState currentElevatorState = elevator.getState();
         ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
 
+        if (currentArmState == ArmState.BARGE && currentElevatorState == ElevatorState.BARGE && !canMoveDownFromBarge()) {
+            return;
+        }
+
         if (getTargetState() == SuperStructureTargetState.FEED) {
-            if (currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) {
+            if ((currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
                 arm.setState(ArmState.FEED);
             }
-            else if (currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle() && currentElevatorState != ElevatorState.FEED) {
+            else if (((currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) && currentElevatorState != ElevatorState.FEED) {
                 elevator.setState(ElevatorState.FEED);
             }
             else {
@@ -110,7 +121,7 @@ public class SuperStructure extends SubsystemBase{
             }
         }
         else {
-            if (targetElevatorState != currentElevatorState && arm.atTargetAngle()) {
+            if ((targetElevatorState != currentElevatorState && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) {
                 if (currentArmState == ArmState.FEED) {
                     arm.setState(ArmState.VERTICAL_DOWN);
                 }
@@ -118,10 +129,15 @@ public class SuperStructure extends SubsystemBase{
                     elevator.setState(targetElevatorState);
                 }
             }
-            else if (targetArmState != currentArmState && elevator.atTargetHeight()) {
+            else if ((targetArmState != currentArmState && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
                 arm.setState(targetArmState);
             }
         }
+    }
+
+    @Override
+    public void periodic() {
+        updateArmElevatorTargetStates();
 
         visualizer.update(elevator.getCurrentHeight(), arm.getCurrentAngle());
 

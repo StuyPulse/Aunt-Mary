@@ -36,10 +36,19 @@ public class LEDDefaultCommand extends Command{
             || froggy.getRollerState() == RollerState.INTAKE_CORAL;
     }
 
+    private boolean isShooting() {
+        return shooter.getState() == ShooterState.SHOOT_CORAL_FORWARD
+            || shooter.getState() == ShooterState.SHOOT_CORAL_REVERSE
+            || shooter.getState() == ShooterState.SHOOT_ALGAE;
+    }
+
     @Override
     public void execute() {
-        if (shooter.hasCoral()) {
+        if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
+        }
+        else if (isShooting()) {
+            leds.applyPattern(Settings.LED.SHOOT_COLOR);
         }
         else if (isIntaking()) {
             leds.applyPattern(Settings.LED.INTAKE_COLOR);

@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
+import com.stuypulse.robot.constants.Settings;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,9 +24,19 @@ public abstract class Funnel extends SubsystemBase {
     }
 
     public enum FunnelState {
-        FORWARD,
-        REVERSE,
-        STOP
+        FORWARD(Settings.Funnel.FORWARD_SPEED),
+        REVERSE(Settings.Funnel.REVERSE_SPEED),
+        STOP(0);
+
+        private Number speed;
+
+        private FunnelState(Number speed) {
+            this.speed = speed;
+        }
+
+        public double getSpeed() {
+            return this.speed.doubleValue();
+        }
     }
 
     private FunnelState state;

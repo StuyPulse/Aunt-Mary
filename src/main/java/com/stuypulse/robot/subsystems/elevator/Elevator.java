@@ -6,13 +6,17 @@
 
 package com.stuypulse.robot.subsystems.elevator;
 
+import java.util.Optional;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Elevator extends SubsystemBase {
 
@@ -57,12 +61,14 @@ public abstract class Elevator extends SubsystemBase {
 
     private ElevatorState state;
 
-    public Elevator() {
+    protected Elevator() {
         this.state = ElevatorState.STOW;
     }
 
     public void setState(ElevatorState state) {
         this.state = state;
+        setVoltageOverride(Optional.empty());
+        setOperatorOffset(0);
     }
 
     public ElevatorState getState() {
@@ -71,6 +77,13 @@ public abstract class Elevator extends SubsystemBase {
 
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
+
+    public abstract void setVoltageOverride(Optional<Double> voltage);
+    public abstract void setOperatorOffset(double offset);
+    public abstract double getOperatorOffset();
+
+    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
+    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
 
     @Override
     public void periodic() {

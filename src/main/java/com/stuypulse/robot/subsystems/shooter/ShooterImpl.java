@@ -20,45 +20,22 @@ public class ShooterImpl extends Shooter {
 
     private final TalonFX motor;
 
-    private final DigitalInput IRSensor;
+    private final DigitalInput beamBreak;
     private final BStream hasCoral;
     private final BStream isStalling;
 
     protected ShooterImpl() {
+        super();
         motor = new TalonFX(Ports.Shooter.MOTOR);
-        Motors.LokiShooter.MOTOR_CONFIG.configure(motor);
+        Motors.Shooter.MOTOR_CONFIG.configure(motor);
 
-        IRSensor = new DigitalInput(Ports.Shooter.IR_SENSOR);
+        beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);
 
-        hasCoral = BStream.create(IRSensor).not()
-                    .filtered(new BDebounce.Both(Settings.LokiShooter.HAS_CORAL_DEBOUNCE));
+        hasCoral = BStream.create(beamBreak).not()
+                    .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
 
-        isStalling = BStream.create(() -> Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.LokiShooter.STALL_CURRENT_THRESHOLD)
-                    .filtered(new BDebounce.Both(Settings.LokiShooter.STALL_DETECTION_DEBOUNCE));
-    }
-
-    private void setMotorBasedOnState() {
-        switch (getState()) {
-            case ACQUIRE_CORAL:
-                motor.set(Settings.LokiShooter.CORAL_ACQUIRE_SPEED.get());
-                break;
-            case SHOOT_CORAL_FORWARD:
-                motor.set(Settings.LokiShooter.CORAL_SHOOT_SPEED.get());
-                break;
-            case SHOOT_CORAL_REVERSE:
-                motor.set(-Settings.LokiShooter.CORAL_SHOOT_SPEED.get());
-            case ACQUIRE_ALGAE:
-                motor.set(-Settings.LokiShooter.ALGAE_ACQUIRE_SPEED.get());
-                break;
-            case SHOOT_ALGAE:
-                motor.set(Settings.LokiShooter.ALGAE_SHOOT_SPEED.get());
-                break;
-            case STOP:
-                motor.set(0);
-                break;
-            default:
-                break;
-        }
+        isStalling = BStream.create(() -> Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Shooter.STALL_CURRENT_THRESHOLD)
+                    .filtered(new BDebounce.Both(Settings.Shooter.STALL_DETECTION_DEBOUNCE));
     }
 
     @Override
@@ -75,7 +52,12 @@ public class ShooterImpl extends Shooter {
     public void periodic() {
         super.periodic();
 
-        setMotorBasedOnState();
+        if (Settings.EnabledSubsystems.SHOOTER.get()) {
+            motor.set(getState().getSpeed());
+        }
+        else {
+            motor.set(0);
+        }
 
         SmartDashboard.putNumber("Shooter/Voltage", motor.getMotorVoltage().getValueAsDouble());
 

@@ -17,7 +17,7 @@ public interface Ports {
     public interface Froggy {
         int PIVOT = 22;
         int ROLLER = 21;
-        int ABSOLUTE_ENCODER = 0;
+        int ABSOLUTE_ENCODER = 4;
     }
 
     public interface Climb {
@@ -27,12 +27,12 @@ public interface Ports {
 
     public interface Arm {
         int MOTOR = 32;
-        int ABSOLUTE_ENCODER = 7;
+        int ABSOLUTE_ENCODER = 5;
     }
 
     public interface Shooter {
         int MOTOR = 42;
-        int IR_SENSOR = 5;
+        int BEAM_BREAK = 7;
     }
 
     public interface Funnel {

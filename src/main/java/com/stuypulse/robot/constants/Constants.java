@@ -42,23 +42,23 @@ public interface Constants {
 
         double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(216.992516 + 90);
 
         double ARM_LENGTH = Units.inchesToMeters(29);
         double MASS_KG = Units.lbsToKilograms(12.8);
         double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
 
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-95);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(360);
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-98.638641);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(240);
     }
 
     public interface Froggy {
-        double GEAR_RATIO = 4.0 / 1.0;
+        double GEAR_RATIO = 8.0 / 1.0;
 
-        Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-56.584441);
+        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(94.812699);
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.420866);
     }
 
     public interface Climb {
