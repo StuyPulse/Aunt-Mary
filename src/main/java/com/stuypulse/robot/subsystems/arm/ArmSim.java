@@ -160,16 +160,17 @@ public class ArmSim extends Arm {
         if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 sim.setInputVoltage(voltageOverride.get());
-                sim.update(Settings.DT);
             }
             else {
                 sim.setInputVoltage(controller.getU(0));
-                sim.update(Settings.DT);
             }
         }
         else {
             sim.setInputVoltage(0);
         }
+
+        sim.update(Settings.DT);
+
 
         SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());

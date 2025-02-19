@@ -53,6 +53,8 @@ public class ElevatorSimu extends Elevator {
             Constants.Elevator.MAX_HEIGHT_METERS,
             false,
             Constants.Elevator.MIN_HEIGHT_METERS);
+        
+        sim.setState(Constants.Elevator.MIN_HEIGHT_METERS, 0);
 
         LinearSystem<N2, N1, N2> elevatorSystem = LinearSystemId.createElevatorSystem(
             DCMotor.getKrakenX60(1), 
@@ -156,15 +158,15 @@ public class ElevatorSimu extends Elevator {
         if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
                 sim.setInputVoltage(0);
-                sim.update(Settings.DT);
             }
             else {
                 sim.setInputVoltage(controller.getU(0));
-                sim.update(Settings.DT);
             }
         }
         else {
             sim.setInputVoltage(0);
         }
+
+        sim.update(Settings.DT);
     }
 }
