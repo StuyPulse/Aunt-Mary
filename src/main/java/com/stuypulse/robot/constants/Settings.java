@@ -152,6 +152,9 @@ public interface Settings {
     }
 
     public interface Arm {
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-90);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230 - 12.304688);
+
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-83.385);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(60.6);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(75.0);

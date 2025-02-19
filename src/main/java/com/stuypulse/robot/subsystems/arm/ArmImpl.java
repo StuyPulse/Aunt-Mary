@@ -51,7 +51,7 @@ public class ArmImpl extends Arm {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
-        motor.setPosition(Constants.Arm.MIN_ANGLE.getRotations());
+        motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
 
         // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
@@ -112,7 +112,7 @@ public class ArmImpl extends Arm {
 
     private Rotation2d getTargetAngle() {
        return Rotation2d.fromDegrees(
-        SLMath.clamp(getState().getTargetAngle().plus(operatorOffset).getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
+        SLMath.clamp(getState().getTargetAngle().plus(operatorOffset).getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
@@ -156,7 +156,7 @@ public class ArmImpl extends Arm {
 
         Rotation2d absoluteEncoderAngle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
 
-        if (absoluteEncoderAngle.getRotations() >= Constants.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
+        if (absoluteEncoderAngle.getRotations() >= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
             && absoluteEncoderAngle.getRotations() <= Constants.Arm.ENCODER_BREAKPOINT_ANGLE.getRotations()
             && absoluteEncoder.isConnected()) 
         {

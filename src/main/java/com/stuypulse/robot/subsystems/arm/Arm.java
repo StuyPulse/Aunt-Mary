@@ -54,7 +54,7 @@ public abstract class Arm extends SubsystemBase {
         private Rotation2d targetAngle;
 
         private ArmState(Rotation2d targetAngle) {
-            this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
+            this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
         }
 
         public Rotation2d getTargetAngle() {

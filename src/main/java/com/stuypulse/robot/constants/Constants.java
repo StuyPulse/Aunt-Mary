@@ -48,9 +48,6 @@ public interface Constants {
         double MASS_KG = Units.lbsToKilograms(12.8);
         double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
 
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-90);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230 - 12.304688);
-
         Rotation2d ENCODER_BREAKPOINT_ANGLE = Rotation2d.fromDegrees(52 - 12.304688); // The abs encoder jumps from about 52 to -308
     }
 

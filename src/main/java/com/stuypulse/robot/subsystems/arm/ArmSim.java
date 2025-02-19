@@ -51,8 +51,8 @@ public class ArmSim extends Arm {
             Constants.Arm.GEAR_RATIO,
             Constants.Arm.MOMENT_OF_INERTIA,
             Constants.Arm.ARM_LENGTH,
-            Constants.Arm.MIN_ANGLE.getRadians(),
-            Constants.Arm.MAX_ANGLE.getRadians(),
+            Settings.Arm.MIN_ANGLE.getRadians(),
+            Settings.Arm.MAX_ANGLE.getRadians(),
             false,
             Settings.Arm.STOW_ANGLE.getRadians()
         );
