@@ -63,7 +63,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
 
     /* Swerve requests to apply during SysId characterization */
-    private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
+    private final SwerveRequest.SysIdSwerveTranslation m_moduleTranslationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
@@ -85,17 +85,42 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return this.robotCentricRequest;
     }
 
-    /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
-    private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
+    /* SysId routine for characterizing module translation. This is used to find PID gains for the drive motors. */
+    private final SysIdRoutine m_sysIdRoutineModuleTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
             null,        // Use default timeout (10 s)
             // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
+            state -> SignalLogger.writeString("SysIdModuleTranslation_State", state.toString())
         ),
         new SysIdRoutine.Mechanism(
-            output -> setControl(m_translationCharacterization.withVolts(output)),
+            output -> setControl(m_moduleTranslationCharacterization.withVolts(output)),
+            null,
+            this
+        )
+    );
+
+    /* SysId routine for characterizing chassis translation. This is used to find PID gains PID to pose. */
+    private final SysIdRoutine m_sysIdRoutineChassisTranslation = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            /* This is in meters per second², but SysId only supports "volts per second" */
+            Volts.of(1).per(Second),
+            /* This is in meters per second, but SysId only supports "volts" */
+            Volts.of(4),
+            null, // Use default timeout (10 s)
+            // Log state with SignalLogger class
+            state -> SignalLogger.writeString("SysIdChassisTranslation_State", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            output -> {
+                /* output is actually meters per second, but SysId only supports "volts" */
+                setControl(getFieldCentricSwerveRequest().withVelocityX(output.in(Volts)).withVelocityY(0).withRotationalRate(0));
+                /* also log the requested output for SysId */
+                SignalLogger.writeDouble("Target X Velocity ('voltage')", output.in(Volts));
+                SignalLogger.writeDouble("X Position", getPose().getX());
+                SignalLogger.writeDouble("X Velocity", getChassisSpeeds().vxMetersPerSecond * getPose().getRotation().getCos());
+            },
             null,
             this
         )
@@ -147,7 +172,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineChassisTranslation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
