@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 public interface Cameras {
 
     public CameraInfo[] LimelightCameras = new CameraInfo[] {
-        new CameraInfo("limelight", new Pose3d())
+        new CameraInfo("Funnel-Side-Cam", new Pose3d(Units.inchesToMeters(-13.819), Units.inchesToMeters(2.250), Units.inchesToMeters(6.829), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-20), Units.degreesToRadians(0))))
     };
 
     public static class CameraInfo {

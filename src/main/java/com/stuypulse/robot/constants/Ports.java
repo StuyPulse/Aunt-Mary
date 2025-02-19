@@ -22,7 +22,7 @@ public interface Ports {
 
     public interface Climb {
         int MOTOR = 20;
-        // int ABSOLUTE_ENCODER = 0;
+        int ABSOLUTE_ENCODER = 3;
     }
 
     public interface Arm {

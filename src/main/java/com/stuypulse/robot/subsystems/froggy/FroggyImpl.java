@@ -109,7 +109,7 @@ public class FroggyImpl extends Froggy {
                 state -> {
                     SignalLogger.writeDouble("Froggy Pivot Position (degrees)", getCurrentAngle().getDegrees());
                     SignalLogger.writeDouble("Froggy Pivot Velocity (degrees per s)", Units.rotationsToDegrees(pivotMotor.getVelocity().getValueAsDouble()));
-                    SignalLogger.writeDouble("Arm Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
+                    SignalLogger.writeDouble("Froggy Pivot Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
                 }, 
                 this));
     }
