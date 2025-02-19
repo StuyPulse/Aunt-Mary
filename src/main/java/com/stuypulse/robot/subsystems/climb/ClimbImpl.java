@@ -119,7 +119,16 @@ public class ClimbImpl extends Climb {
                         motor.setVoltage(voltageOverride.get());
                     }
                     else {
-                        motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+                        if (!atTargetAngle()) {
+                            double voltageMagnitude = getState() == ClimbState.CLIMBING ? Settings.Climb.CLIMB_VOLTAGE : Settings.Climb.DEFAULT_VOLTAGE;
+                            motor.setVoltage(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees() > 0
+                                ? voltageMagnitude
+                                : -voltageMagnitude);
+                        }
+                        else {
+                            motor.setVoltage(0);
+                        }
+                        // motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
                     }
                 }
             }

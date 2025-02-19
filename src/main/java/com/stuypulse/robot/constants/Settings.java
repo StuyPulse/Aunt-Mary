@@ -66,7 +66,6 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
-
                 SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
                 SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
 
@@ -203,11 +202,14 @@ public interface Settings {
         double RESET_STALL_CURRENT = 40;
         double RESET_VOLTAGE = -1.0;
 
+        double DEFAULT_VOLTAGE = 4; // Used for normal movement
+        double CLIMB_VOLTAGE = 8; // Used when climbing
+
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(162.0);
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0);
         Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(0.0);
         
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.0);
     }
 
     public interface LED {
