@@ -135,9 +135,9 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.145752;
 
         // Coral
-        double FRONT_L2_HEIGHT_METERS = 1.609;
-        double FRONT_L3_HEIGHT_METERS = 1.073;
-        double FRONT_L4_HEIGHT_METERS = 1.708;
+        double FRONT_L2_HEIGHT_METERS = 1.552002;
+        double FRONT_L3_HEIGHT_METERS = 1.037354;
+        double FRONT_L4_HEIGHT_METERS = 1.656494;
         
         double BACK_L2_HEIGHT_METERS = 1.106;
         double BACK_L3_HEIGHT_METERS = 1.161;
@@ -155,9 +155,9 @@ public interface Settings {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-90);
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230 - 12.304688);
 
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-83.385);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(60.6);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(75.0);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-69.345703);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(65.302734);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(50.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(171.5);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(146.1);
