@@ -78,9 +78,7 @@ public class ArmImpl extends Arm {
                 null, 
                 edu.wpi.first.units.Units.Volts.of(5), 
                 null,
-                state -> {
-                    SignalLogger.writeString("SysIdArm_State", state.toString());
-                }),
+                state -> SignalLogger.writeString("SysIdArm_State", state.toString())),
             new SysIdRoutine.Mechanism(
                 output -> {
                     motor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));

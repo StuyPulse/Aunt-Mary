@@ -137,22 +137,22 @@ public class RobotContainer {
         driver.getDPadRight().whileTrue(new SwerveDriveDriveAligned(driver, Rotation2d.kZero));
 
         // manual shoot depending on whatever states robot is in: either score barge, forwards/backwards on reef, or processor/L1
-        // driver.getDPadRight()
-        //     .whileTrue(new ConditionalCommand(
-        //         new ConditionalCommand(
-        //             new ShooterShootAlgae(), 
-        //             new ConditionalCommand(
-        //                 new ShooterShootForwards(), 
-        //                 new ShooterShootBackwards().onlyIf(() -> shooter.shouldShootBackwards()), 
-        //                 () -> shooter.shouldShootForward()),
-        //             () -> superStructure.getTargetState() == SuperStructureTargetState.BARGE), 
-        //         new ConditionalCommand(
-        //             new FroggyRollerShootCoral(), 
-        //             new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
-        //             () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-        //         () -> superStructure.isInScoreState()))
-        //     .onFalse(new ShooterStop())
-        //     .onFalse(new FroggyRollerStop());
+        driver.getDPadRight()
+            .whileTrue(new ConditionalCommand(
+                new ConditionalCommand(
+                    new ShooterShootAlgae(), 
+                    new ConditionalCommand(
+                        new ShooterShootForwards(), 
+                        new ShooterShootBackwards().onlyIf(() -> shooter.shouldShootBackwards()), 
+                        () -> shooter.shouldShootForward()),
+                    () -> superStructure.getTargetState() == SuperStructureTargetState.BARGE), 
+                new ConditionalCommand(
+                    new FroggyRollerShootCoral(), 
+                    new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
+                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
+                () -> superStructure.isInScoreState()))
+            .onFalse(new ShooterStop())
+            .onFalse(new FroggyRollerStop());
 
         // ground algae pickup
         driver.getLeftTriggerButton()
