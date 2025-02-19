@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.616084943498884,
+        "y": 7.418355015345981
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1909915941298803,
+        "y": 4.099047248041398
+      },
+      "isLocked": false,
+      "linkedName": "Blue Top HP"
+    },
+    {
+      "anchor": {
+        "x": 3.258745029994419,
+        "y": 4.000363159179687
+      },
+      "prevControl": {
+        "x": 1.9151657059057003,
+        "y": 6.962576113065726
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue A"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Blue To Reef",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 125.00000000000001
+  },
+  "useDefaultConstraints": true
+}

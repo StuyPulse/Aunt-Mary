@@ -66,8 +66,10 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
-                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 2.0);
-                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 3.0);
+
+                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
+                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
+
                 SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
                 SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
             }
@@ -278,5 +280,9 @@ public interface Settings {
 
             Rotation2d ANGLE_OFFSET_PER_CLICK = Rotation2d.fromDegrees(5);
         }
+    }
+  
+    public interface Auton {
+        double SHOOTER_WAIT_TIME = 0.2;
     }
 }

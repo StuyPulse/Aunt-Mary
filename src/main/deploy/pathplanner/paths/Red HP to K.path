@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6382734026227679,
+        "y": 7.407847377232142
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.878188245147361,
+        "y": 5.1324266824821905
+      },
+      "isLocked": false,
+      "linkedName": "Red Top HP"
+    },
+    {
+      "anchor": {
+        "x": 3.8905805315290176,
+        "y": 5.093667602539062
+      },
+      "prevControl": {
+        "x": 1.9468585429382765,
+        "y": 7.091880486390446
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red K"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Red to Reef",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 125.00000000000001
+  },
+  "useDefaultConstraints": true
+}
