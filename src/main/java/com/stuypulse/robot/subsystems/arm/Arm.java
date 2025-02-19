@@ -49,7 +49,7 @@ public abstract class Arm extends SubsystemBase {
         ALGAE_L2(Settings.Arm.ALGAE_L2_ANGLE),
         ALGAE_L3(Settings.Arm.ALGAE_L3_ANGLE),
         BARGE(Settings.Arm.BARGE_ANGLE),
-        VERTICAL_DOWN(Rotation2d.fromDegrees(-90));
+        VERTICAL_DOWN(Settings.Arm.VERTICAL_DOWN_ANGLE);
 
         private Rotation2d targetAngle;
 

@@ -167,8 +167,9 @@ public interface Settings {
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(60.0);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-75.5);
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-80);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
+        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-90);
+        Rotation2d VERTICAL_DOWN_ANGLE = Rotation2d.fromDegrees(-81.562500);
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(250.0);

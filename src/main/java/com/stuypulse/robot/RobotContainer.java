@@ -148,6 +148,8 @@ public class RobotContainer {
     /****************/
 
     private void configureTestButtons() {
+        driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
+        
         driver.getTopButton().onTrue(new SuperStructureToL4Front());
         driver.getRightButton().onTrue(new SuperStructureToL3Front());
         driver.getBottomButton().onTrue(new SuperStructureToFeed());
