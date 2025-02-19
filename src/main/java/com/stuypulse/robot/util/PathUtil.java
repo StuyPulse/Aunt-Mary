@@ -45,14 +45,6 @@ public class PathUtil {
                 }
             }
         }
-
-        public void resetPoseToStartOfPath(String path) {
-            resetPoseToStartOfPath(load(path));
-        }
-
-        public void resetPoseToStartOfPath(PathPlannerPath path) {
-            CommandSwerveDrivetrain.getInstance().resetPose(path.getStartingDifferentialPose());
-        }
         
         public AutonConfig registerBlue(SendableChooser<Command> chooser) {
             chooser.addOption("Blue " + name, auton.apply(loadPaths(paths)));
