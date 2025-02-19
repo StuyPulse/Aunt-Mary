@@ -180,6 +180,7 @@ public class ArmImpl extends Arm {
 
         SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());
         SmartDashboard.putNumber("Arm/Setpoint (deg)", controller.getSetpoint());
+        SmartDashboard.putNumber("Arm/Angle Error (deg)", controller.getError());
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
         SmartDashboard.putNumber("Arm/Absolute Encoder Value not offset (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
         SmartDashboard.putNumber("Arm/Absolute Encoder Value offset (deg)", absoluteEncoderAngle.getDegrees());
