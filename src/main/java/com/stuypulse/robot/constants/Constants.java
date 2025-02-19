@@ -49,7 +49,9 @@ public interface Constants {
         double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
 
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-98.638641);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(240);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230);
+
+        Rotation2d ENCODER_BREAKPOINT_ANGLE = Rotation2d.fromDegrees(240); // The abs encoder jumps from about 240 to -120
     }
 
     public interface Froggy {

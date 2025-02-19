@@ -139,6 +139,12 @@ public class ArmImpl extends Arm {
     @Override
     public void periodic() {
         super.periodic();
+
+        if (absoluteEncoder.get() >= Constants.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
+            && absoluteEncoder.get() <= Constants.Arm.ENCODER_BREAKPOINT_ANGLE.getRotations()) 
+        {
+            motor.setPosition(absoluteEncoder.get(), 0.0);
+        }
         
         if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
             if (voltageOverride.isPresent()) {
