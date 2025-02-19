@@ -9,6 +9,8 @@ package com.stuypulse.robot;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
+import java.util.Optional;
+
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
@@ -39,6 +41,7 @@ import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotOverrideVoltage;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
@@ -102,6 +105,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -129,8 +133,9 @@ public class RobotContainer {
     // Robot container
     public RobotContainer() {
         configureDefaultCommands();
-        configureDriverButtonBindings();
-        configureOperatorButtonBindings();
+        configureTestButtons();
+        // configureDriverButtonBindings();
+        // configureOperatorButtonBindings();
         configureAutons();
         configureSysids();
 
@@ -141,6 +146,14 @@ public class RobotContainer {
     /****************/
     /*** DEFAULT ***/
     /****************/
+
+    private void configureTestButtons() {
+        driver.getTopButton().onTrue(new SuperStructureToL3Front());
+        driver.getBottomButton().onTrue(new SuperStructureToFeed());
+
+        driver.getLeftMenuButton().onTrue(new ClimbOpen());
+        driver.getRightMenuButton().onTrue(new ClimbClimb());
+    }
 
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
@@ -156,7 +169,6 @@ public class RobotContainer {
     private void configureDriverButtonBindings() {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
-        driver.getDPadRight().whileTrue(new SwerveDriveDriveAligned(driver, Rotation2d.kZero));
 
         // manual shoot depending on whatever states robot is in: either score barge, forwards/backwards on reef, or processor/L1
         driver.getDPadRight()

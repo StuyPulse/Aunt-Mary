@@ -86,6 +86,7 @@ public abstract class Arm extends SubsystemBase {
     public abstract boolean atTargetAngle();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
+    public abstract double getVoltageOverride();
     public abstract void setOperatorOffset(Rotation2d offset);
     public abstract Rotation2d getOperatorOffset();
 

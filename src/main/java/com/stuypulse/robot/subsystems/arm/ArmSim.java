@@ -8,6 +8,8 @@ package com.stuypulse.robot.subsystems.arm;
 
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
+import static edu.wpi.first.units.Units.Second;
+
 import java.util.Optional;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -89,7 +91,7 @@ public class ArmSim extends Arm {
 
         sysidRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
-                null, 
+                edu.wpi.first.units.Units.Volts.of(2).per(Second), 
                 edu.wpi.first.units.Units.Volts.of(5), 
                 null,
                 state -> SignalLogger.writeString("SysIdArm_State", state.toString())), 
@@ -133,6 +135,16 @@ public class ArmSim extends Arm {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public double getVoltageOverride() {
+        if (voltageOverride.isPresent()) {
+            return voltageOverride.get();
+        }
+        else {
+            return 0;
+        }
     }
 
     @Override

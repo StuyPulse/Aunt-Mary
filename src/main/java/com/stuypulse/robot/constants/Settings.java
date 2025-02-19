@@ -36,11 +36,11 @@ public interface Settings {
 
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", false);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", false);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
     }
@@ -164,11 +164,11 @@ public interface Settings {
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(60.0);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-93);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-75.5);
+        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-80);
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(150.0);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(200.0);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(250.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 
@@ -206,8 +206,8 @@ public interface Settings {
         double CLIMB_VOLTAGE = 8; // Used when climbing
 
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(162.0);
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(0.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0); // When pressing against the hardstop
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(180.0);
         
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.0);
     }

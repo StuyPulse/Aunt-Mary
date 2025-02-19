@@ -42,16 +42,16 @@ public interface Constants {
 
         double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(216.992516 + 90);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(216.992516 + 90 - 12.304688);
 
         double ARM_LENGTH = Units.inchesToMeters(29);
         double MASS_KG = Units.lbsToKilograms(12.8);
         double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
 
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-98.638641);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230);
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-90);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230 - 12.304688);
 
-        Rotation2d ENCODER_BREAKPOINT_ANGLE = Rotation2d.fromDegrees(240); // The abs encoder jumps from about 240 to -120
+        Rotation2d ENCODER_BREAKPOINT_ANGLE = Rotation2d.fromDegrees(52 - 12.304688); // The abs encoder jumps from about 52 to -308
     }
 
     public interface Froggy {

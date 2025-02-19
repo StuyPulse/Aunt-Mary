@@ -34,16 +34,19 @@ public interface Gains {
 
     public interface Arm {
         public interface PID {
-            double kP = 9.2822;
+            // double kP = 0.0356;
+            // double kI = 0.0;
+            // double kD = 0.01036;
+            double kP = 0.0356;
             double kI = 0.0;
-            double kD = 1.1381;
+            double kD = 0.01036;
         }
 
         public interface FF {
-            double kS = 0.084998; 
-            double kV = 2.095;
-            double kA = 0.59073;
-            double kG = 0.90574;
+            double kS = 0.2; 
+            double kV = 0.0067;
+            double kA = 0.00393;
+            double kG = 1.54;
         }
     }
 
