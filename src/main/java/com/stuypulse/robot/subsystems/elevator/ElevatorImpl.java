@@ -83,7 +83,7 @@ public class ElevatorImpl extends Elevator {
     }
 
     private double getTargetHeight() {
-        return getState().getTargetHeight() + operatorOffset;
+        return SLMath.clamp(getState().getTargetHeight() + operatorOffset, Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
     }
 
     @Override
@@ -118,12 +118,14 @@ public class ElevatorImpl extends Elevator {
             motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
         }
 
-        if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
-            if (voltageOverride.isPresent()) {
-                motor.setVoltage(voltageOverride.get());
-            }
-            else {
-                motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
+            if (!isRunningSysid) {
+                if (voltageOverride.isPresent()) {
+                    motor.setVoltage(voltageOverride.get());
+                }
+                else {
+                    motor.setControl(new MotionMagicVoltage(getTargetHeight()));
+                }
             }
         }
         else {

@@ -157,12 +157,14 @@ public class ArmSim extends Arm {
         controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
-        if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
-            if (voltageOverride.isPresent()) {
-                sim.setInputVoltage(voltageOverride.get());
-            }
-            else {
-                sim.setInputVoltage(controller.getU(0));
+        if (Settings.EnabledSubsystems.ARM.get()) {
+            if (!isRunningSysid) {
+                if (voltageOverride.isPresent()) {
+                    sim.setInputVoltage(voltageOverride.get());
+                }
+                else {
+                    sim.setInputVoltage(controller.getU(0));
+                }
             }
         }
         else {

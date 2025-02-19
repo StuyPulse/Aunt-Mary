@@ -16,6 +16,7 @@ import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -108,7 +109,8 @@ public class ArmImpl extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-       return getState().getTargetAngle().plus(operatorOffset);
+       return Rotation2d.fromDegrees(
+        SLMath.clamp(getState().getTargetAngle().plus(operatorOffset).getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
@@ -146,13 +148,15 @@ public class ArmImpl extends Arm {
             motor.setPosition(absoluteEncoder.get(), 0.0);
         }
         
-        if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
-            if (voltageOverride.isPresent()) {
-                motor.setVoltage(voltageOverride.get());
-            }
-            else {
-                // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+        if (Settings.EnabledSubsystems.ARM.get()) {
+            if (!isRunningSysid) {
+                if (voltageOverride.isPresent()) {
+                    motor.setVoltage(voltageOverride.get());
+                }
+                else {
+                    // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                    motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+                }
             }
         }
         else {

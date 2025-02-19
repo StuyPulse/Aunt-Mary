@@ -105,19 +105,23 @@ public class ClimbImpl extends Climb {
 
     @Override
     public void periodic() {
-        if (!hasBeenReset  && !isRunningSysid) {
-            motor.setVoltage(Settings.Climb.RESET_VOLTAGE);
-            if (Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Climb.RESET_STALL_CURRENT) {
-                hasBeenReset = true;
-                motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
-            }
-        }
-        if (Settings.EnabledSubsystems.CLIMB.get() && !isRunningSysid) {
-            if (voltageOverride.isPresent()) {
-                motor.setVoltage(voltageOverride.get());
-            }
-            else {
-                motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+        if (Settings.EnabledSubsystems.CLIMB.get()) {
+            if (!isRunningSysid) {
+                if (!hasBeenReset) {
+                    motor.setVoltage(Settings.Climb.RESET_VOLTAGE);
+                    if (Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Climb.RESET_STALL_CURRENT) {
+                        hasBeenReset = true;
+                        motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
+                    }
+                }
+                else {
+                    if (voltageOverride.isPresent()) {
+                        motor.setVoltage(voltageOverride.get());
+                    }
+                    else {
+                        motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+                    }
+                }
             }
         }
         else {
