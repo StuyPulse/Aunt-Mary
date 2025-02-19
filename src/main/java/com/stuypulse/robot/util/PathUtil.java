@@ -16,6 +16,7 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.RotationTarget;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,7 +42,6 @@ public class PathUtil {
                     PathPlannerPath.fromPathFile(path);
                 } catch (Exception e) {
                     DriverStation.reportError("Path \"" + path + "\" not found. Did you mean \"" + PathUtil.findClosestMatch(PathUtil.getPathFileNames(), path) + "\"?", false);
-
                 }
             }
         }
