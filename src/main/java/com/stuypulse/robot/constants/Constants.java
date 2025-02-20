@@ -14,7 +14,7 @@ public interface Constants {
     double LENGTH_WITH_BUMPERS_METERS = Units.inchesToMeters(30);
     double WIDTH_WITH_BUMPERS_METERS = Units.inchesToMeters(30);
 
-    double SHOOTER_Y_OFFSET = Units.inchesToMeters(8.5);
+    double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.16);
 
     public interface Elevator {
         double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR
@@ -52,10 +52,10 @@ public interface Constants {
     public interface Froggy {
         double GEAR_RATIO = 8.0 / 1.0;
 
-        Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-56.584441);
-        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(94.812699);
+        Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-51);
+        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(105);
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.420866);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(219.815204 - 90);
     }
 
     public interface Climb {
