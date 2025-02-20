@@ -13,6 +13,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -39,9 +40,6 @@ public class ElevatorSimu extends Elevator {
 
     private Optional<Double> voltageOverride;
     private double operatorOffset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
 
     protected ElevatorSimu() {
         sim = new ElevatorSim(
@@ -86,32 +84,20 @@ public class ElevatorSimu extends Elevator {
 
         voltageOverride = Optional.empty();
         operatorOffset = 0;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                Units.Volts.of(4), 
-                null,
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    isRunningSysid = true;
-                    sim.setInputVoltage(output.in(Units.Volts));
-                }, 
-                null, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            7, 
+            "Elevator", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentHeight(), 
+            () -> sim.getVelocityMetersPerSecond(), 
+            () -> voltageOverride.get(), 
+            getInstance()
+        );
     }
 
     private double getTargetHeight() {
@@ -156,13 +142,11 @@ public class ElevatorSimu extends Elevator {
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {
-            if (!isRunningSysid) {
-                if (voltageOverride.isPresent()) {
-                    sim.setInputVoltage(0);
-                }
-                else {
-                    sim.setInputVoltage(controller.getU(0));
-                }
+            if (voltageOverride.isPresent()) {
+                sim.setInputVoltage(0);
+            }
+            else {
+                sim.setInputVoltage(controller.getU(0));
             }
         }
         else {

@@ -63,6 +63,9 @@ public interface Constants {
     public interface Climb {
         double GEAR_RATIO = 75.0;
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0.0);
+
+        Rotation2d MIN_ANGLE = Rotation2d.kZero;
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(270);
     }
 
     public interface LED {

@@ -8,8 +8,8 @@ package com.stuypulse.robot.commands.climb;
 
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 
-public class ClimbStow extends ClimbToState {
-    public ClimbStow() {
-        super(ClimbState.STOW);
+public class ClimbClose extends ClimbToState {
+    public ClimbClose() {
+        super(ClimbState.CLOSED);
     }
 }

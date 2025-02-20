@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Arm extends SubsystemBase {
 
-    public static final Arm instance;
+    private static final Arm instance;
 
     static {
         if (Robot.isReal()) {
@@ -87,11 +87,11 @@ public abstract class Arm extends SubsystemBase {
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
     public abstract double getVoltageOverride();
+    
     public abstract void setOperatorOffset(Rotation2d offset);
     public abstract Rotation2d getOperatorOffset();
 
-    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
+    public abstract SysIdRoutine getSysIdRoutine();
 
     @Override
     public void periodic() {

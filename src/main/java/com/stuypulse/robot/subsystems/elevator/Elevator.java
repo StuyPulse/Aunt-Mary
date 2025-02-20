@@ -82,8 +82,7 @@ public abstract class Elevator extends SubsystemBase {
     public abstract void setOperatorOffset(double offset);
     public abstract double getOperatorOffset();
 
-    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
+    public abstract SysIdRoutine getSysIdRoutine();
 
     @Override
     public void periodic() {

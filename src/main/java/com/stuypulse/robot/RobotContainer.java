@@ -107,6 +107,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class RobotContainer {
@@ -474,20 +475,23 @@ public class RobotContainer {
         autonChooser.addOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
         autonChooser.addOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
 
-        autonChooser.addOption("Elevator Quasi Forward", elevator.getSysIdQuasistatic(Direction.kForward));
-        autonChooser.addOption("Elevator Quasi Backward", elevator.getSysIdQuasistatic(Direction.kReverse));
-        autonChooser.addOption("Elevator Dynamic Forward", elevator.getSysIdDynamic(Direction.kForward));
-        autonChooser.addOption("Elevator Dynamic Backward", elevator.getSysIdDynamic(Direction.kReverse));
+        SysIdRoutine elevatorSysIdRoutine = elevator.getSysIdRoutine();
+        autonChooser.addOption("Elevator Quasi Forward", elevatorSysIdRoutine.quasistatic(Direction.kForward));
+        autonChooser.addOption("Elevator Quasi Backward", elevatorSysIdRoutine.quasistatic(Direction.kReverse));
+        autonChooser.addOption("Elevator Dynamic Forward", elevatorSysIdRoutine.dynamic(Direction.kForward));
+        autonChooser.addOption("Elevator Dynamic Backward", elevatorSysIdRoutine.dynamic(Direction.kReverse));
 
-        autonChooser.addOption("Arm Quasi Forward", arm.getSysIdQuasistatic(Direction.kForward));
-        autonChooser.addOption("Arm Quasi Backward", arm.getSysIdQuasistatic(Direction.kReverse));
-        autonChooser.addOption("Arm Dynamic Forward", arm.getSysIdDynamic(Direction.kForward));
-        autonChooser.addOption("Arm Dynamic Backward", arm.getSysIdDynamic(Direction.kReverse));
+        SysIdRoutine armSysIdRoutine = arm.getSysIdRoutine();
+        autonChooser.addOption("Arm Quasi Forward", armSysIdRoutine.quasistatic(Direction.kForward));
+        autonChooser.addOption("Arm Quasi Backward", armSysIdRoutine.quasistatic(Direction.kReverse));
+        autonChooser.addOption("Arm Dynamic Forward", armSysIdRoutine.dynamic(Direction.kForward));
+        autonChooser.addOption("Arm Dynamic Backward", armSysIdRoutine.dynamic(Direction.kReverse));
 
-        autonChooser.addOption("Froggy Pivot Quasi Forward", froggy.getPivotSysIdQuasistatic(Direction.kForward));
-        autonChooser.addOption("Froggy Pivot Quasi Backward", froggy.getPivotSysIdQuasistatic(Direction.kReverse));
-        autonChooser.addOption("Froggy Pivot Dynamic Forward", froggy.getPivotSysIdDynamic(Direction.kForward));
-        autonChooser.addOption("Froggy Pivot Dynamic Backward", froggy.getPivotSysIdDynamic(Direction.kReverse));
+        SysIdRoutine froggyPivotSysIdRoutine = froggy.getFroggySysIdRoutine();
+        autonChooser.addOption("Froggy Pivot Quasi Forward", froggyPivotSysIdRoutine.quasistatic(Direction.kForward));
+        autonChooser.addOption("Froggy Pivot Quasi Backward", froggyPivotSysIdRoutine.quasistatic(Direction.kReverse));
+        autonChooser.addOption("Froggy Pivot Dynamic Forward", froggyPivotSysIdRoutine.dynamic(Direction.kForward));
+        autonChooser.addOption("Froggy Pivot Dynamic Backward", froggyPivotSysIdRoutine.dynamic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() {

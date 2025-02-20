@@ -99,8 +99,7 @@ public abstract class Froggy extends SubsystemBase {
     public abstract void setPivotOperatorOffset(Rotation2d offset);
     public abstract Rotation2d getPivotOperatorOffset();
 
-    public abstract Command getPivotSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getPivotSysIdDynamic(SysIdRoutine.Direction direction);
+    public abstract SysIdRoutine getFroggySysIdRoutine();
 
     @Override
     public void periodic() {

@@ -15,6 +15,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -41,9 +42,6 @@ public class ArmSim extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
 
     protected ArmSim() {
         sim = new SingleJointedArmSim(
@@ -86,36 +84,20 @@ public class ArmSim extends Arm {
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                edu.wpi.first.units.Units.Volts.of(2).per(Second), 
-                edu.wpi.first.units.Units.Volts.of(5), 
-                null,
-                state -> SignalLogger.writeString("SysIdArm_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    sim.setInputVoltage(output.in(edu.wpi.first.units.Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> {
-                    SignalLogger.writeDouble("Arm Position (rad)", getCurrentAngle().getRadians());
-                    SignalLogger.writeDouble("Arm Velocity (rad per s)", sim.getVelocityRadPerSec());
-                    SignalLogger.writeDouble("Arm Voltage", controller.getU(0));
-                }, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            3, 
+            7, 
+            "Arm", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+            () -> voltageOverride.get(), 
+            getInstance()
+        );
     }
 
     @Override
@@ -170,13 +152,11 @@ public class ArmSim extends Arm {
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ARM.get()) {
-            if (!isRunningSysid) {
-                if (voltageOverride.isPresent()) {
-                    sim.setInputVoltage(voltageOverride.get());
-                }
-                else {
-                    sim.setInputVoltage(controller.getU(0));
-                }
+            if (voltageOverride.isPresent()) {
+                sim.setInputVoltage(voltageOverride.get());
+            }
+            else {
+                sim.setInputVoltage(controller.getU(0));
             }
         }
         else {

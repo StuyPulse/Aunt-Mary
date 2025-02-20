@@ -8,6 +8,11 @@ package com.stuypulse.robot.subsystems.climb;
 
 import java.util.Optional;
 
+import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.math.SLMath;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,15 +30,26 @@ public abstract class Climb extends SubsystemBase {
     }
 
     public enum ClimbState {
-        STOW,
-        OPEN,
-        CLIMBING,
+        CLOSED(Settings.Climb.CLOSED_ANGLE),
+        OPEN(Settings.Climb.OPEN_ANGLE),
+        CLIMBING(Settings.Climb.CLIMBED_ANGLE);
+
+        private Rotation2d targetAngle;
+
+        private ClimbState(Rotation2d targetAngle) {
+            this.targetAngle = Rotation2d.fromDegrees(
+                SLMath.clamp(targetAngle.getDegrees(), Constants.Climb.MIN_ANGLE.getDegrees(), Constants.Climb.MAX_ANGLE.getDegrees()));
+        }
+
+        public Rotation2d getTargetAngle() {
+            return this.targetAngle;
+        }
     }
 
     private ClimbState state;
 
     protected Climb() {
-        this.state = ClimbState.STOW;
+        this.state = ClimbState.OPEN;
     }
 
     public ClimbState getState() {
@@ -49,8 +65,7 @@ public abstract class Climb extends SubsystemBase {
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
 
-    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
+    public abstract SysIdRoutine getSysIdRoutine();
 
     @Override
     public void periodic() {

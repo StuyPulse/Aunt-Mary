@@ -9,6 +9,8 @@ package com.stuypulse.robot.subsystems.climb;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -33,9 +35,6 @@ public class ClimbImpl extends Climb {
 
     private boolean hasBeenReset;
 
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
-
     protected ClimbImpl() {
         super();
         motor = new TalonFX(Ports.Climb.MOTOR);
@@ -56,49 +55,24 @@ public class ClimbImpl extends Climb {
         voltageOverride = Optional.empty();
 
         hasBeenReset = false;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                edu.wpi.first.units.Units.Volts.of(2).per(Second), 
-                edu.wpi.first.units.Units.Volts.of(8), 
-                null,
-                state -> SignalLogger.writeString("SysIdPivot_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    motor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> {
-                    SignalLogger.writeDouble("Climb Pivot Position (degrees)", getCurrentAngle().getDegrees());
-                    SignalLogger.writeDouble("Climb Pivot Velocity (degrees per s)", Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()));
-                    SignalLogger.writeDouble("Climb Pivot Voltage", motor.getMotorVoltage().getValueAsDouble());
-                }, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            3, 
+            7, 
+            "Climb", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()), 
+            () -> motor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     private Rotation2d getTargetAngle() {
-        switch (getState()) {
-            case STOW:
-                return Settings.Climb.CLOSED_ANGLE;
-            case OPEN:
-                return Settings.Climb.OPEN_ANGLE;
-            case CLIMBING:
-                return Settings.Climb.CLIMBED_ANGLE;
-            default:
-                return Settings.Climb.CLOSED_ANGLE;
-        }
+        return getState().getTargetAngle();
     }
 
     private Rotation2d getCurrentAngle() {
@@ -118,30 +92,28 @@ public class ClimbImpl extends Climb {
     @Override
     public void periodic() {
         if (Settings.EnabledSubsystems.CLIMB.get()) {
-            if (!isRunningSysid) {
-                if (!hasBeenReset) {
-                    motor.setVoltage(Settings.Climb.RESET_VOLTAGE);
-                    if (Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Climb.RESET_STALL_CURRENT) {
-                        hasBeenReset = true;
-                        motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
-                    }
+            if (!hasBeenReset) {
+                motor.setVoltage(Settings.Climb.RESET_VOLTAGE);
+                if (Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Climb.RESET_STALL_CURRENT) {
+                    hasBeenReset = true;
+                    motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
+                }
+            }
+            else {
+                if (voltageOverride.isPresent()) {
+                    motor.setVoltage(voltageOverride.get());
                 }
                 else {
-                    if (voltageOverride.isPresent()) {
-                        motor.setVoltage(voltageOverride.get());
+                    if (!atTargetAngle()) {
+                        double voltageMagnitude = getState() == ClimbState.CLIMBING ? Settings.Climb.CLIMB_VOLTAGE : Settings.Climb.DEFAULT_VOLTAGE;
+                        motor.setVoltage(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees() > 0
+                            ? voltageMagnitude
+                            : -voltageMagnitude);
                     }
                     else {
-                        if (!atTargetAngle()) {
-                            double voltageMagnitude = getState() == ClimbState.CLIMBING ? Settings.Climb.CLIMB_VOLTAGE : Settings.Climb.DEFAULT_VOLTAGE;
-                            motor.setVoltage(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees() > 0
-                                ? voltageMagnitude
-                                : -voltageMagnitude);
-                        }
-                        else {
-                            motor.setVoltage(0);
-                        }
-                        // motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+                        motor.setVoltage(0);
                     }
+                    // motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
                 }
             }
         }

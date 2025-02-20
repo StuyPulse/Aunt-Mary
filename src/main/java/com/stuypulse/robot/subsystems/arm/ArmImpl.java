@@ -11,6 +11,7 @@ import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
@@ -44,9 +45,6 @@ public class ArmImpl extends Arm {
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
 
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
-
     public ArmImpl() {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
@@ -73,36 +71,20 @@ public class ArmImpl extends Arm {
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                edu.wpi.first.units.Units.Volts.of(3).per(Second), 
-                edu.wpi.first.units.Units.Volts.of(7), 
-                null,
-                state -> SignalLogger.writeString("SysIdArm_State", state.toString())),
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    motor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> {
-                    SignalLogger.writeDouble("Arm Position (degrees)", getCurrentAngle().getDegrees());
-                    SignalLogger.writeDouble("Arm Velocity (degrees per s)", Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()));
-                    SignalLogger.writeDouble("Arm Voltage", motor.getMotorVoltage().getValueAsDouble());
-                }, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            3, 
+            7, 
+            "Arm", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()), 
+            () -> motor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     @Override
@@ -164,26 +146,28 @@ public class ArmImpl extends Arm {
         }
         
         if (Settings.EnabledSubsystems.ARM.get()) {
-            if (!isRunningSysid) {
-                if (voltageOverride.isPresent()) {
-                    motor.setVoltage(voltageOverride.get());
-                }
-                else {
-                    // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                    motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
-                }
+            if (voltageOverride.isPresent()) {
+                motor.setVoltage(voltageOverride.get());
+            }
+            else {
+                // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }
         else {
             motor.setVoltage(0);
         }
 
+        SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
         SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());
+
         SmartDashboard.putNumber("Arm/Setpoint (deg)", controller.getSetpoint());
         SmartDashboard.putNumber("Arm/Angle Error (deg)", controller.getError());
+        
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
-        SmartDashboard.putNumber("Arm/Absolute Encoder Value not offset (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
-        SmartDashboard.putNumber("Arm/Absolute Encoder Value offset (deg)", absoluteEncoderAngle.getDegrees());
+        SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+        SmartDashboard.putNumber("Arm/Absolute Encoder Value (deg)", absoluteEncoderAngle.getDegrees());
+
         SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
     }

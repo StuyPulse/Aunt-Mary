@@ -13,6 +13,7 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Velocity;
@@ -36,9 +37,6 @@ public class ElevatorImpl extends Elevator {
     private Optional<Double> voltageOverride;
     private double operatorOffset;
 
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
-
     protected ElevatorImpl() {
         super();
         motor = new TalonFX(Ports.Elevator.MOTOR, Settings.CANIVORE_NAME);
@@ -49,32 +47,20 @@ public class ElevatorImpl extends Elevator {
 
         voltageOverride = Optional.empty();
         operatorOffset = 0;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                Units.Volts.of(5), 
-                null,
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    motor.setVoltage(output.in(Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                null, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            7, 
+            "Elevator", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentHeight(), 
+            () -> motor.getVelocity().getValueAsDouble(), 
+            () -> motor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     @Override
@@ -119,13 +105,11 @@ public class ElevatorImpl extends Elevator {
         }
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {
-            if (!isRunningSysid) {
-                if (voltageOverride.isPresent()) {
-                    motor.setVoltage(voltageOverride.get());
-                }
-                else {
-                    motor.setControl(new MotionMagicVoltage(getTargetHeight()));
-                }
+            if (voltageOverride.isPresent()) {
+                motor.setVoltage(voltageOverride.get());
+            }
+            else {
+                motor.setControl(new MotionMagicVoltage(getTargetHeight()));
             }
         }
         else {

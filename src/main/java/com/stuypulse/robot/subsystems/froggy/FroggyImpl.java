@@ -19,6 +19,7 @@ import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
@@ -51,9 +52,6 @@ public class FroggyImpl extends Froggy {
 
     private Optional<Double> pivotVoltageOverride;
     private Rotation2d pivotOperatorOffset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
 
     protected FroggyImpl() {
         super();
@@ -92,36 +90,20 @@ public class FroggyImpl extends Froggy {
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                edu.wpi.first.units.Units.Volts.of(5).per(Second), 
-                edu.wpi.first.units.Units.Volts.of(12), 
-                null,
-                state -> SignalLogger.writeString("SysIdPivot_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    pivotMotor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> {
-                    SignalLogger.writeDouble("Froggy Pivot Position (degrees)", getCurrentAngle().getDegrees());
-                    SignalLogger.writeDouble("Froggy Pivot Velocity (degrees per s)", Units.rotationsToDegrees(pivotMotor.getVelocity().getValueAsDouble()));
-                    SignalLogger.writeDouble("Froggy Pivot Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
-                }, 
-                this));
     }
 
     @Override
-    public Command getPivotSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getPivotSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getFroggySysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            7, 
+            "Froggy Pivot", 
+            voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> pivotMotor.getVelocity().getValueAsDouble(), 
+            () -> pivotMotor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     private Rotation2d getCurrentAngle() {
@@ -164,15 +146,13 @@ public class FroggyImpl extends Froggy {
         super.periodic();
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {
-            if (!isRunningSysid) {
-                rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
-                if (pivotVoltageOverride.isPresent()) {
-                    pivotMotor.setVoltage(pivotVoltageOverride.get());
-                }
-                else {
-                    // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                    pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
-                }
+            rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
+            if (pivotVoltageOverride.isPresent()) {
+                pivotMotor.setVoltage(pivotVoltageOverride.get());
+            }
+            else {
+                // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }
         else {
