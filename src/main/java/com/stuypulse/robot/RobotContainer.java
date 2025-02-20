@@ -97,6 +97,7 @@ import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superstructure.SuperStructure.SuperStructureTargetState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -119,6 +120,7 @@ public class RobotContainer {
     // Subsystem
     private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
     private final Telemetry telemetry = new Telemetry(Settings.Swerve.Constraints.MAX_VELOCITY.get());
+    private final LimelightVision vision = LimelightVision.getInstance();
     private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final Elevator elevator = Elevator.getInstance();
@@ -159,6 +161,9 @@ public class RobotContainer {
 
         driver.getDPadRight().whileTrue(new ShooterShootForwards()).onFalse(new ShooterStop());
         driver.getDPadLeft().whileTrue(new ShooterShootBackwards()).onFalse(new ShooterStop());
+
+        driver.getLeftBumper().whileTrue(new ShooterAcquireAlgae());
+        driver.getRightBumper().whileTrue(new ShooterShootAlgae()).onFalse(new ShooterStop());
     }
 
     private void configureDefaultCommands() {
@@ -314,8 +319,8 @@ public class RobotContainer {
         operator.getLeftBumper().whileTrue(new FroggyPivotMoveOperatorOffsetUp());
         operator.getRightBumper().whileTrue(new FroggyPivotMoveOperatorOffsetDown());
 
-        operator.getLeftMenuButton().onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
-        operator.getRightMenuButton().onTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
+        operator.getLeftMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
+        operator.getRightMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
 
         operator.getTopButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL4Front() : new SuperStructureToL4Back());
         operator.getRightButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL3Front() : new SuperStructureToL3Back());

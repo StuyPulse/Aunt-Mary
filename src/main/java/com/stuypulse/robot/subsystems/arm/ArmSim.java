@@ -52,7 +52,7 @@ public class ArmSim extends Arm {
             Settings.Arm.MIN_ANGLE.getRadians(),
             Settings.Arm.MAX_ANGLE.getRadians(),
             false,
-            Settings.Arm.STOW_ANGLE.getRadians()
+            Settings.Arm.MIN_ANGLE.getRadians()
         );
 
         LinearSystem<N2, N1, N2> armSystem = LinearSystemId.createSingleJointedArmSystem(
@@ -80,7 +80,7 @@ public class ArmSim extends Arm {
             Settings.Arm.MAX_VEL.getRadians(),
             Settings.Arm.MAX_ACCEL.getRadians()
         );
-        motionProfile.reset(Settings.Arm.STOW_ANGLE.getRadians());
+        motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;

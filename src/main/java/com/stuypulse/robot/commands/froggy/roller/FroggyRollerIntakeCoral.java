@@ -26,12 +26,12 @@ public class FroggyRollerIntakeCoral extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        froggy.setRollerState(RollerState.STOP);
+    public boolean isFinished() {
+        return froggy.isStalling();
     }
 
     @Override
-    public boolean isFinished() {
-        return froggy.isStalling();
+    public void end(boolean interrupted) {
+        froggy.setRollerState(RollerState.STOP);
     }
 }

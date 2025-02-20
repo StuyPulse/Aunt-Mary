@@ -36,6 +36,7 @@ import static edu.wpi.first.units.Units.Second;
 import java.util.Optional;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ArmImpl extends Arm {
@@ -66,12 +67,12 @@ public class ArmImpl extends Arm {
         // absoluteEncoder.getConfigurator().apply(magnetConfig);
 
         MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
-        motionProfile.reset(Settings.Arm.STOW_ANGLE.getDegrees());
+        motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Arm.FF.kG))
-            .add(new ArmDriveFeedForward(Gains.Arm.FF.kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
-            .add(new ArmElevatorFeedForward(Gains.Arm.FF.kG, Elevator.getInstance()::getAccelGs))
+            .add(new ArmFeedforward(Gains.Arm.FF.CORAL_kG))
+            .add(new ArmDriveFeedForward(Gains.Arm.FF.CORAL_kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
+            .add(new ArmElevatorFeedForward(Gains.Arm.FF.CORAL_kG, Elevator.getInstance()::getAccelGs))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
 
@@ -142,21 +143,27 @@ public class ArmImpl extends Arm {
     public void periodic() {
         super.periodic();
 
-        Rotation2d absoluteEncoderAngle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
+        // Rotation2d absoluteEncoderAngle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
 
-        if (absoluteEncoderAngle.getRotations() >= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
-            && absoluteEncoderAngle.getRotations() <= Constants.Arm.ENCODER_BREAKPOINT_ANGLE.getRotations()
-            && absoluteEncoder.isConnected()) 
-        {
-            motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
-        }
+        // absoluteEncoderAngle = absoluteEncoderAngle.getDegrees() <= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getDegrees()
+        //     ? absoluteEncoderAngle.plus(Rotation2d.fromRotations(1))
+        //     : absoluteEncoderAngle;
+
+        // motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
+
+        // if (absoluteEncoderAngle.getRotations() >= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
+        //     && absoluteEncoderAngle.getRotations() <= Constants.Arm.ENCODER_BREAKPOINT_ANGLE.getRotations()
+        //     && absoluteEncoder.isConnected()) 
+        // {
+        //     motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
+        // }
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }
             else {
-                // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
                 motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }
@@ -172,7 +179,7 @@ public class ArmImpl extends Arm {
         
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
         SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
-        SmartDashboard.putNumber("Arm/Absolute Encoder Value (deg)", absoluteEncoderAngle.getDegrees());
+        // SmartDashboard.putNumber("Arm/Absolute Encoder Value (deg)", absoluteEncoderAngle.getDegrees());
 
         SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());

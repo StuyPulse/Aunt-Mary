@@ -38,7 +38,6 @@ public abstract class Arm extends SubsystemBase {
     }
 
     public enum ArmState {
-        STOW(Settings.Arm.STOW_ANGLE),
         FEED(Settings.Arm.FEED_ANGLE),
         L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
         L2_BACK(Settings.Arm.L2_ANGLE_BACK),
@@ -48,8 +47,7 @@ public abstract class Arm extends SubsystemBase {
         L4_BACK(Settings.Arm.L4_ANGLE_BACK),
         ALGAE_L2(Settings.Arm.ALGAE_L2_ANGLE),
         ALGAE_L3(Settings.Arm.ALGAE_L3_ANGLE),
-        BARGE(Settings.Arm.BARGE_ANGLE),
-        VERTICAL_DOWN(Settings.Arm.VERTICAL_DOWN_ANGLE);
+        BARGE(Settings.Arm.BARGE_ANGLE);
 
         private Rotation2d targetAngle;
 
@@ -69,7 +67,7 @@ public abstract class Arm extends SubsystemBase {
     private ArmState state;
 
     protected Arm() {
-        this.state = ArmState.STOW;
+        this.state = ArmState.FEED;
     }
 
     public ArmState getState() {

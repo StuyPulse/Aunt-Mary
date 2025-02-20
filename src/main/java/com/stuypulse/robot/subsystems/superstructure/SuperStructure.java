@@ -24,7 +24,6 @@ public class SuperStructure extends SubsystemBase{
 
     public enum SuperStructureTargetState {
         FEED(ArmState.FEED, ElevatorState.FEED),
-        STOW(ArmState.STOW, ElevatorState.STOW),
         L2_FRONT(ArmState.L2_FRONT, ElevatorState.L2_FRONT),
         L2_BACK(ArmState.L2_BACK, ElevatorState.L2_BACK),
         L3_FRONT(ArmState.L3_FRONT, ElevatorState.L3_FRONT),
@@ -60,7 +59,7 @@ public class SuperStructure extends SubsystemBase{
     private SuperStructureVisualizer visualizer;
 
     private SuperStructure() {
-        this.targetState = SuperStructureTargetState.STOW;
+        this.targetState = SuperStructureTargetState.FEED;
 
         this.arm = Arm.getInstance();
         this.elevator = Elevator.getInstance();
@@ -99,40 +98,42 @@ public class SuperStructure extends SubsystemBase{
     }
 
     private void updateArmElevatorTargetStates() {
-        ArmState currentArmState = arm.getState();
-        ArmState targetArmState = getTargetState().getTargetArmState();
+        arm.setState(getTargetState().getTargetArmState());
+        elevator.setState(getTargetState().getTargetElevatorState());
+        // ArmState currentArmState = arm.getState();
+        // ArmState targetArmState = getTargetState().getTargetArmState();
 
-        ElevatorState currentElevatorState = elevator.getState();
-        ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
+        // ElevatorState currentElevatorState = elevator.getState();
+        // ElevatorState targetElevatorState = getTargetState().getTargetElevatorState();
 
-        if (currentArmState == ArmState.BARGE && currentElevatorState == ElevatorState.BARGE && !canMoveDownFromBarge()) {
-            return;
-        }
+        // if (currentArmState == ArmState.BARGE && currentElevatorState == ElevatorState.BARGE && !canMoveDownFromBarge()) {
+        //     return;
+        // }
 
-        if (getTargetState() == SuperStructureTargetState.FEED) {
-            if ((currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
-                arm.setState(ArmState.FEED);
-            }
-            else if (((currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) && currentElevatorState != ElevatorState.FEED) {
-                elevator.setState(ElevatorState.FEED);
-            }
-            else {
-                arm.setState(ArmState.VERTICAL_DOWN);
-            }
-        }
-        else {
-            if ((targetElevatorState != currentElevatorState && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) {
-                if (currentArmState == ArmState.FEED) {
-                    arm.setState(ArmState.VERTICAL_DOWN);
-                }
-                else {
-                    elevator.setState(targetElevatorState);
-                }
-            }
-            else if ((targetArmState != currentArmState && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
-                arm.setState(targetArmState);
-            }
-        }
+        // if (getTargetState() == SuperStructureTargetState.FEED) {
+        //     if ((currentElevatorState == ElevatorState.FEED && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
+        //         arm.setState(ArmState.FEED);
+        //     }
+        //     else if (((currentArmState == ArmState.VERTICAL_DOWN && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) && currentElevatorState != ElevatorState.FEED) {
+        //         elevator.setState(ElevatorState.FEED);
+        //     }
+        //     else {
+        //         arm.setState(ArmState.VERTICAL_DOWN);
+        //     }
+        // }
+        // else {
+        //     if ((targetElevatorState != currentElevatorState && arm.atTargetAngle()) || !Settings.EnabledSubsystems.ARM.get()) {
+        //         if (currentArmState == ArmState.FEED) {
+        //             arm.setState(ArmState.VERTICAL_DOWN);
+        //         }
+        //         else {
+        //             elevator.setState(targetElevatorState);
+        //         }
+        //     }
+        //     else if ((targetArmState != currentArmState && elevator.atTargetHeight()) || !Settings.EnabledSubsystems.ELEVATOR.get()) {
+        //         arm.setState(targetArmState);
+        //     }
+        // }
     }
 
     @Override

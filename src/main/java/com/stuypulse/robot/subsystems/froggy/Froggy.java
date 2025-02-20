@@ -48,10 +48,10 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public enum RollerState {
-        INTAKE_CORAL(-Settings.Froggy.CORAL_INTAKE_SPEED),
+        INTAKE_CORAL(Settings.Froggy.CORAL_INTAKE_SPEED),
         INTAKE_ALGAE(Settings.Froggy.ALGAE_INTAKE_SPEED),
         SHOOT_CORAL(Settings.Froggy.CORAL_OUTTAKE_SPEED),
-        SHOOT_ALGAE(-Settings.Froggy.ALGAE_OUTTAKE_SPEED),
+        SHOOT_ALGAE(Settings.Froggy.ALGAE_OUTTAKE_SPEED),
         HOLD_ALGAE(Settings.Froggy.HOLD_ALGAE_SPEED),
         STOP(0);
 

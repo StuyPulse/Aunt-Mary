@@ -27,7 +27,7 @@ public interface Ports {
 
     public interface Arm {
         int MOTOR = 32;
-        int ABSOLUTE_ENCODER = 5;
+        int ABSOLUTE_ENCODER = 8;
     }
 
     public interface Shooter {
@@ -42,7 +42,7 @@ public interface Ports {
 
     public interface Elevator {
         int MOTOR = 31;
-        int BOTTOM_SWITCH = 8;
+        int BOTTOM_SWITCH = 0;
     }
 
     public interface LED {

@@ -95,8 +95,8 @@ public class FroggyImpl extends Froggy {
     @Override
     public SysIdRoutine getFroggySysIdRoutine() {
         return SysId.getRoutine(
-            2, 
-            7, 
+            5, 
+            12, 
             "Froggy Pivot", 
             voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentAngle().getDegrees(), 

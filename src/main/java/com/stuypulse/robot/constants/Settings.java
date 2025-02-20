@@ -36,13 +36,13 @@ public interface Settings {
 
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", false);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
-        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
+        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
 
     public interface Swerve {
@@ -51,8 +51,8 @@ public interface Settings {
         public interface Constraints {
             double MAX_MODULE_SPEED = 4.9;
     
-            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 3.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 5.0);
+            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 2.0);
+            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 3.0);
             SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
             SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
     
@@ -104,16 +104,18 @@ public interface Settings {
     }
 
     public interface Shooter {
-        SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Coral Shoot Speed Forward", 0.75);
-        SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Coral Shoot Speed Reverse", -0.75);
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.13);
-        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", -0.45);
-        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
+        SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.75);
+        SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.75);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.13);
+        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
+        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
+
+        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hol Speed", -0.1);
 
         double HAS_CORAL_DEBOUNCE = 0.05;
 
         double STALL_DETECTION_DEBOUNCE = 0.5;
-        double STALL_CURRENT_THRESHOLD = 30;
+        double STALL_CURRENT_THRESHOLD = 80;
     }
 
     public interface Funnel {
@@ -129,7 +131,7 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND = 2.0;
+        double MAX_VELOCITY_METERS_PER_SECOND = 1.5;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
         double FEED_HEIGHT_METERS = 1.145752;
@@ -144,7 +146,7 @@ public interface Settings {
         double BACK_L4_HEIGHT_METERS = 1.836;
 
         // Algae
-        double BARGE_HEIGHT_METERS = 2.073;
+        double BARGE_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double ALGAE_L2_HEIGHT_METERS = 1.4;
         double ALGAE_L3_HEIGHT_METERS = 1.8;
 
@@ -152,8 +154,8 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-90);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(230 - 12.304688);
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-83); // Angle that arm makes when resting against the funnel
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-69.345703);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(65.302734);
@@ -165,34 +167,30 @@ public interface Settings {
 
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(60.0);
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-90);
-        Rotation2d VERTICAL_DOWN_ANGLE = Rotation2d.fromDegrees(-81.562500);
+        Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(4));
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(250.0);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 
     public interface Froggy {
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d STOW_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(3.5);
+        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(41);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(0);
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
 
-        double ALGAE_INTAKE_SPEED = 1.0;
-        double ALGAE_OUTTAKE_SPEED = 1.0;
-
-        double CORAL_INTAKE_SPEED = 1.0;
-        double CORAL_OUTTAKE_SPEED = 1.0;
-
-        double HOLD_ALGAE_SPEED = 0.0;
+        SmartNumber ALGAE_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Intake Speed", 1.0);
+        SmartNumber ALGAE_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Outtake Speed", -1.0);
+        SmartNumber CORAL_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Intake Speed", -1.0);
+        SmartNumber CORAL_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Outtake Speed", 1.0);
+        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.0);
 
         double CORAL_STALL_CURRENT_THRESHOLD = 80.0;
         double ALGAE_STALL_CURRENT_THRESHOLD = 80.0;

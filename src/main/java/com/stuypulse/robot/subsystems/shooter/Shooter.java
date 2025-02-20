@@ -30,6 +30,7 @@ public abstract class Shooter extends SubsystemBase {
         SHOOT_CORAL_FORWARD(Settings.Shooter.CORAL_SHOOT_SPEED_FORWARD),
         SHOOT_CORAL_REVERSE(Settings.Shooter.CORAL_SHOOT_SPEED_REVERSE),
         SHOOT_ALGAE(Settings.Shooter.ALGAE_SHOOT_SPEED),
+        HOLD_ALGAE(Settings.Shooter.ALGAE_HOLD_SPEED),
         STOP(0);
 
         private Number speed;
