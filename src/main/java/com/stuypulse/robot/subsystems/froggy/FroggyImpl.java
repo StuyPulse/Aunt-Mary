@@ -160,15 +160,18 @@ public class FroggyImpl extends Froggy {
             pivotMotor.setVoltage(0);
         }
 
-        SmartDashboard.putBoolean("Froggy/At Target Angle", isAtTargetAngle());
+        // PIVOT
+        SmartDashboard.putBoolean("Froggy/Pivot/At Target Angle", isAtTargetAngle());
 
-        SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Froggy/Setpoint (deg)", controller.getSetpoint());
-        SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
+        SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putBoolean("Froggy/Is Stalling", isStalling());
+        // ROLLER
+        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling", isStalling());
         
-        SmartDashboard.putNumber("Froggy/Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller/Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller/Stator Current", rollerMotor.getStatorCurrent().getValueAsDouble());
     }
 }

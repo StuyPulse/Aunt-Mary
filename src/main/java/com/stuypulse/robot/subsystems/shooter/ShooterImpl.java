@@ -60,8 +60,8 @@ public class ShooterImpl extends Shooter {
         }
 
         SmartDashboard.putNumber("Shooter/Voltage", motor.getMotorVoltage().getValueAsDouble());
-
-        SmartDashboard.putNumber("Shooter/Current", motor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Stator Current", motor.getStatorCurrent().getValueAsDouble());
 
         SmartDashboard.putBoolean("Shooter/Has Coral", hasCoral());
         SmartDashboard.putBoolean("Shooter/Is Stalling", isStalling());

@@ -164,9 +164,5 @@ public class ArmSim extends Arm {
         }
 
         sim.update(Settings.DT);
-
-
-        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
     }
 }

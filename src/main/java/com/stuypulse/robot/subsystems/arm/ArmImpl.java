@@ -170,5 +170,6 @@ public class ArmImpl extends Arm {
 
         SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
     }
 }
