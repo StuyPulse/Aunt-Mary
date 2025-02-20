@@ -95,8 +95,8 @@ public class FroggyImpl extends Froggy {
     @Override
     public SysIdRoutine getFroggySysIdRoutine() {
         return SysId.getRoutine(
-            5, 
-            12, 
+            2, 
+            9, 
             "Froggy Pivot", 
             voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentAngle().getDegrees(), 
@@ -162,6 +162,11 @@ public class FroggyImpl extends Froggy {
 
         // PIVOT
         SmartDashboard.putBoolean("Froggy/Pivot/At Target Angle", isAtTargetAngle());
+        SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+
+        SmartDashboard.putNumber("Froggy/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Pivot/Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
 
         SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
