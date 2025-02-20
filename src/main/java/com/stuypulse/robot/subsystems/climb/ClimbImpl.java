@@ -10,21 +10,13 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.util.SysId;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import static edu.wpi.first.units.Units.Second;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbImpl extends Climb {
@@ -56,20 +48,6 @@ public class ClimbImpl extends Climb {
         voltageOverride = Optional.empty();
 
         hasBeenReset = false;
-    }
-
-    @Override
-    public SysIdRoutine getSysIdRoutine() {
-        return SysId.getRoutine(
-            3, 
-            7, 
-            "Climb", 
-            voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getDegrees(), 
-            () -> Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()), 
-            () -> motor.getMotorVoltage().getValueAsDouble(), 
-            getInstance()
-        );
     }
 
     private Rotation2d getTargetAngle() {

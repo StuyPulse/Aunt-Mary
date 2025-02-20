@@ -14,9 +14,7 @@ import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Climb extends SubsystemBase {
     private static final Climb instance;
@@ -64,8 +62,6 @@ public abstract class Climb extends SubsystemBase {
     public abstract boolean atTargetAngle();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
-
-    public abstract SysIdRoutine getSysIdRoutine();
 
     @Override
     public void periodic() {
