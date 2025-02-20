@@ -78,6 +78,8 @@ public abstract class Elevator extends SubsystemBase {
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
 
+    public abstract double getAccelGs();
+
     public abstract void setVoltageOverride(Optional<Double> voltage);
     public abstract void setOperatorOffset(double offset);
     public abstract double getOperatorOffset();

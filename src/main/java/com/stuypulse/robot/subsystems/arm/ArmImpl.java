@@ -11,6 +11,10 @@ import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.ArmDriveFeedForward;
+import com.stuypulse.robot.util.ArmElevatorFeedForward;
 import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
@@ -66,6 +70,8 @@ public class ArmImpl extends Arm {
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
             .add(new ArmFeedforward(Gains.Arm.FF.kG))
+            .add(new ArmDriveFeedForward(Gains.Arm.FF.kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
+            .add(new ArmElevatorFeedForward(Gains.Arm.FF.kG, Elevator.getInstance()::getAccelGs))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
 

@@ -6,6 +6,9 @@
 
 package com.stuypulse.robot.subsystems.elevator;
 
+import com.stuypulse.stuylib.streams.numbers.IStream;
+import com.stuypulse.stuylib.streams.numbers.filters.Derivative;
+import com.stuypulse.stuylib.streams.numbers.filters.IFilter;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import java.util.Optional;
@@ -37,6 +40,8 @@ public class ElevatorSimu extends Elevator {
     private final ElevatorSim sim;
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
+
+    private IStream accel;
 
     private Optional<Double> voltageOverride;
     private double operatorOffset;
@@ -82,6 +87,9 @@ public class ElevatorSimu extends Elevator {
 
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
+        accel = IStream.create(() -> sim.getVelocityMetersPerSecond())
+            .filtered(new Derivative());
+
         voltageOverride = Optional.empty();
         operatorOffset = 0;
     }
@@ -112,6 +120,11 @@ public class ElevatorSimu extends Elevator {
     @Override
     public boolean atTargetHeight() {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+    }
+
+    @Override
+    public double getAccelGs() {
+        return accel.get();
     }
 
     @Override
