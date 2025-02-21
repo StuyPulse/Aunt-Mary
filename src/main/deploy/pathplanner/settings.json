@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.74,
-  "robotLength": 0.74,
+  "robotWidth": 0.9186500042,
+  "robotLength": 0.9440500042,
   "holonomicMode": true,
   "pathFolders": [
     "Blue To HP",
@@ -23,7 +23,7 @@
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
-  "robotMass": 61.23,
+  "robotMass": 63.05,
   "robotMOI": 6.883,
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.051,
@@ -41,9 +41,9 @@
   "brModuleX": -0.273,
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
-  "bumperOffsetY": 0.0,
+  "bumperOffsetY": 0.01905,
   "robotFeatures": [
-    "{\"name\":\"Funnel\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.225,\"y\":0.0},\"size\":{\"width\":0.4,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}",
-    "{\"name\":\"Shooter\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.225,\"y\":-0.15},\"size\":{\"width\":0.125,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+    "{\"name\":\"Funnel\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.275,\"y\":0.0},\"size\":{\"width\":0.4,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}",
+    "{\"name\":\"Shooter\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.275,\"y\":-0.125},\"size\":{\"width\":0.15,\"length\":0.25},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
   ]
 }
