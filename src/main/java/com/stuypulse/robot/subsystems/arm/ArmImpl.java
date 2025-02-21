@@ -38,7 +38,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public class ArmImpl extends Arm {
 
     private TalonFX motor;
-    // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
 
     private Controller controller;
@@ -138,8 +137,8 @@ public class ArmImpl extends Arm {
 
         controller = new MotorFeedforward(kS, kV, kA).position()
             .add(new ArmFeedforward(kG))
-            // .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
-            // .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
+            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
+            .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
             .add(new PIDController(kP, kI, kD))
             .setSetpointFilter(motionProfile);
 
@@ -173,12 +172,10 @@ public class ArmImpl extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        // double degrees = Units.rotationsToDegrees(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
-        // if (degrees < Constants.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getDegrees()) {
-        //     degrees += 360;
-        // }
-        // return Rotation2d.fromDegrees(degrees);
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        double encoderAngle = absoluteEncoder.get();
+        return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
+            ? encoderAngle 
+            : encoderAngle + 1);
     }
 
     @Override
@@ -209,21 +206,6 @@ public class ArmImpl extends Arm {
     @Override
     public void periodic() {
         super.periodic();
-
-        Rotation2d absoluteEncoderAngle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
-
-        absoluteEncoderAngle = absoluteEncoderAngle.getDegrees() <= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getDegrees()
-            ? absoluteEncoderAngle.plus(Rotation2d.fromRotations(1))
-            : absoluteEncoderAngle;
-
-        motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
-
-        // if (absoluteEncoderAngle.getRotations() >= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
-        //     && absoluteEncoderAngle.getRotations() <= Constants.Arm.ENCODER_BREAKPOINT_ANGLE.getRotations()
-        //     && absoluteEncoder.isConnected()) 
-        // {
-        //     motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
-        // }
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
@@ -245,7 +227,6 @@ public class ArmImpl extends Arm {
         
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
         SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
-        SmartDashboard.putNumber("Arm/Absolute Encoder Value (deg)", absoluteEncoderAngle.getDegrees());
 
         SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
