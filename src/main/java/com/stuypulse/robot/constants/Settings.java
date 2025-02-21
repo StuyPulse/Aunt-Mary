@@ -31,7 +31,7 @@ public interface Settings {
 
     String CANIVORE_NAME = "CANIVORE";
 
-    double CLEARANCE_DISTANCE_FROM_REEF = 0.4; // From end of bumper
+    double CLEARANCE_DISTANCE_FROM_REEF = 0.75; // From bumper
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {
@@ -52,8 +52,8 @@ public interface Settings {
         public interface Constraints {
             double MAX_MODULE_SPEED = 4.9;
     
-            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 2.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 3.0);
+            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 3.0);
+            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 5.0);
             SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
             SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
     
@@ -75,8 +75,8 @@ public interface Settings {
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.02); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.02);
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.04); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.04);
                 SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(4));
     
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
@@ -85,6 +85,7 @@ public interface Settings {
             }
 
             public interface Targets {
+                // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;

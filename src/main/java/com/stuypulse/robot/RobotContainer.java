@@ -9,8 +9,6 @@ package com.stuypulse.robot;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
-import java.util.Optional;
-
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
@@ -86,12 +84,11 @@ import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
-import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAligned;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchWithClearance;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
-import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 
 import com.stuypulse.robot.constants.Field;
@@ -101,6 +98,7 @@ import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
@@ -116,6 +114,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -220,62 +219,69 @@ public class RobotContainer {
 
         // L4 coral score
         driver.getTopButton()
-            .whileTrue(
-                new ConditionalCommand(
-                    new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                            .alongWith(new SwerveDrivePIDToNearestBranch(4, true)
-                                .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootBackwards()), 
-                    new ElevatorToL4Back().alongWith(new ArmToL4Back())
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                            .alongWith(new SwerveDrivePIDToNearestBranch(4, false)
-                                .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootForwards()), 
-                    () -> swerve.isFrontFacingReef())
-            )
-            .onFalse(new ElevatorToFeed())
+            .whileTrue(new ConditionalCommand(
+                new SwerveDrivePIDToNearestBranchWithClearance(4, true)
+                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ElevatorToL4Front().alongWith(new ArmToL4Front()))
+                        .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+                    .andThen(new ShooterShootBackwards()), 
+                new SwerveDrivePIDToNearestBranch(4, false)
+                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
+                        .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+                    .andThen(new ShooterShootForwards()), 
+                () -> swerve.isFrontFacingReef()))
             .onFalse(new ArmToFeed())
+            .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef() || arm.getCurrentAngle().getDegrees() < 90)
+                .andThen(new ElevatorToFeed()))
             .onFalse(new ShooterStop());
 
         // L3 coral score
         driver.getRightButton()
-            .whileTrue(
-                new ConditionalCommand(
-                    new ElevatorToL3Front().alongWith(new ArmToL3Front())
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                            .alongWith(new SwerveDrivePIDToNearestBranch(3, true)
-                                .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootBackwards()), 
-                    new ElevatorToL3Back().alongWith(new ArmToL3Back())
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                            .alongWith(new SwerveDrivePIDToNearestBranch(3, false)
-                                .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootForwards()), 
-                    () -> swerve.isFrontFacingReef())
-            )
-            .onFalse(new ElevatorToFeed())
-            .onFalse(new ArmToFeed())
+            .whileTrue(new ConditionalCommand(
+                new SwerveDrivePIDToNearestBranchWithClearance(3, true)
+                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ElevatorToL3Front().alongWith(new ArmToL3Front()))
+                        .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+                    .andThen(new ShooterShootBackwards()), 
+                new SwerveDrivePIDToNearestBranch(3, false)
+                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
+                        .onlyIf(() -> elevator.getState() != ElevatorState.L3_BACK || arm.getState() != ArmState.L3_BACK)
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+                    .andThen(new ShooterShootForwards()), 
+                () -> swerve.isFrontFacingReef()))
+            .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ElevatorToFeed()))
+            .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ArmToFeed()))
             .onFalse(new ShooterStop());
 
         // L2 coral score
         driver.getBottomButton()
-            .whileTrue(
-                new ConditionalCommand(
-                    new ElevatorToL2Front().alongWith(new ArmToL2Front())
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                            .alongWith(new SwerveDrivePIDToNearestBranch(2, true)
-                                .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootBackwards()), 
-                    new ElevatorToL2Back().alongWith(new ArmToL2Back())
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                            .alongWith(new SwerveDrivePIDToNearestBranch(2, false)
-                                .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootForwards()), 
-                    () -> swerve.isFrontFacingReef())
-            )
-            .onFalse(new ElevatorToFeed())
-            .onFalse(new ArmToFeed())
+            .whileTrue(new ConditionalCommand(
+                new SwerveDrivePIDToNearestBranchWithClearance(2, true)
+                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ElevatorToL2Front().alongWith(new ArmToL2Front()))
+                        .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+                    .andThen(new ShooterShootForwards()),
+                new SwerveDrivePIDToNearestBranch(2, false)
+                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
+                        .onlyIf(() -> elevator.getState() != ElevatorState.L2_BACK || arm.getState() != ArmState.L2_BACK)
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+                    .andThen(new ShooterShootForwards()), 
+                () -> swerve.isFrontFacingReef()))
+            .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ElevatorToFeed()))
+            .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ArmToFeed()))
             .onFalse(new ShooterStop());
 
         // Barge score

@@ -132,12 +132,13 @@ public interface Field {
     /*** REEF POSITIONS ***/
 
     Translation2d REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + 93.5 / 2), WIDTH / 2);
+    double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
     public enum CoralBranch {
         A,B,C,D,E,F,G,H,I,J,K,L;
 
-        public Pose2d getTargetPose(int level, boolean isScoringFrontSide) {
+        public Pose2d getScorePose(int level, boolean isScoringFrontSide) {
             Pose3d correspondingAprilTagPose;
             switch (this) {
                 case A, B:
@@ -174,12 +175,43 @@ public interface Field {
                     targetDistanceFromReef = isScoringFrontSide ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L4_FRONT : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L4_BACK;
                     break;
                 default:
-                    throw new IllegalArgumentException("Branch level provided to CoralBranch.getTargetPose() was invalid. Should be in range [2,4]");
+                    throw new IllegalArgumentException("Branch level provided to CoralBranch.getScorePose() was invalid. Should be in range [2,4]");
             }
 
             return correspondingAprilTagPose.toPose2d().transformBy(
                 new Transform2d(
                     Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 
+                    CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1), 
+                    isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
+        }
+
+        public Pose2d getReadyPose(boolean isScoringFrontSide) {
+            Pose3d correspondingAprilTagPose;
+            switch (this) {
+                case A, B:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_AB.getLocation() : NamedTags.RED_AB.getLocation();
+                    break;
+                case C, D:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_CD.getLocation() : NamedTags.RED_CD.getLocation();
+                    break;
+                case E, F:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_EF.getLocation() : NamedTags.RED_EF.getLocation();
+                    break;
+                case G, H:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_GH.getLocation() : NamedTags.RED_GH.getLocation();
+                    break;
+                case I, J:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_IJ.getLocation() : NamedTags.RED_IJ.getLocation();
+                    break;
+                case K, L:
+                default:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_KL.getLocation() : NamedTags.RED_KL.getLocation();
+                    break;
+            }
+
+            return correspondingAprilTagPose.toPose2d().transformBy(
+                new Transform2d(
+                    Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.CLEARANCE_DISTANCE_FROM_REEF + 0.1, // The 0.1 is a buffer to ensure the robot gets past the clearance
                     CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1), 
                     isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
@@ -209,7 +241,7 @@ public interface Field {
 
         for (CoralBranch branch : CoralBranch.values()) {
             // just pick a random level for the branch (in this case 2) since it doesnt really matter
-            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(branch.getTargetPose(2, true)).getTranslation().getNorm();
+            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(branch.getScorePose(2, true)).getTranslation().getNorm();
             if (distance < closestDistance) {
                 closestDistance = distance;
                 nearestBranch = branch;

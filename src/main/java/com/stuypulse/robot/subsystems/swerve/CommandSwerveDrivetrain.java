@@ -19,6 +19,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
@@ -402,6 +403,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE.get();
     }
 
+    public boolean isClearFromReef() {
+        return Field.REEF_CENTER.getDistance(getPose().getTranslation()) > (Settings.CLEARANCE_DISTANCE_FROM_REEF + Field.CENTER_OF_REEF_TO_REEF_FACE + Constants.LENGTH_WITH_BUMPERS_METERS / 2);
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
@@ -419,6 +424,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
 
         SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
+        SmartDashboard.putBoolean("Swerve/Is clear from Reef", isClearFromReef());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }
