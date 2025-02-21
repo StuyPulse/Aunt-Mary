@@ -13,6 +13,7 @@ import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
+import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Gains;
@@ -25,19 +26,11 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import static edu.wpi.first.units.Units.Second;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class FroggyImpl extends Froggy {
 
@@ -52,6 +45,8 @@ public class FroggyImpl extends Froggy {
 
     private Optional<Double> pivotVoltageOverride;
     private Rotation2d pivotOperatorOffset;
+
+    private Number kG;
 
     protected FroggyImpl() {
         super();
@@ -73,7 +68,7 @@ public class FroggyImpl extends Froggy {
         absoluteEncoder.setInverted(true);
 
         controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Froggy.FF.kG))
+            .add(new ArmFeedforward(kG))
             .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
             .setSetpointFilter(new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees()));
 
@@ -152,6 +147,13 @@ public class FroggyImpl extends Froggy {
             }
             else {
                 // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                kG = IStream.create(() -> {
+                    if (isStalling() && getRollerState() == RollerState.HOLD_ALGAE) {
+                        return Gains.Froggy.FF.ALGAE_kG;
+                    } else {
+                        return Gains.Froggy.FF.CORAL_kG;
+                    }
+                }).number();
                 pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }
@@ -171,6 +173,7 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
         SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/kG", kG.doubleValue()); // higher value is algae, put in key once found
 
         // ROLLER
         SmartDashboard.putBoolean("Froggy/Roller/Is Stalling", isStalling());
