@@ -86,6 +86,7 @@ import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
+import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchWithClearance;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
@@ -225,14 +226,14 @@ public class RobotContainer {
                         .andThen(new ElevatorToL4Front().alongWith(new ArmToL4Front()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootBackwards()), 
+                    .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())), 
                 new SwerveDrivePIDToNearestBranch(4, false)
                     .deadlineFor(new LEDSolidColor(Color.kYellow))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()), 
+                    .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new ArmToFeed())
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef() || arm.getCurrentAngle().getDegrees() < 90)
@@ -248,14 +249,14 @@ public class RobotContainer {
                         .andThen(new ElevatorToL3Front().alongWith(new ArmToL3Front()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootBackwards()), 
+                    .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())), 
                 new SwerveDrivePIDToNearestBranch(3, false)
                     .deadlineFor(new LEDSolidColor(Color.kYellow))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L3_BACK || arm.getState() != ArmState.L3_BACK)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()), 
+                    .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ElevatorToFeed()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ArmToFeed()))
@@ -270,14 +271,14 @@ public class RobotContainer {
                         .andThen(new ElevatorToL2Front().alongWith(new ArmToL2Front()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()),
+                    .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())),
                 new SwerveDrivePIDToNearestBranch(2, false)
                     .deadlineFor(new LEDSolidColor(Color.kYellow))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L2_BACK || arm.getState() != ArmState.L2_BACK)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()), 
+                    .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ElevatorToFeed()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef()).andThen(new ArmToFeed()))

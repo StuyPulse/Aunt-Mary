@@ -45,9 +45,22 @@ public interface Gains {
             double kS = 0.0076787; 
             double kV = 0.00847;
             double kA = 0.00153;
+            
             double EMPTY_kG = 0.0;
+            double EMPTY_kA = 0.0;
+            double EMPTY_kV = 0.0;
+            double EMPTY_kS = 0.0;
+
             double CORAL_kG = 0.92147;
+            double CORAL_kA = 0.0076787;
+            double CORAL_kV = 0.00847;
+            double CORAL_kS = 0.00153;
+
             double ALGAE_kG = 0.92147;
+            double ALGAE_kA = 0.0;
+            double ALGAE_kV = 0.0;
+            double ALGAE_kS = 0.0;
+    
         }
     }
 

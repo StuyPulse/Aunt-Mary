@@ -11,6 +11,7 @@ import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.ArmDriveFeedForward;
 import com.stuypulse.robot.util.ArmElevatorFeedForward;
@@ -31,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ArmImpl extends Arm {
@@ -44,13 +44,17 @@ public class ArmImpl extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
-    private Number kG;
+    private Number kS, kV, kA, kG;
 
     public ArmImpl() {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
+        kS = 0.0;
+        kV = 0.0;
+        kA = 0.0;
+        kG = 0.0;
 
         // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
@@ -65,7 +69,7 @@ public class ArmImpl extends Arm {
         MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
-        controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
+        controller = new MotorFeedforward(kS, kV, kA).position()
             .add(new ArmFeedforward(kG))
             .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
             .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
@@ -74,7 +78,6 @@ public class ArmImpl extends Arm {
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
-        kG = 0.0;
     }
 
     @Override
@@ -156,12 +159,42 @@ public class ArmImpl extends Arm {
         // }
 
         kG = IStream.create(() -> {
-            if (getState() == Arm.ArmState.FEED) {
-                return Gains.Arm.FF.EMPTY_kG;
-            } else if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
                 return Gains.Arm.FF.ALGAE_kG;
+            } else if (!Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.FF.EMPTY_kG;
             } else {
                 return Gains.Arm.FF.CORAL_kG;
+            }
+        }).number();
+              
+        kS = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.FF.ALGAE_kS;
+            } else if (!Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.FF.EMPTY_kS;
+            } else {
+                return Gains.Arm.FF.CORAL_kS;
+            }
+        }).number();
+
+        kV = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.FF.ALGAE_kV;
+            } else if (!Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.FF.EMPTY_kV;
+            } else {
+                return Gains.Arm.FF.CORAL_kV;
+            }
+        }).number();
+
+        kA = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.FF.ALGAE_kA;
+            } else if (!Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.FF.EMPTY_kA;
+            } else {
+                return Gains.Arm.FF.CORAL_kA;
             }
         }).number();
         
@@ -170,7 +203,6 @@ public class ArmImpl extends Arm {
                 motor.setVoltage(voltageOverride.get());
             }
             else {
-                motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
                 motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }

@@ -48,7 +48,7 @@ public interface Settings {
     public interface Swerve {
         double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.1;
         double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
-
+        double NUDGE_FORWARD_SPEED_METERS_PER_SECOND = 0.15;
         public interface Constraints {
             double MAX_MODULE_SPEED = 4.9;
     
