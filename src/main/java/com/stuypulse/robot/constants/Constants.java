@@ -11,10 +11,10 @@ import edu.wpi.first.math.util.Units;
 
 public interface Constants {
 
-    double LENGTH_WITH_BUMPERS_METERS = Units.inchesToMeters(30);
-    double WIDTH_WITH_BUMPERS_METERS = Units.inchesToMeters(30);
+    double LENGTH_WITH_BUMPERS_METERS = Units.inchesToMeters(37.16);
+    double WIDTH_WITH_BUMPERS_METERS = Units.inchesToMeters(36.16);
 
-    double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.16);
+    double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.16 + 0.6);
 
     public interface Elevator {
         double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR
@@ -60,7 +60,7 @@ public interface Constants {
 
     public interface Climb {
         double GEAR_RATIO = 75.0;
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(0.0);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(92.970992);
 
         Rotation2d MIN_ANGLE = Rotation2d.kZero;
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(270);

@@ -102,7 +102,7 @@ public interface Motors {
         TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
 			.withCurrentLimitAmps(80)
 			.withRampRate(0.25)
-			.withNeutralMode(NeutralModeValue.Brake)
+			.withNeutralMode(NeutralModeValue.Coast)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
 			.withPIDConstants(Gains.Climb.PID.kP, Gains.Climb.PID.kI, Gains.Climb.PID.kD, 0)
 			.withFFConstants(Gains.Climb.FF.kS, Gains.Climb.FF.kV, Gains.Climb.FF.kA, Gains.Climb.FF.kG, 0)

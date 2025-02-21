@@ -36,7 +36,6 @@ public abstract class Elevator extends SubsystemBase {
     }
 
     public enum ElevatorState {
-        STOW(Constants.Elevator.MIN_HEIGHT_METERS),
         FEED(Settings.Elevator.FEED_HEIGHT_METERS),
         L2_FRONT(Settings.Elevator.FRONT_L2_HEIGHT_METERS),
         L3_FRONT(Settings.Elevator.FRONT_L3_HEIGHT_METERS),
@@ -63,7 +62,7 @@ public abstract class Elevator extends SubsystemBase {
     private ElevatorState state;
 
     protected Elevator() {
-        this.state = ElevatorState.STOW;
+        this.state = ElevatorState.FEED;
     }
 
     public void setState(ElevatorState state) {
