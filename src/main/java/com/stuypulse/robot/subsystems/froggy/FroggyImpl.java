@@ -37,7 +37,6 @@ public class FroggyImpl extends Froggy {
 
     private TalonFX rollerMotor;
     private TalonFX pivotMotor;
-    // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
 
     private BStream isStalling;
@@ -52,14 +51,6 @@ public class FroggyImpl extends Froggy {
 
         pivotMotor = new TalonFX(Ports.Froggy.PIVOT);
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
-
-        // absoluteEncoder = new CANcoder(Ports.Froggy.ABSOLUTE_ENCODER);
-
-        // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-        //     .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
-        //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
-
-        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);

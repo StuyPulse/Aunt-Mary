@@ -6,8 +6,6 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
-import org.ejml.equation.IntegerSequence.For;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;

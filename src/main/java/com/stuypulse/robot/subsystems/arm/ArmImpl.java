@@ -122,15 +122,8 @@ public class ArmImpl extends Arm {
             }
         }).number();
 
-        // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
-
-        // MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs()
-        //     .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
-        //     .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
-
-        // absoluteEncoder.getConfigurator().apply(magnetConfig);
 
         MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());

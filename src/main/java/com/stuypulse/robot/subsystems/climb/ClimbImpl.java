@@ -21,7 +21,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbImpl extends Climb {
     private TalonFX motor;
-    // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
 
     private Optional<Double> voltageOverride;
@@ -33,14 +32,6 @@ public class ClimbImpl extends Climb {
         motor = new TalonFX(Ports.Climb.MOTOR);
         Motors.Climb.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
-
-        // absoluteEncoder = new CANcoder(Ports.Climb.ABSOLUTE_ENCODER);
-
-        // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-        //     .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations())
-        //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
-
-        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(false);
@@ -92,7 +83,6 @@ public class ClimbImpl extends Climb {
                     else {
                         motor.setVoltage(0);
                     }
-                    // motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
                 }
             }
         }
