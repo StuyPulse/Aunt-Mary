@@ -71,8 +71,7 @@ public class ThreePieceJKL extends SequentialCommandGroup {
             new SwerveDrivePIDToNearestBranch(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
-            new ShooterStop(),
-
+            new ShooterStop()
         );
 
     }
