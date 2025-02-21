@@ -197,10 +197,12 @@ public class RobotContainer {
             .onFalse(new ShooterStop())
             .onFalse(new FroggyRollerStop());
 
-        // ground algae intake
+        // ground algae intake and send elevator/arm to feed
         driver.getLeftTriggerButton()
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .whileTrue(new FroggyRollerIntakeAlgae().andThen(new BuzzController(driver)))
+            .onTrue(new ElevatorToFeed())
+            .onTrue(new ArmToFeed())
             .onFalse(new FroggyPivotToStow());
 
         // Algae processor score
@@ -210,10 +212,12 @@ public class RobotContainer {
                 .andThen(new FroggyRollerShootAlgae()))
             .onFalse(new FroggyRollerStop());
 
-        // Ground coral intake
+        // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
             .onTrue(new FroggyPivotToCoralGroundPickup())
             .whileTrue(new FroggyRollerIntakeCoral())
+            .onTrue(new ElevatorToFeed())
+            .onTrue(new ArmToFeed())
             .onFalse(new FroggyPivotToStow());
 
         // L1 coral score
