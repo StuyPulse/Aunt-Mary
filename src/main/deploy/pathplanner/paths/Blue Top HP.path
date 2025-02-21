@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.735239519391741,
-        "y": 7.353829956054687
+        "x": 1.6300611223493302,
+        "y": 7.31465584891183
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6549948489547004,
-        "y": 7.027797203398767
+        "x": 1.5498164519122897,
+        "y": 6.9886230962559095
       },
       "isLocked": false,
       "linkedName": "Blue Top HP"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "Blue Utilities",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

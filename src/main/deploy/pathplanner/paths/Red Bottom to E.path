@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.347715881735079,
-        "y": 2.81736214780874
+        "x": 5.357483799251099,
+        "y": 2.889248211170982
       },
       "isLocked": false,
       "linkedName": "Red Bottom Start"
@@ -20,8 +20,8 @@
         "y": 2.8420745849609377
       },
       "prevControl": {
-        "x": 6.429657127556075,
-        "y": 2.818946117940915
+        "x": 6.44226138330418,
+        "y": 2.8801252980695207
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "Red to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

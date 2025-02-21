@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.735239519391741,
-        "y": 7.353829956054687
+        "x": 1.6300611223493302,
+        "y": 7.31465584891183
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.154037647051891,
-        "y": 3.9894146716345023
+        "x": 3.148223666494421,
+        "y": 4.034178936131832
       },
       "isLocked": false,
       "linkedName": "Blue Top HP"
@@ -20,8 +20,8 @@
         "y": 4.056981985909598
       },
       "prevControl": {
-        "x": 1.9615649713419783,
-        "y": 6.9429189345565785
+        "x": 1.8943586609313032,
+        "y": 6.712410237339751
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Blue To Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

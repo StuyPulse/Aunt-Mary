@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8571162925072993,
-        "y": 2.9221376471198433
+        "x": 3.8249172502954747,
+        "y": 2.894524426751204
       },
       "isLocked": false,
       "linkedName": "Red Bottom HP"
@@ -20,8 +20,8 @@
         "y": 2.8759438650948663
       },
       "prevControl": {
-        "x": 1.9212215997007314,
-        "y": 1.023919682987587
+        "x": 1.9210233857459387,
+        "y": 1.0403100002437538
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Red to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "useDefaultConstraints": true
 }

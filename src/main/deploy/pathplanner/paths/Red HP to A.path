@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.20020473313638,
-        "y": 3.874862382645486
+        "x": 3.128981408539434,
+        "y": 3.9642169774844254
       },
       "isLocked": false,
       "linkedName": "Red Top HP"
@@ -20,8 +20,8 @@
         "y": 4.035864693777901
       },
       "prevControl": {
-        "x": 1.8806622659542112,
-        "y": 7.030730645831786
+        "x": 1.8760913701347872,
+        "y": 6.962044082202689
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Red to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

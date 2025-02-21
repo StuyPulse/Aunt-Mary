@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.831763755816866,
-        "y": 3.0178919037432763
+        "x": 3.843466026936238,
+        "y": 2.8984841545838695
       },
       "isLocked": false,
       "linkedName": "Blue Bottom HP"
@@ -20,8 +20,8 @@
         "y": 2.8778821672712045
       },
       "prevControl": {
-        "x": 1.6512996087904033,
-        "y": 0.7399342160182241
+        "x": 1.6205844988132556,
+        "y": 0.6787310036528442
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Blue To Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "useDefaultConstraints": true
 }

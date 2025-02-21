@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.080385781648835,
-        "y": 4.3552400001239615
+        "x": 6.087630468450763,
+        "y": 4.3488064036661225
       },
       "isLocked": false,
       "linkedName": "Red Mid Top Start"
@@ -20,8 +20,8 @@
         "y": 4.354403817026238
       },
       "prevControl": {
-        "x": 6.858639638498747,
-        "y": 4.37823294148204
+        "x": 6.8518354245764925,
+        "y": 4.3678763677548975
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Red to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

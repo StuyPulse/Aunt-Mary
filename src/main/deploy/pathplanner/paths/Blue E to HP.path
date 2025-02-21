@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4383202698504216,
-        "y": 0.6060049189068968
+        "x": 2.9461172921316963,
+        "y": 1.5098488943917416
       },
       "isLocked": false,
       "linkedName": "Blue E"
@@ -20,8 +20,8 @@
         "y": 0.7061676025390625
       },
       "prevControl": {
-        "x": 4.354393026119995,
-        "y": 2.414665412137423
+        "x": 4.186623461381711,
+        "y": 2.307647543552958
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "Blue To HP",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

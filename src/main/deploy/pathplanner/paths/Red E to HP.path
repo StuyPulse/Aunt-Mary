@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.342034005178085,
-        "y": 1.1533730047156618
+        "x": 2.5481265325891242,
+        "y": 1.1956263467929538
       },
       "isLocked": false,
       "linkedName": "Red E"
@@ -20,8 +20,8 @@
         "y": 0.7039232526506691
       },
       "prevControl": {
-        "x": 4.62647225516183,
-        "y": 2.5343436104910713
+        "x": 4.720704765559239,
+        "y": 2.6938576706126884
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "Red to HP",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

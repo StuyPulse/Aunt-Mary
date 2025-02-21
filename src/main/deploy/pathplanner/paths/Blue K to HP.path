@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8309601104974433,
-        "y": 7.2854598980331415
+        "x": 1.7888361703905091,
+        "y": 7.179391220693517
       },
       "isLocked": false,
       "linkedName": "Blue K"
     },
     {
       "anchor": {
-        "x": 1.735239519391741,
-        "y": 7.353829956054687
+        "x": 1.6300611223493302,
+        "y": 7.31465584891183
       },
       "prevControl": {
-        "x": 3.7656960251604943,
-        "y": 5.270096612385721
+        "x": 3.6965239663373928,
+        "y": 5.317807433190369
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "reversed": false,
   "folder": "Blue To HP",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

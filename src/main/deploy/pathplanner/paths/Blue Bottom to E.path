@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.9955875941685255,
+        "x": 7.043586077008928,
         "y": 2.833760288783482
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.330422533321931,
-        "y": 2.783840780364981
+        "x": 5.316819562964643,
+        "y": 2.813839497556888
       },
       "isLocked": false,
       "linkedName": "Blue Bottom Start"
@@ -20,8 +20,8 @@
         "y": 2.833760288783482
       },
       "prevControl": {
-        "x": 6.4613084729039585,
-        "y": 2.812225956883102
+        "x": 6.511719784636691,
+        "y": 2.8439019987208347
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "Blue To Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }
