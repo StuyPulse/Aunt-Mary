@@ -41,12 +41,14 @@ public class FourPieceEDCB extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
                 new ElevatorToFeed().alongWith(new ArmToFeed())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
-                new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
             ),
             new SwerveDrivePIDToNearestBranch(4, true)
                 .andThen(new ShooterShootBackwards()),
@@ -57,12 +59,14 @@ public class FourPieceEDCB extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
                 new ElevatorToFeed().alongWith(new ArmToFeed())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
-                new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
             ),
             new SwerveDrivePIDToNearestBranch(4, true)
                 .andThen(new ShooterShootBackwards()),
@@ -73,12 +77,14 @@ public class FourPieceEDCB extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[5]),
                 new ElevatorToFeed().alongWith(new ArmToFeed())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[6]),
-                new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
             ),
             new SwerveDrivePIDToNearestBranch(4, true)
                 .andThen(new ShooterShootBackwards()),

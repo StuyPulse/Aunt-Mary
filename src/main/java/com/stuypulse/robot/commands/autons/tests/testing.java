@@ -11,13 +11,13 @@ public class testing extends SequentialCommandGroup {
 
         addCommands(
             
-            CommandSwerveDrivetrain.followPathCommand(paths[0]),
-            CommandSwerveDrivetrain.followPathCommand(paths[1]),
-            CommandSwerveDrivetrain.followPathCommand(paths[2]),
-            CommandSwerveDrivetrain.followPathCommand(paths[3]),
-            CommandSwerveDrivetrain.followPathCommand(paths[4]),
-            CommandSwerveDrivetrain.followPathCommand(paths[5]),
-            CommandSwerveDrivetrain.followPathCommand(paths[6])
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[5]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[6])
 
         ); 
 
