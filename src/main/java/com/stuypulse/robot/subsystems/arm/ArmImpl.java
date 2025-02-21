@@ -13,9 +13,11 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.ArmDriveFeedForward;
 import com.stuypulse.robot.util.ArmElevatorFeedForward;
+import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
@@ -44,83 +46,13 @@ public class ArmImpl extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
-    private Number kP, kI, kD, kS, kV, kA, kG;
+    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     public ArmImpl() {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
-        
-        kG = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.FF.kG;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.FF.kG;
-            } else {
-                return Gains.Arm.Empty.FF.kG;
-            }
-        }).number();
-              
-        kS = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.FF.kS;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.FF.kS;
-            } else {
-                return Gains.Arm.Empty.FF.kS;
-            }
-        }).number();
-
-        kV = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.FF.kV;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.FF.kV;
-            } else {
-                return Gains.Arm.Empty.FF.kV;
-            }
-        }).number();
-
-        kA = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.FF.kA;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.FF.kA;
-            } else {
-                return Gains.Arm.Empty.FF.kA;
-            }
-        }).number();
-
-        kP = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.PID.kP;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.PID.kP;
-            } else {
-                return Gains.Arm.Empty.PID.kP;
-            }
-        }).number();
-
-        kI = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.PID.kI;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.PID.kI;
-            } else {
-                return Gains.Arm.Empty.PID.kI;
-            }
-        }).number();
-
-        kD = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.Algae.PID.kD;
-            } else if (Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.Coral.PID.kD;
-            } else {
-                return Gains.Arm.Empty.PID.kD;
-            }
-        }).number();
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
@@ -137,6 +69,14 @@ public class ArmImpl extends Arm {
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
+
+        kP = new SettableNumber(Gains.Arm.Empty.PID.kP);
+        kI = new SettableNumber(Gains.Arm.Empty.PID.kI);
+        kD = new SettableNumber(Gains.Arm.Empty.PID.kD);
+        kS = new SettableNumber(Gains.Arm.Empty.FF.kS);
+        kV = new SettableNumber(Gains.Arm.Empty.FF.kV);
+        kA = new SettableNumber(Gains.Arm.Empty.FF.kA);
+        kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
     }
 
     @Override
@@ -196,9 +136,39 @@ public class ArmImpl extends Arm {
         return this.operatorOffset;
     }
 
+    private void updateGains() {
+        if (getState() == ArmState.HOLD_ALGAE || getState() == ArmState.BARGE) {
+            kP.set(Gains.Arm.Algae.PID.kP);
+            kI.set(Gains.Arm.Algae.PID.kI);
+            kD.set(Gains.Arm.Algae.PID.kD);
+            kS.set(Gains.Arm.Algae.FF.kS);
+            kV.set(Gains.Arm.Algae.FF.kV);
+            kA.set(Gains.Arm.Algae.FF.kA);
+            kG.set(Gains.Arm.Algae.FF.kG);
+        } else if (Shooter.getInstance().hasCoral()) {
+            kP.set(Gains.Arm.Coral.PID.kP);
+            kI.set(Gains.Arm.Coral.PID.kI);
+            kD.set(Gains.Arm.Coral.PID.kD);
+            kS.set(Gains.Arm.Coral.FF.kS);
+            kV.set(Gains.Arm.Coral.FF.kV);
+            kA.set(Gains.Arm.Coral.FF.kA);
+            kG.set(Gains.Arm.Coral.FF.kG);
+        } else {
+            kP.set(Gains.Arm.Empty.PID.kP);
+            kI.set(Gains.Arm.Empty.PID.kI);
+            kD.set(Gains.Arm.Empty.PID.kD);
+            kS.set(Gains.Arm.Empty.FF.kS);
+            kV.set(Gains.Arm.Empty.FF.kV);
+            kA.set(Gains.Arm.Empty.FF.kA);
+            kG.set(Gains.Arm.Empty.FF.kG);
+        }
+    }
+
     @Override
     public void periodic() {
         super.periodic();
+        
+        updateGains();
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
