@@ -218,6 +218,7 @@ public class RobotContainer {
             .onFalse(new FroggyRollerStop())
             .onFalse(new FroggyPivotToStow());
 
+        // L4 coral score
         driver.getTopButton()
             .whileTrue(
                 new ConditionalCommand(
@@ -237,6 +238,7 @@ public class RobotContainer {
             .onFalse(new ArmToFeed())
             .onFalse(new ShooterStop());
 
+        // L3 coral score
         driver.getRightButton()
             .whileTrue(
                 new ConditionalCommand(
@@ -256,6 +258,7 @@ public class RobotContainer {
             .onFalse(new ArmToFeed())
             .onFalse(new ShooterStop());
 
+        // L2 coral score
         driver.getBottomButton()
             .whileTrue(
                 new ConditionalCommand(
@@ -275,6 +278,7 @@ public class RobotContainer {
             .onFalse(new ArmToFeed())
             .onFalse(new ShooterStop());
 
+        // Barge score
         driver.getLeftButton()
             .whileTrue(new SwerveDriveDriveAlignedToBarge(driver))
             .whileTrue(new ElevatorToBarge().alongWith(new ArmToBarge())
@@ -285,11 +289,13 @@ public class RobotContainer {
             .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
             .onFalse(new ShooterStop());
 
+        // Acquire Reef Algae L3
         driver.getDPadLeft()
             .whileTrue(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
             .whileTrue(new ShooterAcquireAlgae())
             .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
         
+        // Acquire Reef Algae L2
         driver.getDPadDown()
             .whileTrue(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
             .whileTrue(new ShooterAcquireAlgae())
@@ -300,16 +306,19 @@ public class RobotContainer {
     }
 
     private void configureOperatorButtonBindings() {
+        // Elevator Voltage Override
         new Trigger(() -> Math.abs(operator.getLeftStick().y) > Settings.Operator.Elevator.VOLTAGE_OVERRIDE_DEADBAND)   
             .whileTrue(new ElevatorOverrideVoltage(() -> -operator.getLeftStick().y > 0 
                 ? (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_UP))
                 : (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_DOWN))));
         
+        // Arm Voltage Override
         new Trigger(() -> Math.abs(operator.getRightStick().x) > Settings.Operator.Arm.VOLTAGE_OVERRIDE_DEADBAND)
             .whileTrue(new ArmOverrideVoltage(() -> operator.getRightStick().x > 0 
                 ? (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_UP))
                 : (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_DOWN))));
 
+        // Shoot Backwards
         operator.getLeftTriggerButton()
             .whileTrue(new ConditionalCommand(
                 new ShooterShootForwards().alongWith(new FunnelReverse()),
@@ -317,12 +326,23 @@ public class RobotContainer {
                 () -> shooter.shouldShootBackwards()))
             .onFalse(new ShooterStop());
 
+        // Shoot Forwards
+        operator.getRightTriggerButton()
+            .whileTrue(new ConditionalCommand(
+                new ShooterShootBackwards(), 
+                new ShooterShootForwards(), 
+                () -> shooter.shouldShootBackwards()))
+            .onFalse(new ShooterStop());
+
+        // Froggy pivot offsets
         operator.getLeftBumper().whileTrue(new FroggyPivotMoveOperatorOffsetUp());
         operator.getRightBumper().whileTrue(new FroggyPivotMoveOperatorOffsetDown());
 
+        // Climb voltage overrides
         operator.getLeftMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
         operator.getRightMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
 
+        // Arm/Elevator to heights
         operator.getTopButton().onTrue(swerve.isFrontFacingReef() 
             ? new ElevatorToL4Front().alongWith(new ArmToL4Front()) 
             : new ElevatorToL4Back().alongWith(new ArmToL4Back()));
@@ -337,17 +357,13 @@ public class RobotContainer {
             .onTrue(new ElevatorToBarge())
             .onTrue(new ArmToBarge());
 
+        // Elevator offsets
         operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());
         operator.getDPadDown().onTrue(new ElevatorOffsetTargetDown());
 
+        // Arm offsets
         operator.getDPadLeft().onTrue(new ArmOffsetTargetDown());
         operator.getDPadRight().onTrue(new ArmOffsetTargetUp());
-
-        operator.getRightTriggerButton()
-            .whileTrue(new ConditionalCommand(
-                new ShooterShootBackwards(), 
-                new ShooterShootForwards(), 
-                () -> shooter.shouldShootBackwards()));
     }
 
     /**************/
