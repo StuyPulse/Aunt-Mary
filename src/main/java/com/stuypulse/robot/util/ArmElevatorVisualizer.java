@@ -1,4 +1,4 @@
-package com.stuypulse.robot.subsystems.superstructure;
+package com.stuypulse.robot.util;
 
 import com.stuypulse.robot.constants.Constants;
 
@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
-public class SuperStructureVisualizer {
-    private static final SuperStructureVisualizer instance;
+public class ArmElevatorVisualizer {
+    private static final ArmElevatorVisualizer instance;
 
     static {
-        instance = new SuperStructureVisualizer();
+        instance = new ArmElevatorVisualizer();
     }
 
-    public static SuperStructureVisualizer getInstance() {
+    public static ArmElevatorVisualizer getInstance() {
         return instance;
     }
 
@@ -30,13 +30,15 @@ public class SuperStructureVisualizer {
     private final MechanismRoot2d elevatorCarriageTopFront;
     private final MechanismRoot2d elevatorCarriageTopBack;
 
+    private double elevatorHeight;
+
     private final MechanismRoot2d armPivot;
     private final MechanismLigament2d arm;
 
     private double width;
     private double height;
 
-    private SuperStructureVisualizer() {
+    private ArmElevatorVisualizer() {
         width = Constants.Arm.ARM_LENGTH * 2 + Units.inchesToMeters(3);
         height = Constants.Elevator.MAX_HEIGHT_METERS + Constants.Arm.ARM_LENGTH + Units.inchesToMeters(3);
 
@@ -110,6 +112,8 @@ public class SuperStructureVisualizer {
             new Color8Bit(Color.kOrange)
         ));
 
+        elevatorHeight = Constants.Elevator.MIN_HEIGHT_METERS;
+
         // ARM
         armPivot = superStructure.getRoot("Arm Pivot", width/2, Constants.Elevator.MIN_HEIGHT_METERS - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
 
@@ -124,13 +128,18 @@ public class SuperStructureVisualizer {
         armPivot.append(arm);
     }
 
-    public void update(double elevatorHeight, Rotation2d armAngle) {
+    public void updateElevatorHeight(double elevatorHeight) {
+        this.elevatorHeight = elevatorHeight;
         elevatorCarriageTopFront.setPosition((width + Constants.Elevator.WIDTH) / 2 - Units.inchesToMeters(2), elevatorHeight);
         elevatorCarriageTopBack.setPosition((width - Constants.Elevator.WIDTH) / 2 + Units.inchesToMeters(2), elevatorHeight);
 
+        SmartDashboard.putData("Visualizers/Arm-Elevator", superStructure);
+    }
+
+    public void updateArmAngle(Rotation2d armAngle) {
         armPivot.setPosition(width/2, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
         arm.setAngle(armAngle);
 
-        SmartDashboard.putData("Visualizers/Superstructure", superStructure);
+        SmartDashboard.putData("Visualizers/Arm-Elevator", superStructure);
     }
 }

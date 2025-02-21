@@ -14,6 +14,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
@@ -25,6 +26,7 @@
       "/SmartDashboard/Swerve/Module 2": "Mechanism2d",
       "/SmartDashboard/Swerve/Module 3": "Mechanism2d",
       "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Arm-Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
@@ -41,7 +43,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Visualizers/Superstructure": {
+      "/SmartDashboard/Visualizers/Arm-Elevator": {
         "window": {
           "visible": true
         }

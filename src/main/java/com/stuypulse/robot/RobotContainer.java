@@ -15,6 +15,17 @@ import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
+import com.stuypulse.robot.commands.arm.ArmToFeed;
+import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
+import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
+import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
+import com.stuypulse.robot.commands.arm.algae.ArmToBarge;
+import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
+import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
+import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
+import com.stuypulse.robot.commands.arm.coral.ArmToL3Front;
+import com.stuypulse.robot.commands.arm.coral.ArmToL4Back;
+import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
 import com.stuypulse.robot.commands.autons.EDCB.FourPieceEDCB;
 import com.stuypulse.robot.commands.autons.EDCB.OnePieceE;
 import com.stuypulse.robot.commands.autons.EDCB.ThreeHalfPieceEDC;
@@ -39,12 +50,24 @@ import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Front;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Back;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotOverrideVoltage;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilAtTargetAngle;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeAlgae;
@@ -62,17 +85,6 @@ import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToAlgaeL2;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToAlgaeL3;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToBarge;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToFeed;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Back;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL2Front;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Back;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL3Front;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Back;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
-import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAligned;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
@@ -86,6 +98,7 @@ import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
@@ -93,20 +106,16 @@ import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
-import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
-import com.stuypulse.robot.subsystems.superstructure.SuperStructure.SuperStructureTargetState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -125,7 +134,6 @@ public class RobotContainer {
     private final Shooter shooter = Shooter.getInstance();
     private final Elevator elevator = Elevator.getInstance();
     private final Arm arm = Arm.getInstance();
-    private final SuperStructure superStructure = SuperStructure.getInstance();
     private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
     private final LEDController leds = LEDController.getInstance();
@@ -136,9 +144,8 @@ public class RobotContainer {
     // Robot container
     public RobotContainer() {
         configureDefaultCommands();
-        configureTestButtons();
-        // configureDriverButtonBindings();
-        // configureOperatorButtonBindings();
+        configureDriverButtonBindings();
+        configureOperatorButtonBindings();
         configureAutons();
         configureSysids();
 
@@ -149,22 +156,6 @@ public class RobotContainer {
     /****************/
     /*** DEFAULT ***/
     /****************/
-
-    private void configureTestButtons() {
-        driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
-
-        driver.getTopButton().onTrue(new SuperStructureToL4Front());
-        driver.getRightButton().onTrue(new SuperStructureToL3Front());
-        driver.getBottomButton().onTrue(new SuperStructureToFeed());
-
-        driver.getRightTriggerButton().whileTrue(new FroggyRollerIntakeCoral());
-
-        driver.getDPadRight().whileTrue(new ShooterShootForwards()).onFalse(new ShooterStop());
-        driver.getDPadLeft().whileTrue(new ShooterShootBackwards()).onFalse(new ShooterStop());
-
-        driver.getLeftBumper().whileTrue(new ShooterAcquireAlgae());
-        driver.getRightBumper().whileTrue(new ShooterShootAlgae()).onFalse(new ShooterStop());
-    }
 
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
@@ -185,114 +176,124 @@ public class RobotContainer {
         driver.getDPadRight()
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
+                    new FroggyRollerShootAlgae(), 
+                    new FroggyRollerShootCoral(), 
+                    () -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
+                new ConditionalCommand(
                     new ShooterShootAlgae(), 
                     new ConditionalCommand(
-                        new ShooterShootForwards(), 
-                        new ShooterShootBackwards().onlyIf(() -> shooter.shouldShootBackwards()), 
-                        () -> shooter.shouldShootForward()),
-                    () -> superStructure.getTargetState() == SuperStructureTargetState.BARGE), 
-                new ConditionalCommand(
-                    new FroggyRollerShootCoral(), 
-                    new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
-                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-                () -> superStructure.isInScoreState()))
+                        new ShooterShootBackwards(),
+                        new ShooterShootForwards(),
+                        shooter::shouldShootBackwards
+                    ), 
+                    () -> arm.getState() == ArmState.BARGE), 
+                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE))
             .onFalse(new ShooterStop())
             .onFalse(new FroggyRollerStop());
 
-        // ground algae pickup
+        // ground algae intake
         driver.getLeftTriggerButton()
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .whileTrue(new FroggyRollerIntakeAlgae().andThen(new BuzzController(driver)))
             .onFalse(new FroggyPivotToStow());
 
+        // Algae processor score
         driver.getLeftBumper()
-            .onTrue(new FroggyRollerShootAlgae())
+            .whileTrue(new FroggyPivotToProcessor()
+                .andThen(new FroggyPivotWaitUntilAtTargetAngle())
+                .andThen(new FroggyRollerShootAlgae()))
             .onFalse(new FroggyRollerStop());
 
+        // Ground coral intake
         driver.getRightTriggerButton()
             .onTrue(new FroggyPivotToCoralGroundPickup())
             .whileTrue(new FroggyRollerIntakeCoral())
             .onFalse(new FroggyPivotToStow());
 
+        // L1 coral score
         driver.getRightBumper()
             .whileTrue(new FroggyPivotToL1()
                 .andThen(new FroggyPivotWaitUntilAtTargetAngle())
                 .andThen(new FroggyRollerShootCoral()))
-            .onFalse(new FroggyRollerStop().andThen(new FroggyPivotToStow()));
+            .onFalse(new FroggyRollerStop())
+            .onFalse(new FroggyPivotToStow());
 
         driver.getTopButton()
             .whileTrue(
                 new ConditionalCommand(
-                    new SuperStructureToL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget()
+                    new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDrivePIDToNearestBranch(4, true)
                                 .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootBackwards()), 
-                    new SuperStructureToL4Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget()
+                    new ElevatorToL4Back().alongWith(new ArmToL4Back())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDrivePIDToNearestBranch(4, false)
                                 .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
-            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ElevatorToFeed())
+            .onFalse(new ArmToFeed())
             .onFalse(new ShooterStop());
 
         driver.getRightButton()
             .whileTrue(
                 new ConditionalCommand(
-                    new SuperStructureToL3Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget()
+                    new ElevatorToL3Front().alongWith(new ArmToL3Front())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDrivePIDToNearestBranch(3, true)
                                 .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootBackwards()), 
-                    new SuperStructureToL3Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget()
+                    new ElevatorToL3Back().alongWith(new ArmToL3Back())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDrivePIDToNearestBranch(3, false)
                                 .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
-            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ElevatorToFeed())
+            .onFalse(new ArmToFeed())
             .onFalse(new ShooterStop());
 
         driver.getBottomButton()
             .whileTrue(
                 new ConditionalCommand(
-                    new SuperStructureToL2Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget()
+                    new ElevatorToL2Front().alongWith(new ArmToL2Front())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDrivePIDToNearestBranch(2, true)
                                 .alongWith(new LEDSolidColor(Color.kYellow))))
-                        .andThen(new ShooterShootForwards()), 
-                    new SuperStructureToL2Back()
-                        .andThen(new SuperStructureWaitUntilAtTarget()
+                        .andThen(new ShooterShootBackwards()), 
+                    new ElevatorToL2Back().alongWith(new ArmToL2Back())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDrivePIDToNearestBranch(2, false)
                                 .alongWith(new LEDSolidColor(Color.kYellow))))
                         .andThen(new ShooterShootForwards()), 
                     () -> swerve.isFrontFacingReef())
             )
-            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ElevatorToFeed())
+            .onFalse(new ArmToFeed())
             .onFalse(new ShooterStop());
 
         driver.getLeftButton()
             .whileTrue(new SwerveDriveDriveAlignedToBarge(driver))
-            .whileTrue(new SuperStructureToBarge()
-                .andThen(new SuperStructureWaitUntilAtTarget()
+            .whileTrue(new ElevatorToBarge().alongWith(new ArmToBarge())
+                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                     .alongWith(new SwerveDriveWaitUntilAlignedToBarge()
                         .alongWith(new LEDSolidColor(Color.kYellow))))
                 .andThen(new ShooterShootAlgae()))
-            .onFalse(new SuperStructureToFeed())
+            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
             .onFalse(new ShooterStop());
 
         driver.getDPadLeft()
-            .whileTrue(new SuperStructureToAlgaeL3()
-                .andThen(new ShooterAcquireAlgae()))
-            .onFalse(new SuperStructureToFeed());
+            .whileTrue(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
+            .whileTrue(new ShooterAcquireAlgae())
+            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
         
         driver.getDPadDown()
-            .whileTrue(new SuperStructureToAlgaeL2()
-                .andThen(new ShooterAcquireAlgae()))
-            .onFalse(new SuperStructureToFeed());
+            .whileTrue(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
+            .whileTrue(new ShooterAcquireAlgae())
+            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
 
         driver.getLeftMenuButton().onTrue(new ClimbOpen());
         driver.getRightMenuButton().onTrue(new ClimbClimb());
@@ -322,10 +323,19 @@ public class RobotContainer {
         operator.getLeftMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
         operator.getRightMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
 
-        operator.getTopButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL4Front() : new SuperStructureToL4Back());
-        operator.getRightButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL3Front() : new SuperStructureToL3Back());
-        operator.getBottomButton().onTrue(swerve.isFrontFacingReef() ? new SuperStructureToL2Front() : new SuperStructureToL2Back());
-        operator.getLeftButton().onTrue(new SuperStructureToBarge());
+        operator.getTopButton().onTrue(swerve.isFrontFacingReef() 
+            ? new ElevatorToL4Front().alongWith(new ArmToL4Front()) 
+            : new ElevatorToL4Back().alongWith(new ArmToL4Back()));
+        operator.getRightButton().onTrue(swerve.isFrontFacingReef() 
+            ? new ElevatorToL3Front().alongWith(new ArmToL3Front()) 
+            : new ElevatorToL3Back().alongWith(new ArmToL3Back()));
+        operator.getBottomButton().onTrue(swerve.isFrontFacingReef() 
+            ? new ElevatorToL2Front().alongWith(new ArmToL2Front()) 
+            : new ElevatorToL2Back().alongWith(new ArmToL2Back()));
+
+        operator.getLeftButton()
+            .onTrue(new ElevatorToBarge())
+            .onTrue(new ArmToBarge());
 
         operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());
         operator.getDPadDown().onTrue(new ElevatorOffsetTargetDown());

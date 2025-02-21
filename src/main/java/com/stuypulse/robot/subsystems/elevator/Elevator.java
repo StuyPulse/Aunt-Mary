@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.ArmElevatorVisualizer;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -88,6 +89,8 @@ public abstract class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+        ArmElevatorVisualizer.getInstance().updateElevatorHeight(getCurrentHeight());
+        
         SmartDashboard.putString("Elevator/State", state.toString());
         SmartDashboard.putNumber("Elevator/Target Height (m)", getState().getTargetHeight());
         SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());
