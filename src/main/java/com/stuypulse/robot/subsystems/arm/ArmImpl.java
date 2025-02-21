@@ -6,7 +6,6 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
-import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
@@ -20,22 +19,18 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
-import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import static edu.wpi.first.units.Units.Second;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -49,6 +44,7 @@ public class ArmImpl extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
+    private Number kG;
 
     public ArmImpl() {
         super();
@@ -70,14 +66,15 @@ public class ArmImpl extends Arm {
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
         controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Arm.FF.CORAL_kG))
-            .add(new ArmDriveFeedForward(Gains.Arm.FF.CORAL_kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
-            .add(new ArmElevatorFeedForward(Gains.Arm.FF.CORAL_kG, Elevator.getInstance()::getAccelGs))
+            .add(new ArmFeedforward(kG))
+            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
+            .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
             .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
+        kG = 0.0;
     }
 
     @Override
@@ -157,6 +154,16 @@ public class ArmImpl extends Arm {
         // {
         //     motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
         // }
+
+        kG = IStream.create(() -> {
+            if (getState() == Arm.ArmState.FEED) {
+                return Gains.Arm.FF.EMPTY_kG;
+            } else if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.FF.ALGAE_kG;
+            } else {
+                return Gains.Arm.FF.CORAL_kG;
+            }
+        }).number();
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {

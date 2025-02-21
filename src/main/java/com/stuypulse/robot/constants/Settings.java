@@ -152,6 +152,7 @@ public interface Settings {
         double BARGE_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double ALGAE_L2_HEIGHT_METERS = 1.4;
         double ALGAE_L3_HEIGHT_METERS = 1.8;
+        double HOLD_ALGAE_HEIGHT_METERS = 1.2;
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
@@ -177,6 +178,7 @@ public interface Settings {
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
+        Rotation2d HOLD_ALGAE = Rotation2d.fromDegrees(4);
     }
 
     public interface Froggy {
