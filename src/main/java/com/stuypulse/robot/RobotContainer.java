@@ -18,6 +18,7 @@ import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
 import com.stuypulse.robot.commands.arm.algae.ArmToBarge;
+import com.stuypulse.robot.commands.arm.algae.ArmToHoldAlgae;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
@@ -50,6 +51,7 @@ import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToHoldAlgae;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
@@ -61,7 +63,6 @@ import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotOverrideVoltage;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
@@ -89,8 +90,6 @@ import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchWithClearance;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
-import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
-
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -299,13 +298,13 @@ public class RobotContainer {
         driver.getDPadLeft()
             .whileTrue(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
             .whileTrue(new ShooterAcquireAlgae())
-            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
+            .onFalse(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae()));
         
         // Acquire Reef Algae L2
         driver.getDPadDown()
             .whileTrue(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
             .whileTrue(new ShooterAcquireAlgae())
-            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
+            .onFalse(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae()));
 
         driver.getLeftMenuButton().onTrue(new ClimbOpen());
         driver.getRightMenuButton().onTrue(new ClimbClimb());

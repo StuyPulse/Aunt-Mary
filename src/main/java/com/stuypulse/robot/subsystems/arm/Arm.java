@@ -48,6 +48,7 @@ public abstract class Arm extends SubsystemBase {
         L4_BACK(Settings.Arm.L4_ANGLE_BACK),
         ALGAE_L2(Settings.Arm.ALGAE_L2_ANGLE),
         ALGAE_L3(Settings.Arm.ALGAE_L3_ANGLE),
+        HOLD_ALGAE(Settings.Arm.HOLD_ALGAE),
         BARGE(Settings.Arm.BARGE_ANGLE);
 
         private Rotation2d targetAngle;
