@@ -25,18 +25,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red Barge 3 to EF Algae"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red EF Algae to Barge 3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Red Barge 3 to IJ Algae"
           }
         },
@@ -44,6 +32,18 @@
           "type": "path",
           "data": {
             "pathName": "Red IJ Algae to Barge 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Barge 3 to EF Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red EF Algae to Barge 3"
           }
         }
       ]
