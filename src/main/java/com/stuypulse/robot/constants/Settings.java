@@ -31,7 +31,7 @@ public interface Settings {
 
     String CANIVORE_NAME = "CANIVORE";
 
-    double CLEARANCE_DISTANCE_FROM_REEF = 0.4;
+    double CLEARANCE_DISTANCE_FROM_REEF = 0.4; // From end of bumper
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {
@@ -47,6 +47,7 @@ public interface Settings {
 
     public interface Swerve {
         double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.03;
+        double ROTATIONAL_DEADBAND_RAD_PER_S = 0.02;
 
         public interface Constraints {
             double MAX_MODULE_SPEED = 4.9;
@@ -84,11 +85,12 @@ public interface Settings {
             }
 
             public interface Targets {
-                double TARGET_DISTANCE_FROM_REEF_L2_BACK = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L3_BACK = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
+
+                double TARGET_DISTANCE_FROM_REEF_L2_BACK = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L3_BACK = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = 0.0;
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = 0.0;

@@ -70,11 +70,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.FieldCentric fieldCentricRequest = new SwerveRequest.FieldCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withDeadband(Settings.Swerve.MODULE_VELOCITY_DEADBAND_M_PER_S)
+        .withRotationalDeadband(Settings.Swerve.ROTATIONAL_DEADBAND_RAD_PER_S)
         .withDesaturateWheelSpeeds(true);
 
     private final SwerveRequest.RobotCentric robotCentricRequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withDeadband(Settings.Swerve.MODULE_VELOCITY_DEADBAND_M_PER_S)
+        .withRotationalDeadband(Settings.Swerve.ROTATIONAL_DEADBAND_RAD_PER_S)
         .withDesaturateWheelSpeeds(true);
 
     public SwerveRequest.FieldCentric getFieldCentricSwerveRequest() {
