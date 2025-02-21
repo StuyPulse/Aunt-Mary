@@ -37,12 +37,19 @@ import com.stuypulse.robot.commands.autons.JKLA.ThreePieceJKL;
 import com.stuypulse.robot.commands.autons.JKLA.TwoPieceJK;
 import com.stuypulse.robot.commands.autons.misc.DoNothingAuton;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
-import com.stuypulse.robot.commands.autons.misc.OnePieceG;
-import com.stuypulse.robot.commands.autons.misc.OnePieceH;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
+import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
+import com.stuypulse.robot.commands.autons.HAlgae.OneHOneAlgae;
+import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
+import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
+import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.tests.CurvyLineTest;
 import com.stuypulse.robot.commands.autons.tests.RSquareTest;
 import com.stuypulse.robot.commands.autons.tests.SquareTest;
 import com.stuypulse.robot.commands.autons.tests.StraightLineTest;
+import com.stuypulse.robot.commands.autons.tests.testing;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
@@ -481,6 +488,58 @@ public class RobotContainer {
         BLUE_FOUR_PIECE_EDCB.registerBlue(autonChooser);
         RED_FOUR_PIECE_EDCB.registerRed(autonChooser);
 
+        /**  TOP ALGAE AUTONS **/
+
+        AutonConfig BLUE_H_ONE_ALGAE = new AutonConfig("1 Piece H + 1 Algae", OneHOneAlgae::new,
+        "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3");
+        AutonConfig RED_H_ONE_ALGAE = new AutonConfig("1 Piece H + 1 Algae", OneHOneAlgae::new,
+        "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3");
+
+        AutonConfig BLUE_H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
+        "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
+        AutonConfig RED_H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
+        "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
+
+        AutonConfig BLUE_H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
+        "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
+        AutonConfig RED_H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
+        "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
+
+        BLUE_H_ONE_ALGAE.registerBlue(autonChooser);
+        RED_H_ONE_ALGAE.registerRed(autonChooser);
+
+        BLUE_H_TWO_ALGAE.registerBlue(autonChooser);
+        RED_H_TWO_ALGAE.registerRed(autonChooser);
+
+        BLUE_H_THREE_ALGAE.registerBlue(autonChooser);
+        RED_H_THREE_ALGAE.registerRed(autonChooser);
+
+        /** BOTTOM ALGAE AUTONS **/
+
+        AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3");
+        AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3");
+
+        AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
+        AutonConfig RED_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
+
+        AutonConfig BLUE_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
+        "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
+        AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
+        "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
+
+        BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
+        RED_G_ONE_ALGAE.registerRed(autonChooser);
+
+        BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
+        RED_G_TWO_ALGAE.registerRed(autonChooser);
+
+        BLUE_G_THREE_ALGAE.registerBlue(autonChooser);
+        RED_G_THREE_ALGAE.registerRed(autonChooser);
+
         /** TESTS **/
 
         AutonConfig BLUE_MOBILITY = new AutonConfig("Mobility", Mobility::new,
@@ -495,6 +554,9 @@ public class RobotContainer {
         "Square Top", "Square Right", "Square Bottom", "Square Left");
         AutonConfig RSQUARE_TEST = new AutonConfig("RSquare Test", RSquareTest::new,
         "RSquare Top", "RSquare Right", "RSquare Bottom", "RSquare Left");
+        AutonConfig testing = new AutonConfig("testing", testing::new,
+        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP", "Red HP to B");
+
 
         BLUE_MOBILITY.registerBlue(autonChooser);
         RED_MOBILITY.registerRed(autonChooser);
@@ -502,6 +564,7 @@ public class RobotContainer {
         CURVY_LINE_TEST.registerRed(autonChooser);
         SQUARE_TEST.registerRed(autonChooser);
         RSQUARE_TEST.registerRed(autonChooser);
+        testing.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

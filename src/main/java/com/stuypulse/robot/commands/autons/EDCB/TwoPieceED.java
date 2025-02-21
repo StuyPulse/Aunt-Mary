@@ -54,6 +54,7 @@ public class TwoPieceED extends SequentialCommandGroup {
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop()
+
         );
 
     }

@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.autons.misc;
+package com.stuypulse.robot.commands.autons.HAlgae;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;

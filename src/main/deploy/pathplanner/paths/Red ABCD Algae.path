@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.1391313825334817,
+        "y": 3.8886557442801335
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1608607700892857,
+        "y": 3.0004032679966515
+      },
+      "isLocked": false,
+      "linkedName": "Red AB Algae"
+    },
+    {
+      "anchor": {
+        "x": 3.908586338588169,
+        "y": 2.7856597900390625
+      },
+      "prevControl": {
+        "x": 2.908586338588169,
+        "y": 2.7856597900390625
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red CD Algae"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Red Utilities",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

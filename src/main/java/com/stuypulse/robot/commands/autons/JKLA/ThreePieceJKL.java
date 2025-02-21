@@ -72,6 +72,7 @@ public class ThreePieceJKL extends SequentialCommandGroup {
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop()
+
         );
 
     }
