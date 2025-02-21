@@ -59,7 +59,8 @@ public interface Gains {
             double kS = 0.0;
             double kV = 0.0;
             double kA = 0.0;
-            double kG = 0.0;
+            double CORAL_kG = 0.0;
+            double ALGAE_kG = 0.0;
         }
     }
 
