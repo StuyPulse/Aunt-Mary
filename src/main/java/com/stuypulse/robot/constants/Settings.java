@@ -52,10 +52,10 @@ public interface Settings {
         public interface Constraints {
             double MAX_MODULE_SPEED = 4.9;
     
-            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 3.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 5.0);
-            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
-            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
+            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 4.0);
+            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 15.0);
+            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(500));
+            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(1000));
     
             PathConstraints DEFAULT_CONSTRAINTS =
                 new PathConstraints(
@@ -67,11 +67,11 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
-                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
-                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
+                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 4.0);
+                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 15.0);
 
-                SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
-                SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
+                SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(500));
+                SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(1000));
             }
 
             public interface Tolerances {
@@ -109,21 +109,21 @@ public interface Settings {
     public interface Shooter {
         SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.75);
         SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.75);
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.13);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
         SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hol Speed", -0.1);
 
-        double HAS_CORAL_DEBOUNCE = 0.05;
+        double HAS_CORAL_DEBOUNCE = 0.0;
 
         double STALL_DETECTION_DEBOUNCE = 0.5;
         double STALL_CURRENT_THRESHOLD = 80;
     }
 
     public interface Funnel {
-        SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 0.4);
-        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", -0.4);
+        SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 1.0);
+        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", -1.0);
 
         double STALL_CURRENT = 30;
         double STALL_DETECTION_TIME = 0.25;
@@ -137,7 +137,7 @@ public interface Settings {
         double MAX_VELOCITY_METERS_PER_SECOND = 1.5;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
-        double FEED_HEIGHT_METERS = 1.145752;
+        double FEED_HEIGHT_METERS = 1.13;
 
         // Coral
         double FRONT_L2_HEIGHT_METERS = 1.552002;
@@ -157,7 +157,7 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-83); // Angle that arm makes when resting against the funnel
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-69.345703);
@@ -172,7 +172,7 @@ public interface Settings {
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
 
-        Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(4));
+        Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);
