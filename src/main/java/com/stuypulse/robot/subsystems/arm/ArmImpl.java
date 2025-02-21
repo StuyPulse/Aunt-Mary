@@ -63,7 +63,6 @@ public class ArmImpl extends Arm {
         controller = new MotorFeedforward(kS, kV, kA).position()
             .add(new ArmFeedforward(kG))
             .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
-            .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
             .add(new PIDController(kP, kI, kD))
             .setSetpointFilter(motionProfile);
 
