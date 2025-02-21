@@ -11,9 +11,10 @@ public class Mobility extends SequentialCommandGroup {
     public Mobility(PathPlannerPath... paths) {
 
         addCommands(
+
             new SwerveDriveResetPoseToStartOfPath(paths[0]),
 
-            // Drive straight
+            // Drives straight
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
 
         );

@@ -31,6 +31,11 @@
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
     "windows": {
+      "/SmartDashboard/Autonomous": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "bottom": 1638,
         "builtin": "2025 Reefscape",
@@ -106,7 +111,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 246,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -151,7 +156,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 252,
+          "height": 4,
           "series": [
             {
               "color": [
