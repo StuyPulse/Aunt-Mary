@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
@@ -44,17 +45,83 @@ public class ArmImpl extends Arm {
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
-    private Number kS, kV, kA, kG;
+    private Number kP, kI, kD, kS, kV, kA, kG;
 
     public ArmImpl() {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
-        kS = 0.0;
-        kV = 0.0;
-        kA = 0.0;
-        kG = 0.0;
+        
+        kG = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.FF.kG;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.FF.kG;
+            } else {
+                return Gains.Arm.Empty.FF.kG;
+            }
+        }).number();
+              
+        kS = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.FF.kS;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.FF.kS;
+            } else {
+                return Gains.Arm.Empty.FF.kS;
+            }
+        }).number();
+
+        kV = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.FF.kV;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.FF.kV;
+            } else {
+                return Gains.Arm.Empty.FF.kV;
+            }
+        }).number();
+
+        kA = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.FF.kA;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.FF.kA;
+            } else {
+                return Gains.Arm.Empty.FF.kA;
+            }
+        }).number();
+
+        kP = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.PID.kP;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.PID.kP;
+            } else {
+                return Gains.Arm.Empty.PID.kP;
+            }
+        }).number();
+
+        kI = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.PID.kI;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.PID.kI;
+            } else {
+                return Gains.Arm.Empty.PID.kI;
+            }
+        }).number();
+
+        kD = IStream.create(() -> {
+            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
+                return Gains.Arm.Algae.PID.kD;
+            } else if (Shooter.getInstance().hasCoral()) {
+                return Gains.Arm.Coral.PID.kD;
+            } else {
+                return Gains.Arm.Empty.PID.kD;
+            }
+        }).number();
 
         // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
@@ -71,9 +138,9 @@ public class ArmImpl extends Arm {
 
         controller = new MotorFeedforward(kS, kV, kA).position()
             .add(new ArmFeedforward(kG))
-            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
-            .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
-            .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
+            // .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
+            // .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
+            .add(new PIDController(kP, kI, kD))
             .setSetpointFilter(motionProfile);
 
         voltageOverride = Optional.empty();
@@ -143,13 +210,13 @@ public class ArmImpl extends Arm {
     public void periodic() {
         super.periodic();
 
-        // Rotation2d absoluteEncoderAngle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
+        Rotation2d absoluteEncoderAngle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
 
-        // absoluteEncoderAngle = absoluteEncoderAngle.getDegrees() <= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getDegrees()
-        //     ? absoluteEncoderAngle.plus(Rotation2d.fromRotations(1))
-        //     : absoluteEncoderAngle;
+        absoluteEncoderAngle = absoluteEncoderAngle.getDegrees() <= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getDegrees()
+            ? absoluteEncoderAngle.plus(Rotation2d.fromRotations(1))
+            : absoluteEncoderAngle;
 
-        // motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
+        motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
 
         // if (absoluteEncoderAngle.getRotations() >= Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getRotations() 
         //     && absoluteEncoderAngle.getRotations() <= Constants.Arm.ENCODER_BREAKPOINT_ANGLE.getRotations()
@@ -157,46 +224,6 @@ public class ArmImpl extends Arm {
         // {
         //     motor.setPosition(absoluteEncoderAngle.getRotations(), 0.0);
         // }
-
-        kG = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.FF.ALGAE_kG;
-            } else if (!Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.FF.EMPTY_kG;
-            } else {
-                return Gains.Arm.FF.CORAL_kG;
-            }
-        }).number();
-              
-        kS = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.FF.ALGAE_kS;
-            } else if (!Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.FF.EMPTY_kS;
-            } else {
-                return Gains.Arm.FF.CORAL_kS;
-            }
-        }).number();
-
-        kV = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.FF.ALGAE_kV;
-            } else if (!Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.FF.EMPTY_kV;
-            } else {
-                return Gains.Arm.FF.CORAL_kV;
-            }
-        }).number();
-
-        kA = IStream.create(() -> {
-            if (getState() == Arm.ArmState.HOLD_ALGAE || getState() == Arm.ArmState.BARGE) {
-                return Gains.Arm.FF.ALGAE_kA;
-            } else if (!Shooter.getInstance().hasCoral()) {
-                return Gains.Arm.FF.EMPTY_kA;
-            } else {
-                return Gains.Arm.FF.CORAL_kA;
-            }
-        }).number();
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
@@ -218,7 +245,7 @@ public class ArmImpl extends Arm {
         
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
         SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
-        // SmartDashboard.putNumber("Arm/Absolute Encoder Value (deg)", absoluteEncoderAngle.getDegrees());
+        SmartDashboard.putNumber("Arm/Absolute Encoder Value (deg)", absoluteEncoderAngle.getDegrees());
 
         SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
