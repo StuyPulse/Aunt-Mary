@@ -1,10 +1,14 @@
 package com.stuypulse.robot.commands.autons.JKLA;
 
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.stuypulse.robot.commands.arm.ArmToFeed;
+import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
+import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
+import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.superstructure.SuperStructureToL4Front;
-import com.stuypulse.robot.commands.superstructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
@@ -25,8 +29,8 @@ public class OnePieceJ extends SequentialCommandGroup {
             // Score Preload on J
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
-                new SuperStructureToL4Front()
-                    .andThen(new SuperStructureWaitUntilAtTarget())
+                new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new SwerveDrivePIDToNearestBranch(4, true)
                 .andThen(new ShooterShootBackwards()),
