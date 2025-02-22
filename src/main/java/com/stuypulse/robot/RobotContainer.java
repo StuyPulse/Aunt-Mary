@@ -114,6 +114,7 @@ import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
@@ -170,7 +171,7 @@ public class RobotContainer {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         funnel.setDefaultCommand(new FunnelDefaultCommand());
         leds.setDefaultCommand(new LEDDefaultCommand());
-        shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral()));
+        shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral() && arm.getState() != ArmState.HOLD_ALGAE));
     }
 
     /***************/
