@@ -339,8 +339,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
-    public double getXAccelGs() {
-        return getPigeon2().getAccelerationX().getValueAsDouble();
+    public double getRobotRelativeXAccelGs() {
+        return getPigeon2().getAccelerationX().getValueAsDouble() * getPose().getRotation().getCos();
     }
 
     public void configureAutoBuilder() {
@@ -433,6 +433,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         SmartDashboard.putNumber("Swerve/Gyro/Accel x (g)", getPigeon2().getAccelerationX().getValueAsDouble());
         SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
+        SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
 
         SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
         SmartDashboard.putBoolean("Swerve/Is clear from Reef", isClearFromReef());

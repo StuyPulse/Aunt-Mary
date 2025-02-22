@@ -35,46 +35,46 @@ public interface Gains {
     public interface Arm {
         public interface Coral  {
             public interface PID {
-                double kP = 0.18304;
-                double kI = 0.0;
-                double kD = 0.010187;
-            }
-
-            public interface FF {
-                double kS = 0.0076787; 
-                double kV = 0.00847;
-                double kA = 0.00153;
-                double kG = 0.92147;
-            }
-        }
-
-        public interface Empty  {
-            public interface PID {
-                double kP = 0.18304;
-                double kI = 0.0;
-                double kD = 0.010187;
-            }
-
-            public interface FF {
-                double kS = 0.0076787; 
-                double kV = 0.00847;
-                double kA = 0.00153;
-                double kG = 0.92147;
-            }
-        }
-
-        public interface Algae  {
-            public interface PID {
-                double kP = 0.0;
+                double kP = 0.049744;
                 double kI = 0.0;
                 double kD = 0.0;
             }
 
             public interface FF {
-                double kS = 0.0; 
-                double kV = 0.0;
-                double kA = 0.0;
-                double kG = 0.0;
+                double kS = 0.076049; 
+                double kV = 0.011872;
+                double kA = 0.0011738;
+                double kG = 0.69106;
+            }
+        }
+
+        public interface Empty  {
+            public interface PID {
+                double kP = 0.022194;
+                double kI = 0.0;
+                double kD = 0.00021311;
+            }
+
+            public interface FF {
+                double kS = 0.041733; 
+                double kV = 0.011199;
+                double kA = 0.00123655;
+                double kG = 0.60473;
+            }
+        }
+
+        public interface Algae  {
+            public interface PID {
+                double kP = 0.014094;
+                double kI = 0.0;
+                double kD = 0.0;
+            }
+
+            public interface FF {
+                double kS = 0.078914; 
+                double kV = 0.011835;
+                double kA = 0.0011797;
+                double kG = 0.69059;
             }
         }
     }

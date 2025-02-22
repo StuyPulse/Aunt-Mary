@@ -38,9 +38,9 @@ public interface Settings {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
@@ -75,9 +75,9 @@ public interface Settings {
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.03); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.03);
-                SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(4));
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.05); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.05);
+                SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(5));
     
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
 
@@ -140,7 +140,7 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.13;
 
         // Coral
-        double FRONT_L2_HEIGHT_METERS = 1.552002;
+        double FRONT_L2_HEIGHT_METERS = 1.592002;
         double FRONT_L3_HEIGHT_METERS = 1.037354;
         double FRONT_L4_HEIGHT_METERS = 1.656494;
         
@@ -165,7 +165,7 @@ public interface Settings {
 
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-69.345703);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(65.302734);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(50.361328);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(171.5);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(146.1);

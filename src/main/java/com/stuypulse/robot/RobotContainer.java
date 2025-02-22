@@ -579,7 +579,7 @@ public class RobotContainer {
         "Square Top", "Square Right", "Square Bottom", "Square Left");
         AutonConfig RSQUARE_TEST = new AutonConfig("RSquare Test", RSquareTest::new,
         "RSquare Top", "RSquare Right", "RSquare Bottom", "RSquare Left");
-        AutonConfig testing = new AutonConfig("testing", testing::new,
+        AutonConfig testPath = new AutonConfig("testing", testing::new,
         "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP", "Red HP to B");
 
 
@@ -589,7 +589,7 @@ public class RobotContainer {
         CURVY_LINE_TEST.registerRed(autonChooser);
         SQUARE_TEST.registerRed(autonChooser);
         RSQUARE_TEST.registerRed(autonChooser);
-        testing.registerRed(autonChooser);
+        testPath.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

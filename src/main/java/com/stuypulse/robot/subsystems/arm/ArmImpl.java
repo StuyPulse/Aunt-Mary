@@ -60,15 +60,6 @@ public class ArmImpl extends Arm {
         MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
-        controller = new MotorFeedforward(kS, kV, kA).position()
-            .add(new ArmFeedforward(kG))
-            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getXAccelGs))
-            .add(new PIDController(kP, kI, kD))
-            .setSetpointFilter(motionProfile);
-
-        voltageOverride = Optional.empty();
-        operatorOffset = Rotation2d.kZero;
-
         kP = new SettableNumber(Gains.Arm.Empty.PID.kP);
         kI = new SettableNumber(Gains.Arm.Empty.PID.kI);
         kD = new SettableNumber(Gains.Arm.Empty.PID.kD);
@@ -76,13 +67,22 @@ public class ArmImpl extends Arm {
         kV = new SettableNumber(Gains.Arm.Empty.FF.kV);
         kA = new SettableNumber(Gains.Arm.Empty.FF.kA);
         kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
+
+        controller = new MotorFeedforward(kS, kV, kA).position()
+            .add(new ArmFeedforward(kG))
+            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs))
+            .add(new PIDController(kP, kI, kD))
+            .setSetpointFilter(motionProfile);
+
+        voltageOverride = Optional.empty();
+        operatorOffset = Rotation2d.kZero;
     }
 
     @Override
     public SysIdRoutine getSysIdRoutine() {
         return SysId.getRoutine(
-            3, 
-            7, 
+            2, 
+            6, 
             "Arm", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentAngle().getDegrees(), 
@@ -104,7 +104,7 @@ public class ArmImpl extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        double encoderAngle = absoluteEncoder.get();
+        double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations();
         return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
             ? encoderAngle 
             : encoderAngle + 1);
@@ -168,6 +168,8 @@ public class ArmImpl extends Arm {
         super.periodic();
         
         updateGains();
+
+        SmartDashboard.putNumber("Arm/kG", kG.get());
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
