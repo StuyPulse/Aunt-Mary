@@ -54,6 +54,12 @@ public class SwerveDrivePIDToNearestBranchWithClearance extends Command {
     private Pose2d readyPose;
     private VStream translationSetpoint;
 
+    private ArmState correspondingArmState;
+    private ElevatorState correspondingElevatorState;
+    
+    private boolean armHasReachedCorrespondingTarget;
+    private boolean elevatorHasReachedCorrespondingTarget;
+
     public SwerveDrivePIDToNearestBranchWithClearance(int level, boolean isScoringFrontSide) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
@@ -82,19 +88,6 @@ public class SwerveDrivePIDToNearestBranchWithClearance extends Command {
         thetaTolerance = Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE;
         maxVelocityWhenAligned = Settings.Swerve.Alignment.Tolerances.MAX_VELOCITY_WHEN_ALIGNED;
 
-        addRequirements(swerve);
-    }
-
-    public SwerveDrivePIDToNearestBranchWithClearance withTolerance(Number x, Number y, Number theta) {
-        xTolerance = x;
-        yTolerance = y;
-        thetaTolerance = theta;
-        return this;
-    }
-
-    private Pose2d getCurrentTarget() {
-        ArmState correspondingArmState;
-        ElevatorState correspondingElevatorState;
         switch (level) {
             case 2:
                 correspondingArmState = isScoringFrontSide ? ArmState.L2_FRONT : ArmState.L2_BACK;
@@ -114,8 +107,18 @@ public class SwerveDrivePIDToNearestBranchWithClearance extends Command {
                 break;
         }
 
-        return (Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle() 
-            && Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight())
+        addRequirements(swerve);
+    }
+
+    public SwerveDrivePIDToNearestBranchWithClearance withTolerance(Number x, Number y, Number theta) {
+        xTolerance = x;
+        yTolerance = y;
+        thetaTolerance = theta;
+        return this;
+    }
+
+    private Pose2d getCurrentTarget() {
+        return (armHasReachedCorrespondingTarget && elevatorHasReachedCorrespondingTarget)
             ? scorePose
             : readyPose;
     }
@@ -134,6 +137,9 @@ public class SwerveDrivePIDToNearestBranchWithClearance extends Command {
         scorePose = Field.getClosestBranch().getScorePose(level, isScoringFrontSide);
         readyPose = Field.getClosestBranch().getReadyPose(isScoringFrontSide);
         translationSetpoint = getNewTranslationSetpointGenerator();
+
+        armHasReachedCorrespondingTarget = false;
+        elevatorHasReachedCorrespondingTarget = false;
     }
 
     private boolean isAligned() {
@@ -154,6 +160,14 @@ public class SwerveDrivePIDToNearestBranchWithClearance extends Command {
             .withVelocityX(controller.getOutput().vxMetersPerSecond)
             .withVelocityY(controller.getOutput().vyMetersPerSecond)
             .withRotationalRate(controller.getOutput().omegaRadiansPerSecond));
+
+        if (Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle()) {
+            armHasReachedCorrespondingTarget = true;
+        }
+
+        if (Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight()) {
+            elevatorHasReachedCorrespondingTarget = true;
+        }
         
         SmartDashboard.putNumber("Alignment/Target x", getCurrentTarget().getX());
         SmartDashboard.putNumber("Alignment/Target y", getCurrentTarget().getY());

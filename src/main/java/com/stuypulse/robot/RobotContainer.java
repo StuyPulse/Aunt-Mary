@@ -238,7 +238,7 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())), 
-                new SwerveDrivePIDToNearestBranch(4, false)
+                new SwerveDrivePIDToNearestBranchWithClearance(4, false)
                     .deadlineFor(new LEDSolidColor(Color.kYellow))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
@@ -261,7 +261,7 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())), 
-                new SwerveDrivePIDToNearestBranch(3, false)
+                new SwerveDrivePIDToNearestBranchWithClearance(3, false)
                     .deadlineFor(new LEDSolidColor(Color.kYellow))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
@@ -283,7 +283,7 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())),
-                new SwerveDrivePIDToNearestBranch(2, false)
+                new SwerveDrivePIDToNearestBranchWithClearance(2, false)
                     .deadlineFor(new LEDSolidColor(Color.kYellow))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
