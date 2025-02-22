@@ -24,6 +24,7 @@ import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.Matrix;
@@ -381,8 +382,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return moduleStates;
     }
 
-    private ChassisSpeeds getChassisSpeeds() {
+    public ChassisSpeeds getChassisSpeeds() {
         return getKinematics().toChassisSpeeds(getModuleStates());
+    }
+
+    public Vector2D getFieldRelativeSpeeds() {
+        return new Vector2D(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
+            .rotate(Angle.fromRotation2d(getPose().getRotation()));
     }
 
     private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
@@ -411,6 +417,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void periodic() {
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+
+        SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
+        SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
+
         SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
         for (int i = 0; i < 4; i++) {
