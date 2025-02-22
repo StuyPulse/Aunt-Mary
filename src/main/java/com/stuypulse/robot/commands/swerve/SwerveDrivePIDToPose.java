@@ -8,8 +8,10 @@ import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.HolonomicController;
+import com.stuypulse.robot.util.TranslationMotionProfileIan;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.booleans.BStream;
@@ -21,6 +23,7 @@ import com.stuypulse.stuylib.streams.vectors.filters.VMotionProfile;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,8 +56,8 @@ public class SwerveDrivePIDToPose extends Command {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         controller = new HolonomicController(
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD),
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD),
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 1, 0).position()),
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 1, 0).position()),
             new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION)));
 
@@ -88,11 +91,18 @@ public class SwerveDrivePIDToPose extends Command {
 
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
     private VStream getNewTranslationSetpointGenerator() {
-        VStream targetTranslationRelativeToStart = VStream.create(() -> new Vector2D(targetPose.getTranslation().minus(startingPose.getTranslation())))
-            .filtered(
-                new VMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION));
+        return VStream.create(() -> new Vector2D(targetPose.getTranslation()))
+            .filtered(new TranslationMotionProfileIan(
+                Settings.Swerve.Alignment.Constraints.MAX_VELOCITY, 
+                Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION,
+                new Vector2D(swerve.getPose().getTranslation()),
+                swerve.getFieldRelativeSpeeds()));
 
-        return VStream.create(() -> targetTranslationRelativeToStart.get().add(new Vector2D(startingPose.getTranslation())));
+        // VStream targetTranslationRelativeToStart = VStream.create(() -> new Vector2D(targetPose.getTranslation().minus(startingPose.getTranslation())))
+        //     .filtered(
+        //         new VMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION));
+
+        // return VStream.create(() -> targetTranslationRelativeToStart.get().add(new Vector2D(startingPose.getTranslation())));
     }
 
     @Override
