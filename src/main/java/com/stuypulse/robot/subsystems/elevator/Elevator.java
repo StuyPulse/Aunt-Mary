@@ -47,7 +47,8 @@ public abstract class Elevator extends SubsystemBase {
         ALGAE_L3(Settings.Elevator.ALGAE_L3_HEIGHT_METERS),
         HOLD_ALGAE(Settings.Elevator.HOLD_ALGAE_HEIGHT_METERS),
         BARGE(Settings.Elevator.BARGE_HEIGHT_METERS),
-        BOTTOM(Constants.Elevator.MIN_HEIGHT_METERS);
+        BOTTOM(Constants.Elevator.MIN_HEIGHT_METERS),
+        CLIMB(Settings.Elevator.CLIMB_HEIGHT_METERS);
 
         private Number targetHeight;
 

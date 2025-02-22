@@ -68,7 +68,7 @@ public interface Settings {
         public interface Alignment {
             public interface Constraints {
                 SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 4.0);
-                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 10.0);
+                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 12.0);
 
                 SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
                 SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
@@ -154,6 +154,8 @@ public interface Settings {
         double ALGAE_L3_HEIGHT_METERS = 1.8;
         double HOLD_ALGAE_HEIGHT_METERS = 1.2;
 
+        double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
+
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
 
@@ -174,11 +176,13 @@ public interface Settings {
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
+        Rotation2d HOLD_ALGAE = MIN_ANGLE.plus(Rotation2d.fromDegrees(4));
+        
+        Rotation2d CLIMB_ANGLE = MAX_ANGLE.minus(Rotation2d.fromDegrees(5));
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
-        Rotation2d HOLD_ALGAE = Rotation2d.fromDegrees(4);
     }
 
     public interface Froggy {
@@ -206,14 +210,15 @@ public interface Settings {
     }
 
     public interface Climb {
-        double DEFAULT_VOLTAGE = 2; // Used for normal movement
-        double CLIMB_VOLTAGE = 8; // Used when climbing
+        double DEFAULT_VOLTAGE = 4; // Used for normal movement
+        double OPEN_VOLTAGE_LOW = 1; // Used when getting close to the open angle
+        double CLIMB_VOLTAGE = 12; // Used when climbing
 
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0);
-        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(170.0);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(3.0);
+        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245);
         
-        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED = Rotation2d.fromDegrees(5);
+        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED = Rotation2d.fromDegrees(8);
     }
 
     public interface LED {
@@ -239,7 +244,7 @@ public interface Settings {
         double BUZZ_INTENSITY = 1.0;
 
         public interface Drive {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.05);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.08);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
@@ -249,7 +254,7 @@ public interface Settings {
         }
 
         public interface Turn {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.05);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.08);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);

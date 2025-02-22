@@ -13,6 +13,7 @@ import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
+import com.stuypulse.robot.commands.arm.ArmToClimb;
 import com.stuypulse.robot.commands.arm.ArmToFeed;
 import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
@@ -57,6 +58,7 @@ import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToHoldAlgae;
@@ -330,7 +332,11 @@ public class RobotContainer {
             .whileTrue(new ShooterAcquireAlgae())
             .onFalse(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae()));
 
-        driver.getLeftMenuButton().onTrue(new ClimbOpen());
+        driver.getLeftMenuButton()
+            .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())
+                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                .andThen(new ClimbOpen()));
+
         driver.getRightMenuButton()
             .onTrue(new ClimbClimb())
             .onFalse(new ClimbIdle());

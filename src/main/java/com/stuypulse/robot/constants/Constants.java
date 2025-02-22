@@ -38,7 +38,7 @@ public interface Constants {
     }
 
     public interface Arm {
-        double GEAR_RATIO = 20.0;
+        double GEAR_RATIO = 30.0;
 
         double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
 
@@ -50,7 +50,7 @@ public interface Constants {
     }
 
     public interface Froggy {
-        double GEAR_RATIO = 8.0 / 1.0;
+        double GEAR_RATIO = 48.0;
 
         Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-51);
         Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(105);
@@ -60,10 +60,10 @@ public interface Constants {
 
     public interface Climb {
         double GEAR_RATIO = 75.0;
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(92.970992);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(259);
 
         Rotation2d MIN_ANGLE = Rotation2d.kZero;
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(270);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(265);
     }
 
     public interface LED {
