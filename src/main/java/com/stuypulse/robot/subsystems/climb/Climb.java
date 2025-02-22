@@ -59,13 +59,10 @@ public abstract class Climb extends SubsystemBase {
         setVoltageOverride(Optional.empty());
     }
 
-    public abstract boolean atTargetAngle();
-
     public abstract void setVoltageOverride(Optional<Double> voltage);
 
     @Override
     public void periodic() {
         SmartDashboard.putString("Climb/State", state.toString());
-        SmartDashboard.putBoolean("Climb/At Target Angle", atTargetAngle());
     }
 }

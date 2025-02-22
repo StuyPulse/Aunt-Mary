@@ -206,17 +206,14 @@ public interface Settings {
     }
 
     public interface Climb {
-        double RESET_STALL_CURRENT = 40;
-        double RESET_VOLTAGE = -1.0;
-
-        double DEFAULT_VOLTAGE = 4; // Used for normal movement
+        double DEFAULT_VOLTAGE = 2; // Used for normal movement
         double CLIMB_VOLTAGE = 8; // Used when climbing
 
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(170.0);
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0); // When pressing against the hardstop
         Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(270.0);
         
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.0);
+        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED = Rotation2d.fromDegrees(5);
     }
 
     public interface LED {
