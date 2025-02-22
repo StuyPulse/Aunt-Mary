@@ -51,6 +51,7 @@ import com.stuypulse.robot.commands.autons.tests.SquareTest;
 import com.stuypulse.robot.commands.autons.tests.StraightLineTest;
 import com.stuypulse.robot.commands.autons.tests.testing;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
+import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
@@ -330,7 +331,9 @@ public class RobotContainer {
             .onFalse(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae()));
 
         driver.getLeftMenuButton().onTrue(new ClimbOpen());
-        driver.getRightMenuButton().onTrue(new ClimbClimb());
+        driver.getRightMenuButton()
+            .onTrue(new ClimbClimb())
+            .onFalse(new ClimbIdle());
     }
 
     private void configureOperatorButtonBindings() {
