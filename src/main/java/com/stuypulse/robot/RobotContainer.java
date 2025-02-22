@@ -83,8 +83,8 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
-import com.stuypulse.robot.commands.leds.LEDSolidColor;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
@@ -232,14 +232,14 @@ public class RobotContainer {
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
                 new SwerveDrivePIDToNearestBranchWithClearance(4, true)
-                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL4Front().alongWith(new ArmToL4Front()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())), 
                 new SwerveDrivePIDToNearestBranchWithClearance(4, false)
-                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
@@ -255,14 +255,14 @@ public class RobotContainer {
         driver.getRightButton()
             .whileTrue(new ConditionalCommand(
                 new SwerveDrivePIDToNearestBranchWithClearance(3, true)
-                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL3Front().alongWith(new ArmToL3Front()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())), 
                 new SwerveDrivePIDToNearestBranchWithClearance(3, false)
-                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L3_BACK || arm.getState() != ArmState.L3_BACK)
@@ -277,14 +277,14 @@ public class RobotContainer {
         driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
                 new SwerveDrivePIDToNearestBranchWithClearance(2, true)
-                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL2Front().alongWith(new ArmToL2Front()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())),
                 new SwerveDrivePIDToNearestBranchWithClearance(2, false)
-                    .deadlineFor(new LEDSolidColor(Color.kYellow))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
                         .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L2_BACK || arm.getState() != ArmState.L2_BACK)
@@ -301,7 +301,7 @@ public class RobotContainer {
             .whileTrue(new ElevatorToBarge().alongWith(new ArmToBarge())
                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                     .alongWith(new SwerveDriveWaitUntilAlignedToBarge()
-                        .alongWith(new LEDSolidColor(Color.kYellow))))
+                        .alongWith(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))))
                 .andThen(new ShooterShootAlgae()))
             .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
             .onFalse(new ShooterStop());
