@@ -98,9 +98,9 @@ public class TranslationMotionProfileIan implements VFilter {
             mOutput = mOutput.add(mVelocity.mul(dt));
         }
 
-        Field.FIELD2D.getObject("Ian setpoint").setPose(Robot.isBlue() 
-            ? new Pose2d(mOutput.x, mOutput.y, new Rotation2d())
-            : Field.transformToOppositeAlliance(new Pose2d(mOutput.x, mOutput.y, new Rotation2d())));
+        // Field.FIELD2D.getObject("Translation Motion Profile Ian").setPose(!Robot.isBlue()
+        //     ? new Pose2d(mOutput.x, mOutput.y, new Rotation2d())
+        //     : Field.transformToOppositeAlliance(new Pose2d(mOutput.x, mOutput.y, new Rotation2d())));
             
         return mOutput;
     }
