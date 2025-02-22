@@ -30,7 +30,8 @@ public abstract class Climb extends SubsystemBase {
     public enum ClimbState {
         CLOSED(Settings.Climb.CLOSED_ANGLE),
         OPEN(Settings.Climb.OPEN_ANGLE),
-        CLIMBING(Settings.Climb.CLIMBED_ANGLE);
+        CLIMBING(Settings.Climb.CLIMBED_ANGLE),
+        IDLE(Rotation2d.kZero); // Filler angle (wont be used)
 
         private Rotation2d targetAngle;
 
@@ -47,7 +48,7 @@ public abstract class Climb extends SubsystemBase {
     private ClimbState state;
 
     protected Climb() {
-        this.state = ClimbState.OPEN;
+        this.state = ClimbState.CLOSED;
     }
 
     public ClimbState getState() {
