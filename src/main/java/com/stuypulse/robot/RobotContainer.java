@@ -412,6 +412,11 @@ public class RobotContainer {
 
         swerve.configureAutoBuilder();
 
+        AutonConfig testa = new AutonConfig("testa", testing::new,
+        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP", "Red HP to B");
+
+        testa.registerRed(autonChooser);
+
         autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
 
         /** TOP AUTONS **/
