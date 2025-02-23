@@ -237,6 +237,8 @@ public interface Settings {
         LEDPattern CLIMB_OPEN_COLOR = LEDPattern.rainbow(255, 255);
 
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
+
+        LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple);
     }
 
     public interface Driver {

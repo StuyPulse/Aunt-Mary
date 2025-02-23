@@ -6,6 +6,10 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,6 +19,7 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robot;
     private Command auto;
+    private LimelightVision vision = LimelightVision.getInstance();
 
     public static boolean isBlue() {
         return DriverStation.getAlliance().isPresent()
@@ -45,6 +50,9 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         // put your pregame LED check in here
+        if (vision.getTagCount("limelight-shooter") >= 2) {
+            new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED);
+        }
     }
 
     /***********************/
