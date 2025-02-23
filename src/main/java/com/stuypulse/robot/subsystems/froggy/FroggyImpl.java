@@ -13,13 +13,13 @@ import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
-import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.geometry.*;
@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class FroggyImpl extends Froggy {
@@ -40,6 +39,10 @@ public class FroggyImpl extends Froggy {
     private DutyCycleEncoder absoluteEncoder;
 
     private BStream isStalling;
+
+    private Controller controller;
+    private MotionProfile motionProfile;
+    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     private Optional<Double> pivotVoltageOverride;
     private Rotation2d pivotOperatorOffset;
@@ -68,6 +71,21 @@ public class FroggyImpl extends Froggy {
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
+
+        kP = new SettableNumber(Gains.Froggy.Coral.PID.kP);
+        kI = new SettableNumber(Gains.Froggy.Coral.PID.kI);
+        kD = new SettableNumber(Gains.Froggy.Coral.PID.kD);
+        kS = new SettableNumber(Gains.Froggy.Coral.FF.kS);
+        kV = new SettableNumber(Gains.Froggy.Coral.FF.kV);
+        kA = new SettableNumber(Gains.Froggy.Coral.FF.kA);
+        kG = new SettableNumber(Gains.Froggy.Coral.FF.kG);
+
+        motionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
+
+        controller = new MotorFeedforward(kS, kV, kA).position()
+            .add(new ArmFeedforward(kG))
+            .add(new PIDController(kP, kI, kD))
+            .setSetpointFilter(motionProfile);
     }
 
     @Override
@@ -90,7 +108,11 @@ public class FroggyImpl extends Froggy {
     }
 
     private Rotation2d getTargetAngle() {
-        return Rotation2d.fromDegrees(SLMath.clamp(getPivotState().getTargetAngle().getDegrees(), Constants.Froggy.MINIMUM_ANGLE.getDegrees(), Constants.Froggy.MAXIMUM_ANGLE.getDegrees()))
+        return Rotation2d.fromDegrees(
+            SLMath.clamp(
+                getPivotState().getTargetAngle().getDegrees(),
+                Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
+                Constants.Froggy.MAXIMUM_ANGLE.getDegrees())) 
             .plus(pivotOperatorOffset);
     }
 
@@ -119,9 +141,31 @@ public class FroggyImpl extends Froggy {
         return this.pivotOperatorOffset;
     }
 
+    private void updateGains() {
+        if (getRollerState() == RollerState.HOLD_ALGAE && isStalling()) {
+            kP.set(Gains.Froggy.Algae.PID.kP);
+            kI.set(Gains.Froggy.Algae.PID.kI);
+            kD.set(Gains.Froggy.Algae.PID.kD);
+            kS.set(Gains.Froggy.Algae.FF.kS);
+            kV.set(Gains.Froggy.Algae.FF.kV);
+            kA.set(Gains.Froggy.Algae.FF.kA);
+            kG.set(Gains.Froggy.Algae.FF.kG);
+        } else {
+            kP.set(Gains.Froggy.Coral.PID.kP);
+            kI.set(Gains.Froggy.Coral.PID.kI);
+            kD.set(Gains.Froggy.Coral.PID.kD);
+            kS.set(Gains.Froggy.Coral.FF.kS);
+            kV.set(Gains.Froggy.Coral.FF.kV);
+            kA.set(Gains.Froggy.Coral.FF.kA);
+            kG.set(Gains.Froggy.Coral.FF.kG);
+        }
+    }
+
     @Override
     public void periodic() {
         super.periodic();
+
+        updateGains();
 
         pivotMotor.setPosition(getCurrentAngle().getRotations());
 
@@ -131,14 +175,7 @@ public class FroggyImpl extends Froggy {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
             }
             else {
-                if (getRollerState() == RollerState.HOLD_ALGAE && isStalling()) {
-                    // Algae
-                    pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()).withSlot(1));
-                }
-                else {
-                    // Coral
-                    pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()).withSlot(0));
-                }
+                pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }
         else {

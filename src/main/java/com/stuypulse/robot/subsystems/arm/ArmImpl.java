@@ -43,10 +43,10 @@ public class ArmImpl extends Arm {
     private DutyCycleEncoder absoluteEncoder;
 
     private Controller controller;
+    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
-    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     public ArmImpl() {
         super();
