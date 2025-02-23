@@ -20,6 +20,7 @@ import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
 import com.stuypulse.robot.commands.arm.algae.ArmToBarge;
 import com.stuypulse.robot.commands.arm.algae.ArmToHoldAlgae;
+import com.stuypulse.robot.commands.arm.algae.ArmToProcessor;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
@@ -62,6 +63,7 @@ import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToHoldAlgae;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToProcessor;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
@@ -117,6 +119,7 @@ import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
@@ -228,7 +231,12 @@ public class RobotContainer {
             .whileTrue(new FroggyPivotToProcessor()
                 .andThen(new FroggyPivotWaitUntilAtTargetAngle())
                 .andThen(new FroggyRollerShootAlgae()))
-            .onFalse(new FroggyRollerStop());
+            .whileTrue(new ElevatorToProcessor().alongWith(new ArmToProcessor())
+                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                .andThen(new ShooterShootAlgae())
+                .onlyIf(() -> !shooter.hasCoral()))
+            .onFalse(new FroggyRollerStop())
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
@@ -337,11 +345,13 @@ public class RobotContainer {
                 .andThen(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae())))
             .onFalse(new ShooterHoldAlgae());
 
+        // Get ready for climb
         driver.getLeftMenuButton()
             .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())
                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                 .andThen(new ClimbOpen()));
 
+        // Climb!!
         driver.getRightMenuButton()
             .onTrue(new ClimbClimb())
             .onFalse(new ClimbIdle());

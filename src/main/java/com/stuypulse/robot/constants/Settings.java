@@ -150,6 +150,7 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS = 1.4;
         double ALGAE_L3_HEIGHT_METERS = 1.8;
         double HOLD_ALGAE_HEIGHT_METERS = 1.2;
+        double PROCESSOR_HEIGHT_METERS = 1.13;
 
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
 
@@ -170,6 +171,9 @@ public interface Settings {
 
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
+
+        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-70);
+
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
