@@ -101,6 +101,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchReady;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
+import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -126,6 +127,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -154,6 +156,7 @@ public class RobotContainer {
     // Robot container
     public RobotContainer() {
         configureDefaultCommands();
+        configureAutomaticCommands();
         configureDriverButtonBindings();
         configureOperatorButtonBindings();
         configureAutons();
@@ -172,6 +175,16 @@ public class RobotContainer {
         funnel.setDefaultCommand(new FunnelDefaultCommand());
         leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
         shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral() && arm.getState() != ArmState.HOLD_ALGAE));
+    }
+
+    private void configureAutomaticCommands() {
+        RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
+            .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED));
+
+        RobotModeTriggers.disabled().onTrue(new VisionSetIMUMode(1));
+        RobotModeTriggers.autonomous().onTrue(new VisionSetIMUMode(2));
+        RobotModeTriggers.teleop().onTrue(new VisionSetIMUMode(2));
+        RobotModeTriggers.test().onTrue(new VisionSetIMUMode(2));
     }
 
     /***************/

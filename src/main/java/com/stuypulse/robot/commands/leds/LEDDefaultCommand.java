@@ -1,7 +1,6 @@
 package com.stuypulse.robot.commands.leds;
 
 import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.Robot.Mode;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Vision;
 import com.stuypulse.robot.subsystems.climb.Climb;
@@ -48,10 +47,7 @@ public class LEDDefaultCommand extends Command{
 
     @Override
     public void execute() {
-        if (Robot.getMode() == Mode.DISABLED && LimelightVision.getInstance().getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED) {
-            leds.applyPattern(Settings.LED.DISABLED_ALIGNED);
-        }
-        else if (shooter.hasCoral() || funnel.hasCoral()) {
+        if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
         }
         else if (isShooting()) {

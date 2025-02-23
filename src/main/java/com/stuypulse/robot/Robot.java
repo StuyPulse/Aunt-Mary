@@ -6,23 +6,12 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-
-    public enum Mode {
-        DISABLED,
-        AUTONOMOUS,
-        TELEOP,
-        TEST
-    }
-
-    private static Mode mode;
 
     private RobotContainer robot;
     private Command auto;
@@ -32,10 +21,6 @@ public class Robot extends TimedRobot {
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
     }
 
-    public static Mode getMode() {
-        return mode;
-    }
-
     /*************************/
     /*** ROBOT SCHEDULING ***/
     /*************************/
@@ -43,7 +28,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robot = new RobotContainer();
-        mode = Mode.DISABLED;
     }
 
     @Override
@@ -56,10 +40,7 @@ public class Robot extends TimedRobot {
     /*********************/
 
     @Override
-    public void disabledInit() {
-        mode = Mode.DISABLED;
-        new VisionSetIMUMode(1).schedule();
-    }
+    public void disabledInit() {}
 
     @Override
     public void disabledPeriodic() {}
@@ -70,8 +51,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        mode = Mode.AUTONOMOUS;
-        new VisionSetIMUMode(2).schedule();
         auto = robot.getAutonomousCommand();
         
         if (auto != null) {
@@ -91,8 +70,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        mode = Mode.TELEOP;
-        new VisionSetIMUMode(2).schedule();
         if (auto != null) {
             auto.cancel();
         }
@@ -110,8 +87,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        mode = Mode.TEST;
-        new VisionSetIMUMode(2).schedule();
         CommandScheduler.getInstance().cancelAll();
     }
 
