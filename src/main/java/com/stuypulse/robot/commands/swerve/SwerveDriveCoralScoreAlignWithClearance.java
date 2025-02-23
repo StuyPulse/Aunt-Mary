@@ -2,6 +2,8 @@ package com.stuypulse.robot.commands.swerve;
 
 import java.util.function.Supplier;
 
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
@@ -18,7 +20,8 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
         addCommands(
             new SwerveDrivePIDToPose(() -> nearestBranch.get().getReadyPose(isFrontFacingReef))
                 .until(() -> Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
-                        && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle()),
+                        && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle())
+                .alongWith(new LEDApplyPattern(nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
             new SwerveDrivePIDToPose(() -> nearestBranch.get().getScorePose(level, isFrontFacingReef))
         );
     }

@@ -225,14 +225,12 @@ public interface Settings {
         LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kRed);
 
         LEDPattern ALIGN_COLOR = LEDPattern.solid(Color.kYellow);
-        LEDPattern SHOOT_COLOR = LEDPattern.solid(Color.kGreen);
+        LEDPattern SCORE_COLOR = LEDPattern.solid(Color.kGreen);
         LEDPattern ABORT_COLOR = LEDPattern.solid(Color.kBlue);
 
         LEDPattern INTAKE_COLOR = LEDPattern.rainbow(255, 255);
 
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);
-
-        LEDPattern L1_PROCESSOR_SCORING_COLOR = LEDPattern.solid(Color.kGreen);
 
         LEDPattern CLIMB_OPEN_COLOR = LEDPattern.rainbow(255, 255);
 
@@ -240,6 +238,11 @@ public interface Settings {
 
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled
+
+
+        //Side Alignment color
+        LEDPattern LEFT_SIDE_COLOR = LEDPattern.solid(Color.kYellow);
+        LEDPattern RIGHT_SIDE_COLOR = LEDPattern.solid(Color.kBlue);
     }
 
     public interface Driver {
