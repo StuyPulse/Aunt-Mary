@@ -22,7 +22,6 @@ public class ShooterImpl extends Shooter {
 
     private final DigitalInput beamBreak;
     private final BStream hasCoral;
-    private final BStream isStalling;
 
     protected ShooterImpl() {
         super();
@@ -33,19 +32,11 @@ public class ShooterImpl extends Shooter {
 
         hasCoral = BStream.create(beamBreak).not()
                     .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
-
-        isStalling = BStream.create(() -> Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Shooter.STALL_CURRENT_THRESHOLD)
-                    .filtered(new BDebounce.Both(Settings.Shooter.STALL_DETECTION_DEBOUNCE));
     }
 
     @Override
     public boolean hasCoral() {
         return hasCoral.get();
-    }
-
-    @Override
-    public boolean isStalling() {
-        return isStalling.get();
     }
 
     @Override
@@ -64,6 +55,5 @@ public class ShooterImpl extends Shooter {
         SmartDashboard.putNumber("Shooter/Stator Current", motor.getStatorCurrent().getValueAsDouble());
 
         SmartDashboard.putBoolean("Shooter/Has Coral", hasCoral());
-        SmartDashboard.putBoolean("Shooter/Is Stalling", isStalling());
     }
 }

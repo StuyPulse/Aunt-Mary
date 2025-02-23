@@ -113,12 +113,9 @@ public interface Settings {
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
-        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hol Speed", -0.1);
+        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.1);
 
         double HAS_CORAL_DEBOUNCE = 0.0;
-
-        double STALL_DETECTION_DEBOUNCE = 0.5;
-        double STALL_CURRENT_THRESHOLD = 80;
     }
 
     public interface Funnel {

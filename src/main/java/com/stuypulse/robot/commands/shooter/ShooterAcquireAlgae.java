@@ -24,19 +24,4 @@ public class ShooterAcquireAlgae extends Command {
     public void initialize() {
         shooter.setState(ShooterState.ACQUIRE_ALGAE);
     }
-
-    @Override
-    public boolean isFinished() {
-        return shooter.isStalling();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        if (!interrupted) {
-            shooter.setState(ShooterState.HOLD_ALGAE);
-        }
-        else {
-            shooter.setState(ShooterState.STOP);
-        }
-    }
 }

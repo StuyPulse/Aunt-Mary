@@ -59,7 +59,6 @@ public abstract class Shooter extends SubsystemBase {
     }
 
     public abstract boolean hasCoral();
-    public abstract boolean isStalling();
 
     public boolean shouldShootForward() {
         switch (Arm.getInstance().getState()) {
