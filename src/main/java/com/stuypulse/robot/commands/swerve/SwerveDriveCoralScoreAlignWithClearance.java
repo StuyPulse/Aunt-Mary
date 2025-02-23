@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {    
     public SwerveDriveCoralScoreAlignWithClearance(int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
-        Supplier<CoralBranch> nearestBranch = () -> ReefUtil.getClosestBranch();
+        Supplier<CoralBranch> nearestBranch = () -> ReefUtil.getClosestCoralBranch();
 
         addCommands(
             new SwerveDrivePIDToPose(() -> nearestBranch.get().getReadyPose(isFrontFacingReef))

@@ -81,7 +81,7 @@ public interface ReefUtil {
         }
     }
 
-    public static CoralBranch getClosestBranch() {
+    public static CoralBranch getClosestCoralBranch() {
         CoralBranch nearestBranch = CoralBranch.A;
         double closestDistance = Double.MAX_VALUE;
 
@@ -131,7 +131,7 @@ public interface ReefUtil {
         }
     }
 
-    public static Algae getClosestAlgaeBranch() {
+    public static Algae getClosestAlgae() {
         Algae nearestAlgaeBranch = Algae.AB;
         double closestDistance = Double.MAX_VALUE;
 

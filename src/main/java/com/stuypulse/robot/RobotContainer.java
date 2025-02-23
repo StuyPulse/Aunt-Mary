@@ -90,6 +90,7 @@ import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
@@ -98,6 +99,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
 import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
@@ -117,6 +119,7 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
+import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -319,17 +322,19 @@ public class RobotContainer {
             .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
             .onFalse(new ShooterStop());
 
-        // Acquire Reef Algae L3
+        // Acquire Closest Reef Algae
         driver.getDPadLeft()
-            .whileTrue(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
-            .whileTrue(new ShooterAcquireAlgae())
-            .onFalse(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae()));
-        
-        // Acquire Reef Algae L2
-        driver.getDPadDown()
-            .whileTrue(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
-            .whileTrue(new ShooterAcquireAlgae())
-            .onFalse(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae()));
+            .whileTrue(new ConditionalCommand(
+                new SwerveDrivePidToNearestReefAlgae()
+                    .alongWith(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
+                    .alongWith(new ShooterAcquireAlgae()), 
+                new SwerveDrivePidToNearestReefAlgae()
+                    .alongWith(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
+                    .alongWith(new ShooterAcquireAlgae()), 
+                () -> ReefUtil.getClosestAlgae().isHighAlgae()))
+            .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                .andThen(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae())))
+            .onFalse(new ShooterHoldAlgae());
 
         driver.getLeftMenuButton()
             .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())

@@ -4,6 +4,6 @@ import com.stuypulse.robot.util.ReefUtil;
 
 public class SwerveDrivePIDToNearestBranchScore extends SwerveDrivePIDToPose{
     public SwerveDrivePIDToNearestBranchScore(int level, boolean isScoringFrontSide) {
-        super(() -> ReefUtil.getClosestBranch().getScorePose(level, isScoringFrontSide));
+        super(() -> ReefUtil.getClosestCoralBranch().getScorePose(level, isScoringFrontSide));
     }
 }
