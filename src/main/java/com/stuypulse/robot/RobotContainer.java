@@ -170,7 +170,7 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         funnel.setDefaultCommand(new FunnelDefaultCommand());
-        leds.setDefaultCommand(new LEDDefaultCommand());
+        leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
         shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral() && arm.getState() != ArmState.HOLD_ALGAE));
     }
 

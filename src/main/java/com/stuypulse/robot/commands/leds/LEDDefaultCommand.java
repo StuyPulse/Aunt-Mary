@@ -1,6 +1,9 @@
 package com.stuypulse.robot.commands.leds;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.Robot.Mode;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Vision;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
@@ -10,6 +13,7 @@ import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -44,7 +48,10 @@ public class LEDDefaultCommand extends Command{
 
     @Override
     public void execute() {
-        if (shooter.hasCoral() || funnel.hasCoral()) {
+        if (Robot.getMode() == Mode.DISABLED && LimelightVision.getInstance().getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED) {
+            leds.applyPattern(Settings.LED.DISABLED_ALIGNED);
+        }
+        else if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
         }
         else if (isShooting()) {

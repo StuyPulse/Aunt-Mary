@@ -30,7 +30,7 @@ public class LimelightVision extends SubsystemBase{
 
     private String[] names;
     private SmartBoolean[] camerasEnabled;
-    private int[] camerasTagCounts;
+    private int[] tagCounts;
 
     private LimelightVision() {
         names = new String[Cameras.LimelightCameras.length];
@@ -49,7 +49,7 @@ public class LimelightVision extends SubsystemBase{
         }
 
         camerasEnabled = new SmartBoolean[Cameras.LimelightCameras.length];
-        camerasTagCounts = new int[Cameras.LimelightCameras.length];
+        tagCounts = new int[Cameras.LimelightCameras.length];
 
         for (int i = 0; i < camerasEnabled.length; i++) {
             camerasEnabled[i] = new SmartBoolean("Vision/" + names[i] + " Is Enabled", true);
@@ -81,13 +81,12 @@ public class LimelightVision extends SubsystemBase{
         }
     }
 
-    public int getTagCount(String name) {
-        for (int i = 0; i < names.length; i++) {
-            if (names[i].equals(name)) {
-                return camerasTagCounts[i];
-            }
+    public int getMaxTagCount() {
+        int maxTagCount = 0;
+        for (int i = 0; i < Cameras.LimelightCameras.length; i++) {
+            maxTagCount = Math.max(maxTagCount, tagCounts[i]);
         }
-        return 0;
+        return maxTagCount;
     }
 
     @Override
@@ -115,12 +114,12 @@ public class LimelightVision extends SubsystemBase{
                         CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds, Settings.Vision.MIN_STDDEVS.times(1 + poseEstimate.avgTagDist));
                         SmartDashboard.putBoolean("Vision/" + names[i] + " Has Data", true);
                         SmartDashboard.putNumber("Vision/" + names[i] + " Tag Count", poseEstimate.tagCount);
-                        camerasTagCounts[i] = poseEstimate.tagCount;
+                        tagCounts[i] = poseEstimate.tagCount;
                     }
                     else {
                         SmartDashboard.putBoolean("Vision/" + names[i] + " Has Data", false);
                         SmartDashboard.putNumber("Vision/" + names[i] + " Tag Count", 0);
-                        camerasTagCounts[i] = 0;
+                        tagCounts[i] = 0;
                     }
                 }
             }

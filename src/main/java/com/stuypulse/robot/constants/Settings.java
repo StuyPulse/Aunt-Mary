@@ -238,7 +238,8 @@ public interface Settings {
 
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
 
-        LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple);
+        double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
+        LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled
     }
 
     public interface Driver {
