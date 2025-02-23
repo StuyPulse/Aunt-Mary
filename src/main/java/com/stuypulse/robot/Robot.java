@@ -6,9 +6,7 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.robot.commands.leds.LEDApplyPattern;
-import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.vision.LimelightVision;
+import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -17,13 +15,25 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 
+    public enum Mode {
+        DISABLED,
+        AUTONOMOUS,
+        TELEOP,
+        TEST
+    }
+
+    private static Mode mode;
+
     private RobotContainer robot;
     private Command auto;
-    private LimelightVision vision = LimelightVision.getInstance();
 
     public static boolean isBlue() {
         return DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+    }
+
+    public static Mode getMode() {
+        return mode;
     }
 
     /*************************/
@@ -33,6 +43,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robot = new RobotContainer();
+        mode = Mode.DISABLED;
     }
 
     @Override
@@ -45,15 +56,13 @@ public class Robot extends TimedRobot {
     /*********************/
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        mode = Mode.DISABLED;
+        new VisionSetIMUMode(1).schedule();
+    }
 
     @Override
-    public void disabledPeriodic() {
-        // put your pregame LED check in here
-        if (vision.getTagCount("limelight-shooter") >= 2) {
-            new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED);
-        }
-    }
+    public void disabledPeriodic() {}
 
     /***********************/
     /*** AUTONOMOUS MODE ***/
@@ -61,6 +70,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        mode = Mode.AUTONOMOUS;
+        new VisionSetIMUMode(2).schedule();
         auto = robot.getAutonomousCommand();
         
         if (auto != null) {
@@ -80,6 +91,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        mode = Mode.TELEOP;
+        new VisionSetIMUMode(2).schedule();
         if (auto != null) {
             auto.cancel();
         }
@@ -97,6 +110,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        mode = Mode.TEST;
+        new VisionSetIMUMode(2).schedule();
         CommandScheduler.getInstance().cancelAll();
     }
 

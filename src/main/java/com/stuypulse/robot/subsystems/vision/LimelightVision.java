@@ -53,9 +53,10 @@ public class LimelightVision extends SubsystemBase{
 
         for (int i = 0; i < camerasEnabled.length; i++) {
             camerasEnabled[i] = new SmartBoolean("Vision/" + names[i] + " Is Enabled", true);
-            LimelightHelpers.SetIMUMode(names[i], 0);
             SmartDashboard.putBoolean("Vision/" + names[i] + " Has Data", false);
         }
+
+        setIMUMode(1);
 
         CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MIN_STDDEVS);
     }
