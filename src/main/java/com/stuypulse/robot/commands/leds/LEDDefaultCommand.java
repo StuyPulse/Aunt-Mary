@@ -1,8 +1,6 @@
 package com.stuypulse.robot.commands.leds;
 
-import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Vision;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
@@ -12,7 +10,6 @@ import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
-import com.stuypulse.robot.subsystems.vision.LimelightVision;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -39,10 +36,12 @@ public class LEDDefaultCommand extends Command{
             || froggy.getRollerState() == RollerState.INTAKE_CORAL;
     }
 
-    private boolean isShooting() {
+    private boolean isScoring() {
         return shooter.getState() == ShooterState.SHOOT_CORAL_FORWARD
             || shooter.getState() == ShooterState.SHOOT_CORAL_REVERSE
-            || shooter.getState() == ShooterState.SHOOT_ALGAE;
+            || shooter.getState() == ShooterState.SHOOT_ALGAE
+            || froggy.getRollerState() == RollerState.SHOOT_CORAL 
+            || froggy.getRollerState() == RollerState.SHOOT_ALGAE;
     }
 
     @Override
@@ -50,17 +49,14 @@ public class LEDDefaultCommand extends Command{
         if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
         }
-        else if (isShooting()) {
-            leds.applyPattern(Settings.LED.SHOOT_COLOR);
+        else if (isScoring()) {
+            leds.applyPattern(Settings.LED.SCORE_COLOR);
         }
         else if (isIntaking()) {
             leds.applyPattern(Settings.LED.INTAKE_COLOR);
         }
         else if (funnel.getState() == FunnelState.REVERSE) {
             leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
-        }
-        else if (froggy.getRollerState() == RollerState.SHOOT_CORAL || froggy.getRollerState() == RollerState.SHOOT_ALGAE) {
-            leds.applyPattern(Settings.LED.L1_PROCESSOR_SCORING_COLOR);
         }
         else if (climb.getState() == ClimbState.OPEN) {
             leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
