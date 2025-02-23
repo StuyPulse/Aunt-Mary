@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.shooter;
 
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 
@@ -17,7 +18,12 @@ public abstract class Shooter extends SubsystemBase {
     private static final Shooter instance;
 
     static {
-        instance = new ShooterImpl();
+        if (Robot.isReal()) {
+            instance = new ShooterImpl();
+        }
+        else {
+            instance = new ShooterSim();
+        }
     }
 
     public static Shooter getInstance() {
