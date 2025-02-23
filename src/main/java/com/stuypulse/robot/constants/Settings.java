@@ -31,30 +31,31 @@ public interface Settings {
 
     String CANIVORE_NAME = "CANIVORE";
 
-    double CLEARANCE_DISTANCE_FROM_REEF = 0.4;
+    double CLEARANCE_DISTANCE_FROM_REEF = 0.75; // From bumper
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
-        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", false);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
-        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", false);
+        SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
 
     public interface Swerve {
-        double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.03;
-
+        double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.1;
+        double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
+        double NUDGE_FORWARD_SPEED_METERS_PER_SECOND = 0.15;
         public interface Constraints {
             double MAX_MODULE_SPEED = 4.9;
     
-            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 3.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 5.0);
-            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
-            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
+            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 4.0);
+            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 15.0);
+            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
+            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
     
             PathConstraints DEFAULT_CONSTRAINTS =
                 new PathConstraints(
@@ -66,18 +67,17 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
+                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 4.0);
+                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 12.0);
 
-                SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 3.0);
-                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 5.0);
-
-                SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(360));
-                SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(720));
+                SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
+                SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.02); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.02);
-                SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(4));
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.05); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.05);
+                SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(5));
     
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
 
@@ -85,11 +85,13 @@ public interface Settings {
             }
 
             public interface Targets {
+                // DISTANCE FROM REEF TO BUMPER
+                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = -0.02;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
+                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = -0.02;
+
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = 0.0;
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = 0.0;
@@ -105,21 +107,23 @@ public interface Settings {
     }
 
     public interface Shooter {
-        SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Coral Shoot Speed Forward", 0.75);
-        SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Coral Shoot Speed Reverse", -0.75);
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Coral Acquire Speed", 0.3);
-        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Algae Acquire Speed", -0.45);
-        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Algae Shoot Speed", 0.45);
+        SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.75);
+        SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.75);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);
+        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
+        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
-        double HAS_CORAL_DEBOUNCE = 0.2;
+        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hol Speed", -0.1);
+
+        double HAS_CORAL_DEBOUNCE = 0.0;
 
         double STALL_DETECTION_DEBOUNCE = 0.5;
-        double STALL_CURRENT_THRESHOLD = 30;
+        double STALL_CURRENT_THRESHOLD = 80;
     }
 
     public interface Funnel {
-        SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 0.4);
-        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", -0.4);
+        SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 1.0);
+        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", -1.0);
 
         double STALL_CURRENT = 30;
         double STALL_DETECTION_TIME = 0.25;
@@ -130,32 +134,38 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND = 2.0;
+        double MAX_VELOCITY_METERS_PER_SECOND = 1.5;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
-        double FEED_HEIGHT_METERS = 1.0;
+        double FEED_HEIGHT_METERS = 1.13;
 
         // Coral
-        double FRONT_L2_HEIGHT_METERS = 1.609;
-        double FRONT_L3_HEIGHT_METERS = 1.073;
-        double FRONT_L4_HEIGHT_METERS = 1.708;
+        double FRONT_L2_HEIGHT_METERS = 1.592002;
+        double FRONT_L3_HEIGHT_METERS = 1.037354;
+        double FRONT_L4_HEIGHT_METERS = 1.656494;
         
         double BACK_L2_HEIGHT_METERS = 1.106;
         double BACK_L3_HEIGHT_METERS = 1.161;
         double BACK_L4_HEIGHT_METERS = 1.836;
 
         // Algae
-        double BARGE_HEIGHT_METERS = 2.073;
+        double BARGE_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double ALGAE_L2_HEIGHT_METERS = 1.4;
         double ALGAE_L3_HEIGHT_METERS = 1.8;
+        double HOLD_ALGAE_HEIGHT_METERS = 1.2;
+
+        double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
 
     public interface Arm {
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-83.385);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(60.6);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(75.0);
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
+
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-69.345703);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(65.302734);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(171.5);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(146.1);
@@ -163,51 +173,52 @@ public interface Settings {
 
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(60.0);
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
 
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-90);
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-93);
+        Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
+        Rotation2d HOLD_ALGAE = MIN_ANGLE.plus(Rotation2d.fromDegrees(4));
+        
+        Rotation2d CLIMB_ANGLE = MAX_ANGLE.minus(Rotation2d.fromDegrees(5));
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(150.0);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(200.0);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 
     public interface Froggy {
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d STOW_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(3.5);
+        Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(41);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(0);
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
 
-        double ALGAE_INTAKE_SPEED = 0.5;
-        double ALGAE_OUTTAKE_SPEED = 0.5;
+        SmartNumber ALGAE_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Intake Speed", 1.0);
+        SmartNumber ALGAE_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Outtake Speed", -1.0);
+        SmartNumber CORAL_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Intake Speed", -1.0);
+        SmartNumber CORAL_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Outtake Speed", 1.0);
+        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.0);
 
-        double CORAL_INTAKE_SPEED = 0.5;
-        double CORAL_OUTTAKE_SPEED = 0.5;
-
-        double HOLD_ALGAE_SPEED = 0.0;
-
-        double CORAL_STALL_CURRENT_THRESHOLD = 20.0;
-        double ALGAE_STALL_CURRENT_THRESHOLD = 20.0;
+        double CORAL_STALL_CURRENT_THRESHOLD = 80.0;
+        double ALGAE_STALL_CURRENT_THRESHOLD = 80.0;
         double STALL_DEBOUNCE_TIME = 0.0;
 
-        double MAX_VEL_ROTATIONS_PER_S = 1.0;
-        double MAX_ACCEL_ROTATIONS_PER_S_PER_S = 1.0;
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(100);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(100);
     }
 
     public interface Climb {
-        double RESET_STALL_CURRENT = 40;
-        double RESET_VOLTAGE = -1.0;
+        double DEFAULT_VOLTAGE = 4; // Used for normal movement
+        double OPEN_VOLTAGE_LOW = 1; // Used when getting close to the open angle
+        double CLIMB_VOLTAGE = 12; // Used when climbing
 
-        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(162.0);
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(0.0);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(0.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(3.0);
+        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245);
         
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.0);
+        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED = Rotation2d.fromDegrees(8);
     }
 
     public interface LED {
@@ -233,7 +244,7 @@ public interface Settings {
         double BUZZ_INTENSITY = 1.0;
 
         public interface Drive {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.05);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.08);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
@@ -243,7 +254,7 @@ public interface Settings {
         }
 
         public interface Turn {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.05);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.08);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);
@@ -283,6 +294,6 @@ public interface Settings {
     }
   
     public interface Auton {
-        double SHOOTER_WAIT_TIME = 0.2;
+        double SHOOTER_WAIT_TIME = 0.75;
     }
 }

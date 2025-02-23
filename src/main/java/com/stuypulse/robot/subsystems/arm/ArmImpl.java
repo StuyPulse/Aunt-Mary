@@ -11,95 +11,85 @@ import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.ArmDriveFeedForward;
+import com.stuypulse.robot.util.ArmElevatorFeedForward;
+import com.stuypulse.robot.util.SettableNumber;
+import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
-import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ArmImpl extends Arm {
 
     private TalonFX motor;
-    // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
 
     private Controller controller;
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
+    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     public ArmImpl() {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
-        motor.setPosition(Constants.Arm.MIN_ANGLE.getRotations());
+        motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
 
-        // absoluteEncoder = new CANcoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
-        // MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs()
-        //     .withMagnetOffset(Constants.Arm.ANGLE_OFFSET)
-        //     .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
+        motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
-        // absoluteEncoder.getConfigurator().apply(magnetConfig);
+        kP = new SettableNumber(Gains.Arm.Empty.PID.kP);
+        kI = new SettableNumber(Gains.Arm.Empty.PID.kI);
+        kD = new SettableNumber(Gains.Arm.Empty.PID.kD);
+        kS = new SettableNumber(Gains.Arm.Empty.FF.kS);
+        kV = new SettableNumber(Gains.Arm.Empty.FF.kV);
+        kA = new SettableNumber(Gains.Arm.Empty.FF.kA);
+        kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
 
-        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getRotations(), Settings.Arm.MAX_ACCEL.getRotations());
-        motionProfile.reset(Settings.Arm.STOW_ANGLE.getRotations());
-
-        controller = new MotorFeedforward(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Arm.FF.kG))
-            .add(new PIDController(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD))
+        controller = new MotorFeedforward(kS, kV, kA).position()
+            .add(new ArmFeedforward(kG))
+            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs))
+            .add(new PIDController(kP, kI, kD))
             .setSetpointFilter(motionProfile);
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                edu.wpi.first.units.Units.Volts.of(5), 
-                null,
-                state -> SignalLogger.writeString("SysIdArm_State", state.toString())),
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    motor.setVoltage(output.in(edu.wpi.first.units.Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> {
-                    SignalLogger.writeDouble("Arm Position (rotations)", getCurrentAngle().getRotations());
-                    SignalLogger.writeDouble("Arm Velocity (rotations per s)", motor.getVelocity().getValueAsDouble());
-                    SignalLogger.writeDouble("Arm Voltage", motor.getMotorVoltage().getValueAsDouble());
-                }, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            6, 
+            "Arm", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()), 
+            () -> motor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     @Override
@@ -108,22 +98,31 @@ public class ArmImpl extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-       return getState().getTargetAngle().plus(operatorOffset);
+       return Rotation2d.fromDegrees(
+        SLMath.clamp(getState().getTargetAngle().plus(operatorOffset).getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
     public Rotation2d getCurrentAngle() {
-        // double degrees = Units.rotationsToDegrees(absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations());
-        // if (degrees < Constants.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(5)).getDegrees()) {
-        //     degrees += 360;
-        // }
-        // return Rotation2d.fromDegrees(degrees);
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations();
+        return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
+            ? encoderAngle 
+            : encoderAngle + 1);
     }
 
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public double getVoltageOverride() {
+        if (voltageOverride.isPresent()) {
+            return voltageOverride.get();
+        }
+        else {
+            return 0;
+        }
     }
 
     @Override
@@ -136,24 +135,65 @@ public class ArmImpl extends Arm {
         return this.operatorOffset;
     }
 
+    private void updateGains() {
+        if (getState() == ArmState.HOLD_ALGAE || getState() == ArmState.BARGE) {
+            kP.set(Gains.Arm.Algae.PID.kP);
+            kI.set(Gains.Arm.Algae.PID.kI);
+            kD.set(Gains.Arm.Algae.PID.kD);
+            kS.set(Gains.Arm.Algae.FF.kS);
+            kV.set(Gains.Arm.Algae.FF.kV);
+            kA.set(Gains.Arm.Algae.FF.kA);
+            kG.set(Gains.Arm.Algae.FF.kG);
+        } else if (Shooter.getInstance().hasCoral()) {
+            kP.set(Gains.Arm.Coral.PID.kP);
+            kI.set(Gains.Arm.Coral.PID.kI);
+            kD.set(Gains.Arm.Coral.PID.kD);
+            kS.set(Gains.Arm.Coral.FF.kS);
+            kV.set(Gains.Arm.Coral.FF.kV);
+            kA.set(Gains.Arm.Coral.FF.kA);
+            kG.set(Gains.Arm.Coral.FF.kG);
+        } else {
+            kP.set(Gains.Arm.Empty.PID.kP);
+            kI.set(Gains.Arm.Empty.PID.kI);
+            kD.set(Gains.Arm.Empty.PID.kD);
+            kS.set(Gains.Arm.Empty.FF.kS);
+            kV.set(Gains.Arm.Empty.FF.kV);
+            kA.set(Gains.Arm.Empty.FF.kA);
+            kG.set(Gains.Arm.Empty.FF.kG);
+        }
+    }
+
     @Override
     public void periodic() {
         super.periodic();
         
-        if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
+        updateGains();
+
+        SmartDashboard.putNumber("Arm/kG", kG.get());
+        
+        if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }
             else {
-                // motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                motor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+                motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
         }
         else {
             motor.setVoltage(0);
         }
 
-        SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
+        SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());
+
+        SmartDashboard.putNumber("Arm/Setpoint (deg)", controller.getSetpoint());
+        SmartDashboard.putNumber("Arm/Angle Error (deg)", controller.getError());
+        
+        SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
+        SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+
+        SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
     }
 }

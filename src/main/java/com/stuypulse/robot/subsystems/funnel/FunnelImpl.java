@@ -6,8 +6,6 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
-import org.ejml.equation.IntegerSequence.For;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
@@ -62,8 +60,10 @@ public class FunnelImpl extends Funnel {
             motor.set(0);
         }
 
-        SmartDashboard.putNumber("Funnel/Current", motor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putBoolean("Funnel/IR Sensor", irSensor.get());
+        SmartDashboard.putNumber("Funnel/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Funnel/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        
+        SmartDashboard.putBoolean("Funnel/IR Sensor raw", irSensor.get());
         SmartDashboard.putBoolean("Funnel/Has Coral", hasCoral());
     }
 }

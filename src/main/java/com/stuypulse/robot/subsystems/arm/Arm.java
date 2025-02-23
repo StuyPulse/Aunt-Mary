@@ -12,6 +12,7 @@ import java.util.Optional;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.ArmElevatorVisualizer;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Arm extends SubsystemBase {
 
-    public static final Arm instance;
+    private static final Arm instance;
 
     static {
         if (Robot.isReal()) {
@@ -38,7 +39,6 @@ public abstract class Arm extends SubsystemBase {
     }
 
     public enum ArmState {
-        STOW(Settings.Arm.STOW_ANGLE),
         FEED(Settings.Arm.FEED_ANGLE),
         L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
         L2_BACK(Settings.Arm.L2_ANGLE_BACK),
@@ -48,13 +48,14 @@ public abstract class Arm extends SubsystemBase {
         L4_BACK(Settings.Arm.L4_ANGLE_BACK),
         ALGAE_L2(Settings.Arm.ALGAE_L2_ANGLE),
         ALGAE_L3(Settings.Arm.ALGAE_L3_ANGLE),
+        HOLD_ALGAE(Settings.Arm.HOLD_ALGAE),
         BARGE(Settings.Arm.BARGE_ANGLE),
-        VERTICAL_DOWN(Rotation2d.fromDegrees(-90));
+        CLIMB(Settings.Arm.CLIMB_ANGLE);
 
         private Rotation2d targetAngle;
 
         private ArmState(Rotation2d targetAngle) {
-            this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Constants.Arm.MIN_ANGLE.getDegrees(), Constants.Arm.MAX_ANGLE.getDegrees()));
+            this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
         }
 
         public Rotation2d getTargetAngle() {
@@ -69,7 +70,7 @@ public abstract class Arm extends SubsystemBase {
     private ArmState state;
 
     protected Arm() {
-        this.state = ArmState.STOW;
+        this.state = ArmState.FEED;
     }
 
     public ArmState getState() {
@@ -86,14 +87,17 @@ public abstract class Arm extends SubsystemBase {
     public abstract boolean atTargetAngle();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
+    public abstract double getVoltageOverride();
+    
     public abstract void setOperatorOffset(Rotation2d offset);
     public abstract Rotation2d getOperatorOffset();
 
-    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
+    public abstract SysIdRoutine getSysIdRoutine();
 
     @Override
     public void periodic() {
+        ArmElevatorVisualizer.getInstance().updateArmAngle(getCurrentAngle());
+        
         SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());
 

@@ -12,7 +12,9 @@ import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Froggy extends SubsystemBase {
 
@@ -46,10 +48,10 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public enum RollerState {
-        INTAKE_CORAL(-Settings.Froggy.CORAL_INTAKE_SPEED),
+        INTAKE_CORAL(Settings.Froggy.CORAL_INTAKE_SPEED),
         INTAKE_ALGAE(Settings.Froggy.ALGAE_INTAKE_SPEED),
         SHOOT_CORAL(Settings.Froggy.CORAL_OUTTAKE_SPEED),
-        SHOOT_ALGAE(-Settings.Froggy.ALGAE_OUTTAKE_SPEED),
+        SHOOT_ALGAE(Settings.Froggy.ALGAE_OUTTAKE_SPEED),
         HOLD_ALGAE(Settings.Froggy.HOLD_ALGAE_SPEED),
         STOP(0);
 
@@ -96,6 +98,8 @@ public abstract class Froggy extends SubsystemBase {
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
     public abstract void setPivotOperatorOffset(Rotation2d offset);
     public abstract Rotation2d getPivotOperatorOffset();
+
+    public abstract SysIdRoutine getFroggySysIdRoutine();
 
     @Override
     public void periodic() {

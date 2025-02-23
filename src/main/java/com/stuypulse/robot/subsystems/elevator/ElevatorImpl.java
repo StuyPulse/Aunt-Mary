@@ -7,25 +7,17 @@
 package com.stuypulse.robot.subsystems.elevator;
 
 import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.network.SmartNumber;
-
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -35,9 +27,6 @@ public class ElevatorImpl extends Elevator {
 
     private Optional<Double> voltageOverride;
     private double operatorOffset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
 
     protected ElevatorImpl() {
         super();
@@ -49,32 +38,20 @@ public class ElevatorImpl extends Elevator {
 
         voltageOverride = Optional.empty();
         operatorOffset = 0;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                Units.Volts.of(5), 
-                null,
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    motor.setVoltage(output.in(Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                null, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            7, 
+            "Elevator", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentHeight(), 
+            () -> motor.getVelocity().getValueAsDouble(), 
+            () -> motor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     @Override
@@ -83,12 +60,17 @@ public class ElevatorImpl extends Elevator {
     }
 
     private double getTargetHeight() {
-        return getState().getTargetHeight() + operatorOffset;
+        return SLMath.clamp(getState().getTargetHeight() + operatorOffset, Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
     }
 
     @Override
     public boolean atTargetHeight() {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+    }
+
+    @Override
+    public double getAccelGs() {
+        return motor.getAcceleration().getValueAsDouble();
     }
 
     private boolean atBottom() {
@@ -118,7 +100,7 @@ public class ElevatorImpl extends Elevator {
             motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
         }
 
-        if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
+        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }
@@ -130,11 +112,10 @@ public class ElevatorImpl extends Elevator {
             motor.setVoltage(0);
         }
 
-
-        SmartDashboard.putNumber("Elevator/Motor Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
-
-        SmartDashboard.putNumber("Elevator/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+
+        SmartDashboard.putNumber("Elevator/Accel Gs", getAccelGs());
     }
 }

@@ -12,8 +12,8 @@ public interface Gains {
 
     public interface Swerve {
         public interface Alignment {
-            PIDConstants XY = new PIDConstants(1.0, 0, 0.0);
-            PIDConstants THETA = new PIDConstants(12.988, 0, 0.77717);
+            PIDConstants XY = new PIDConstants(3.0, 0, 0.0);
+            PIDConstants THETA = new PIDConstants(3.0, 0, 0.1);
         }
     }
 
@@ -33,17 +33,49 @@ public interface Gains {
     }
 
     public interface Arm {
-        public interface PID {
-            double kP = 9.2822;
-            double kI = 0.0;
-            double kD = 1.1381;
+        public interface Coral  {
+            public interface PID {
+                double kP = 0.049744;
+                double kI = 0.0;
+                double kD = 0.0;
+            }
+
+            public interface FF {
+                double kS = 0.076049; 
+                double kV = 0.011872;
+                double kA = 0.0011738;
+                double kG = 0.69106;
+            }
         }
 
-        public interface FF {
-            double kS = 0.084998; 
-            double kV = 2.095;
-            double kA = 0.59073;
-            double kG = 0.90574;
+        public interface Empty  {
+            public interface PID {
+                double kP = 0.022194;
+                double kI = 0.0;
+                double kD = 0.00021311;
+            }
+
+            public interface FF {
+                double kS = 0.041733; 
+                double kV = 0.011199;
+                double kA = 0.00123655;
+                double kG = 0.60473;
+            }
+        }
+
+        public interface Algae  {
+            public interface PID {
+                double kP = 0.014094;
+                double kI = 0.0;
+                double kD = 0.0;
+            }
+
+            public interface FF {
+                double kS = 0.078914; 
+                double kV = 0.011835;
+                double kA = 0.0011797;
+                double kG = 0.69059;
+            }
         }
     }
 
@@ -58,7 +90,8 @@ public interface Gains {
             double kS = 0.0;
             double kV = 0.0;
             double kA = 0.0;
-            double kG = 0.0;
+            double CORAL_kG = 0.0;
+            double ALGAE_kG = 0.0;
         }
     }
 

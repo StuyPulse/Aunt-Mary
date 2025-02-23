@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Mid Top to H"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue H to GH Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue GH Algae to Barge 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Barge 3 to IJ Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue IJ Algae to Barge 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Barge 3 to EF Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue EF Algae to Barge 3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Top Autons",
+  "choreoAuto": false
+}

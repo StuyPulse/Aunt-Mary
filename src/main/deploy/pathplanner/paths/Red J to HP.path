@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.792452130998884,
-        "y": 5.256076921735492
+        "x": 4.905434744698661,
+        "y": 5.344677734375
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.471010925773443,
-        "y": 7.518856016198161
+        "x": 1.4297410010846314,
+        "y": 7.52529115222486
       },
       "isLocked": false,
       "linkedName": "Red J"
     },
     {
       "anchor": {
-        "x": 1.6382734026227679,
-        "y": 7.407847377232142
+        "x": 1.689485386439732,
+        "y": 7.340108816964285
       },
       "prevControl": {
-        "x": 4.258436616161161,
-        "y": 5.5719258573002515
+        "x": 4.451065765986906,
+        "y": 5.612570304105246
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "reversed": false,
   "folder": "Red to HP",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

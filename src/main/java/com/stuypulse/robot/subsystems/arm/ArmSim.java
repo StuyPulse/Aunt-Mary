@@ -8,11 +8,14 @@ package com.stuypulse.robot.subsystems.arm;
 
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
+import static edu.wpi.first.units.Units.Second;
+
 import java.util.Optional;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -40,19 +43,16 @@ public class ArmSim extends Arm {
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
 
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
-
     protected ArmSim() {
         sim = new SingleJointedArmSim(
             DCMotor.getKrakenX60(1),
             Constants.Arm.GEAR_RATIO,
             Constants.Arm.MOMENT_OF_INERTIA,
             Constants.Arm.ARM_LENGTH,
-            Constants.Arm.MIN_ANGLE.getRadians(),
-            Constants.Arm.MAX_ANGLE.getRadians(),
+            Settings.Arm.MIN_ANGLE.getRadians(),
+            Settings.Arm.MAX_ANGLE.getRadians(),
             false,
-            Settings.Arm.STOW_ANGLE.getRadians()
+            Settings.Arm.MIN_ANGLE.getRadians()
         );
 
         LinearSystem<N2, N1, N2> armSystem = LinearSystemId.createSingleJointedArmSystem(
@@ -80,40 +80,24 @@ public class ArmSim extends Arm {
             Settings.Arm.MAX_VEL.getRadians(),
             Settings.Arm.MAX_ACCEL.getRadians()
         );
-        motionProfile.reset(Settings.Arm.STOW_ANGLE.getRadians());
+        motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
 
         voltageOverride = Optional.empty();
         operatorOffset = Rotation2d.kZero;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                edu.wpi.first.units.Units.Volts.of(5), 
-                null,
-                state -> SignalLogger.writeString("SysIdArm_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    sim.setInputVoltage(output.in(edu.wpi.first.units.Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> {
-                    SignalLogger.writeDouble("Arm Position (rad)", getCurrentAngle().getRadians());
-                    SignalLogger.writeDouble("Arm Velocity (rad per s)", sim.getVelocityRadPerSec());
-                    SignalLogger.writeDouble("Arm Voltage", controller.getU(0));
-                }, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            3, 
+            7, 
+            "Arm", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+            () -> voltageOverride.get(), 
+            getInstance()
+        );
     }
 
     @Override
@@ -133,6 +117,16 @@ public class ArmSim extends Arm {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
+    }
+
+    @Override
+    public double getVoltageOverride() {
+        if (voltageOverride.isPresent()) {
+            return voltageOverride.get();
+        }
+        else {
+            return 0;
+        }
     }
 
     @Override
@@ -157,21 +151,18 @@ public class ArmSim extends Arm {
         controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
-        if (Settings.EnabledSubsystems.ARM.get() && !isRunningSysid) {
+        if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
                 sim.setInputVoltage(voltageOverride.get());
-                sim.update(Settings.DT);
             }
             else {
                 sim.setInputVoltage(controller.getU(0));
-                sim.update(Settings.DT);
             }
         }
         else {
             sim.setInputVoltage(0);
         }
 
-        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Arm/Target Angle (deg)", getTargetAngle().getDegrees());
+        sim.update(Settings.DT);
     }
 }

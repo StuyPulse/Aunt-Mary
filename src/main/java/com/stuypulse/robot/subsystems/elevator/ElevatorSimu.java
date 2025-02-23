@@ -6,6 +6,9 @@
 
 package com.stuypulse.robot.subsystems.elevator;
 
+import com.stuypulse.stuylib.streams.numbers.IStream;
+import com.stuypulse.stuylib.streams.numbers.filters.Derivative;
+import com.stuypulse.stuylib.streams.numbers.filters.IFilter;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import java.util.Optional;
@@ -13,6 +16,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -37,11 +41,10 @@ public class ElevatorSimu extends Elevator {
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
 
+    private IStream accel;
+
     private Optional<Double> voltageOverride;
     private double operatorOffset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
 
     protected ElevatorSimu() {
         sim = new ElevatorSim(
@@ -53,6 +56,8 @@ public class ElevatorSimu extends Elevator {
             Constants.Elevator.MAX_HEIGHT_METERS,
             false,
             Constants.Elevator.MIN_HEIGHT_METERS);
+        
+        sim.setState(Constants.Elevator.MIN_HEIGHT_METERS, 0);
 
         LinearSystem<N2, N1, N2> elevatorSystem = LinearSystemId.createElevatorSystem(
             DCMotor.getKrakenX60(1), 
@@ -82,34 +87,25 @@ public class ElevatorSimu extends Elevator {
 
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
+        accel = IStream.create(() -> sim.getVelocityMetersPerSecond())
+            .filtered(new Derivative());
+
         voltageOverride = Optional.empty();
         operatorOffset = 0;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                Units.Volts.of(4), 
-                null,
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString())), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    isRunningSysid = true;
-                    sim.setInputVoltage(output.in(Units.Volts));
-                }, 
-                null, 
-                this));
     }
 
     @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            7, 
+            "Elevator", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentHeight(), 
+            () -> sim.getVelocityMetersPerSecond(), 
+            () -> voltageOverride.get(), 
+            getInstance()
+        );
     }
 
     private double getTargetHeight() {
@@ -124,6 +120,11 @@ public class ElevatorSimu extends Elevator {
     @Override
     public boolean atTargetHeight() {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+    }
+
+    @Override
+    public double getAccelGs() {
+        return accel.get();
     }
 
     @Override
@@ -153,18 +154,18 @@ public class ElevatorSimu extends Elevator {
         controller.correct(VecBuilder.fill(sim.getPositionMeters(), sim.getVelocityMetersPerSecond()));
         controller.predict(Settings.DT);
 
-        if (Settings.EnabledSubsystems.ELEVATOR.get() && !isRunningSysid) {
+        if (Settings.EnabledSubsystems.ELEVATOR.get()) {
             if (voltageOverride.isPresent()) {
                 sim.setInputVoltage(0);
-                sim.update(Settings.DT);
             }
             else {
                 sim.setInputVoltage(controller.getU(0));
-                sim.update(Settings.DT);
             }
         }
         else {
             sim.setInputVoltage(0);
         }
+
+        sim.update(Settings.DT);
     }
 }

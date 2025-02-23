@@ -55,12 +55,8 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
-			.withPIDConstants(Gains.Arm.PID.kP, Gains.Arm.PID.kI, Gains.Arm.PID.kD, 0)
-			.withFFConstants(Gains.Arm.FF.kS, Gains.Arm.FF.kV, Gains.Arm.FF.kA, Gains.Arm.FF.kG, 0)
-			.withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO);
 			// .withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
-			// .withMotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
     }
 
     public interface Froggy {
@@ -76,11 +72,13 @@ public interface Motors {
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
 			.withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD, 0)
-			.withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.kG, 0)
+			.withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.CORAL_kG, 0)
+            .withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD, 1)
+			.withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.ALGAE_kG, 1) 
 			.withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO)
 			.withRemoteSensor(Ports.Froggy.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO)
-			.withMotionProfile(Settings.Froggy.MAX_VEL_ROTATIONS_PER_S, Settings.Froggy.MAX_ACCEL_ROTATIONS_PER_S_PER_S);
+			.withMotionProfile(Settings.Froggy.MAX_VEL.getRotations(), Settings.Froggy.MAX_ACCEL.getRotations());
     }
 
     public interface Elevator {

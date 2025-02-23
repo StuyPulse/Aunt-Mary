@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.805061994280134,
+        "y": 4.034775573328922
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.560602678571428,
+        "y": 4.031682041713169
+      },
+      "isLocked": false,
+      "linkedName": "Red G"
+    },
+    {
+      "anchor": {
+        "x": 5.797665841238838,
+        "y": 4.09498291015625
+      },
+      "prevControl": {
+        "x": 7.572946602957589,
+        "y": 4.126097760881696
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red GH Algae"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Red To Algae",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

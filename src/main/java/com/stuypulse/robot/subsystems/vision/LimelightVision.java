@@ -9,6 +9,7 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 import com.stuypulse.stuylib.network.SmartBoolean;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -37,9 +38,9 @@ public class LimelightVision extends SubsystemBase{
                 robotRelativePose.getX(), 
                 robotRelativePose.getY(), 
                 robotRelativePose.getZ(), 
-                robotRelativePose.getRotation().getX(), 
-                robotRelativePose.getRotation().getY(), 
-                robotRelativePose.getRotation().getZ()
+                Units.radiansToDegrees(robotRelativePose.getRotation().getX()), 
+                Units.radiansToDegrees(robotRelativePose.getRotation().getY()), 
+                Units.radiansToDegrees(robotRelativePose.getRotation().getZ())
             );
         }
 

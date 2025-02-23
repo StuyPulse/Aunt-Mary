@@ -6,31 +6,24 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbImpl extends Climb {
     private TalonFX motor;
-    // private CANcoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     private Optional<Double> voltageOverride;
-
-    private boolean hasBeenReset;
-
-    private SysIdRoutine sysidRoutine;
-    private boolean isRunningSysid;
 
     protected ClimbImpl() {
         super();
@@ -38,64 +31,20 @@ public class ClimbImpl extends Climb {
         Motors.Climb.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
 
-        // absoluteEncoder = new CANcoder(Ports.Climb.ABSOLUTE_ENCODER);
-
-        // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-        //     .withMagnetOffset(Constants.Climb.ANGLE_OFFSET.getRotations())
-        //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
-
-        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
+        absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
+        absoluteEncoder.setInverted(false);
 
         voltageOverride = Optional.empty();
-
-        hasBeenReset = false;
-
-        isRunningSysid = false;
-
-        sysidRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, 
-                Units.Volts.of(6), 
-                null), 
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    motor.setVoltage(output.in(Units.Volts));
-                    isRunningSysid = true;
-                }, 
-                state -> SignalLogger.writeString("SysIdElevator_State", state.toString()), 
-                this));
-    }
-
-    @Override
-    public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.quasistatic(direction);
-    }
-
-    @Override
-    public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysidRoutine.dynamic(direction);
     }
 
     private Rotation2d getTargetAngle() {
-        switch (getState()) {
-            case STOW:
-                return Settings.Climb.CLOSED_ANGLE;
-            case OPEN:
-                return Settings.Climb.OPEN_ANGLE;
-            case CLIMBING:
-                return Settings.Climb.CLIMBED_ANGLE;
-            default:
-                return Settings.Climb.CLOSED_ANGLE;
-        }
+        return getState().getTargetAngle();
     }
 
     private Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
-    }
-
-    @Override
-    public boolean atTargetAngle() {
-        return Math.abs(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees()) < Settings.Climb.ANGLE_TOLERANCE.getDegrees();
+        return absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()
+            ? Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() + 1)
+            : Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
     }
 
     @Override
@@ -105,29 +54,66 @@ public class ClimbImpl extends Climb {
 
     @Override
     public void periodic() {
-        if (!hasBeenReset  && !isRunningSysid) {
-            motor.setVoltage(Settings.Climb.RESET_VOLTAGE);
-            if (Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Climb.RESET_STALL_CURRENT) {
-                hasBeenReset = true;
-                motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
-            }
-        }
-        if (Settings.EnabledSubsystems.CLIMB.get() && !isRunningSysid) {
+        super.periodic();
+        if (Settings.EnabledSubsystems.CLIMB.get()) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
             }
             else {
-                motor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+                double angleErrorDegrees = getTargetAngle().getDegrees() - getCurrentAngle().getDegrees();
+                SmartDashboard.putNumber("Climb/Angle Error (deg)", angleErrorDegrees);
+
+                if (getState() == ClimbState.IDLE) {
+                    motor.setVoltage(0);
+                }
+                else if (getState() == ClimbState.OPEN) {
+                    if (angleErrorDegrees < 0) {
+                        if (Math.abs(angleErrorDegrees) < 15) {
+                            motor.setVoltage(-Settings.Climb.OPEN_VOLTAGE_LOW);
+                        }
+                        else {
+                            motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
+                        }
+                    }
+                    else {
+                        motor.setVoltage(0);
+                    }
+                }
+                else if (getState() == ClimbState.CLOSED) {
+                    if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED.getDegrees()) {
+                        if (getCurrentAngle().getDegrees() > Settings.Climb.CLOSED_ANGLE.getDegrees()) {
+                            motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
+                        }
+                        else {
+                            motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
+                        }
+                    }
+                    else {
+                        motor.setVoltage(0);
+                    }
+                }
+                else if (getState() == ClimbState.CLIMBING) {
+                    if (getCurrentAngle().getDegrees() < Settings.Climb.CLIMBED_ANGLE.getDegrees()) {
+                        motor.setVoltage(Settings.Climb.CLIMB_VOLTAGE);
+                    }
+                    else {
+                        motor.setVoltage(0);
+                    }
+                }
             }
         }
         else {
             motor.setVoltage(0);
         }
 
+        SmartDashboard.putNumber("Climb/Absolute Encoder angle raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+        SmartDashboard.putNumber("Climb/Absolute Encoder angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations()));
+
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
 
         SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Current", motor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Climb/Stator Current", motor.getStatorCurrent().getValueAsDouble());
     }
 }

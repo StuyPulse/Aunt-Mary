@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8905805315290176,
-        "y": 5.093667602539062
+        "x": 3.8606388636997764,
+        "y": 5.211597987583705
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.689198458382694,
-        "y": 4.945528274150924
+        "x": 3.6592567905534525,
+        "y": 5.063458659195566
       },
       "isLocked": false,
       "linkedName": "Red K"
     },
     {
       "anchor": {
-        "x": 3.568975394112723,
-        "y": 4.930391148158481
+        "x": 3.575963483537946,
+        "y": 5.054136439732143
       },
       "prevControl": {
-        "x": 3.787717597885343,
-        "y": 5.051435967497012
+        "x": 3.794705687310566,
+        "y": 5.175181259070674
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "Red Utilities",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

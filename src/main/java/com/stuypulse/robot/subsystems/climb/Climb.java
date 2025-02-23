@@ -8,10 +8,13 @@ package com.stuypulse.robot.subsystems.climb;
 
 import java.util.Optional;
 
+import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.math.SLMath;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public abstract class Climb extends SubsystemBase {
     private static final Climb instance;
@@ -25,15 +28,27 @@ public abstract class Climb extends SubsystemBase {
     }
 
     public enum ClimbState {
-        STOW,
-        OPEN,
-        CLIMBING,
+        CLOSED(Settings.Climb.CLOSED_ANGLE),
+        OPEN(Settings.Climb.OPEN_ANGLE),
+        CLIMBING(Settings.Climb.CLIMBED_ANGLE),
+        IDLE(Rotation2d.kZero); // Filler angle (wont be used)
+
+        private Rotation2d targetAngle;
+
+        private ClimbState(Rotation2d targetAngle) {
+            this.targetAngle = Rotation2d.fromDegrees(
+                SLMath.clamp(targetAngle.getDegrees(), Constants.Climb.MIN_ANGLE.getDegrees(), Constants.Climb.MAX_ANGLE.getDegrees()));
+        }
+
+        public Rotation2d getTargetAngle() {
+            return this.targetAngle;
+        }
     }
 
     private ClimbState state;
 
     protected Climb() {
-        this.state = ClimbState.STOW;
+        this.state = ClimbState.CLOSED;
     }
 
     public ClimbState getState() {
@@ -45,16 +60,10 @@ public abstract class Climb extends SubsystemBase {
         setVoltageOverride(Optional.empty());
     }
 
-    public abstract boolean atTargetAngle();
-
     public abstract void setVoltageOverride(Optional<Double> voltage);
-
-    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
 
     @Override
     public void periodic() {
         SmartDashboard.putString("Climb/State", state.toString());
-        SmartDashboard.putBoolean("Climb/At Target Angle", atTargetAngle());
     }
 }

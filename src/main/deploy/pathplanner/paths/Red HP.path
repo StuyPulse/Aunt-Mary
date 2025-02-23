@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6382734026227679,
-        "y": 7.407847377232142
+        "x": 1.689485386439732,
+        "y": 7.340108816964285
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.63133918458931,
-        "y": 6.617148906433243
+        "x": 1.682551168406274,
+        "y": 6.549410346165387
       },
       "isLocked": false,
       "linkedName": "Red Top HP"
     },
     {
       "anchor": {
-        "x": 1.6128204345703125,
-        "y": 0.6087424142020086
+        "x": 1.6112901960100445,
+        "y": 0.7039232526506691
       },
       "prevControl": {
-        "x": 1.6075084089186695,
-        "y": 1.3259010121823729
+        "x": 1.6059781703584015,
+        "y": 1.4210818506310336
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "Red Utilities",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

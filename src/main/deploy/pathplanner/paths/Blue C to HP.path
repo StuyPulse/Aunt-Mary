@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.855027988978794,
-        "y": 2.9843867710658483
+        "x": 3.784075927734375,
+        "y": 2.8778821672712045
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9929960345923734,
-        "y": 0.9965224116572569
+        "x": 1.772198058835988,
+        "y": 0.8323176781486934
       },
       "isLocked": false,
       "linkedName": "Blue C"
     },
     {
       "anchor": {
-        "x": 1.6107801164899553,
-        "y": 0.6035906110491066
+        "x": 1.6300611223493302,
+        "y": 0.7061676025390625
       },
       "prevControl": {
-        "x": 3.302453767164401,
-        "y": 2.394714405213484
+        "x": 3.6673834940017462,
+        "y": 2.750659293932905
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "Blue To HP",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

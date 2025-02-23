@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.692028372628348,
+        "x": 5.805061994280134,
         "y": 4.034775573328922
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.70906502859933,
+        "x": 5.822098650251116,
         "y": 4.411163251202804
       },
       "isLocked": false,
@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.728244018554688,
+        "x": 5.836890956333705,
         "y": 4.354403817026238
       },
       "prevControl": {
-        "x": 5.7546558861064385,
+        "x": 5.863302823885456,
         "y": 4.105802905418036
       },
       "nextControl": null,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Red Utilities",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

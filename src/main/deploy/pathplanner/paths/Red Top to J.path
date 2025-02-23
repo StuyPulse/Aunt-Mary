@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.117394583565848,
-        "y": 5.256076921735492
+        "x": 7.029762922014509,
+        "y": 5.344677734375
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.007288626756819,
-        "y": 5.267465740618087
+        "x": 5.7821959109673795,
+        "y": 5.364720492475522
       },
       "isLocked": false,
       "linkedName": "Red Top Start"
     },
     {
       "anchor": {
-        "x": 4.792452130998884,
-        "y": 5.256076921735492
+        "x": 4.905434744698661,
+        "y": 5.344677734375
       },
       "prevControl": {
-        "x": 5.871214920205553,
-        "y": 5.255530296688935
+        "x": 6.1646245211584745,
+        "y": 5.333728021604713
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "Red to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

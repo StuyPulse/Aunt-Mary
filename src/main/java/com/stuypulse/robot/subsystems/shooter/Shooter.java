@@ -7,7 +7,7 @@
 package com.stuypulse.robot.subsystems.shooter;
 
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.superstructure.SuperStructure;
+import com.stuypulse.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +30,7 @@ public abstract class Shooter extends SubsystemBase {
         SHOOT_CORAL_FORWARD(Settings.Shooter.CORAL_SHOOT_SPEED_FORWARD),
         SHOOT_CORAL_REVERSE(Settings.Shooter.CORAL_SHOOT_SPEED_REVERSE),
         SHOOT_ALGAE(Settings.Shooter.ALGAE_SHOOT_SPEED),
+        HOLD_ALGAE(Settings.Shooter.ALGAE_HOLD_SPEED),
         STOP(0);
 
         private Number speed;
@@ -61,7 +62,7 @@ public abstract class Shooter extends SubsystemBase {
     public abstract boolean isStalling();
 
     public boolean shouldShootForward() {
-        switch (SuperStructure.getInstance().getTargetState()) {
+        switch (Arm.getInstance().getState()) {
             case L2_FRONT, L2_BACK, L3_BACK, L4_BACK:
                 return true;
             default:
@@ -70,7 +71,7 @@ public abstract class Shooter extends SubsystemBase {
     }
 
     public boolean shouldShootBackwards() {
-        switch (SuperStructure.getInstance().getTargetState()) {
+        switch (Arm.getInstance().getState()) {
             case L3_FRONT, L4_FRONT:
                 return true;
             default:

@@ -13,33 +13,31 @@ import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
+import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class FroggyImpl extends Froggy {
 
     private TalonFX rollerMotor;
     private TalonFX pivotMotor;
-    // private CANcoder absoluteEncoder;
     private DutyCycleEncoder absoluteEncoder;
-
-    private Controller controller;
 
     private BStream isStalling;
 
@@ -53,22 +51,9 @@ public class FroggyImpl extends Froggy {
 
         pivotMotor = new TalonFX(Ports.Froggy.PIVOT);
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
-
-        // absoluteEncoder = new CANcoder(Ports.Froggy.ABSOLUTE_ENCODER);
-
-        // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs()
-        //     .withMagnetOffset(Constants.Froggy.ANGLE_OFFSET)
-        //     .withSensorDirection(SensorDirectionValue.Clockwise_Positive);
-
-        // absoluteEncoder.getConfigurator().apply(magnetSensorConfigs);
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
-
-        controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Froggy.FF.kG))
-            .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
-            .setSetpointFilter(new MotionProfile(Settings.Froggy.MAX_VEL_ROTATIONS_PER_S, Settings.Froggy.MAX_ACCEL_ROTATIONS_PER_S_PER_S));
 
         isStalling = BStream.create(() -> {
             switch (getRollerState()) {
@@ -83,6 +68,20 @@ public class FroggyImpl extends Froggy {
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
+    }
+
+    @Override
+    public SysIdRoutine getFroggySysIdRoutine() {
+        return SysId.getRoutine(
+            2, 
+            9, 
+            "Froggy Pivot", 
+            voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
+            () -> getCurrentAngle().getRotations(), 
+            () -> pivotMotor.getVelocity().getValueAsDouble(), 
+            () -> pivotMotor.getMotorVoltage().getValueAsDouble(), 
+            getInstance()
+        );
     }
 
     private Rotation2d getCurrentAngle() {
@@ -124,14 +123,22 @@ public class FroggyImpl extends Froggy {
     public void periodic() {
         super.periodic();
 
+        pivotMotor.setPosition(getCurrentAngle().getRotations());
+
         if (Settings.EnabledSubsystems.FROGGY.get()) {
             rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
             if (pivotVoltageOverride.isPresent()) {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
             }
             else {
-                // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                pivotMotor.setVoltage(controller.update(getTargetAngle().getRotations(), getCurrentAngle().getRotations()));
+                if (getRollerState() == RollerState.HOLD_ALGAE && isStalling()) {
+                    // Algae
+                    pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()).withSlot(1));
+                }
+                else {
+                    // Coral
+                    pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()).withSlot(0));
+                }
             }
         }
         else {
@@ -139,14 +146,22 @@ public class FroggyImpl extends Froggy {
             pivotMotor.setVoltage(0);
         }
 
-        SmartDashboard.putBoolean("Froggy/At Target Angle", isAtTargetAngle());
+        // PIVOT
+        SmartDashboard.putBoolean("Froggy/Pivot/At Target Angle", isAtTargetAngle());
+        SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 
-        SmartDashboard.putNumber("Froggy/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Froggy/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Pivot/Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
 
-        SmartDashboard.putBoolean("Froggy/Is Stalling", isStalling());
+        SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
+
+        // ROLLER
+        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling", isStalling());
         
-        SmartDashboard.putNumber("Froggy/Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Roller Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller/Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Froggy/Roller/Stator Current", rollerMotor.getStatorCurrent().getValueAsDouble());
     }
 }

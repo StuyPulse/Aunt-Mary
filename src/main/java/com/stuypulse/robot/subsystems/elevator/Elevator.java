@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.ArmElevatorVisualizer;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,7 +36,6 @@ public abstract class Elevator extends SubsystemBase {
     }
 
     public enum ElevatorState {
-        STOW(Constants.Elevator.MIN_HEIGHT_METERS),
         FEED(Settings.Elevator.FEED_HEIGHT_METERS),
         L2_FRONT(Settings.Elevator.FRONT_L2_HEIGHT_METERS),
         L3_FRONT(Settings.Elevator.FRONT_L3_HEIGHT_METERS),
@@ -45,8 +45,10 @@ public abstract class Elevator extends SubsystemBase {
         L4_BACK(Settings.Elevator.BACK_L4_HEIGHT_METERS),
         ALGAE_L2(Settings.Elevator.ALGAE_L2_HEIGHT_METERS),
         ALGAE_L3(Settings.Elevator.ALGAE_L3_HEIGHT_METERS),
+        HOLD_ALGAE(Settings.Elevator.HOLD_ALGAE_HEIGHT_METERS),
         BARGE(Settings.Elevator.BARGE_HEIGHT_METERS),
-        BOTTOM(Constants.Elevator.MIN_HEIGHT_METERS);
+        BOTTOM(Constants.Elevator.MIN_HEIGHT_METERS),
+        CLIMB(Settings.Elevator.CLIMB_HEIGHT_METERS);
 
         private Number targetHeight;
 
@@ -62,7 +64,7 @@ public abstract class Elevator extends SubsystemBase {
     private ElevatorState state;
 
     protected Elevator() {
-        this.state = ElevatorState.STOW;
+        this.state = ElevatorState.FEED;
     }
 
     public void setState(ElevatorState state) {
@@ -78,15 +80,18 @@ public abstract class Elevator extends SubsystemBase {
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
 
+    public abstract double getAccelGs();
+
     public abstract void setVoltageOverride(Optional<Double> voltage);
     public abstract void setOperatorOffset(double offset);
     public abstract double getOperatorOffset();
 
-    public abstract Command getSysIdQuasistatic(SysIdRoutine.Direction direction);
-    public abstract Command getSysIdDynamic(SysIdRoutine.Direction direction);
+    public abstract SysIdRoutine getSysIdRoutine();
 
     @Override
     public void periodic() {
+        ArmElevatorVisualizer.getInstance().updateElevatorHeight(getCurrentHeight());
+        
         SmartDashboard.putString("Elevator/State", state.toString());
         SmartDashboard.putNumber("Elevator/Target Height (m)", getState().getTargetHeight());
         SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());

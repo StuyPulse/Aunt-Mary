@@ -19,10 +19,12 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.Matrix;
@@ -41,6 +43,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
@@ -70,11 +73,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.FieldCentric fieldCentricRequest = new SwerveRequest.FieldCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withDeadband(Settings.Swerve.MODULE_VELOCITY_DEADBAND_M_PER_S)
+        .withRotationalDeadband(Settings.Swerve.ROTATIONAL_DEADBAND_RAD_PER_S)
         .withDesaturateWheelSpeeds(true);
 
     private final SwerveRequest.RobotCentric robotCentricRequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withDeadband(Settings.Swerve.MODULE_VELOCITY_DEADBAND_M_PER_S)
+        .withRotationalDeadband(Settings.Swerve.ROTATIONAL_DEADBAND_RAD_PER_S)
         .withDesaturateWheelSpeeds(true);
 
     public SwerveRequest.FieldCentric getFieldCentricSwerveRequest() {
@@ -335,16 +340,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    public double getRobotRelativeXAccelGs() {
+        return getPigeon2().getAccelerationX().getValueAsDouble() * getPose().getRotation().getCos();
+    }
+
     public void configureAutoBuilder() {
         try{
             AutoBuilder.configure(
                 this::getPose,
                 this::resetPose,
                 this::getChassisSpeeds,
-                (speeds, feedforwards) -> setChassisSpeeds(speeds),
+                this::setChassisSpeedsAuton,
                 new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
                 RobotConfig.fromGUISettings(),
-                () -> false,
+                () -> true,
                 instance
             );
             // PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
@@ -374,13 +383,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return moduleStates;
     }
 
-    private ChassisSpeeds getChassisSpeeds() {
+    public ChassisSpeeds getChassisSpeeds() {
         return getKinematics().toChassisSpeeds(getModuleStates());
+    }
+
+    public Vector2D getFieldRelativeSpeeds() {
+        return new Vector2D(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
+            .rotate(Angle.fromRotation2d(getPose().getRotation()));
     }
 
     private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
         ChassisSpeeds speeds = new ChassisSpeeds(robotSpeeds.vxMetersPerSecond, robotSpeeds.vyMetersPerSecond, -robotSpeeds.omegaRadiansPerSecond);
         setControl(new SwerveRequest.RobotCentric().withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(speeds.omegaRadiansPerSecond));
+    }
+
+    private void setChassisSpeedsAuton(ChassisSpeeds robotSpeeds) {
+        ChassisSpeeds speeds = new ChassisSpeeds(robotSpeeds.vxMetersPerSecond, robotSpeeds.vyMetersPerSecond, -robotSpeeds.omegaRadiansPerSecond);
+        setControl(new SwerveRequest.RobotCentric().withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(-speeds.omegaRadiansPerSecond));
     }
 
     public boolean isFrontFacingReef() {
@@ -396,10 +415,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE.get();
     }
 
+    public boolean isClearFromReef() {
+        return Field.REEF_CENTER.getDistance(getPose().getTranslation()) > (Settings.CLEARANCE_DISTANCE_FROM_REEF + Field.CENTER_OF_REEF_TO_REEF_FACE + Constants.LENGTH_WITH_BUMPERS_METERS / 2);
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+
+        SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
+        SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
+
         SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
         for (int i = 0; i < 4; i++) {
@@ -407,9 +434,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Speed (m per s)", getModule(i).getTargetState().speedMetersPerSecond);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Angle (deg)", getModule(i).getCurrentState().angle.getDegrees() % 360);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Angle (deg)", getModule(i).getTargetState().angle.getDegrees() % 360);
+            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Stator Current", getModule(i).getDriveMotor().getStatorCurrent().getValueAsDouble());
         }
 
+        SmartDashboard.putNumber("Swerve/Gyro/Accel x (g)", getPigeon2().getAccelerationX().getValueAsDouble());
+        SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
+        SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
+
         SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
+        SmartDashboard.putBoolean("Swerve/Is clear from Reef", isClearFromReef());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }

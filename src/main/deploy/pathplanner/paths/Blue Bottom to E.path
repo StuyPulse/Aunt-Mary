@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.146367100306919,
-        "y": 2.961790248325893
+        "x": 7.043586077008928,
+        "y": 2.833760288783482
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.37975987018341,
-        "y": 2.9925964828272886
+        "x": 5.316819562964643,
+        "y": 2.813839497556888
       },
       "isLocked": false,
       "linkedName": "Blue Bottom Start"
     },
     {
       "anchor": {
-        "x": 5.076107352120536,
-        "y": 2.961790248325893
+        "x": 5.108242361886161,
+        "y": 2.833760288783482
       },
       "prevControl": {
-        "x": 6.204489207954774,
-        "y": 2.9088323871335353
+        "x": 6.511719784636691,
+        "y": 2.8439019987208347
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "Blue To Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

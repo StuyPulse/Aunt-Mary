@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.892620849609375,
-        "y": 5.088974870954241
+        "x": 3.8334006173270088,
+        "y": 5.176861572265625
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.376974835073141,
-        "y": 4.854129268172988
+        "x": 3.317754602790775,
+        "y": 4.942015969484372
       },
       "isLocked": false,
       "linkedName": "Blue K"
     },
     {
       "anchor": {
-        "x": 3.5622933523995535,
-        "y": 4.92284197126116
+        "x": 3.5713217599051337,
+        "y": 5.040517316545759
       },
       "prevControl": {
-        "x": 3.7810355561721734,
-        "y": 5.043886790599692
+        "x": 3.7900639636777536,
+        "y": 5.1615621358842905
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "Blue Utilities",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

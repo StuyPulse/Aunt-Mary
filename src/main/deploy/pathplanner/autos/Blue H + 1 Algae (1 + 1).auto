@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Mid Top to H"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue H to GH Algae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue GH Algae to Barge 3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Top Autons",
+  "choreoAuto": false
+}

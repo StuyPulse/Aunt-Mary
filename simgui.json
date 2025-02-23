@@ -26,6 +26,7 @@
       "/SmartDashboard/Swerve/Module 2": "Mechanism2d",
       "/SmartDashboard/Swerve/Module 3": "Mechanism2d",
       "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Arm-Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
@@ -47,7 +48,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Visualizers/Superstructure": {
+      "/SmartDashboard/Visualizers/Arm-Elevator": {
         "window": {
           "visible": true
         }
@@ -95,13 +96,8 @@
     "Server": {
       "Publishers": {
         "open": true
-      },
-      "open": true
-    },
-    "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
+      }
+    }
   },
   "Plot": {
     "Plot <0>": {
@@ -113,8 +109,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
-          "height": 246,
+          "height": 9,
           "series": [
             {
               "color": [
@@ -147,8 +142,7 @@
         }
       ],
       "window": {
-        "name": "Elevator Target Vs Current Height",
-        "visible": false
+        "name": "Elevator Target Vs Current Height"
       }
     },
     "Plot <1>": {
@@ -161,7 +155,6 @@
             0.8500000238418579
           ],
           "height": 4,
-          "height": 252,
           "series": [
             {
               "color": [
@@ -194,8 +187,7 @@
         }
       ],
       "window": {
-        "name": "Arm Target vs Current Angle",
-        "visible": false
+        "name": "Arm Target vs Current Angle"
       }
     }
   }

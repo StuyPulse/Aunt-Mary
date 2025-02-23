@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.616084943498884,
-        "y": 7.418355015345981
+        "x": 1.6300611223493302,
+        "y": 7.31465584891183
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.354047900318607,
-        "y": 5.058769876451597
+        "x": 3.5442932251718675,
+        "y": 5.112104734320315
       },
       "isLocked": false,
       "linkedName": "Blue Top HP"
     },
     {
       "anchor": {
-        "x": 3.5622933523995535,
-        "y": 4.92284197126116
+        "x": 3.5713217599051337,
+        "y": 5.040517316545759
       },
       "prevControl": {
-        "x": 1.6980588778394932,
-        "y": 7.161554526429133
+        "x": 1.6855217874901318,
+        "y": 7.266571798877964
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,20 +35,20 @@
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "Blue To Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }
