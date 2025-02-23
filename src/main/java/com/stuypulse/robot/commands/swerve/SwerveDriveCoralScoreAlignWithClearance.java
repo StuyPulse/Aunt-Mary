@@ -19,9 +19,9 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
         addCommands(
             new SwerveDrivePIDToPose(() -> nearestBranch.get().getReadyPose(isFrontFacingReef))
+                .alongWith(new LEDApplyPattern(nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
                 .until(() -> Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
-                        && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle())
-                .alongWith(new LEDApplyPattern(nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+                        && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle()),
             new SwerveDrivePIDToPose(() -> nearestBranch.get().getScorePose(level, isFrontFacingReef))
         );
     }

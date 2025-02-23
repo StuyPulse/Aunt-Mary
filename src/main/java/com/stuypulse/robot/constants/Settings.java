@@ -239,7 +239,6 @@ public interface Settings {
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled
 
-
         //Side Alignment color
         LEDPattern LEFT_SIDE_COLOR = LEDPattern.solid(Color.kYellow);
         LEDPattern RIGHT_SIDE_COLOR = LEDPattern.solid(Color.kBlue);
