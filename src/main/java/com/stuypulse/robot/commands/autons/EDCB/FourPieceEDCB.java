@@ -9,8 +9,8 @@ import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
-import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToCurrentNearestBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchScore;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -33,7 +33,7 @@ public class FourPieceEDCB extends SequentialCommandGroup {
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
-            new SwerveDrivePIDToCurrentNearestBranchScore(4, true)
+            new SwerveDrivePIDToNearestBranchScore(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop(),
@@ -51,7 +51,7 @@ public class FourPieceEDCB extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new SwerveDrivePIDToCurrentNearestBranchScore(4, true)
+            new SwerveDrivePIDToNearestBranchScore(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop(),
@@ -69,7 +69,7 @@ public class FourPieceEDCB extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new SwerveDrivePIDToCurrentNearestBranchScore(4, true)
+            new SwerveDrivePIDToNearestBranchScore(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop(),
@@ -87,7 +87,7 @@ public class FourPieceEDCB extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new SwerveDrivePIDToCurrentNearestBranchScore(4, true)
+            new SwerveDrivePIDToNearestBranchScore(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop()

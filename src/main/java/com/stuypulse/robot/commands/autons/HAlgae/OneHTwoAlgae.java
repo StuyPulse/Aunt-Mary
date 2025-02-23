@@ -15,8 +15,8 @@ import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToCurrentNearestBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchScore;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
@@ -38,7 +38,7 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
-            new SwerveDrivePIDToCurrentNearestBranchScore(4, true)
+            new SwerveDrivePIDToNearestBranchScore(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop(),
