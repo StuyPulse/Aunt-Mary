@@ -12,17 +12,21 @@ import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {    
     public SwerveDriveCoralScoreAlignWithClearance(int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
         Supplier<CoralBranch> nearestBranch = () -> ReefUtil.getClosestCoralBranch();
 
         addCommands(
-            new SwerveDrivePIDToPose(() -> nearestBranch.get().getReadyPose(isFrontFacingReef))
-                .alongWith(new LEDApplyPattern(nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
-                .until(() -> Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
-                        && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle()),
-            new SwerveDrivePIDToPose(() -> nearestBranch.get().getScorePose(level, isFrontFacingReef))
+            new WaitUntilCommand(() -> Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
+                && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle())
+                .deadlineFor(new SwerveDrivePIDToBranchClear(nearestBranch::get, isFrontFacingReef))
+                .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+            new SwerveDrivePIDToBranchReady(nearestBranch::get, level, isFrontFacingReef)
+                .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+            new SwerveDrivePIDToBranchScore(nearestBranch::get, level, isFrontFacingReef)
+                .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
         );
     }
 }

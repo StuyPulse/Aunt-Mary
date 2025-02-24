@@ -46,10 +46,7 @@ public class LEDDefaultCommand extends Command{
 
     @Override
     public void execute() {
-        if (shooter.hasCoral() || funnel.hasCoral()) {
-            leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
-        }
-        else if (isScoring()) {
+        if (isScoring()) {
             leds.applyPattern(Settings.LED.SCORE_COLOR);
         }
         else if (isIntaking()) {
@@ -63,6 +60,9 @@ public class LEDDefaultCommand extends Command{
         }
         else if (climb.getState() == ClimbState.CLIMBING) {
             leds.applyPattern(Settings.LED.CLIMBING_COLOR);
+        }
+        else if (shooter.hasCoral() || funnel.hasCoral()) {
+            leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
         }
     }
 }
