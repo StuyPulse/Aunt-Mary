@@ -25,19 +25,20 @@ public class RobotVisualizer {
     private final Mechanism2d canvas;
     private double width, height;
 
+    private double elevatorHeight;
+
     private final MechanismRoot2d elevatorFixedStageBottomFront;
     private final MechanismRoot2d elevatorFixedStageBottomBack;
-
     private final MechanismRoot2d elevatorCarriageTopFront;
     private final MechanismRoot2d elevatorCarriageTopBack;
 
-    private double elevatorHeight;
+    private final MechanismLigament2d[] elevatorParts;
 
     private final MechanismRoot2d armPivot;
+    private final MechanismLigament2d arm;
+
     private final MechanismRoot2d topRollerPivot;
     private final MechanismRoot2d bottomRollerPivot;
-
-    private final MechanismLigament2d arm;
 
     private final MechanismLigament2d[] topRollers;
     private final MechanismLigament2d[] bottomRollers;
@@ -76,6 +77,8 @@ public class RobotVisualizer {
         }
 
         /* ELEVATOR VISUALIZER */
+        elevatorHeight = Constants.Elevator.MIN_HEIGHT_METERS;
+
         elevatorFixedStageBottomFront = canvas.getRoot(
             "Elevator Fixed Stage Bottom Front",
             (width + Constants.Elevator.WIDTH)/ 2,
@@ -88,21 +91,23 @@ public class RobotVisualizer {
             0
         );
 
-        elevatorFixedStageBottomFront.append(new MechanismLigament2d(
+        MechanismLigament2d frontFixedStage = new MechanismLigament2d(
             "Front Fixed Stage",
             Constants.Elevator.FIXED_STAGE_MAX_HEIGHT,
             90,
             10,
             new Color8Bit(Color.kOrange)
-        ));
+        );
+        elevatorFixedStageBottomFront.append(frontFixedStage);
 
-        elevatorFixedStageBottomBack.append(new MechanismLigament2d(
+        MechanismLigament2d backFixedStage = new MechanismLigament2d(
             "Back Fixed Stage",
             Constants.Elevator.FIXED_STAGE_MAX_HEIGHT,
             90,
             10,
             new Color8Bit(Color.kOrange)
-        ));
+        );
+        elevatorFixedStageBottomBack.append(backFixedStage);
 
         elevatorCarriageTopFront = canvas.getRoot(
             "Elevator Carriage Top Front",
@@ -116,36 +121,41 @@ public class RobotVisualizer {
             Constants.Elevator.MIN_HEIGHT_METERS
         );
 
-        elevatorCarriageTopFront.append(new MechanismLigament2d(
+        MechanismLigament2d frontCarriage = new MechanismLigament2d(
             "Front Carriage",
             Constants.Elevator.CARRIAGE_LENGTH,
             -90,
             10,
             new Color8Bit(Color.kOrange)
-        ));
+        );
+        elevatorCarriageTopFront.append(frontCarriage);
 
-        elevatorCarriageTopBack.append(new MechanismLigament2d(
+        MechanismLigament2d backCarriage = new MechanismLigament2d(
             "Back Carriage",
             Constants.Elevator.CARRIAGE_LENGTH,
             -90,
             10,
             new Color8Bit(Color.kOrange)
-        ));
+        );
+        elevatorCarriageTopBack.append(backCarriage);
 
-        elevatorCarriageTopFront.append(new MechanismLigament2d(
+        MechanismLigament2d topCarriage = new MechanismLigament2d(
             "Top Carriage",
             Constants.Elevator.WIDTH - (2 * Units.inchesToMeters(2)),
             -180,
             10,
             new Color8Bit(Color.kOrange)
-        ));
+        );
+        elevatorCarriageTopFront.append(topCarriage);
 
-        elevatorHeight = Constants.Elevator.MIN_HEIGHT_METERS;
+        elevatorParts = new MechanismLigament2d[]{frontFixedStage, backFixedStage, frontCarriage, backCarriage, topCarriage};
     }
 
-    public void updateArmAngle(Rotation2d armAngle) {
+    public void updateArmAngle(Rotation2d armAngle, boolean atTargetAngle) {
         armPivot.setPosition(width/2, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
         arm.setAngle(armAngle);
+
+        arm.setColor(atTargetAngle ? new Color8Bit(Color.kGreen) : new Color8Bit(Color.kRed));
 
         topRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER);
         bottomRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER);
@@ -155,17 +165,21 @@ public class RobotVisualizer {
 
     public void updateRollerSpeed(double speed) {
         for (int i = 0; i < 4; i++) {
-            topRollers[i].setAngle(topRollers[i].getAngle() + speed * 20);
-            bottomRollers[i].setAngle(bottomRollers[i].getAngle() - speed * 20);
+            topRollers[i].setAngle(topRollers[i].getAngle() + speed * 10);
+            bottomRollers[i].setAngle(bottomRollers[i].getAngle() - speed * 10);
         }
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }
 
-    public void updateElevatorHeight(double elevatorHeight) {
+    public void updateElevatorHeight(double elevatorHeight, boolean atTargetHeight) {
         this.elevatorHeight = elevatorHeight;
         elevatorCarriageTopFront.setPosition((width + Constants.Elevator.WIDTH) / 2 - Units.inchesToMeters(2), elevatorHeight);
         elevatorCarriageTopBack.setPosition((width - Constants.Elevator.WIDTH) / 2 + Units.inchesToMeters(2), elevatorHeight);
+
+        for (MechanismLigament2d elevatorPart : elevatorParts) {
+            elevatorPart.setColor(atTargetHeight ? new Color8Bit(Color.kGreen) : new Color8Bit(Color.kRed));
+        }
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }

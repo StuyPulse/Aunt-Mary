@@ -91,7 +91,7 @@ public abstract class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        RobotVisualizer.getInstance().updateElevatorHeight(getCurrentHeight());
+        RobotVisualizer.getInstance().updateElevatorHeight(getCurrentHeight(), atTargetHeight());
 
         SmartDashboard.putString("Elevator/State", state.toString());
         SmartDashboard.putNumber("Elevator/Target Height (m)", getState().getTargetHeight());
