@@ -34,20 +34,13 @@ public class RobotVisualizer {
     private double elevatorHeight;
 
     private final MechanismRoot2d armPivot;
-    private final MechanismRoot2d armTopRollerPivot;
-    private final MechanismRoot2d armBottomRollerPivot;
+    private final MechanismRoot2d topRollerPivot;
+    private final MechanismRoot2d bottomRollerPivot;
 
     private final MechanismLigament2d arm;
 
-    private final MechanismLigament2d topRoller1;
-    private final MechanismLigament2d topRoller2;
-    private final MechanismLigament2d topRoller3;
-    private final MechanismLigament2d topRoller4;
-    
-    private final MechanismLigament2d bottomRoller1;
-    private final MechanismLigament2d bottomRoller2;
-    private final MechanismLigament2d bottomRoller3;
-    private final MechanismLigament2d bottomRoller4;
+    private final MechanismLigament2d[] topRollers;
+    private final MechanismLigament2d[] bottomRollers;
 
     private RobotVisualizer() {
         width = Constants.Arm.ARM_LENGTH * 2 + Units.inchesToMeters(3);
@@ -57,8 +50,6 @@ public class RobotVisualizer {
 
         /* ARM VISUALIZER */
         armPivot = canvas.getRoot("Arm Pivot", width/2, Constants.Elevator.MIN_HEIGHT_METERS - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
-        armTopRollerPivot = canvas.getRoot("Top Roller Pivot", width/2, Constants.Elevator.MIN_HEIGHT_METERS - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_ROLLER );
-        armBottomRollerPivot = canvas.getRoot("Bottom Roller Pivot", width/2, Constants.Elevator.MIN_HEIGHT_METERS - Constants.Arm.DISTANCE_FROM_PIVOT_TO_BOTTOM_ROLLER);
 
         arm = new MechanismLigament2d(
             "Arm",
@@ -72,27 +63,19 @@ public class RobotVisualizer {
 
         /* ROLLER VISUALIZER */
 
-        topRoller1 = new MechanismLigament2d("Top Roller 1", 0.05, 90, 2, new Color8Bit(Color.kWhite));
-        topRoller2 = new MechanismLigament2d("Top Roller 2", 0.05, 0, 2, new Color8Bit(Color.kWhite)); 
-        topRoller3 = new MechanismLigament2d("Top Roller 3", 0.05,180, 2, new Color8Bit(Color.kWhite));
-        topRoller4 = new MechanismLigament2d("Top Roller 4", 0.05, -90, 2, new Color8Bit(Color.kWhite)); 
+        topRollerPivot = canvas.getRoot("Top Roller Pivot", width/2, Constants.Elevator.MIN_HEIGHT_METERS - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR - Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER);
+        bottomRollerPivot = canvas.getRoot("Bottom Roller Pivot", width/2, Constants.Elevator.MIN_HEIGHT_METERS - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR - Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER);
 
-        bottomRoller1 = new MechanismLigament2d("Bottom Roller 1", 0.05, -90, 2, new Color8Bit(Color.kWhite));
-        bottomRoller2 = new MechanismLigament2d("Bottom Roller 2", 0.05, 0, 2, new Color8Bit(Color.kWhite));
-        bottomRoller3 = new MechanismLigament2d("Bottom Roller 3", 0.05, 90, 2, new Color8Bit(Color.kWhite));
-        bottomRoller4 = new MechanismLigament2d("Bottom Roller 4", 0.05, 180, 2, new Color8Bit(Color.kWhite));
+        topRollers = new MechanismLigament2d[4];
+        bottomRollers = new MechanismLigament2d[4];
+        for (int i = 0; i < 4; i++) {
+            topRollers[i] = new MechanismLigament2d("Top Roller " + i, 0.05, 90 * i, 2, new Color8Bit(Color.kWhite));
+            topRollerPivot.append(topRollers[i]);
+            bottomRollers[i] = new MechanismLigament2d("Bottom Roller " + i, 0.05, 90 * i, 2, new Color8Bit(Color.kWhite));
+            bottomRollerPivot.append(bottomRollers[i]);
+        }
 
-        armTopRollerPivot.append(topRoller1);
-        armTopRollerPivot.append(topRoller2);
-        armTopRollerPivot.append(topRoller3);
-        armTopRollerPivot.append(topRoller4);
-        
-        armBottomRollerPivot.append(bottomRoller1);
-        armBottomRollerPivot.append(bottomRoller2);
-        armBottomRollerPivot.append(bottomRoller3);
-        armBottomRollerPivot.append(bottomRoller4);
-
-        /* SUPERSTRUCTURE VISUALIZER */
+        /* ELEVATOR VISUALIZER */
         elevatorFixedStageBottomFront = canvas.getRoot(
             "Elevator Fixed Stage Bottom Front",
             (width + Constants.Elevator.WIDTH)/ 2,
@@ -164,22 +147,17 @@ public class RobotVisualizer {
         armPivot.setPosition(width/2, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
         arm.setAngle(armAngle);
 
-        armTopRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_ROLLER, elevatorHeight + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_ROLLER);
-        armBottomRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Arm.DISTANCE_FROM_PIVOT_TO_BOTTOM_ROLLER, elevatorHeight + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Arm.DISTANCE_FROM_PIVOT_TO_BOTTOM_ROLLER);
+        topRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER);
+        bottomRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER);
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }
 
-    public void updateRollerState(boolean sign) {
-        topRoller1.setAngle(sign ? topRoller1.getAngle() - 7 : topRoller1.getAngle() + 7);
-        topRoller2.setAngle(sign ? topRoller2.getAngle() - 7 : topRoller2.getAngle() + 7);
-        topRoller3.setAngle(sign ? topRoller3.getAngle() - 7 : topRoller3.getAngle() + 7);
-        topRoller4.setAngle(sign ? topRoller4.getAngle() - 7 : topRoller4.getAngle() + 7);
-
-        bottomRoller1.setAngle(sign ? bottomRoller1.getAngle() + 7 : bottomRoller1.getAngle() - 7);
-        bottomRoller2.setAngle(sign ? bottomRoller2.getAngle() + 7 : bottomRoller2.getAngle() - 7);
-        bottomRoller3.setAngle(sign ? bottomRoller3.getAngle() + 7 : bottomRoller3.getAngle() - 7);
-        bottomRoller4.setAngle(sign ? bottomRoller4.getAngle() + 7 : bottomRoller4.getAngle() - 7);
+    public void updateRollerSpeed(double speed) {
+        for (int i = 0; i < 4; i++) {
+            topRollers[i].setAngle(topRollers[i].getAngle() + speed * 20);
+            bottomRollers[i].setAngle(bottomRollers[i].getAngle() - speed * 20);
+        }
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }

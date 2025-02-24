@@ -54,11 +54,6 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/Visualizers/Roller": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
@@ -117,7 +112,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": -6,
+          "height": 246,
           "series": [
             {
               "color": [
@@ -162,7 +157,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 252,
           "series": [
             {
               "color": [

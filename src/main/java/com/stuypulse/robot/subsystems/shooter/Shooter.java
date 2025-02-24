@@ -10,7 +10,6 @@ import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.util.RobotVisualizer;
-import com.stuypulse.robot.util.RollerVisualizer;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -88,8 +87,12 @@ public abstract class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        RollerVisualizer.getInstance().updateRollerState(this.getState().getSpeed() > 0);
-        RobotVisualizer.getInstance().updateRollerState(this.getState().getSpeed() > 0);
+        if (Settings.EnabledSubsystems.SHOOTER.get()) {
+            RobotVisualizer.getInstance().updateRollerSpeed(getState().getSpeed());
+        }
+        else {
+            RobotVisualizer.getInstance().updateRollerSpeed(0);
+        }
         SmartDashboard.putString("Shooter/State", getState().toString());
     }
 }

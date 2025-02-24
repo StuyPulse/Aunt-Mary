@@ -41,14 +41,17 @@ public interface Constants {
         double GEAR_RATIO = 30.0;
 
         double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
-        double DISTANCE_FROM_PIVOT_TO_TOP_ROLLER = Units.inchesToMeters(15); // Current used for sim only
-        double DISTANCE_FROM_PIVOT_TO_BOTTOM_ROLLER = Units.inchesToMeters(22); // Current used for sim only
 
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(201.848576 + 90);
 
         double ARM_LENGTH = Units.inchesToMeters(29);
         double MASS_KG = Units.lbsToKilograms(12.8);
         double MOMENT_OF_INERTIA = MASS_KG * ARM_LENGTH * ARM_LENGTH / 3;
+    }
+
+    public interface Shooter {
+        double DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER = Units.inchesToMeters(15); // Current used for sim only
+        double DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER = Units.inchesToMeters(22); // Current used for sim only
     }
 
     public interface Froggy {
