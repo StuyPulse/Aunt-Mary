@@ -9,9 +9,9 @@ package com.stuypulse.robot.commands.shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ShooterAcquireAlgae extends Command {
+public class ShooterAcquireAlgae extends InstantCommand {
 
     private final Shooter shooter;
 

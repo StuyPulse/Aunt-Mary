@@ -9,9 +9,9 @@ package com.stuypulse.robot.commands.froggy.roller;
 import com.stuypulse.robot.subsystems.froggy.*;
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class FroggyRollerIntakeCoral extends Command {
+public class FroggyRollerIntakeCoral extends InstantCommand {
 
     private final Froggy froggy;
 
@@ -23,15 +23,5 @@ public class FroggyRollerIntakeCoral extends Command {
     @Override
     public void initialize() {
         froggy.setRollerState(RollerState.INTAKE_CORAL);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return froggy.isStalling();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        froggy.setRollerState(RollerState.STOP);
     }
 }

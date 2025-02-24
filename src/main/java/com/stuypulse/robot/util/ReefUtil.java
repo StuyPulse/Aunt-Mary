@@ -127,7 +127,7 @@ public interface ReefUtil {
 
         public Pose2d getTargetPose() {
             return getCorrespondingAprilTagPose()
-                .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), 0, Rotation2d.fromDegrees(180)));
+                .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), Constants.SHOOTER_Y_OFFSET, Rotation2d.fromDegrees(180)));
         }
     }
 

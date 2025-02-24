@@ -178,17 +178,19 @@ public class RobotContainer {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         funnel.setDefaultCommand(new FunnelDefaultCommand());
         leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
-        shooter.setDefaultCommand(new ShooterAcquireCoral().andThen(new BuzzController(driver)).onlyIf(() -> !shooter.hasCoral() && arm.getState() != ArmState.HOLD_ALGAE));
+        shooter.setDefaultCommand(new ShooterAcquireCoral()
+            .andThen(new BuzzController(driver))
+            .onlyIf(() -> !shooter.hasCoral() 
+                && shooter.getState() != ShooterState.ACQUIRE_ALGAE
+                && shooter.getState() != ShooterState.HOLD_ALGAE 
+                && shooter.getState() != ShooterState.SHOOT_ALGAE 
+                && shooter.getState() != ShooterState.SHOOT_CORAL_FORWARD
+                && shooter.getState() != ShooterState.SHOOT_CORAL_REVERSE));
     }
 
     private void configureAutomaticCommands() {
         RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
-            .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED));
-
-        RobotModeTriggers.disabled().onTrue(new VisionSetIMUMode(1));
-        RobotModeTriggers.autonomous().onTrue(new VisionSetIMUMode(2));
-        RobotModeTriggers.teleop().onTrue(new VisionSetIMUMode(2));
-        RobotModeTriggers.test().onTrue(new VisionSetIMUMode(2));
+            .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
     }
 
     /***************/
@@ -201,7 +203,7 @@ public class RobotContainer {
 
         // manual shoot depending on whatever states robot is in: either score barge, forwards/backwards on reef, or processor/L1
         driver.getDPadRight()
-            .whileTrue(new ConditionalCommand(
+            .onTrue(new ConditionalCommand(
                 new ConditionalCommand(
                     new FroggyRollerShootAlgae(), 
                     new FroggyRollerShootCoral(), 
@@ -221,10 +223,12 @@ public class RobotContainer {
         // ground algae intake and send elevator/arm to feed
         driver.getLeftTriggerButton()
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
-            .whileTrue(new FroggyRollerIntakeAlgae().andThen(new BuzzController(driver)))
+            .onTrue(new FroggyRollerIntakeAlgae())
             .onTrue(new ElevatorToFeed())
             .onTrue(new ArmToFeed())
-            .onFalse(new FroggyPivotToStow());
+            .onTrue(new ShooterStop()) // Exit algae hold state
+            .onFalse(new FroggyPivotToStow())
+            .onFalse(new FroggyRollerStop());
 
         // Algae processor score
         driver.getLeftBumper()
@@ -236,15 +240,17 @@ public class RobotContainer {
                 .andThen(new ShooterShootAlgae())
                 .onlyIf(() -> !shooter.hasCoral()))
             .onFalse(new FroggyRollerStop())
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+            .onFalse(new ShooterStop());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
             .onTrue(new FroggyPivotToCoralGroundPickup())
-            .whileTrue(new FroggyRollerIntakeCoral())
+            .onTrue(new FroggyRollerIntakeCoral())
             .onTrue(new ElevatorToFeed())
             .onTrue(new ArmToFeed())
-            .onFalse(new FroggyPivotToStow());
+            .onTrue(new ShooterStop()) // Exit algae hold state
+            .onFalse(new FroggyPivotToStow())
+            .onFalse(new FroggyRollerStop());
 
         // L1 coral score
         driver.getRightBumper()
@@ -263,8 +269,8 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())),
-                new SwerveDriveCoralScoreAlignWithClearance(4, true, ElevatorState.L4_BACK, ArmState.L4_BACK)
+                    .andThen(new ShooterShootBackwards()),
+                new SwerveDriveCoralScoreAlignWithClearance(4, false, ElevatorState.L4_BACK, ArmState.L4_BACK)
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
                         .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
@@ -285,7 +291,7 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootBackwards().alongWith(new SwerveDriveNudgeForward())),
+                    .andThen(new ShooterShootBackwards()),
                 new SwerveDriveCoralScoreAlignWithClearance(3, false, ElevatorState.L3_BACK, ArmState.L3_BACK)
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
                         .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
@@ -307,7 +313,7 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootForwards().alongWith(new SwerveDriveNudgeForward())),
+                    .andThen(new ShooterShootForwards()),
                 new SwerveDriveCoralScoreAlignWithClearance(2, false, ElevatorState.L2_BACK, ArmState.L2_BACK)
                     .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
                         .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
