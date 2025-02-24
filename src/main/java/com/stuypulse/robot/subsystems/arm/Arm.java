@@ -13,6 +13,7 @@ import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.ArmElevatorVisualizer;
+import com.stuypulse.robot.util.RobotVisualizer;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -98,6 +99,7 @@ public abstract class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         ArmElevatorVisualizer.getInstance().updateArmAngle(getCurrentAngle());
+        RobotVisualizer.getInstance().updateArmAngle(getCurrentAngle());
         
         SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());

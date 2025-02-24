@@ -28,6 +28,8 @@
       "/SmartDashboard/Visualizers/Arm": "Mechanism2d",
       "/SmartDashboard/Visualizers/Arm-Elevator": "Mechanism2d",
       "/SmartDashboard/Visualizers/Elevator": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Robot": "Mechanism2d",
+      "/SmartDashboard/Visualizers/Roller": "Mechanism2d",
       "/SmartDashboard/Visualizers/Superstructure": "Mechanism2d"
     },
     "windows": {
@@ -48,7 +50,12 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Visualizers/Arm-Elevator": {
+      "/SmartDashboard/Visualizers/Robot": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Visualizers/Roller": {
         "window": {
           "visible": true
         }
@@ -97,7 +104,8 @@
       "Publishers": {
         "open": true
       }
-    }
+    },
+    "visible": true
   },
   "Plot": {
     "Plot <0>": {
@@ -109,7 +117,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 9,
+          "height": -6,
           "series": [
             {
               "color": [
@@ -154,7 +162,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 4,
+          "height": 0,
           "series": [
             {
               "color": [
