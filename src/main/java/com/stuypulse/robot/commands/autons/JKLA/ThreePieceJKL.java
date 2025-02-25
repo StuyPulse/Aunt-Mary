@@ -33,11 +33,37 @@ public class ThreePieceJKL extends SequentialCommandGroup {
 
             // Score Preload on J
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+                new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
-            new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+            new ShooterShootBackwards(),
+            new WaitCommand(0.5),
+            new ShooterStop(),
+            new ParallelCommandGroup(
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+                new WaitCommand(1.5)
+                    .andThen(
+                        new ElevatorToFeed().alongWith(new ArmToFeed())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+
+            new WaitCommand(0.25),
+
+            // To HP, Score on K
+            new ParallelCommandGroup(
+                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new WaitCommand(0.1),
+                        new ShooterStop()), // change ts
+                new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
             new ShooterShootBackwards(),
             new WaitCommand(0.5),
             new ShooterStop(),
@@ -49,49 +75,25 @@ public class ThreePieceJKL extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            
-            new ShooterSetAcquire(),
-            new WaitCommand(0.25),
-
-            // To HP, Score on K
-            new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
-                    )
-            ),
-            new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
-            new ShooterShootBackwards(),
-            new WaitCommand(0.5),
-            new ShooterStop(),
-            new ParallelCommandGroup(
-                new ShooterAcquireCoral(),
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
-                new WaitCommand(1.5)
-                    .andThen(
-                        new ElevatorToFeed().alongWith(new ArmToFeed())
-                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
-                    )
-            ),
-            new ShooterSetAcquire(),
             new WaitCommand(0.25),
 
             // To HP, Score on L
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
+                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new WaitCommand(0.1),
+                        new ShooterStop()),
+                new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
             new ShooterShootBackwards(),
             new WaitCommand(0.5),
             new ShooterStop(),
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[5])
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
 
         );
 

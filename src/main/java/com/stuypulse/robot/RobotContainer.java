@@ -462,10 +462,10 @@ public class RobotContainer {
         AutonConfig RED_TWO_PIECE_JK = new AutonConfig("2 Piece JK", TwoPieceJK::new,
         "Red Top to J", "Red J to HP", "Red HP to K");
 
-        AutonConfig BLUE_THREE_PIECE_JKL = new AutonConfig("3 Piece JKL", ThreePieceJKL::new,
-        "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Red I BackOut");
+       // AutonConfig BLUE_THREE_PIECE_JKL = new AutonConfig("3 Piece JKL", ThreePieceJKL::new,
+        //"Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Red I BackOut");
         AutonConfig RED_THREE_PIECE_JKL = new AutonConfig("3 Piece JKL", ThreePieceJKL::new,
-        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L", "Red I BackOut");
+        "Red J to HP", "Red K to HP", "Red I BackOut");
 
         AutonConfig BLUE_THREE_HALF_PIECE_JKL = new AutonConfig("3.5 Piece JKL", ThreeHalfPieceJKL::new,
         "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Blue L to HP");
@@ -486,7 +486,7 @@ public class RobotContainer {
         BLUE_TWO_PIECE_JK.registerBlue(autonChooser);
         RED_TWO_PIECE_JK.registerRed(autonChooser);
 
-        BLUE_THREE_PIECE_JKL.registerBlue(autonChooser);
+       // BLUE_THREE_PIECE_JKL.registerBlue(autonChooser);
         RED_THREE_PIECE_JKL.registerRed(autonChooser);
 
         BLUE_THREE_HALF_PIECE_JKL.registerBlue(autonChooser);
