@@ -7,10 +7,13 @@ import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToBranchReady;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.ReefUtil;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -30,7 +33,8 @@ public class OnePieceJ extends SequentialCommandGroup {
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
-            new SwerveDrivePIDToNearestBranchScore(4, true)
+            new SwerveDrivePIDToBranchScore(ReefUtil.CoralBranch.J, 4, true)
+            // new SwerveDrivePIDToNearestBranchScore(4, true)
                 .andThen(new ShooterShootBackwards()),
             new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new ShooterStop()
