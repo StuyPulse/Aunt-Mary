@@ -453,9 +453,9 @@ public class RobotContainer {
         "Red Mid Top to H");
 
         AutonConfig BLUE_ONE_PIECE_J = new AutonConfig("1 Piece J", OnePieceJ::new,
-        "Blue Top to J");
+        "Blue Top to J", "Red I BackOut");
         AutonConfig RED_ONE_PIECE_J = new AutonConfig("1 Piece J", OnePieceJ::new,
-        "Red Top to J");
+        "Red Top to J", "Red I BackOut");
 
         AutonConfig BLUE_TWO_PIECE_JK = new AutonConfig("2 Piece JK", TwoPieceJK::new,
         "Blue Top to J", "Blue J to HP", "Blue HP to K");
@@ -463,9 +463,9 @@ public class RobotContainer {
         "Red Top to J", "Red J to HP", "Red HP to K");
 
         AutonConfig BLUE_THREE_PIECE_JKL = new AutonConfig("3 Piece JKL", ThreePieceJKL::new,
-        "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L");
+        "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Red I BackOut");
         AutonConfig RED_THREE_PIECE_JKL = new AutonConfig("3 Piece JKL", ThreePieceJKL::new,
-        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L");
+        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L", "Red I BackOut");
 
         AutonConfig BLUE_THREE_HALF_PIECE_JKL = new AutonConfig("3.5 Piece JKL", ThreeHalfPieceJKL::new,
         "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Blue L to HP");

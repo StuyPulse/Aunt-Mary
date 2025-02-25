@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6015237117052994,
-        "y": 5.014436102401614
+        "x": 3.5669087273317954,
+        "y": 4.84236373563008
       },
       "isLocked": false,
       "linkedName": "Red Top HP"
     },
     {
       "anchor": {
-        "x": 3.575963483537946,
-        "y": 5.054136439732143
+        "x": 2.7451844262295078,
+        "y": 5.98498975409836
       },
       "prevControl": {
-        "x": 1.8171902409350595,
-        "y": 7.173619580701783
+        "x": 1.1022605364387967,
+        "y": 8.366946941626178
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red L"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
