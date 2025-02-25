@@ -35,9 +35,9 @@ public interface Gains {
     public interface Arm {
         public interface Coral  {
             public interface PID {
-                double kP = 0.049744;
+                double kP = 0.069744;
                 double kI = 0.0;
-                double kD = 0.0;
+                double kD = 0.015;
             }
 
             public interface FF {

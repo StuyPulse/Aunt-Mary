@@ -23,8 +23,8 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
                 && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle())
                 .deadlineFor(new SwerveDrivePIDToBranchClear(nearestBranch::get, isFrontFacingReef))
                 .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-            new SwerveDrivePIDToBranchReady(nearestBranch::get, level, isFrontFacingReef)
-                .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+            // new SwerveDrivePIDToBranchReady(nearestBranch::get, level, isFrontFacingReef)
+            //     .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
             new SwerveDrivePIDToBranchScore(nearestBranch::get, level, isFrontFacingReef)
                 .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
         );

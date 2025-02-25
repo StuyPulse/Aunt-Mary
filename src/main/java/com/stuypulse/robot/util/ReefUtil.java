@@ -66,30 +66,6 @@ public interface ReefUtil {
                     isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
-        public Pose2d getReadyPose(int level, boolean isScoringFrontSide) {
-            double targetDistanceFromReef;
-
-            switch (level) {
-                case 2:
-                    targetDistanceFromReef = isScoringFrontSide ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L2_FRONT : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L2_BACK;
-                    break;
-                case 3:
-                    targetDistanceFromReef = isScoringFrontSide ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L3_FRONT : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L3_BACK;
-                    break;
-                case 4:
-                    targetDistanceFromReef = isScoringFrontSide ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L4_FRONT : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L4_BACK;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Branch level provided to CoralBranch.getReadyPose() was invalid. Should be in range [2,4]");
-            }
-
-            return getCorrespondingAprilTagPose().transformBy(
-                new Transform2d(
-                    Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef + 0.1, 
-                    Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1), 
-                    isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
-        }
-
         public Pose2d getClearancePose(boolean isScoringFrontSide) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.CLEARANCE_DISTANCE_FROM_REEF + 0.05, // The 0.1 is a buffer to ensure the robot gets past the clearance

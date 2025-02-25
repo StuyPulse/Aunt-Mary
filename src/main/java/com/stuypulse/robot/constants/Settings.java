@@ -137,8 +137,8 @@ public interface Settings {
         double FEED_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
 
         // Coral
-        double FRONT_L2_HEIGHT_METERS = 1.592002;
-        double FRONT_L3_HEIGHT_METERS = 1.037354;
+        double FRONT_L2_HEIGHT_METERS = 1.538086;
+        double FRONT_L3_HEIGHT_METERS = 1.036621;
         double FRONT_L4_HEIGHT_METERS = 1.656494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
@@ -149,7 +149,7 @@ public interface Settings {
         double BARGE_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double ALGAE_L2_HEIGHT_METERS = 1.205811;
         double ALGAE_L3_HEIGHT_METERS = 1.622803;
-        double HOLD_ALGAE_HEIGHT_METERS = 1.13;
+        double HOLD_ALGAE_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
         double PROCESSOR_HEIGHT_METERS = 1.13;
 
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
@@ -161,8 +161,8 @@ public interface Settings {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-69.345703);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(65.302734);
+        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(179.513809);
@@ -177,7 +177,7 @@ public interface Settings {
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
-        Rotation2d HOLD_ALGAE = MIN_ANGLE.plus(Rotation2d.fromDegrees(4));
+        Rotation2d HOLD_ALGAE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
         
         Rotation2d CLIMB_ANGLE = MAX_ANGLE.minus(Rotation2d.fromDegrees(5));
 
