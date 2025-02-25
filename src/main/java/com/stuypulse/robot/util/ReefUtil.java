@@ -92,7 +92,7 @@ public interface ReefUtil {
 
         public Pose2d getClearancePose(boolean isScoringFrontSide) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
-                Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.CLEARANCE_DISTANCE_FROM_REEF + 0.1, // The 0.1 is a buffer to ensure the robot gets past the clearance
+                Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.CLEARANCE_DISTANCE_FROM_REEF + 0.05, // The 0.1 is a buffer to ensure the robot gets past the clearance
                 Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1), 
                 isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }

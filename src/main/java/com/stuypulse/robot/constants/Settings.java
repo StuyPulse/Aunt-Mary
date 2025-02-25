@@ -31,7 +31,7 @@ public interface Settings {
 
     String CANIVORE_NAME = "CANIVORE";
 
-    double CLEARANCE_DISTANCE_FROM_REEF = 0.75; // From bumper
+    double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25); // From bumper
     double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
 
     public interface EnabledSubsystems {

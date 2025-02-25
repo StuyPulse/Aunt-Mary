@@ -126,7 +126,7 @@ public interface Field {
     }
 
     /*** REEF POSITIONS ***/
-    Translation2d REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + 93.5 / 2), Field.WIDTH / 2);
+    Translation2d REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + (93.5 - 14.0 * 2) / 2), Field.WIDTH / 2);
     double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
