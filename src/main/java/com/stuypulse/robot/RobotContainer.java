@@ -166,7 +166,7 @@ public class RobotContainer {
         configureAutons();
         configureSysids();
 
-        swerve.registerTelemetry(telemetry::telemeterize);
+        // swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
     }
 

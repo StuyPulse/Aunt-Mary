@@ -94,8 +94,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(4.0);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(6.5);
 
-                double TARGET_DISTANCE_FROM_ALGAE_L2 = 5.0;
-                double TARGET_DISTANCE_FROM_ALGAE_L3 = 5.0;
+                double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(5.0);
+                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(5.0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0;
             }
