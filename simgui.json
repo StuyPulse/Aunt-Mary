@@ -86,6 +86,9 @@
         "Swerve": {
           "open": true
         },
+        "Vision": {
+          "open": true
+        },
         "Visualizers": {
           "Arm": {
             "open": true

@@ -8,13 +8,11 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 import com.stuypulse.stuylib.network.SmartBoolean;
-import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 
 public class LimelightVision extends SubsystemBase{
 
@@ -28,6 +26,12 @@ public class LimelightVision extends SubsystemBase{
         return instance;
     }
 
+    public enum MegaTagMode {
+        MEGATAG1,
+        MEGATAG2
+    }
+
+    private MegaTagMode megaTagMode;
     private String[] names;
     private SmartBoolean[] camerasEnabled;
     private int[] tagCounts;
@@ -56,9 +60,15 @@ public class LimelightVision extends SubsystemBase{
             SmartDashboard.putBoolean("Vision/" + names[i] + " Has Data", false);
         }
 
+        megaTagMode = MegaTagMode.MEGATAG1;
+
         setIMUMode(1);
 
         CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MIN_STDDEVS);
+    }
+
+    public void setMegaTagMode(MegaTagMode mode) {
+        this.megaTagMode = mode;
     }
 
     public void setTagWhitelist(int... ids) {
@@ -89,6 +99,27 @@ public class LimelightVision extends SubsystemBase{
         return maxTagCount;
     }
 
+    private PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
+        return Robot.isBlue() 
+            ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
+            : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
+    }
+
+    private PoseEstimate getMegaTag2PoseEstimate(String limelightName) {
+        LimelightHelpers.SetRobotOrientation(
+            limelightName, 
+            (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180)) % 360, 
+            0, 
+            0, 
+            0, 
+            0, 
+            0
+        );
+        return Robot.isBlue() 
+            ? LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName)
+            : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
+    }
+
     @Override
     public void periodic() {
         if (Settings.EnabledSubsystems.VISION.get()) {
@@ -96,19 +127,9 @@ public class LimelightVision extends SubsystemBase{
                 if (camerasEnabled[i].get()) {
                     String limelightName = names[i];
 
-                    LimelightHelpers.SetRobotOrientation(
-                        limelightName, 
-                        (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180)) % 360, 
-                        0, 
-                        0, 
-                        0, 
-                        0, 
-                        0
-                    );
-
-                    PoseEstimate poseEstimate = Robot.isBlue() 
-                        ? LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName)
-                        : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
+                    PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
+                        ? getMegaTag2PoseEstimate(limelightName)
+                        : getMegaTag1PoseEstimate(limelightName);
                     
                     if (poseEstimate != null && poseEstimate.tagCount > 0) {
                         CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds, Settings.Vision.MIN_STDDEVS.times(1 + poseEstimate.avgTagDist));
@@ -124,6 +145,8 @@ public class LimelightVision extends SubsystemBase{
                 }
             }
         }
+
+        SmartDashboard.putString("Vision/Megatag Mode", this.megaTagMode.toString());
     }
 }
  

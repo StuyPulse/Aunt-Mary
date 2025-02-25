@@ -106,6 +106,8 @@ import com.stuypulse.robot.commands.swerve.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
+import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
+import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -191,6 +193,10 @@ public class RobotContainer {
     private void configureAutomaticCommands() {
         RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
             .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
+
+        RobotModeTriggers.disabled()
+            .onTrue(new VisionSetMegaTag1())
+            .onFalse(new VisionSetMegaTag2());
     }
 
     /***************/
