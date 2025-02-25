@@ -433,7 +433,7 @@ public class RobotContainer {
         swerve.configureAutoBuilder();
 
         AutonConfig testa = new AutonConfig("testa", testing::new,
-        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP", "Red HP to B");
+        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Red C to HP", "Red HP to B");
 
         testa.registerRed(autonChooser);
 
@@ -464,12 +464,12 @@ public class RobotContainer {
         AutonConfig BLUE_THREE_HALF_PIECE_JKL = new AutonConfig("3.5 Piece JKL", ThreeHalfPieceJKL::new,
         "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Blue L to HP");
         AutonConfig RED_THREE_HALF_PIECE_JKL = new AutonConfig("3.5 Piece JKL", ThreeHalfPieceJKL::new,
-        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L", "Blue L to HP");
+        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L", "Red L to HP");
 
         AutonConfig BLUE_FOUR_PIECE_JKLA = new AutonConfig("4 Piece JKLA", FourPieceJKLA::new,
-        "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Blue L to HP","Red HP to A");
+        "Blue Top to J", "Blue J to HP", "Blue HP to K", "Blue K to HP", "Blue HP to L", "Blue L to HP","Blue HP to A");
         AutonConfig RED_FOUR_PIECE_JKLA = new AutonConfig("4 Piece JKLA", FourPieceJKLA::new,
-        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L", "Blue L to HP", "Red HP to A");
+        "Red Top to J", "Red J to HP", "Red HP to K", "Red K to HP", "Red HP to L", "Red L to HP", "Red HP to A");
         
         BLUE_ONE_PIECE_H.registerBlue(autonChooser);
         RED_ONE_PIECE_H.registerRed(autonChooser);
@@ -513,12 +513,12 @@ public class RobotContainer {
         AutonConfig BLUE_THREE_HALF_PIECE_EDC = new AutonConfig("3.5 Piece EDC", ThreeHalfPieceEDC::new,
         "Blue Bottom to E", "Blue E to HP", "Blue HP to D", "Blue D to HP", "Blue HP to C", "Blue C to HP");
         AutonConfig RED_THREE_HALF_PIECE_EDC = new AutonConfig("3.5 Piece EDC", ThreeHalfPieceEDC::new,
-        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP");
+        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Red C to HP");
 
         AutonConfig BLUE_FOUR_PIECE_EDCB = new AutonConfig("4 Piece EDCB", FourPieceEDCB::new,
-        "Blue Bottom to E", "Blue E to HP", "Blue HP to D", "Blue D to HP", "Blue HP to C", "Blue C to HP","Red HP to B");
+        "Blue Bottom to E", "Blue E to HP", "Blue HP to D", "Blue D to HP", "Blue HP to C", "Blue C to HP","Blue HP to B");
         AutonConfig RED_FOUR_PIECE_EDCB = new AutonConfig("4 Piece EDCB", FourPieceEDCB::new,
-        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP", "Red HP to B");
+        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Red C to HP", "Red HP to B");
 
         BLUE_ONE_PIECE_G.registerBlue(autonChooser);
         RED_ONE_PIECE_G.registerRed(autonChooser);
@@ -605,7 +605,7 @@ public class RobotContainer {
         AutonConfig RSQUARE_TEST = new AutonConfig("RSquare Test", RSquareTest::new,
         "RSquare Top", "RSquare Right", "RSquare Bottom", "RSquare Left");
         AutonConfig testPath = new AutonConfig("testing", testing::new,
-        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Blue C to HP", "Red HP to B");
+        "Red Bottom to E", "Red E to HP", "Red HP to D", "Red D to HP", "Red HP to C", "Red C to HP", "Red HP to B");
 
 
         BLUE_MOBILITY.registerBlue(autonChooser);
