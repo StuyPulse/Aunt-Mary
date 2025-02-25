@@ -49,17 +49,17 @@ public class LEDDefaultCommand extends Command{
         if (isScoring()) {
             leds.applyPattern(Settings.LED.SCORE_COLOR);
         }
-        else if (isIntaking()) {
-            leds.applyPattern(Settings.LED.INTAKE_COLOR);
-        }
-        else if (funnel.getState() == FunnelState.REVERSE) {
-            leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
-        }
         else if (climb.getState() == ClimbState.OPEN) {
             leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
         }
         else if (climb.getState() == ClimbState.CLIMBING) {
             leds.applyPattern(Settings.LED.CLIMBING_COLOR);
+        }
+        else if (funnel.getState() == FunnelState.REVERSE) {
+            leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
+        }
+        else if (isIntaking()) {
+            leds.applyPattern(Settings.LED.INTAKE_COLOR);
         }
         else if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
