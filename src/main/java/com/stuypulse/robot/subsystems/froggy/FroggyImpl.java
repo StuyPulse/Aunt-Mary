@@ -103,7 +103,6 @@ public class FroggyImpl extends Froggy {
     }
 
     private Rotation2d getCurrentAngle() {
-        // return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations());
     }
 

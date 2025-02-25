@@ -8,7 +8,9 @@ package com.stuypulse.robot.subsystems.froggy;
 
 import java.util.Optional;
 
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,7 +41,8 @@ public abstract class Froggy extends SubsystemBase {
         private Rotation2d targetAngle;
 
         private PivotState(Rotation2d targetAngle) {
-            this.targetAngle = targetAngle;
+            this.targetAngle = Rotation2d.fromDegrees(
+                SLMath.clamp(targetAngle.getDegrees(), Constants.Froggy.MINIMUM_ANGLE.getDegrees(), Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
         }
 
         public Rotation2d getTargetAngle() {

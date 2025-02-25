@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -42,6 +43,10 @@ public class RobotVisualizer {
 
     private final MechanismLigament2d[] topRollers;
     private final MechanismLigament2d[] bottomRollers;
+
+    private final MechanismRoot2d coralRoot;
+    private final MechanismLigament2d coralFront;
+    private final MechanismLigament2d coralBack;
 
     private RobotVisualizer() {
         width = Constants.Arm.ARM_LENGTH * 2 + Units.inchesToMeters(3);
@@ -149,6 +154,17 @@ public class RobotVisualizer {
         elevatorCarriageTopFront.append(topCarriage);
 
         elevatorParts = new MechanismLigament2d[]{frontFixedStage, backFixedStage, frontCarriage, backCarriage, topCarriage};
+
+        /* CORAL VISUALIZER */
+        coralRoot = canvas.getRoot(
+            "Coral", 
+            width / 2, 
+            elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR - (Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER + Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER) / 2);
+        
+        coralFront = new MechanismLigament2d("Coral Front", 0.1, 90, 20, new Color8Bit(Color.kWhite));
+        coralRoot.append(coralFront);
+        coralBack = new MechanismLigament2d("Coral Back", 0.1, -90, 20, new Color8Bit(Color.kWhite));
+        coralRoot.append(coralBack);
     }
 
     public void updateArmAngle(Rotation2d armAngle, boolean atTargetAngle) {
@@ -157,17 +173,31 @@ public class RobotVisualizer {
 
         arm.setColor(atTargetAngle ? new Color8Bit(Color.kGreen) : new Color8Bit(Color.kRed));
 
-        topRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER);
-        bottomRollerPivot.setPosition(width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER);
+        topRollerPivot.setPosition(
+            width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER, 
+            elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER);
+        bottomRollerPivot.setPosition(
+            width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER, 
+            elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER);
+
+        coralRoot.setPosition(
+            width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * ((Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER + Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER) / 2), 
+            elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * ((Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER + Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER) / 2));
+
+        coralFront.setAngle(90 + armAngle.getDegrees());
+        coralBack.setAngle(-90 + armAngle.getDegrees());
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }
 
-    public void updateRollerSpeed(double speed) {
+    public void updateShooter(double speed, boolean hasCoral) {
         for (int i = 0; i < 4; i++) {
             topRollers[i].setAngle(topRollers[i].getAngle() + speed * 10);
             bottomRollers[i].setAngle(bottomRollers[i].getAngle() - speed * 10);
         }
+
+        coralFront.setLength(hasCoral ? 0.1 : 0);
+        coralBack.setLength(hasCoral ? 0.1 : 0);
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }
