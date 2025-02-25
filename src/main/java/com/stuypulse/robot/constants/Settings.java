@@ -39,8 +39,8 @@ public interface Settings {
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
@@ -90,12 +90,12 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = -0.02;
 
-                double TARGET_DISTANCE_FROM_REEF_L2_BACK = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L3_BACK = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L4_BACK = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
+                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(4.0);
+                double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(6.5);
 
-                double TARGET_DISTANCE_FROM_ALGAE_L2 = 0.0;
-                double TARGET_DISTANCE_FROM_ALGAE_L3 = 0.0;
+                double TARGET_DISTANCE_FROM_ALGAE_L2 = 5.0;
+                double TARGET_DISTANCE_FROM_ALGAE_L3 = 5.0;
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0;
             }
@@ -134,22 +134,22 @@ public interface Settings {
         double MAX_VELOCITY_METERS_PER_SECOND = 1.5;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
-        double FEED_HEIGHT_METERS = 1.13;
+        double FEED_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
 
         // Coral
         double FRONT_L2_HEIGHT_METERS = 1.592002;
         double FRONT_L3_HEIGHT_METERS = 1.037354;
         double FRONT_L4_HEIGHT_METERS = 1.656494;
         
-        double BACK_L2_HEIGHT_METERS = 1.106;
-        double BACK_L3_HEIGHT_METERS = 1.161;
-        double BACK_L4_HEIGHT_METERS = 1.836;
+        double BACK_L2_HEIGHT_METERS = 1.037109;
+        double BACK_L3_HEIGHT_METERS = 1.037109;
+        double BACK_L4_HEIGHT_METERS = 1.732910;
 
         // Algae
         double BARGE_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
-        double ALGAE_L2_HEIGHT_METERS = 1.4;
-        double ALGAE_L3_HEIGHT_METERS = 1.8;
-        double HOLD_ALGAE_HEIGHT_METERS = 1.2;
+        double ALGAE_L2_HEIGHT_METERS = 1.205811;
+        double ALGAE_L3_HEIGHT_METERS = 1.622803;
+        double HOLD_ALGAE_HEIGHT_METERS = 1.13;
         double PROCESSOR_HEIGHT_METERS = 1.13;
 
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
@@ -165,12 +165,12 @@ public interface Settings {
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(65.302734);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(171.5);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(146.1);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.0);
+        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(179.513809);
+        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
+        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
-        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(7);
-        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(9);
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-70);
 
