@@ -368,7 +368,7 @@ public class RobotContainer {
         // Get ready for climb
         driver.getLeftMenuButton()
             .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())
-                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                .andThen(new WaitUntilCommand(() -> elevator.atTargetHeight() || arm.atTargetAngle()))
                 .andThen(new ClimbOpen()));
 
         // Climb!!
