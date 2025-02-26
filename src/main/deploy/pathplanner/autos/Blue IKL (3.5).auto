@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Top to I"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue I to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to K"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue K to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue L to HP"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Top Autons",
+  "choreoAuto": false
+}
