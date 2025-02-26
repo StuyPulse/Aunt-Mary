@@ -77,8 +77,8 @@ public interface Settings {
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", 0.05); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", 0.05);
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", Units.inchesToMeters(1.5)); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", Units.inchesToMeters(1.5));
                 SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(5));
     
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
@@ -99,7 +99,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(5.0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(5.0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.1;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 0.9;
             }
         }
     }
@@ -172,7 +172,7 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(114.0);
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(49.532404);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE;
         

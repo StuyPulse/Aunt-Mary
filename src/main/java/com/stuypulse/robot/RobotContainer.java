@@ -189,10 +189,6 @@ public class RobotContainer {
     private void configureAutomaticCommands() {
         RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
             .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
-
-        RobotModeTriggers.disabled()
-            .onTrue(new VisionSetMegaTag1())
-            .onFalse(new VisionSetMegaTag2());
     }
 
     /***************/
@@ -334,8 +330,7 @@ public class RobotContainer {
                         .alongWith(new SwerveDriveWaitUntilAlignedToBarge()))
                     .andThen(new ShooterShootAlgae())))
             .onFalse(new WaitUntilCommand(swerve::isClearFromBargeX)
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
-            .onFalse(new ShooterStop());
+                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())));
 
         // Acquire Closest Reef Algae
         driver.getDPadLeft()

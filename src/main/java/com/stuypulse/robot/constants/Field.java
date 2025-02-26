@@ -133,14 +133,14 @@ public interface Field {
     /*** PROCESSOR ***/
     public static Pose2d getTargetPoseForProcessorShooter() {
         return Robot.isBlue()
-            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg))
-            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg));
+            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 - 0.06, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg))
+            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 - 0.06, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg));
     }
 
     public static Pose2d getTargetPoseForProcessorFroggy() {
         return Robot.isBlue()
-            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2 + 0.03, 0, Rotation2d.kCW_90deg))
-            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2 + 0.03, 0, Rotation2d.kCW_90deg));
+            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2, 0, Rotation2d.kCW_90deg))
+            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2, 0, Rotation2d.kCW_90deg));
     }
 
     /*** BARGE ***/
