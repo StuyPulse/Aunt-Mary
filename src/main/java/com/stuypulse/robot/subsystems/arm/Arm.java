@@ -60,10 +60,6 @@ public abstract class Arm extends SubsystemBase {
         public Rotation2d getTargetAngle() {
             return this.targetAngle;
         }
-
-        public boolean isFrontSide() {
-            return getTargetAngle().getDegrees() > -90;
-        }
     }
 
     private ArmState state;

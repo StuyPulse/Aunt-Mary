@@ -99,7 +99,7 @@ public class ArmImpl extends Arm {
 
     private Rotation2d getTargetAngle() {
        return Rotation2d.fromDegrees(
-        SLMath.clamp(getState().getTargetAngle().plus(operatorOffset).getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+        SLMath.clamp(getState().getTargetAngle().getDegrees() + operatorOffset.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
@@ -168,8 +168,6 @@ public class ArmImpl extends Arm {
         super.periodic();
         
         updateGains();
-
-        SmartDashboard.putNumber("Arm/kG", kG.get());
         
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {

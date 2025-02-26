@@ -174,7 +174,7 @@ public interface Settings {
 
         Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
         
-        Rotation2d CLIMB_ANGLE = MAX_ANGLE.minus(Rotation2d.fromDegrees(5));
+        Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);

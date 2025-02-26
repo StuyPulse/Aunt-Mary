@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import static edu.wpi.first.units.Units.Second;
@@ -106,7 +107,8 @@ public class ArmSim extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-        return getState().getTargetAngle().plus(operatorOffset);
+        return Rotation2d.fromDegrees(
+            SLMath.clamp(getState().getTargetAngle().getDegrees() + operatorOffset.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
