@@ -65,12 +65,6 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "Arm": {
-          "open": true
-        },
-        "Elevator": {
-          "open": true
-        },
         "Enabled Subsystems": {
           "open": true
         },
@@ -123,7 +117,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 9,
+          "height": -6,
           "series": [
             {
               "color": [
@@ -168,7 +162,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 4,
+          "height": 0,
           "series": [
             {
               "color": [

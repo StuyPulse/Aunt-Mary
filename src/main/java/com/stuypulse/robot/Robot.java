@@ -6,6 +6,11 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
+import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
+import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -44,10 +49,16 @@ public class Robot extends TimedRobot {
     /*********************/
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        new VisionSetMegaTag1().schedule();
+    }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        if (LimelightVision.getInstance().getMTmode() == MegaTagMode.MEGATAG2) {
+            new VisionSetMegaTag1().schedule();
+        }
+    }
 
     /***********************/
     /*** AUTONOMOUS MODE ***/
@@ -55,6 +66,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        new VisionSetMegaTag2().alongWith(new SwerveDriveSeedFieldRelative()).schedule();
         auto = robot.getAutonomousCommand();
         
         if (auto != null) {
@@ -74,6 +86,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        new VisionSetMegaTag2().alongWith(new SwerveDriveSeedFieldRelative()).schedule();
         if (auto != null) {
             auto.cancel();
         }

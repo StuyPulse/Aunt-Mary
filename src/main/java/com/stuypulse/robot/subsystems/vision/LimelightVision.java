@@ -99,7 +99,11 @@ public class LimelightVision extends SubsystemBase{
         return maxTagCount;
     }
 
-    private PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
+    public MegaTagMode getMTmode() {
+        return megaTagMode;
+    }
+
+    public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
         return Robot.isBlue() 
             ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
             : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
