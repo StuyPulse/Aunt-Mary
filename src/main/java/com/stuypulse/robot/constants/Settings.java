@@ -97,7 +97,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(5.0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(5.0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.1;
             }
         }
     }

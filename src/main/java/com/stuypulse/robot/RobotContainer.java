@@ -95,13 +95,14 @@ import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
-import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
-import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToProcessorFroggy;
-import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToProcessorShooter;
-import com.stuypulse.robot.commands.swerve.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
+import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeClear;
+import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScore;
+import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorFroggy;
+import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorShooter;
+import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -325,13 +326,16 @@ public class RobotContainer {
 
         // Barge score
         driver.getLeftButton()
-            .whileTrue(new SwerveDriveDriveAlignedToBarge(driver))
-            .whileTrue(new ElevatorToBarge().alongWith(new ArmToBarge())
-                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                    .alongWith(new SwerveDriveWaitUntilAlignedToBarge()
-                        .alongWith(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))))
-                .andThen(new ShooterShootAlgae()))
-            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
+            .whileTrue(new SwerveDriveDriveAlignedToBargeClear(driver)
+                .until(() -> elevator.getState() == ElevatorState.BARGE && elevator.atTargetHeight() && arm.getState() == ArmState.BARGE && arm.atTargetAngle())
+                .andThen(new SwerveDriveDriveAlignedToBargeScore(driver))
+                .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+                .alongWith(new ElevatorToBarge().alongWith(new ArmToBarge())
+                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBarge()))
+                    .andThen(new ShooterShootAlgae())))
+            .onFalse(new WaitUntilCommand(swerve::isClearFromBargeX)
+                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
             .onFalse(new ShooterStop());
 
         // Acquire Closest Reef Algae
