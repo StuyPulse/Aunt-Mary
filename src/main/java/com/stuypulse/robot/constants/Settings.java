@@ -31,9 +31,6 @@ public interface Settings {
 
     String CANIVORE_NAME = "CANIVORE";
 
-    double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25); // From bumper
-    double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
-
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
@@ -43,6 +40,11 @@ public interface Settings {
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
+    }
+
+    public interface Clearances {
+        double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25 + 1); // From bumper
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
     }
 
     public interface Swerve {
@@ -172,7 +174,7 @@ public interface Settings {
 
         Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(114.0);
 
-        Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
+        Rotation2d FEED_ANGLE = MIN_ANGLE;
         
         Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
 

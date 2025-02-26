@@ -23,6 +23,7 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Swerve.Alignment;
 import com.stuypulse.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
@@ -405,16 +406,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public boolean isAlignedToBargeX() {
-        return Math.abs((Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE) - getPose().getX())
-            < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE.get();
+        return Math.abs((Field.LENGTH / 2 - Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE) - getPose().getX())
+            < Alignment.Tolerances.X_TOLERANCE.get();
     }
 
     public boolean isClearFromBargeX() {
-        return getPose().getX() < (Field.LENGTH / 2 - Settings.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE);
+        return getPose().getX() < (Field.LENGTH / 2 - Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE);
     }
 
     public boolean isClearFromReef() {
-        return Field.REEF_CENTER.getDistance(getPose().getTranslation()) > (Settings.CLEARANCE_DISTANCE_FROM_REEF + Field.CENTER_OF_REEF_TO_REEF_FACE + Constants.LENGTH_WITH_BUMPERS_METERS / 2);
+        return Field.REEF_CENTER.getDistance(getPose().getTranslation()) 
+            > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF 
+                + Field.CENTER_OF_REEF_TO_REEF_FACE 
+                + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
+                - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
     }
 
     @Override

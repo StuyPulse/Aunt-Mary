@@ -145,7 +145,7 @@ public interface Field {
 
     /*** BARGE ***/
     public static double getBargeClearancePoseX() {
-        return LENGTH / 2 - Settings.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE - 0.05;
+        return LENGTH / 2 - Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE - 0.05;
     }
 
     public static double getBargeScorePoseX() {
