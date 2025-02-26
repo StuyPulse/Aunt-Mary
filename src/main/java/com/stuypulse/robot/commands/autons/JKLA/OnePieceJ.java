@@ -8,7 +8,6 @@ import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearanceToBranch;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToBranchClear;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchScore;
@@ -38,7 +37,7 @@ public class OnePieceJ extends SequentialCommandGroup {
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
-            new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+            new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
             new ShooterShootBackwards(),
             //new WaitUntilCommand(() -> !Shooter.getInstance().hasCoral()),
             new WaitCommand(0.5),

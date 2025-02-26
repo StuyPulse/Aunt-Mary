@@ -14,17 +14,23 @@ import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {    
-    public SwerveDriveCoralScoreAlignWithClearance(int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
-        Supplier<CoralBranch> nearestBranch = () -> ReefUtil.getClosestCoralBranch();
-
+public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {  
+    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
         addCommands(
             new WaitUntilCommand(() -> Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
                 && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle())
-                .deadlineFor(new SwerveDrivePIDToBranchClear(nearestBranch::get, isFrontFacingReef))
-                .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-            new SwerveDrivePIDToBranchScore(nearestBranch::get, level, isFrontFacingReef)
-                .deadlineFor(new LEDApplyPattern(() -> nearestBranch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
+                .deadlineFor(new SwerveDrivePIDToBranchClear(branch::get, isFrontFacingReef))
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+            new SwerveDrivePIDToBranchScore(branch::get, level, isFrontFacingReef)
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
         );
+    } 
+
+    public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
+        this(() -> branch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState);
+    }
+
+    public SwerveDriveCoralScoreAlignWithClearance(int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
+        this(ReefUtil::getClosestCoralBranch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState);
     }
 }

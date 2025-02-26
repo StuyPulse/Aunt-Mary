@@ -11,7 +11,7 @@ import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
-import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearanceToBranch;
+import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
@@ -33,7 +33,7 @@ public class ThreePieceJKL extends SequentialCommandGroup {
 
             // Score Preload on J
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
@@ -57,7 +57,7 @@ public class ThreePieceJKL extends SequentialCommandGroup {
                     .andThen(
                         new WaitCommand(0.1),
                         new ShooterStop()), // change ts
-                new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -83,7 +83,7 @@ public class ThreePieceJKL extends SequentialCommandGroup {
                     .andThen(
                         new WaitCommand(0.1),
                         new ShooterStop()),
-                new SwerveDriveCoralScoreAlignWithClearanceToBranch(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
