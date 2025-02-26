@@ -16,7 +16,6 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.ArmDriveFeedForward;
-import com.stuypulse.robot.util.ArmElevatorFeedForward;
 import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.control.Controller;
