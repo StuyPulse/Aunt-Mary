@@ -70,7 +70,7 @@ public interface Motors {
 			.withCurrentLimitAmps(80)
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
-			.withInvertedValue(InvertedValue.Clockwise_Positive)
+			.withInvertedValue(InvertedValue.CounterClockwise_Positive)
 			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO);
     }
 

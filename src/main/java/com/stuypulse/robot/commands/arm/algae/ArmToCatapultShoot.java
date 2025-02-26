@@ -9,8 +9,8 @@ package com.stuypulse.robot.commands.arm.algae;
 import com.stuypulse.robot.commands.arm.ArmSetState;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 
-public class ArmToBarge extends ArmSetState {
-    public ArmToBarge() {
-        super(ArmState.BARGE);
+public class ArmToCatapultShoot extends ArmSetState {
+    public ArmToCatapultShoot() {
+        super(ArmState.CATAPULT_SHOOT);
     }
 }

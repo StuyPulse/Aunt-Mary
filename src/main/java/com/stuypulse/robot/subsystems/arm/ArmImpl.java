@@ -12,6 +12,7 @@ import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -135,22 +136,14 @@ public class ArmImpl extends Arm {
     }
 
     private void updateGains() {
-        if (getState() == ArmState.BARGE) {
-            kP.set(Gains.Arm.Algae.PID.kP);
-            kI.set(Gains.Arm.Algae.PID.kI);
-            kD.set(Gains.Arm.Algae.PID.kD);
-            kS.set(Gains.Arm.Algae.FF.kS);
-            kV.set(Gains.Arm.Algae.FF.kV);
-            kA.set(Gains.Arm.Algae.FF.kA);
-            kG.set(Gains.Arm.Algae.FF.kG);
-        } else if (Shooter.getInstance().hasCoral()) {
-            kP.set(Gains.Arm.Coral.PID.kP);
-            kI.set(Gains.Arm.Coral.PID.kI);
-            kD.set(Gains.Arm.Coral.PID.kD);
-            kS.set(Gains.Arm.Coral.FF.kS);
-            kV.set(Gains.Arm.Coral.FF.kV);
-            kA.set(Gains.Arm.Coral.FF.kA);
-            kG.set(Gains.Arm.Coral.FF.kG);
+        if (Shooter.getInstance().hasCoral() || getState() == ArmState.CATAPULT_READY || getState() == ArmState.CATAPULT_SHOOT) {
+            kP.set(Gains.Arm.CoralAlgae.PID.kP);
+            kI.set(Gains.Arm.CoralAlgae.PID.kI);
+            kD.set(Gains.Arm.CoralAlgae.PID.kD);
+            kS.set(Gains.Arm.CoralAlgae.FF.kS);
+            kV.set(Gains.Arm.CoralAlgae.FF.kV);
+            kA.set(Gains.Arm.CoralAlgae.FF.kA);
+            kG.set(Gains.Arm.CoralAlgae.FF.kG);
         } else {
             kP.set(Gains.Arm.Empty.PID.kP);
             kI.set(Gains.Arm.Empty.PID.kI);
@@ -173,7 +166,12 @@ public class ArmImpl extends Arm {
                 motor.setVoltage(voltageOverride.get());
             }
             else {
-                motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+                if (getState() == ArmState.FEED && atTargetAngle() && Elevator.getInstance().getState() == ElevatorState.FEED && Elevator.getInstance().atTargetHeight() && Shooter.getInstance().getState() == ShooterState.ACQUIRE_CORAL) {
+                    motor.setVoltage(-1);
+                }
+                else {
+                    motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+                }
             }
         }
         else {

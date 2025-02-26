@@ -36,8 +36,8 @@ public interface Settings {
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
@@ -99,7 +99,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(5.0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(5.0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 0.9;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.1;
             }
         }
     }
@@ -172,14 +172,16 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(49.532404);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(30);
+        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(90);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE;
         
         Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(200.0);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400.0);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(300.0);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(500.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 

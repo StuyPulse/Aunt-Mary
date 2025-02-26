@@ -18,7 +18,9 @@ import com.stuypulse.robot.commands.arm.ArmToFeed;
 import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
-import com.stuypulse.robot.commands.arm.algae.ArmToBarge;
+import com.stuypulse.robot.commands.arm.algae.ArmToCatapultReady;
+import com.stuypulse.robot.commands.arm.algae.ArmToCatapultShoot;
+import com.stuypulse.robot.commands.arm.algae.ArmWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
@@ -32,13 +34,7 @@ import com.stuypulse.robot.commands.autons.FDCB.OnePieceF;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.TwoPieceFD;
-import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
-import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
-import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
-import com.stuypulse.robot.commands.autons.HAlgae.OneHOneAlgae;
-import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
-import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.OnePieceI;
@@ -96,7 +92,6 @@ import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
-import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeClear;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorFroggy;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorShooter;
@@ -213,7 +208,7 @@ public class RobotContainer {
                         new ShooterShootForwards(),
                         shooter::shouldShootBackwards
                     ), 
-                    () -> arm.getState() == ArmState.BARGE || shooter.getState() == ShooterState.HOLD_ALGAE), 
+                    () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE))
             .onFalse(new ShooterStop())
             .onFalse(new FroggyRollerStop());
@@ -321,14 +316,14 @@ public class RobotContainer {
 
         // Barge score
         driver.getLeftButton()
-            .whileTrue(new SwerveDriveDriveAlignedToBargeClear(driver)
-                .until(() -> elevator.getState() == ElevatorState.BARGE && elevator.atTargetHeight() && arm.getState() == ArmState.BARGE && arm.atTargetAngle())
-                .andThen(new SwerveDriveDriveAlignedToBargeScore(driver))
+            .whileTrue(new SwerveDriveDriveAlignedToBargeScore(driver)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
-                .alongWith(new ElevatorToBarge().alongWith(new ArmToBarge())
+                .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                         .alongWith(new SwerveDriveWaitUntilAlignedToBarge()))
-                    .andThen(new ShooterShootAlgae())))
+                    .andThen(new ArmToCatapultShoot()
+                        .andThen(new ArmWaitUntilCanCatapult()
+                            .andThen(new ShooterShootAlgae())))))
             .onFalse(new WaitUntilCommand(swerve::isClearFromBargeX)
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())));
 
@@ -418,10 +413,6 @@ public class RobotContainer {
         operator.getBottomButton().onTrue(swerve.isFrontFacingReef() 
             ? new ElevatorToL2Front().alongWith(new ArmToL2Front()) 
             : new ElevatorToL2Back().alongWith(new ArmToL2Back()));
-
-        operator.getLeftButton()
-            .onTrue(new ElevatorToBarge())
-            .onTrue(new ArmToBarge());
 
         // Elevator offsets
         operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());
@@ -543,55 +534,55 @@ public class RobotContainer {
 
         /**  TOP ALGAE AUTONS **/
 
-        AutonConfig BLUE_H_ONE_ALGAE = new AutonConfig("1 Piece H + 1 Algae", OneHOneAlgae::new,
-        "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3");
-        AutonConfig RED_H_ONE_ALGAE = new AutonConfig("1 Piece H + 1 Algae", OneHOneAlgae::new,
-        "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3");
+        // AutonConfig BLUE_H_ONE_ALGAE = new AutonConfig("1 Piece H + 1 Algae", OneHOneAlgae::new,
+        // "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3");
+        // AutonConfig RED_H_ONE_ALGAE = new AutonConfig("1 Piece H + 1 Algae", OneHOneAlgae::new,
+        // "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3");
 
-        AutonConfig BLUE_H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
-        "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
-        AutonConfig RED_H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
-        "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
+        // AutonConfig BLUE_H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
+        // "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
+        // AutonConfig RED_H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
+        // "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
 
-        AutonConfig BLUE_H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
-        "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
-        AutonConfig RED_H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
-        "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
+        // AutonConfig BLUE_H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
+        // "Blue Mid Top to H", "Blue H to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
+        // AutonConfig RED_H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
+        // "Red Mid Top to H", "Red H to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
-        BLUE_H_ONE_ALGAE.registerBlue(autonChooser);
-        RED_H_ONE_ALGAE.registerRed(autonChooser);
+        // BLUE_H_ONE_ALGAE.registerBlue(autonChooser);
+        // RED_H_ONE_ALGAE.registerRed(autonChooser);
 
-        BLUE_H_TWO_ALGAE.registerBlue(autonChooser);
-        RED_H_TWO_ALGAE.registerRed(autonChooser);
+        // BLUE_H_TWO_ALGAE.registerBlue(autonChooser);
+        // RED_H_TWO_ALGAE.registerRed(autonChooser);
 
-        BLUE_H_THREE_ALGAE.registerBlue(autonChooser);
-        RED_H_THREE_ALGAE.registerRed(autonChooser);
+        // BLUE_H_THREE_ALGAE.registerBlue(autonChooser);
+        // RED_H_THREE_ALGAE.registerRed(autonChooser);
 
-        /** BOTTOM ALGAE AUTONS **/
+        // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3");
-        AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3");
+        // AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3");
+        // AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3");
 
-        AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
-        AutonConfig RED_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
+        // AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
+        // AutonConfig RED_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
 
-        AutonConfig BLUE_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
-        "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
-        AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
-        "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
+        // AutonConfig BLUE_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
+        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
+        // AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
+        // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
-        BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
-        RED_G_ONE_ALGAE.registerRed(autonChooser);
+        // BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
+        // RED_G_ONE_ALGAE.registerRed(autonChooser);
 
-        BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
-        RED_G_TWO_ALGAE.registerRed(autonChooser);
+        // BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
+        // RED_G_TWO_ALGAE.registerRed(autonChooser);
 
-        BLUE_G_THREE_ALGAE.registerBlue(autonChooser);
-        RED_G_THREE_ALGAE.registerRed(autonChooser);
+        // BLUE_G_THREE_ALGAE.registerBlue(autonChooser);
+        // RED_G_THREE_ALGAE.registerRed(autonChooser);
 
         /** TESTS **/
 
