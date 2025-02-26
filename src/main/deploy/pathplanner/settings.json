@@ -22,8 +22,8 @@
     "Red Top Autons",
     "Tests"
   ],
-  "defaultMaxVel": 1.5,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 4.0,
+  "defaultMaxAccel": 5.0,
   "defaultMaxAngVel": 400.0,
   "defaultMaxAngAccel": 900.0,
   "defaultNominalVoltage": 12.0,

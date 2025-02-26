@@ -51,7 +51,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
                     .andThen(
-                        new WaitCommand(0.3),
+                        new WaitCommand(1.2),
                         new ShooterStop()), 
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
@@ -77,7 +77,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
                     .andThen(
-                        new WaitCommand(0.3),
+                        new WaitCommand(1.2),
                         new ShooterStop()),
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
