@@ -55,9 +55,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        if (LimelightVision.getInstance().getMTmode() == MegaTagMode.MEGATAG2) {
-            new VisionSetMegaTag1().schedule();
-        }
+        new VisionSetMegaTag1().schedule();
     }
 
     /***********************/
@@ -66,7 +64,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        new VisionSetMegaTag2().alongWith(new SwerveDriveSeedFieldRelative()).schedule();
+        new VisionSetMegaTag2().schedule();
         auto = robot.getAutonomousCommand();
         
         if (auto != null) {
@@ -86,14 +84,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        new VisionSetMegaTag2().alongWith(new SwerveDriveSeedFieldRelative()).schedule();
+        new VisionSetMegaTag2().schedule();
         if (auto != null) {
             auto.cancel();
         }
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        new VisionSetMegaTag2().schedule();
+    }
 
     @Override
     public void teleopExit() {}
