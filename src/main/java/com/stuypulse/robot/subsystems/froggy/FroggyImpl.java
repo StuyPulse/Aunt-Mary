@@ -109,10 +109,9 @@ public class FroggyImpl extends Froggy {
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
             SLMath.clamp(
-                getPivotState().getTargetAngle().getDegrees(),
+                getPivotState().getTargetAngle().getDegrees() + pivotOperatorOffset.getDegrees(),
                 Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
-                Constants.Froggy.MAXIMUM_ANGLE.getDegrees())) 
-            .plus(pivotOperatorOffset);
+                Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
     }
 
     @Override
