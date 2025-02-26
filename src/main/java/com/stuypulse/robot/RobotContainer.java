@@ -19,8 +19,6 @@ import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
 import com.stuypulse.robot.commands.arm.algae.ArmToBarge;
-import com.stuypulse.robot.commands.arm.algae.ArmToHoldAlgae;
-import com.stuypulse.robot.commands.arm.algae.ArmToProcessor;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
@@ -62,8 +60,6 @@ import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToHoldAlgae;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToProcessor;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
@@ -241,12 +237,7 @@ public class RobotContainer {
             .whileTrue(new FroggyPivotToProcessor()
                 .andThen(new FroggyPivotWaitUntilAtTargetAngle())
                 .andThen(new FroggyRollerShootAlgae()))
-            .whileTrue(new ElevatorToProcessor().alongWith(new ArmToProcessor())
-                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
-                .andThen(new ShooterShootAlgae())
-                .onlyIf(() -> !shooter.hasCoral()))
-            .onFalse(new FroggyRollerStop())
-            .onFalse(new ShooterStop());
+            .onFalse(new FroggyRollerStop());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
@@ -354,7 +345,7 @@ public class RobotContainer {
                     .alongWith(new ShooterAcquireAlgae()), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
-                .andThen(new ElevatorToHoldAlgae().alongWith(new ArmToHoldAlgae())))
+                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
             .onFalse(new ShooterHoldAlgae());
 
         // Get ready for climb

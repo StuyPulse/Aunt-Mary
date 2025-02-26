@@ -136,7 +136,7 @@ public class ArmImpl extends Arm {
     }
 
     private void updateGains() {
-        if (getState() == ArmState.HOLD_ALGAE || getState() == ArmState.BARGE) {
+        if (getState() == ArmState.BARGE) {
             kP.set(Gains.Arm.Algae.PID.kP);
             kI.set(Gains.Arm.Algae.PID.kI);
             kD.set(Gains.Arm.Algae.PID.kD);
