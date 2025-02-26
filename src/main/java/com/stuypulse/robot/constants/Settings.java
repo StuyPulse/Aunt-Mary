@@ -44,7 +44,6 @@ public interface Settings {
 
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25 + 1); // From bumper
-        double CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE + 0.4;
     }
 
     public interface Swerve {
@@ -77,8 +76,8 @@ public interface Settings {
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", Units.inchesToMeters(1.5)); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", Units.inchesToMeters(1.5));
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", Units.inchesToMeters(1.9)); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", Units.inchesToMeters(1.9));
                 SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(5));
     
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
@@ -96,10 +95,10 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(4.0);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(6.5);
 
-                double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(5.0);
-                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(5.0);
+                double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(3.0);
+                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(3.0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.1;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 0.85;
             }
         }
     }
@@ -172,16 +171,16 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(30);
-        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(90);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-20);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(5);
+        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE;
         
         Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(300.0);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(500.0);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(350.0);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(700.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 

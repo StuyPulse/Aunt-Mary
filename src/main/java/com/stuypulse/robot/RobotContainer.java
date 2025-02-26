@@ -324,8 +324,7 @@ public class RobotContainer {
                     .andThen(new ArmToCatapultShoot()
                         .andThen(new ArmWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))))
-            .onFalse(new WaitUntilCommand(swerve::isClearFromBargeX)
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())));
+            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
 
         // Acquire Closest Reef Algae
         driver.getDPadLeft()

@@ -133,8 +133,8 @@ public interface Field {
     /*** PROCESSOR ***/
     public static Pose2d getTargetPoseForProcessorShooter() {
         return Robot.isBlue()
-            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 - 0.06, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg))
-            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 - 0.06, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg));
+            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 - 0.08, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg))
+            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 - 0.08, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg));
     }
 
     public static Pose2d getTargetPoseForProcessorFroggy() {
@@ -144,10 +144,6 @@ public interface Field {
     }
 
     /*** BARGE ***/
-    public static double getBargeClearancePoseX() {
-        return LENGTH / 2 - Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE - 0.05;
-    }
-
     public static double getBargeScorePoseX() {
         return LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE;
     }

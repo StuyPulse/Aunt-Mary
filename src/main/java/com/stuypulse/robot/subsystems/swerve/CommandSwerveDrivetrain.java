@@ -410,10 +410,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             < Alignment.Tolerances.X_TOLERANCE.get();
     }
 
-    public boolean isClearFromBargeX() {
-        return getPose().getX() < (Field.LENGTH / 2 - Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_FOR_BARGE);
-    }
-
     public boolean isClearFromReef() {
         return Field.REEF_CENTER.getDistance(getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF 
@@ -448,7 +444,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putBoolean("Swerve/Is clear from Reef", isClearFromReef());
 
         SmartDashboard.putBoolean("Swerve/Is aligned to barge", isAlignedToBargeX());
-        SmartDashboard.putBoolean("Swerve/Is clear from barge", isClearFromBargeX());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }
