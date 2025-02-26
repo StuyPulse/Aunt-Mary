@@ -59,7 +59,7 @@ public class SwerveDriveDriveAlignedToBargeClear extends Command {
             .withVelocityX(targetVelocity.x)
             .withVelocityY(targetVelocity.y)
             .withRotationalRate(angleController.update(
-                Angle.kZero,
+                Angle.k180deg,
                 Angle.fromRotation2d(swerve.getPose().getRotation()))));
     }
 }

@@ -170,7 +170,7 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
-        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(66.0);
+        Rotation2d BARGE_ANGLE = Rotation2d.fromDegrees(114.0);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE.plus(Rotation2d.fromDegrees(0));
         
