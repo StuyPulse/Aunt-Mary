@@ -97,11 +97,11 @@ import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAlignedToBarge;
 import com.stuypulse.robot.commands.swerve.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToProcessorFroggy;
+import com.stuypulse.robot.commands.swerve.SwerveDrivePIDToProcessorShooter;
 import com.stuypulse.robot.commands.swerve.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
-import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -217,7 +217,7 @@ public class RobotContainer {
                         new ShooterShootForwards(),
                         shooter::shouldShootBackwards
                     ), 
-                    () -> arm.getState() == ArmState.BARGE), 
+                    () -> arm.getState() == ArmState.BARGE || shooter.getState() == ShooterState.HOLD_ALGAE), 
                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE))
             .onFalse(new ShooterStop())
             .onFalse(new FroggyRollerStop());
@@ -347,6 +347,19 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
             .onFalse(new ShooterHoldAlgae());
+
+        driver.getDPadDown()
+            .whileTrue(new ConditionalCommand(
+                new SwerveDrivePIDToProcessorShooter()
+                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                        .andThen(new ArmToFeed().alongWith(new ElevatorToFeed())))
+                    .andThen(new ShooterShootAlgae()), 
+                new SwerveDrivePIDToProcessorFroggy()
+                    .alongWith(new FroggyPivotToProcessor().andThen(new FroggyPivotWaitUntilAtTargetAngle()))
+                    .andThen(new FroggyRollerShootAlgae()), 
+                () -> shooter.getState() == ShooterState.HOLD_ALGAE))
+            .onFalse(new ShooterStop())
+            .onFalse(new FroggyRollerStop());
 
         // Get ready for climb
         driver.getLeftMenuButton()

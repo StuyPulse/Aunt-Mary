@@ -130,6 +130,19 @@ public interface Field {
     double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
+    /*** PROCESSOR ***/
+    public static Pose2d getTargetPoseForProcessorShooter() {
+        return Robot.isBlue()
+            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg))
+            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, Constants.SHOOTER_Y_OFFSET, Rotation2d.k180deg));
+    }
+
+    public static Pose2d getTargetPoseForProcessorFroggy() {
+        return Robot.isBlue()
+            ? NamedTags.BLUE_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2 + 0.03, 0, Rotation2d.kCW_90deg))
+            : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2 + 0.03, 0, Rotation2d.kCW_90deg));
+    }
+
     /*** CORAL STATIONS ***/
     public static Pose2d getTargetPoseForCDCoralStation() {
         return Robot.isBlue()
