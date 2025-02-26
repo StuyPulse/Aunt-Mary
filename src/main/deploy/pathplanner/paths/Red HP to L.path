@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5669087273317954,
-        "y": 4.84236373563008
+        "x": 3.7146319643983317,
+        "y": 4.771583139773225
       },
       "isLocked": false,
       "linkedName": "Red Top HP"
     },
     {
       "anchor": {
-        "x": 2.7451844262295078,
-        "y": 5.98498975409836
+        "x": 3.5498954716435174,
+        "y": 4.994447337962963
       },
       "prevControl": {
-        "x": 1.1022605364387967,
-        "y": 8.366946941626178
+        "x": 1.7881014570864282,
+        "y": 7.2280398636360985
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red L"
     }
   ],
   "rotationTargets": [],

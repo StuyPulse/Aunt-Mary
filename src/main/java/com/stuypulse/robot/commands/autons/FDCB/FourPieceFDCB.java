@@ -1,0 +1,123 @@
+package com.stuypulse.robot.commands.autons.FDCB;
+
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.stuypulse.robot.commands.arm.ArmToFeed;
+import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
+import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
+import com.stuypulse.robot.commands.shooter.ShooterSetAcquire;
+import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
+import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
+import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.ReefUtil.CoralBranch;
+
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+
+public class FourPieceFDCB extends SequentialCommandGroup {
+    
+    public FourPieceFDCB(PathPlannerPath... paths) {
+
+        addCommands(
+
+            // Score Preload on F
+            new ParallelCommandGroup(
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.F, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+            ),
+            new ShooterShootBackwards(),
+            new WaitCommand(0.5),
+            new ShooterStop(),
+
+            // To HP, Score D
+            new ParallelCommandGroup(
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+                new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
+                    .andThen(
+                        new ElevatorToFeed().alongWith(new ArmToFeed())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+            new WaitCommand(0.25),
+            new ParallelCommandGroup(
+                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new WaitCommand(0.3),
+                        new ShooterStop()),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+            new ShooterShootBackwards(),
+            new WaitCommand(0.5),
+            new ShooterStop(),
+
+            // To HP, Score C
+            new ParallelCommandGroup(
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+                new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
+                    .andThen(
+                        new ElevatorToFeed().alongWith(new ArmToFeed())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+            new WaitCommand(0.25),
+            new ParallelCommandGroup(
+                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new WaitCommand(0.3),
+                        new ShooterStop()),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+            new ShooterShootBackwards(),
+            new WaitCommand(0.5),
+            new ShooterStop(),
+
+            // To HP, Score B
+            new ParallelCommandGroup(
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+                new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
+                    .andThen(
+                        new ElevatorToFeed().alongWith(new ArmToFeed())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+            new WaitCommand(0.25),
+            new ParallelCommandGroup(
+                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new WaitCommand(0.3),
+                        new ShooterStop()),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.B, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
+            ),
+            new ShooterShootBackwards(),
+            new WaitCommand(0.5),
+            new ShooterStop()
+
+        );
+
+    }
+
+}

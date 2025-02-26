@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Bottom to F"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red F to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to D"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Red Bottom Autons",
+  "choreoAuto": false
+}

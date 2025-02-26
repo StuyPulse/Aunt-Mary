@@ -103,6 +103,9 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "Server": {
       "Publishers": {
         "open": true
@@ -120,7 +123,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 9,
           "series": [
             {
               "color": [
@@ -165,7 +168,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 4,
           "series": [
             {
               "color": [
