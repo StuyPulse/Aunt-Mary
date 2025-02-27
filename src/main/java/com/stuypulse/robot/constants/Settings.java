@@ -98,7 +98,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(3.0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(3.0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 0.85;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0; // 1 meter was better than 0.85 
             }
         }
     }
@@ -174,7 +174,7 @@ public interface Settings {
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 5);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-10);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE;

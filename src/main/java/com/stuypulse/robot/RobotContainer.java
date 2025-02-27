@@ -93,6 +93,7 @@ import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScore;
@@ -333,10 +334,12 @@ public class RobotContainer {
             .whileTrue(new ConditionalCommand(
                 new SwerveDrivePidToNearestReefAlgae()
                     .alongWith(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
-                    .alongWith(new ShooterAcquireAlgae()), 
+                    .alongWith(new ShooterAcquireAlgae())
+                        .andThen(new SwerveDriveNudgeForward()), 
                 new SwerveDrivePidToNearestReefAlgae()
                     .alongWith(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
-                    .alongWith(new ShooterAcquireAlgae()), 
+                    .alongWith(new ShooterAcquireAlgae())
+                        .andThen(new SwerveDriveNudgeForward()), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
