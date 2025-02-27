@@ -12,7 +12,7 @@ public interface Gains {
 
     public interface Swerve {
         public interface Alignment {
-            PIDConstants XY = new PIDConstants(3.0, 0, 0.0);
+            PIDConstants XY = new PIDConstants(3.5, 0, 0.0);
             PIDConstants THETA = new PIDConstants(3.0, 0, 0.1);
         }
     }
@@ -65,34 +65,17 @@ public interface Gains {
     }
 
     public interface Froggy {
-        public interface Coral  {
-            public interface PID {
-                double kP = 0.0;
-                double kI = 0.0;
-                double kD = 0.0;
-            }
-
-            public interface FF {
-                double kS = 0.0; 
-                double kV = 0.0;
-                double kA = 0.0;
-                double kG = 0.0;
-            }
+        public interface PID {
+            double kP = 0.01571;
+            double kI = 0.0;
+            double kD = 0.00057229;
         }
 
-        public interface Algae  {
-            public interface PID {
-                double kP = 0.0;
-                double kI = 0.0;
-                double kD = 0.0;
-            }
-
-            public interface FF {
-                double kS = 0.0; 
-                double kV = 0.0;
-                double kA = 0.0;
-                double kG = 0.0;
-            }
+        public interface FF {
+            double kS = 0.1458; 
+            double kV = 0.015181;
+            double kA = 0.00059012;
+            double kG = 0.24373;
         }
     }
 

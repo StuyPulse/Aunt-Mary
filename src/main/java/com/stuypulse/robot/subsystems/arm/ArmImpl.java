@@ -166,7 +166,17 @@ public class ArmImpl extends Arm {
                 motor.setVoltage(voltageOverride.get());
             }
             else {
-                motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+                if (getState() == ArmState.FEED 
+                    && atTargetAngle()
+                    && Shooter.getInstance().getState() == ShooterState.ACQUIRE_CORAL
+                    && Elevator.getInstance().getState() == ElevatorState.FEED
+                    && Elevator.getInstance().atTargetHeight())
+                {
+                    motor.setVoltage(-0.4);
+                }
+                else {
+                    motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+                }
             }
         }
         else {

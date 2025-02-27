@@ -36,9 +36,9 @@ public interface Settings {
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
 
@@ -69,15 +69,15 @@ public interface Settings {
         public interface Alignment {
             public interface Constraints {
                 SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 4.0);
-                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 12.0);
+                SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 11.5);
 
                 SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
                 SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", Units.inchesToMeters(1.9)); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", Units.inchesToMeters(1.9));
+                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", Units.inchesToMeters(2.0)); 
+                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", Units.inchesToMeters(2.0));
                 SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(5));
     
                 SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
@@ -104,7 +104,7 @@ public interface Settings {
     }
 
     public interface Vision {
-        Vector<N3> MIN_STDDEVS = VecBuilder.fill(0.3, 0.3, 5);
+        Vector<N3> MIN_STDDEVS = VecBuilder.fill(0.3, 0.3, 2.5);
     }
 
     public interface Shooter {
@@ -114,7 +114,7 @@ public interface Settings {
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
-        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.1);
+        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.15);
 
         double HAS_CORAL_DEBOUNCE = 0.0;
     }
@@ -135,7 +135,7 @@ public interface Settings {
         double MAX_VELOCITY_METERS_PER_SECOND = 1.5;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
-        double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(3);
+        double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2);
 
         // Coral
         double FRONT_L2_HEIGHT_METERS = 1.538086;
@@ -171,8 +171,10 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-20);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(5);
+        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 5);
+
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-10);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = MIN_ANGLE;
@@ -186,26 +188,26 @@ public interface Settings {
 
     public interface Froggy {
         Rotation2d STOW_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(3.5);
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(10);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(41);
-        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(0);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(30.746843);
+        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 10);
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
 
         SmartNumber ALGAE_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Intake Speed", 1.0);
         SmartNumber ALGAE_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Outtake Speed", -1.0);
         SmartNumber CORAL_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Intake Speed", -1.0);
         SmartNumber CORAL_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Outtake Speed", 1.0);
-        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.0);
+        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.15);
 
         double CORAL_STALL_CURRENT_THRESHOLD = 80.0;
         double ALGAE_STALL_CURRENT_THRESHOLD = 80.0;
         double STALL_DEBOUNCE_TIME = 0.0;
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(100);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(100);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(300);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(600);
     }
 
     public interface Climb {

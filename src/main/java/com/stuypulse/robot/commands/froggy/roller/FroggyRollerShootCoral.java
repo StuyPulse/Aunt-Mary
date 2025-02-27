@@ -22,6 +22,6 @@ public class FroggyRollerShootCoral extends InstantCommand {
 
     @Override
     public void initialize() {
-        froggy.setRollerState(RollerState.SHOOT_ALGAE);
+        froggy.setRollerState(RollerState.SHOOT_CORAL);
     }
 }

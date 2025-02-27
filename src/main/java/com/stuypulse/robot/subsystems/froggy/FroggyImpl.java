@@ -42,7 +42,6 @@ public class FroggyImpl extends Froggy {
 
     private Controller controller;
     private MotionProfile motionProfile;
-    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     private Optional<Double> pivotVoltageOverride;
     private Rotation2d pivotOperatorOffset;
@@ -72,19 +71,11 @@ public class FroggyImpl extends Froggy {
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
 
-        kP = new SettableNumber(Gains.Froggy.Coral.PID.kP);
-        kI = new SettableNumber(Gains.Froggy.Coral.PID.kI);
-        kD = new SettableNumber(Gains.Froggy.Coral.PID.kD);
-        kS = new SettableNumber(Gains.Froggy.Coral.FF.kS);
-        kV = new SettableNumber(Gains.Froggy.Coral.FF.kV);
-        kA = new SettableNumber(Gains.Froggy.Coral.FF.kA);
-        kG = new SettableNumber(Gains.Froggy.Coral.FF.kG);
-
         motionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
 
-        controller = new MotorFeedforward(kS, kV, kA).position()
-            .add(new ArmFeedforward(kG))
-            .add(new PIDController(kP, kI, kD))
+        controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
+            .add(new ArmFeedforward(Gains.Froggy.FF.kG))
+            .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
             .setSetpointFilter(motionProfile);
     }
 
@@ -95,8 +86,8 @@ public class FroggyImpl extends Froggy {
             5, 
             "Froggy Pivot", 
             voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getRotations(), 
-            () -> pivotMotor.getVelocity().getValueAsDouble(), 
+            () -> getCurrentAngle().getDegrees(), 
+            () -> Units.rotationsToDegrees(pivotMotor.getVelocity().getValueAsDouble()), 
             () -> pivotMotor.getMotorVoltage().getValueAsDouble(), 
             getInstance()
         );
@@ -139,33 +130,9 @@ public class FroggyImpl extends Froggy {
         return this.pivotOperatorOffset;
     }
 
-    private void updateGains() {
-        if (getRollerState() == RollerState.HOLD_ALGAE && isStalling()) {
-            kP.set(Gains.Froggy.Algae.PID.kP);
-            kI.set(Gains.Froggy.Algae.PID.kI);
-            kD.set(Gains.Froggy.Algae.PID.kD);
-            kS.set(Gains.Froggy.Algae.FF.kS);
-            kV.set(Gains.Froggy.Algae.FF.kV);
-            kA.set(Gains.Froggy.Algae.FF.kA);
-            kG.set(Gains.Froggy.Algae.FF.kG);
-        } else {
-            kP.set(Gains.Froggy.Coral.PID.kP);
-            kI.set(Gains.Froggy.Coral.PID.kI);
-            kD.set(Gains.Froggy.Coral.PID.kD);
-            kS.set(Gains.Froggy.Coral.FF.kS);
-            kV.set(Gains.Froggy.Coral.FF.kV);
-            kA.set(Gains.Froggy.Coral.FF.kA);
-            kG.set(Gains.Froggy.Coral.FF.kG);
-        }
-    }
-
     @Override
     public void periodic() {
         super.periodic();
-
-        updateGains();
-
-        pivotMotor.setPosition(getCurrentAngle().getRotations());
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {
             rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
