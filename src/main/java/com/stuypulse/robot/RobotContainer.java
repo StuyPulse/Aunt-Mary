@@ -218,7 +218,8 @@ public class RobotContainer {
                     () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE))
             .onFalse(new ShooterStop())
-            .onFalse(new FroggyRollerStop());
+            .onFalse(new FroggyRollerStop())
+            .onFalse(new FroggyPivotToStow());
 
         // ground algae intake and send elevator/arm to feed
         driver.getLeftTriggerButton()
