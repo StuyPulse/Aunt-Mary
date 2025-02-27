@@ -57,6 +57,7 @@ public abstract class Froggy extends SubsystemBase {
         SHOOT_CORAL(Settings.Froggy.CORAL_OUTTAKE_SPEED),
         SHOOT_ALGAE(Settings.Froggy.ALGAE_OUTTAKE_SPEED),
         HOLD_ALGAE(Settings.Froggy.HOLD_ALGAE_SPEED),
+        HOLD_CORAL(Settings.Froggy.HOLD_CORAL_SPEED),
         STOP(0);
 
         private Number speed;

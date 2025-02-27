@@ -11,17 +11,17 @@ import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class FroggyRollerHold extends InstantCommand {
+public class FroggyRollerHoldCoral extends InstantCommand {
 
     protected final Froggy froggy;
 
-    public FroggyRollerHold() {
+    public FroggyRollerHoldCoral() {
         froggy = Froggy.getInstance();
         addRequirements(froggy);
     }
 
     @Override
     public void initialize() {
-        froggy.setRollerState(RollerState.HOLD_ALGAE);
+        froggy.setRollerState(RollerState.HOLD_CORAL);
     }
 }

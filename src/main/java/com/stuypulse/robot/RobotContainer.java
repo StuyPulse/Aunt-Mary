@@ -74,6 +74,7 @@ import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilAtTargetAngle;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
@@ -241,7 +242,7 @@ public class RobotContainer {
             .onTrue(new ArmToFeed())
             .onTrue(new ShooterStop()) // Exit algae hold state
             .onFalse(new FroggyPivotToStow())
-            .onFalse(new FroggyRollerStop());
+            .onFalse(new FroggyRollerHoldCoral());
 
         // L1 coral score
         driver.getRightBumper()
