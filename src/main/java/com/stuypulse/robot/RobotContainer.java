@@ -378,11 +378,14 @@ public class RobotContainer {
             .onTrue(new FroggyPivotToClimb())
             .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())
                 .andThen(new WaitUntilCommand(() -> elevator.atTargetHeight() || arm.atTargetAngle()))
-                .andThen(new ClimbOpen().alongWith(new ShooterStop())));
+                .andThen(new ClimbOpen()
+                    .alongWith(new ShooterStop())
+                    .alongWith(new FroggyRollerStop())));
 
         // Climb!!
         driver.getRightMenuButton()
             .onTrue(new ClimbClimb().onlyIf(() -> climb.getState() == ClimbState.OPEN))
+            .whileTrue(new ShooterShootBackwards())
             .onFalse(new ClimbIdle());
     }
 
