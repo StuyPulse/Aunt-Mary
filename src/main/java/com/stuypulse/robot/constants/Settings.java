@@ -104,7 +104,7 @@ public interface Settings {
     }
 
     public interface Vision {
-        Vector<N3> MIN_STDDEVS = VecBuilder.fill(0.3, 0.3, 2.5);
+        Vector<N3> MIN_STDDEVS = VecBuilder.fill(0.3, 0.3, 1.0);
     }
 
     public interface Shooter {
