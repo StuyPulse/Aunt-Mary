@@ -36,8 +36,8 @@ public interface Settings {
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean VISION = new SmartBoolean("Enabled Subsystems/Vision Is Enabled", true);
     }
@@ -95,8 +95,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(4.0);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(6.5);
 
-                double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(3.0);
-                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(3.0);
+                double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
+                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0; // 1 meter was better than 0.85 
             }

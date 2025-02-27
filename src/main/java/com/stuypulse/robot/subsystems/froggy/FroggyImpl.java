@@ -138,6 +138,8 @@ public class FroggyImpl extends Froggy {
             rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
             if (pivotVoltageOverride.isPresent()) {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
+            } else if (getPivotState() == PivotState.L1_SCORE_ANGLE) {
+                pivotMotor.setVoltage(-0.5);
             }
             else {
                 pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));

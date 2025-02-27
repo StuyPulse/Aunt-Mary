@@ -247,7 +247,7 @@ public class RobotContainer {
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldCoral());
 
-        // L1 coral score
+        // L1 raise pivot
         driver.getRightBumper()
             .whileTrue(new FroggyPivotToL1()
                 .andThen(new FroggyPivotWaitUntilAtTargetAngle()));
