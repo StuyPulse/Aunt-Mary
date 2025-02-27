@@ -193,6 +193,7 @@ public interface Settings {
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(30.746843);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 10);
+        Rotation2d CLIMB_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
 

@@ -68,6 +68,7 @@ import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToClimb;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
@@ -357,6 +358,7 @@ public class RobotContainer {
 
         // Get ready for climb
         driver.getLeftMenuButton()
+            .onTrue(new FroggyPivotToClimb())
             .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())
                 .andThen(new WaitUntilCommand(() -> elevator.atTargetHeight() || arm.atTargetAngle()))
                 .andThen(new ClimbOpen()));

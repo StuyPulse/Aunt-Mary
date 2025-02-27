@@ -36,7 +36,8 @@ public abstract class Froggy extends SubsystemBase {
         CORAL_GROUND_PICKUP(Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE),
         GOLF_TEE_ALGAE_PICKUP(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE),
         L1_SCORE_ANGLE(Settings.Froggy.L1_SCORING_ANGLE),
-        PROCESSOR_SCORE_ANGLE(Settings.Froggy.PROCESSOR_SCORE_ANGLE);
+        PROCESSOR_SCORE_ANGLE(Settings.Froggy.PROCESSOR_SCORE_ANGLE),
+        CLIMB(Settings.Froggy.CLIMB_ANGLE);
 
         private Rotation2d targetAngle;
 

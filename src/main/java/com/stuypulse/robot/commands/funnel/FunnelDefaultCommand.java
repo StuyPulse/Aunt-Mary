@@ -1,5 +1,7 @@
 package com.stuypulse.robot.commands.funnel;
 
+import com.stuypulse.robot.subsystems.climb.Climb;
+import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
@@ -20,7 +22,11 @@ public class FunnelDefaultCommand extends Command{
 
     @Override
     public void execute() {
-        if (shooter.hasCoral() || shooter.getState() == ShooterState.HOLD_ALGAE) {
+        if (shooter.hasCoral() 
+            || shooter.getState() == ShooterState.HOLD_ALGAE 
+            || Climb.getInstance().getState() == ClimbState.OPEN
+            || Climb.getInstance().getState() == ClimbState.CLIMBING
+        ) {
             funnel.setState(FunnelState.STOP);
         }
         else if (funnel.shouldReverse()) {
