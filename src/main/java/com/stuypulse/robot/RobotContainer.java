@@ -272,6 +272,7 @@ public class RobotContainer {
                     .andThen(new ShooterShootForwards()), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
+                .onlyIf(() -> arm.getState() != ArmState.L4_BACK && elevator.getState() != ElevatorState.L4_BACK)
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
             .onFalse(new ShooterStop());
                 
