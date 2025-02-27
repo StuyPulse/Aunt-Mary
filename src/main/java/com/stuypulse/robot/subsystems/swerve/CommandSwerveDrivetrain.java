@@ -420,6 +420,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Swerve/Pose/X", getPose().getX());
+        SmartDashboard.putNumber("Swerve/Pose/Y", getPose().getY());
+        SmartDashboard.putNumber("Swerve/Pose/Theta", getPose().getRotation().getDegrees());
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
         SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
 
