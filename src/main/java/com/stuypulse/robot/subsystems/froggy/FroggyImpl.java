@@ -138,9 +138,7 @@ public class FroggyImpl extends Froggy {
             rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
             if (pivotVoltageOverride.isPresent()) {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
-            } else if (getPivotState() == PivotState.L1_SCORE_ANGLE) {
-                pivotMotor.setVoltage(-0.5);
-            }
+            } 
             else {
                 pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
             }
@@ -160,6 +158,7 @@ public class FroggyImpl extends Froggy {
 
         SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
 
         // ROLLER
         SmartDashboard.putBoolean("Froggy/Roller/Is Stalling", isStalling());
