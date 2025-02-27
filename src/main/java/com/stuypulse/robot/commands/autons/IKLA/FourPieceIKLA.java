@@ -47,12 +47,15 @@ public class FourPieceIKLA extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new WaitCommand(0.25),
             new ParallelCommandGroup(
-                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquire()
                     .andThen(
-                        new WaitCommand(0.3),
-                        new ShooterStop()), 
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                            .andThen(new ShooterStop())
+                    )
+            ),
+            new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
@@ -73,12 +76,14 @@ public class FourPieceIKLA extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new WaitCommand(0.25),
             new ParallelCommandGroup(
-                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquire()
                     .andThen(
-                        new WaitCommand(0.3),
-                        new ShooterStop()),
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                            .andThen(new ShooterStop()))
+            ),
+            new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
@@ -92,19 +97,21 @@ public class FourPieceIKLA extends SequentialCommandGroup {
 
             // To HP, Score A
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
                 new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
                     .andThen(
                         new ElevatorToFeed().alongWith(new ArmToFeed())
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new WaitCommand(0.25),
             new ParallelCommandGroup(
-                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquire()
                     .andThen(
-                        new WaitCommand(0.3),
-                        new ShooterStop()),
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                            .andThen(new ShooterStop()))
+            ),
+            new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.A, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(

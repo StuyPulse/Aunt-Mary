@@ -47,12 +47,15 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new WaitCommand(0.25),
             new ParallelCommandGroup(
-                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquire()
                     .andThen(
-                        new WaitCommand(1.2),
-                        new ShooterStop()), 
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                            .andThen(new ShooterStop())
+                    )
+            ),
+            new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
@@ -73,12 +76,14 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new WaitCommand(0.25),
             new ParallelCommandGroup(
-                new ShooterSetAcquire().until(() -> Shooter.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquire()
                     .andThen(
-                        new WaitCommand(1.2),
-                        new ShooterStop()),
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                            .andThen(new ShooterStop()))
+            ),
+            new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
