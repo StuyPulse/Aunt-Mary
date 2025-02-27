@@ -49,14 +49,10 @@ public class Robot extends TimedRobot {
     /*********************/
 
     @Override
-    public void disabledInit() {
-        new VisionSetMegaTag1().schedule();
-    }
+    public void disabledInit() {}
 
     @Override
-    public void disabledPeriodic() {
-        new VisionSetMegaTag1().schedule();
-    }
+    public void disabledPeriodic() {}
 
     /***********************/
     /*** AUTONOMOUS MODE ***/

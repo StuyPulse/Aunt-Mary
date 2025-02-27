@@ -188,6 +188,8 @@ public class RobotContainer {
     private void configureAutomaticCommands() {
         RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
             .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
+
+        RobotModeTriggers.disabled().whileTrue(new VisionSetMegaTag1().ignoringDisable(true));
     }
 
     /***************/
