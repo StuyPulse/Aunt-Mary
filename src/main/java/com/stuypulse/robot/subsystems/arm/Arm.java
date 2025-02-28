@@ -51,7 +51,8 @@ public abstract class Arm extends SubsystemBase {
         PROCESSOR(Settings.Arm.PROCESSOR_ANGLE),
         CATAPULT_READY(Settings.Arm.CATAPULT_READY_ANGLE),
         CATAPULT_SHOOT(Settings.Arm.CATAPULT_FINAL_ANGLE),
-        CLIMB(Settings.Arm.CLIMB_ANGLE);
+        CLIMB(Settings.Arm.CLIMB_ANGLE),
+        UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE);
 
         private Rotation2d targetAngle;
 

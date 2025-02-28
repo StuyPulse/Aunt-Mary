@@ -40,12 +40,15 @@ public interface Settings {
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
-        SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", false);
+        SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
         SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", true);
     }
 
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25 + 1); // From bumper
+        double CLEARANCE_DISTANCE_FROM_REEF_FROGGY = Units.inchesToMeters(10); // From bumper
+        // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT = Rotation2d.fromDegrees(30);
+        // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK = Rotation2d.fromDegrees(200);
     }
 
     public interface Swerve {
@@ -154,7 +157,7 @@ public interface Settings {
         double ALGAE_L3_HEIGHT_METERS = 1.622803;
 
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
-        double UNSTUCK_CORAL_HEIGHT_METERS = Units.inchesToMeters(6.0);
+        double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
@@ -184,6 +187,8 @@ public interface Settings {
         
         Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
 
+        Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
+
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(350.0);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(700.0);
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
@@ -195,7 +200,7 @@ public interface Settings {
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(40);
-        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 10);
+        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);

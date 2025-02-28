@@ -14,14 +14,19 @@ import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {  
-    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
+public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {
+    private final ElevatorState correspondingElevatorState;
+    private final ArmState correspondingArmState;
+
+    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
+        this.correspondingElevatorState = correspondingElevatorState;
+        this.correspondingArmState = correspondingArmState;
+
         addCommands(
-            new WaitUntilCommand(() -> Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
-                && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle())
-                .deadlineFor(new SwerveDrivePIDToBranchClear(branch::get, isFrontFacingReef))
+            new WaitUntilCommand(this::isClear)
+                .deadlineFor(new SwerveDrivePIDToBranchClear(branch::get, isScoringFrontSide))
                 .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-            new SwerveDrivePIDToBranchScore(branch::get, level, isFrontFacingReef)
+            new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
         );
     } 
@@ -32,5 +37,12 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
     public SwerveDriveCoralScoreAlignWithClearance(int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
         this(ReefUtil::getClosestCoralBranch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState);
+    }
+
+    private boolean isClear() {
+        return (Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
+                && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle());
+                // || (correspondingArmState.getTargetAngle().getDegrees() < 90 && Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Clearances.MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT.getDegrees())
+                // || (correspondingArmState.getTargetAngle().getDegrees() > 90 && Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Clearances.MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK.getDegrees());
     }
 }

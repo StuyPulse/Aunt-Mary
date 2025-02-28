@@ -15,6 +15,7 @@ import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
 import com.stuypulse.robot.commands.arm.ArmToClimb;
 import com.stuypulse.robot.commands.arm.ArmToFeed;
+import com.stuypulse.robot.commands.arm.ArmUnstuckCoral;
 import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
@@ -76,6 +77,7 @@ import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilAtTargetAngle;
+import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeCoral;
@@ -252,30 +254,20 @@ public class RobotContainer {
             .onTrue(new ShooterStop()) // Exit algae hold state
             .onTrue(new ClimbClose())
             .onFalse(new FroggyPivotToStow())
-            .onFalse(new FroggyRollerStop());
+            .onFalse(new FroggyRollerHoldAlgae());
 
-        // Algae processor score
-        driver.getLeftBumper()
-            .whileTrue(new FroggyPivotToProcessor()
-                .andThen(new FroggyPivotWaitUntilAtTargetAngle())
-                .andThen(new FroggyRollerShootAlgae()))
-            .onFalse(new FroggyRollerStop());
+        // Froggy pivot to processor
+        driver.getLeftBumper().onTrue(new FroggyPivotToProcessor());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
             .onTrue(new FroggyPivotToCoralGroundPickup())
             .onTrue(new FroggyRollerIntakeCoral())
-            .onTrue(new ElevatorToFeed())
-            .onTrue(new ArmToFeed())
-            .onTrue(new ShooterStop()) // Exit algae hold state
-            .onTrue(new ClimbClose())
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldCoral());
 
         // L1 raise pivot
-        driver.getRightBumper()
-            .whileTrue(new FroggyPivotToL1()
-                .andThen(new FroggyPivotWaitUntilAtTargetAngle()));
+        driver.getRightBumper().onTrue(new FroggyPivotToL1());
 
         // L4 coral score
         driver.getTopButton()
@@ -287,16 +279,14 @@ public class RobotContainer {
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
                     .andThen(new ShooterShootBackwards()),
-                new SwerveDriveCoralScoreAlignWithClearance(4, false, ElevatorState.L4_BACK, ArmState.L4_BACK)
-                    .alongWith(new WaitUntilCommand(() -> swerve.isClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
+                new SwerveDrivePIDToNearestBranchScore(4, false)
+                    .alongWith(new ShooterWaitUntilHasCoral()
                         .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
                         .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
                     .andThen(new ShooterShootForwards()), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
-                .onlyIf(() -> arm.getState() != ArmState.L4_BACK && elevator.getState() != ElevatorState.L4_BACK)
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
             .onFalse(new ShooterStop());
                 
@@ -400,11 +390,13 @@ public class RobotContainer {
 
         driver.getDPadDown()
             .onTrue(new ElevatorToUnstuckCoral())
-            .onFalse(new ElevatorToFeed());
+            .onTrue(new ArmUnstuckCoral())
+            .onFalse(new ElevatorToFeed())
+            .onFalse(new ArmToFeed());
 
         // Get ready for climb
         driver.getLeftMenuButton()
-            .onTrue(new FroggyPivotToClimb())
+            .onTrue(new FroggyPivotToStow())
             .onTrue(new ElevatorToClimb().alongWith(new ArmToClimb())
                 .andThen(new WaitUntilCommand(() -> elevator.atTargetHeight() || arm.atTargetAngle()))
                 .andThen(new ClimbOpen()
