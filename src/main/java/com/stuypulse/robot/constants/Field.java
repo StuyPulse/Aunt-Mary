@@ -143,11 +143,6 @@ public interface Field {
             : NamedTags.RED_PROCESSOR.getLocation().toPose2d().plus(new Transform2d(Constants.WIDTH_WITH_BUMPERS_METERS / 2, 0, Rotation2d.kCW_90deg));
     }
 
-    /*** BARGE ***/
-    public static double getBargeScorePoseX() {
-        return LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE;
-    }
-
     /*** CORAL STATIONS ***/
     public static Pose2d getTargetPoseForCDCoralStation() {
         return Robot.isBlue()

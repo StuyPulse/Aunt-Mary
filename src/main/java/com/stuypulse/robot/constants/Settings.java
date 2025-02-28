@@ -46,7 +46,6 @@ public interface Settings {
 
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25 + 1); // From bumper
-        double CLEARANCE_DISTANCE_FROM_BARGE = Units.inchesToMeters(0); // made up number
     }
 
     public interface Swerve {

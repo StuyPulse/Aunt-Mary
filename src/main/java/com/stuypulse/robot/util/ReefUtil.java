@@ -103,44 +103,41 @@ public interface ReefUtil {
     /*** REEF ALGAE ***/
 
     public enum Algae {
-        AB(NamedTags.BLUE_AB.getLocation().toPose2d(), NamedTags.RED_AB.getLocation().toPose2d()),
-        CD(NamedTags.BLUE_CD.getLocation().toPose2d(), NamedTags.RED_CD.getLocation().toPose2d()),
-        EF(NamedTags.BLUE_EF.getLocation().toPose2d(), NamedTags.RED_EF.getLocation().toPose2d()),
-        GH(NamedTags.BLUE_GH.getLocation().toPose2d(), NamedTags.RED_GH.getLocation().toPose2d()),
-        IJ(NamedTags.BLUE_IJ.getLocation().toPose2d(), NamedTags.RED_IJ.getLocation().toPose2d()),
-        KL(NamedTags.BLUE_KL.getLocation().toPose2d(), NamedTags.RED_KL.getLocation().toPose2d());
+        AB_BLUE(NamedTags.BLUE_AB.getLocation().toPose2d()),
+        CD_BLUE(NamedTags.BLUE_CD.getLocation().toPose2d()),
+        EF_BLUE(NamedTags.BLUE_EF.getLocation().toPose2d()),
+        GH_BLUE(NamedTags.BLUE_GH.getLocation().toPose2d()),
+        IJ_BLUE(NamedTags.BLUE_IJ.getLocation().toPose2d()),
+        KL_BLUE(NamedTags.BLUE_KL.getLocation().toPose2d()),
+        AB_RED(NamedTags.RED_AB.getLocation().toPose2d()),
+        CD_RED(NamedTags.RED_CD.getLocation().toPose2d()),
+        EF_RED(NamedTags.RED_EF.getLocation().toPose2d()),
+        GH_RED(NamedTags.RED_GH.getLocation().toPose2d()),
+        IJ_RED(NamedTags.RED_IJ.getLocation().toPose2d()),
+        KL_RED(NamedTags.RED_KL.getLocation().toPose2d());
 
-        private Pose2d correspondingRedAprilTagPose;
-        private Pose2d correspondingBlueAprilTagPose;
+        private Pose2d correspondingTagPose;
 
-        private Algae(Pose2d correspondingBlueAprilTagPose, Pose2d correspondingRedAprilTagPose) {
-            this.correspondingBlueAprilTagPose = correspondingBlueAprilTagPose;
-            this.correspondingRedAprilTagPose = correspondingRedAprilTagPose;
+        private Algae(Pose2d correspondingTagPose) {
+            this.correspondingTagPose = correspondingTagPose;
         }
 
         public Pose2d getCorrespondingAprilTagPose() {
-            return Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
-        }
-
-        public Pose2d getOpposingAprilTagPose() {
-            return !Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
+            return this.correspondingTagPose;
         }
 
         public boolean isHighAlgae() {
             return switch (this) {
-                case AB, EF, IJ -> true;
+                case AB_BLUE, AB_RED, EF_BLUE, EF_RED, IJ_BLUE, IJ_RED-> true;
                 default -> false;
             };
         }
 
         public Pose2d getTargetPose() {
-            if (CommandSwerveDrivetrain.getInstance().isBehindAllianceBarge()) {
-                return getCorrespondingAprilTagPose()
-                    .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), Constants.SHOOTER_Y_OFFSET, Rotation2d.fromDegrees(180)));
-            } else {
-                return getOpposingAprilTagPose()
-                    .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), Constants.SHOOTER_Y_OFFSET, Rotation2d.fromDegrees(180)));
-            }
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), 
+                Constants.SHOOTER_Y_OFFSET, 
+                Rotation2d.k180deg));
         }
 
         public Pose2d getReadyPose() {
@@ -149,7 +146,7 @@ public interface ReefUtil {
     }
 
     public static Algae getClosestAlgae() {
-        Algae nearestAlgaeBranch = Algae.AB;
+        Algae nearestAlgaeBranch = Algae.AB_BLUE;
         double closestDistance = Double.MAX_VALUE;
 
         for (Algae algaeBranch : Algae.values()) {
