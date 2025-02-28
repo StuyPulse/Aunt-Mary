@@ -56,6 +56,7 @@ import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.ElevatorToUnstuckCoral;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
@@ -97,6 +98,8 @@ import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.commands.swerve.SwerveDriveSetBrake;
+import com.stuypulse.robot.commands.swerve.SwerveDriveSetCoast;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAllianceSide;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreAllianceSide;
@@ -134,6 +137,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -201,6 +205,11 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
             .onTrue(new VisionSetMegaTag1())
             .onFalse(new VisionSetMegaTag2());
+
+        RobotModeTriggers.disabled()
+            .onTrue(new WaitCommand(3)
+                .andThen(new SwerveDriveSetCoast()))
+            .onFalse(new SwerveDriveSetBrake());
 
         new Trigger(() -> RobotController.getBatteryVoltage() < RobotController.getBrownoutVoltage())
             .onTrue(new LEDDisable());
@@ -390,7 +399,8 @@ public class RobotContainer {
         //     .onFalse(new FroggyPivotToStow());
 
         driver.getDPadDown()
-            .onTrue(new ArmToClimb());
+            .onTrue(new ElevatorToUnstuckCoral())
+            .onFalse(new ElevatorToFeed());
 
         // Get ready for climb
         driver.getLeftMenuButton()

@@ -154,6 +154,7 @@ public interface Settings {
         double ALGAE_L3_HEIGHT_METERS = 1.622803;
 
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
+        double UNSTUCK_CORAL_HEIGHT_METERS = Units.inchesToMeters(6.0);
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
@@ -195,7 +196,7 @@ public interface Settings {
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(40);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 10);
-        Rotation2d CLIMB_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
+        Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
 
