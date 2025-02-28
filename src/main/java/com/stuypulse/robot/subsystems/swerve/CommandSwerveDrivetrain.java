@@ -418,6 +418,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
     }
 
+    public boolean isBehindAllianceBarge() {
+        return getPose().getTranslation().getX() - Field.LENGTH / 2 < (Settings.Clearances.CLEARANCE_DISTANCE_FROM_BARGE);
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Swerve/Pose/X", getPose().getX());

@@ -38,6 +38,10 @@ public interface ReefUtil {
             return Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
         }
 
+        public Pose2d getOpposingAprilTagPose() {
+            return !Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
+        }
+
         public Pose2d getBranchPoseProjectedOntoReefFace() {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.kZero));
         }
@@ -118,6 +122,10 @@ public interface ReefUtil {
             return Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
         }
 
+        public Pose2d getOpposingAprilTagPose() {
+            return !Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
+        }
+
         public boolean isHighAlgae() {
             return switch (this) {
                 case AB, EF, IJ -> true;
@@ -126,8 +134,13 @@ public interface ReefUtil {
         }
 
         public Pose2d getTargetPose() {
-            return getCorrespondingAprilTagPose()
-                .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), Constants.SHOOTER_Y_OFFSET, Rotation2d.fromDegrees(180)));
+            if (CommandSwerveDrivetrain.getInstance().isBehindAllianceBarge()) {
+                return getCorrespondingAprilTagPose()
+                    .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), Constants.SHOOTER_Y_OFFSET, Rotation2d.fromDegrees(180)));
+            } else {
+                return getOpposingAprilTagPose()
+                    .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), Constants.SHOOTER_Y_OFFSET, Rotation2d.fromDegrees(180)));
+            }
         }
 
         public Pose2d getReadyPose() {
