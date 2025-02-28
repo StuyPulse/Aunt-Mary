@@ -17,4 +17,9 @@ public class VisionSetMegaTag2 extends InstantCommand{
     public void initialize() {
         vision.setMegaTagMode(MegaTagMode.MEGATAG2);
     }
+
+    @Override
+    public boolean runsWhenDisabled() {
+        return true;
+    }
 }

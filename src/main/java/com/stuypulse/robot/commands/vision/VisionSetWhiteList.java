@@ -1,30 +1,24 @@
 package com.stuypulse.robot.commands.vision;
 
-import com.stuypulse.robot.constants.Cameras;
-import com.stuypulse.robot.constants.Cameras.Camera;
+
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class VisionEnable extends InstantCommand{
+public class VisionSetWhiteList extends InstantCommand {
+
     private final LimelightVision vision;
-    private final Camera[] cameras;
+    private final int[] ids;
 
-    public VisionEnable(Camera... cameras) {
+    public VisionSetWhiteList(int... ids) {
         this.vision = LimelightVision.getInstance();
-        this.cameras = cameras;
+        this.ids = ids;
         addRequirements(vision);
-    }
-
-    public VisionEnable() {
-        this(Cameras.LimelightCameras);
     }
 
     @Override
     public void initialize() {
-        for (Camera camera : cameras) {
-            camera.setEnabled(true);
-        }
+        vision.setTagWhitelist(ids);
     }
 
     @Override
