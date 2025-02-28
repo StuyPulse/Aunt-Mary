@@ -15,6 +15,8 @@ import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -39,10 +41,12 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         robot = new RobotContainer();
         DataLogManager.start();
-        // Ignore barge tags
-        new VisionSetWhiteList(1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22).schedule();
+        // Ignore barge tags, processor tags, and coral station tags
+        new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
         // Makes sure swerve is in brake mode
         new SwerveDriveSetBrake().schedule();
+
+        // if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
     }
 
     @Override
