@@ -56,6 +56,7 @@ import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
+import com.stuypulse.robot.commands.elevator.ElevatorToUnstuckCoral;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
@@ -398,7 +399,8 @@ public class RobotContainer {
         //     .onFalse(new FroggyPivotToStow());
 
         driver.getDPadDown()
-            .onTrue(new ArmToClimb());
+            .onTrue(new ElevatorToUnstuckCoral())
+            .onFalse(new ElevatorToFeed());
 
         // Get ready for climb
         driver.getLeftMenuButton()
