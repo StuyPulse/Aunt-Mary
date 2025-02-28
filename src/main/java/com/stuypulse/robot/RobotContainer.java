@@ -385,7 +385,7 @@ public class RobotContainer {
         // Climb!!
         driver.getRightMenuButton()
             .onTrue(new ClimbClimb().onlyIf(() -> climb.getState() == ClimbState.OPEN))
-            .whileTrue(new ShooterShootBackwards())
+            .whileTrue(new ShooterShootBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle());
     }
 
