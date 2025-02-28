@@ -9,6 +9,7 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
+import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         robot = new RobotContainer();
         DataLogManager.start();
+        // Ignore barge tags
+        new VisionSetWhiteList(1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22);
     }
 
     @Override
