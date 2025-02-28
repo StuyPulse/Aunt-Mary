@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        new VisionSetMegaTag2().schedule();
         auto = robot.getAutonomousCommand();
         
         if (auto != null) {
@@ -83,7 +82,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        new VisionSetMegaTag2().schedule();
         if (auto != null) {
             auto.cancel();
         }

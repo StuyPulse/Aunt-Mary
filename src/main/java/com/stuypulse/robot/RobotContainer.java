@@ -85,6 +85,7 @@ import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
+import com.stuypulse.robot.commands.leds.LEDDisable;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
@@ -126,6 +127,7 @@ import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -194,7 +196,12 @@ public class RobotContainer {
         RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
             .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
 
-        RobotModeTriggers.disabled().whileTrue(new VisionSetMegaTag1().ignoringDisable(true));
+        RobotModeTriggers.disabled()
+            .onTrue(new VisionSetMegaTag1())
+            .onFalse(new VisionSetMegaTag2());
+
+        new Trigger(() -> RobotController.getBatteryVoltage() < RobotController.getBrownoutVoltage())
+            .onTrue(new LEDDisable());
     }
 
     /***************/

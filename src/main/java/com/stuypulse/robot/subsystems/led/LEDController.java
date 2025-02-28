@@ -8,6 +8,7 @@ package com.stuypulse.robot.subsystems.led;
 
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -48,6 +49,16 @@ public class LEDController extends SubsystemBase {
 
     public void applyPattern(LEDPattern pattern) {
         pattern.applyTo(ledsBuffer);
-        leds.setData(ledsBuffer);
+    }
+
+    @Override
+    public void periodic() {
+        if (Settings.EnabledSubsystems.LEDS.get()) {
+            leds.start();
+            leds.setData(ledsBuffer);
+        }
+        else {
+            leds.stop();
+        }
     }
 }

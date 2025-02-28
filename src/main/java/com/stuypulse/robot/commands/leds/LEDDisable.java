@@ -1,0 +1,25 @@
+package com.stuypulse.robot.commands.leds;
+
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.led.LEDController;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+public class LEDDisable extends InstantCommand{
+    private final LEDController leds;
+
+    public LEDDisable() {
+        this.leds = LEDController.getInstance();
+        addRequirements(leds);
+    }
+
+    @Override
+    public void initialize() {
+        Settings.EnabledSubsystems.LEDS.set(false);
+    }
+
+    @Override
+    public boolean runsWhenDisabled() {
+        return true;
+    }
+}
