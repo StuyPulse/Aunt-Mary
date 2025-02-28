@@ -174,6 +174,11 @@ public class ArmImpl extends Arm {
                 {
                     motor.setVoltage(-0.4);
                 }
+                else if (getState() == ArmState.L4_BACK
+                    && Shooter.getInstance().getState() == ShooterState.SHOOT_CORAL_FORWARD)
+                {
+                    motor.setVoltage(0);
+                }
                 else {
                     motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
                 }
