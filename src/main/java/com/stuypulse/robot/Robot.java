@@ -7,6 +7,7 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.commands.swerve.SwerveDriveSetBrake;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
@@ -40,6 +41,8 @@ public class Robot extends TimedRobot {
         DataLogManager.start();
         // Ignore barge tags
         new VisionSetWhiteList(1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22).schedule();
+        // Makes sure swerve is in brake mode
+        new SwerveDriveSetBrake().schedule();
     }
 
     @Override
