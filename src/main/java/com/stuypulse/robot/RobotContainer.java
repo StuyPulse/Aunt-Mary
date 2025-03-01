@@ -240,8 +240,18 @@ public class RobotContainer {
                     || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE
                     || arm.getState() == ArmState.PROCESSOR))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
-            .onFalse(new ArmToFeed().onlyIf(() -> arm.getState() == ArmState.PROCESSOR)
-                .alongWith(new ElevatorToFeed().onlyIf(() -> elevator.getState() == ElevatorState.PROCESSOR)))
+            .onFalse(new ConditionalCommand(
+                new ArmToFeed().onlyIf(() -> arm.getState() == ArmState.PROCESSOR)
+                    .alongWith(new ElevatorToFeed().onlyIf(() -> elevator.getState() == ElevatorState.PROCESSOR)), 
+                new WaitUntilCommand(() -> swerve.isClearFromReef())
+                    .andThen(new ElevatorToFeed().alongWith(new ArmToFeed()))
+                    .onlyIf(() -> arm.getState() == ArmState.L4_FRONT
+                        || arm.getState() == ArmState.L4_BACK
+                        || arm.getState() == ArmState.L3_FRONT
+                        || arm.getState() == ArmState.L3_BACK
+                        || arm.getState() == ArmState.L2_FRONT
+                        || arm.getState() == ArmState.L2_BACK), 
+                () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
             .onFalse(new FroggyRollerStop())
             .onFalse(new FroggyPivotToStow());
 
