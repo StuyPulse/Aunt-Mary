@@ -30,8 +30,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
 
             // Score Preload on I
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
-                    .withTimeout(5),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
