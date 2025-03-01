@@ -41,7 +41,7 @@ public class LimelightVision extends SubsystemBase{
             LimelightHelpers.setCameraPose_RobotSpace(
                 camera.getName(), 
                 robotRelativePose.getX(), 
-                robotRelativePose.getY(), 
+                -robotRelativePose.getY(), 
                 robotRelativePose.getZ(), 
                 Units.radiansToDegrees(robotRelativePose.getRotation().getX()), 
                 Units.radiansToDegrees(robotRelativePose.getRotation().getY()), 
