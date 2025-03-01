@@ -30,7 +30,8 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
 
             // Score Preload on F
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.F, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.F, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
+                .withTimeout(5),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
@@ -56,7 +57,8 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
+                    .withTimeout(6),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -84,7 +86,8 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
+                    .withTimeout(6),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
