@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class SwerveDriveCoralScoreAlignWithClearanceAuton extends SequentialCommandGroup {
+
     private final ElevatorState correspondingElevatorState;
     private final ArmState correspondingArmState;
 
@@ -23,9 +24,8 @@ public class SwerveDriveCoralScoreAlignWithClearanceAuton extends SequentialComm
         this.correspondingArmState = correspondingArmState;
 
         addCommands(
-            new WaitUntilCommand(this::isClear)
-                .deadlineFor(new SwerveDrivePIDToBranchClear(branch::get, isScoringFrontSide))
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+            // new SwerveDrivePIDToBranchClear(branch::get, isScoringFrontSide)
+            //     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
             new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .withTimeout(timeout)
                 .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
@@ -36,10 +36,4 @@ public class SwerveDriveCoralScoreAlignWithClearanceAuton extends SequentialComm
         this(() -> branch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState, timeout);
     }
 
-    private boolean isClear() {
-        return (Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
-                && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle());
-                // || (correspondingArmState.getTargetAngle().getDegrees() < 90 && Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Clearances.MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT.getDegrees())
-                // || (correspondingArmState.getTargetAngle().getDegrees() > 90 && Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Clearances.MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK.getDegrees());
-    }
 }

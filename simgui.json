@@ -65,6 +65,9 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Alignment": {
+          "open": true
+        },
         "Enabled Subsystems": {
           "open": true
         },
