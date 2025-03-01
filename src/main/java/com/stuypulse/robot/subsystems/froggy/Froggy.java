@@ -98,7 +98,8 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public abstract boolean isAtTargetAngle();
-    public abstract boolean isStalling();
+    public abstract boolean isStallingCoral();
+    public abstract boolean isStallingAlgae();
 
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
     public abstract void setPivotOperatorOffset(Rotation2d offset);

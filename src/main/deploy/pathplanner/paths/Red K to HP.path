@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2632876546351905,
-        "y": 7.011902835233661
+        "x": 1.0905553334564728,
+        "y": 6.950595321749263
       },
       "isLocked": false,
       "linkedName": "Red K"
     },
     {
       "anchor": {
-        "x": 1.3665983606557375,
-        "y": 6.944006147540984
+        "x": 1.2467213114754097,
+        "y": 6.836116803278688
       },
       "prevControl": {
-        "x": 3.957456087520303,
-        "y": 5.184408741697044
+        "x": 3.975971414964971,
+        "y": 5.189409527774223
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

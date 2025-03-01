@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.601935040509258,
-        "y": 5.291489076967593
+        "x": 3.1407786885245907,
+        "y": 4.04298155737705
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.168979543857472,
-        "y": 5.5229631631841105
+        "x": 2.7078231918728046,
+        "y": 4.2744556435935674
       },
       "isLocked": false,
       "linkedName": "Red I"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -48,7 +48,7 @@
   "folder": "Red Utilities",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

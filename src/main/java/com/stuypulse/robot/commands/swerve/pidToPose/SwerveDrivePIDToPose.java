@@ -34,6 +34,10 @@ public class SwerveDrivePIDToPose extends Command {
 
     private final HolonomicController controller;
     private final Supplier<Pose2d> poseSupplier;
+
+    private double maxVelocity;
+    private double maxAcceleration;
+
     private final BStream isAligned;
     private final IStream velocityError;
 
@@ -60,6 +64,9 @@ public class SwerveDrivePIDToPose extends Command {
             new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0.8, 0).position()),
             new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION)));
+
+        maxVelocity = Settings.Swerve.Alignment.Constraints.MAX_VELOCITY.get();
+        maxAcceleration = Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION.get();
 
         translationSetpoint = getNewTranslationSetpointGenerator();
 
@@ -89,20 +96,20 @@ public class SwerveDrivePIDToPose extends Command {
         return this;
     }
 
+    public SwerveDrivePIDToPose withTranslationalConstraints(double maxVelocity, double maxAcceleration) {
+        this.maxVelocity = maxVelocity;
+        this.maxAcceleration = maxAcceleration;
+        return this;
+    }
+
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
     private VStream getNewTranslationSetpointGenerator() {
         return VStream.create(() -> new Vector2D(targetPose.getTranslation()))
             .filtered(new TranslationMotionProfileIan(
-                Settings.Swerve.Alignment.Constraints.MAX_VELOCITY, 
-                Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION,
+                this.maxVelocity, 
+                this.maxAcceleration,
                 new Vector2D(swerve.getPose().getTranslation()),
                 swerve.getFieldRelativeSpeeds()));
-
-        // VStream targetTranslationRelativeToStart = VStream.create(() -> new Vector2D(targetPose.getTranslation().minus(startingPose.getTranslation())))
-        //     .filtered(
-        //         new VMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION));
-
-        // return VStream.create(() -> targetTranslationRelativeToStart.get().add(new Vector2D(startingPose.getTranslation())));
     }
 
     @Override
