@@ -11,7 +11,6 @@ public class SwerveDriveSetBrake extends InstantCommand {
 
     public SwerveDriveSetBrake() {
         swerve = CommandSwerveDrivetrain.getInstance();
-        addRequirements(swerve);
     }
 
     @Override

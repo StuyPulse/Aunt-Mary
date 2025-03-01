@@ -11,7 +11,6 @@ public class SwerveDriveSetCoast extends InstantCommand {
 
     public SwerveDriveSetCoast() {
         swerve = CommandSwerveDrivetrain.getInstance();
-        addRequirements(swerve);
     }
 
     @Override
