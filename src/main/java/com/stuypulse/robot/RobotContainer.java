@@ -387,13 +387,8 @@ public class RobotContainer {
 
         driver.getDPadDown()
             .onTrue(new ConditionalCommand(
-                new ElevatorToUnstuckCoral().alongWith(new ArmUnstuckCoral()),
                 new ClimbShimmy(),
-                () -> climb.getState() != ClimbState.OPEN
-            ))
-            .onFalse(new ConditionalCommand(
-                new ElevatorToFeed().alongWith(new ArmToFeed()),
-                new ClimbIdle(),
+                new ElevatorToUnstuckCoral().alongWith(new ArmUnstuckCoral()),
                 () -> climb.getState() != ClimbState.OPEN
             ));
 

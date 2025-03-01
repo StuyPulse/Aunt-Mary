@@ -92,6 +92,14 @@ public class ClimbImpl extends Climb {
                         motor.setVoltage(0);
                     }
                 }
+                else if (getState() == ClimbState.SHIMMY) {
+                    if (getCurrentAngle().getDegrees() < Settings.Climb.SHIMMY_ANGLE.getDegrees()) {
+                        motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
+                    }
+                    else {
+                        motor.setVoltage(0);
+                    }
+                }
                 else if (getState() == ClimbState.CLIMBING) {
                     if (getCurrentAngle().getDegrees() < Settings.Climb.CLIMBED_ANGLE.getDegrees()) {
                         motor.setVoltage(Settings.Climb.CLIMB_VOLTAGE);
