@@ -59,6 +59,7 @@ import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
+import com.stuypulse.robot.commands.elevator.algae.ElevatorToProcessor;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
@@ -97,8 +98,6 @@ import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
-import com.stuypulse.robot.commands.swerve.SwerveDriveSetBrake;
-import com.stuypulse.robot.commands.swerve.SwerveDriveSetCoast;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAllianceSide;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreAllianceSide;
@@ -131,6 +130,7 @@ import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -184,7 +184,7 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         funnel.setDefaultCommand(new FunnelDefaultCommand());
-        leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
+        leds.setDefaultCommand(new LEDDefaultCommand());
         shooter.setDefaultCommand(new ShooterAcquireCoral()
             .andThen(new BuzzController(driver))
             .onlyIf(() -> !shooter.hasCoral() 
@@ -198,17 +198,16 @@ public class RobotContainer {
     }
 
     private void configureAutomaticCommands() {
-        RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() > Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
+        RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() >= Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
             .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
+
+        RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() < Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
+            .debounce(0.5)
+            .whileTrue(new LEDApplyPattern(LEDPattern.kOff).ignoringDisable(true));
 
         RobotModeTriggers.disabled()
             .onTrue(new VisionSetMegaTag1())
             .onFalse(new VisionSetMegaTag2());
-
-        RobotModeTriggers.disabled()
-            .onTrue(new WaitCommand(3)
-                .andThen(new SwerveDriveSetCoast()))
-            .onFalse(new SwerveDriveSetBrake());
 
         new Trigger(() -> RobotController.getBatteryVoltage() < RobotController.getBrownoutVoltage())
             .onTrue(new LEDDisable());
@@ -222,11 +221,11 @@ public class RobotContainer {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
 
-        // manual shoot depending on whatever states robot is in: either score barge, forwards/backwards on reef, or processor/L1
         driver.getDPadRight()
             .onTrue(new ConditionalCommand(
                 new ConditionalCommand(
-                    new FroggyRollerShootAlgae(), 
+                    new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE)
+                        .alongWith(new ShooterShootAlgae().onlyIf(() -> arm.getState() == ArmState.PROCESSOR)), 
                     new FroggyRollerShootCoral(), 
                     () -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
                 new ConditionalCommand(
@@ -237,8 +236,12 @@ public class RobotContainer {
                         shooter::shouldShootBackwards
                     ), 
                     () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
-                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE))
-            .onFalse(new ShooterStop())
+                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE 
+                    || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE
+                    || arm.getState() == ArmState.PROCESSOR))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
+            .onFalse(new ArmToFeed().onlyIf(() -> arm.getState() == ArmState.PROCESSOR)
+                .alongWith(new ElevatorToFeed().onlyIf(() -> elevator.getState() == ElevatorState.PROCESSOR)))
             .onFalse(new FroggyRollerStop())
             .onFalse(new FroggyPivotToStow());
 
@@ -254,7 +257,10 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Froggy pivot to processor
-        driver.getLeftBumper().onTrue(new FroggyPivotToProcessor());
+        driver.getLeftBumper()
+            .onTrue(new FroggyPivotToProcessor())
+            .onTrue(new ElevatorToProcessor().alongWith(new ArmToProcessor())
+                .onlyIf(() -> !shooter.hasCoral()));
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
@@ -389,7 +395,7 @@ public class RobotContainer {
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
                 new ElevatorToUnstuckCoral().alongWith(new ArmUnstuckCoral()),
-                () -> climb.getState() != ClimbState.OPEN
+                () -> climb.getState() == ClimbState.OPEN
             ));
 
         // Get ready for climb
@@ -403,7 +409,10 @@ public class RobotContainer {
 
         // Climb!!
         driver.getRightMenuButton()
-            .onTrue(new ClimbClimb().onlyIf(() -> climb.getState() == ClimbState.OPEN))
+            .onTrue(new ClimbClimb()
+                .onlyIf(() -> climb.getState() == ClimbState.OPEN 
+                    || climb.getState() == ClimbState.SHIMMY 
+                    || climb.getState() == ClimbState.IDLE))
             .onTrue(new ShooterShootBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle())
             .onFalse(new ShooterStop());

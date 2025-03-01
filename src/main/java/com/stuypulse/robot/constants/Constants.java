@@ -13,8 +13,8 @@ public interface Constants {
 
     double LENGTH_WITH_BUMPERS_METERS = Units.inchesToMeters(37.16);
     double WIDTH_WITH_BUMPERS_METERS = Units.inchesToMeters(36.16);
-
-    double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.16 + 0.6);
+    
+    double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.5);
 
     public interface Elevator {
         double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR

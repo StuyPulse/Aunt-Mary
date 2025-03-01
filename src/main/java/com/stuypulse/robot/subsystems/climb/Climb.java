@@ -61,6 +61,8 @@ public abstract class Climb extends SubsystemBase {
         setVoltageOverride(Optional.empty());
     }
 
+    public abstract Rotation2d getCurrentAngle();
+
     public abstract void setVoltageOverride(Optional<Double> voltage);
 
     @Override

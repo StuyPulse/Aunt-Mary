@@ -24,8 +24,7 @@ public class FunnelDefaultCommand extends Command{
     public void execute() {
         if (shooter.hasCoral() 
             || shooter.getState() == ShooterState.HOLD_ALGAE 
-            || Climb.getInstance().getState() == ClimbState.OPEN
-            || Climb.getInstance().getState() == ClimbState.CLIMBING
+            || Climb.getInstance().getState() != ClimbState.CLOSED
         ) {
             funnel.setState(FunnelState.STOP);
         }

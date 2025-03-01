@@ -92,9 +92,9 @@ public interface Settings {
 
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
-                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = -0.02;
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
-                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = -0.02;
+                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
@@ -156,6 +156,8 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS = 1.205811;
         double ALGAE_L3_HEIGHT_METERS = 1.622803;
 
+        double PROCESSOR_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
+
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
         double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
 
@@ -177,13 +179,13 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
         Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
 
-        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 5);
+        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
-        Rotation2d FEED_ANGLE = MIN_ANGLE;
+        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
         Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
 
@@ -254,6 +256,8 @@ public interface Settings {
         //Side Alignment color
         LEDPattern LEFT_SIDE_COLOR = LEDPattern.solid(Color.kYellow);
         LEDPattern RIGHT_SIDE_COLOR = LEDPattern.solid(Color.kBlue);
+
+        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kBrown);
     }
 
     public interface Driver {
