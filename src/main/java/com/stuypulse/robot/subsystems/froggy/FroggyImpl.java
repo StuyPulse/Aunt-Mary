@@ -38,7 +38,8 @@ public class FroggyImpl extends Froggy {
     private TalonFX pivotMotor;
     private DutyCycleEncoder absoluteEncoder;
 
-    private BStream isStalling;
+    private BStream isStallingCoral;
+    private BStream isStallingAlgae;
 
     private Controller controller;
     private MotionProfile motionProfile;
@@ -57,16 +58,10 @@ public class FroggyImpl extends Froggy {
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
-        isStalling = BStream.create(() -> {
-            switch (getRollerState()) {
-                case INTAKE_CORAL:
-                    return Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble()) > Settings.Froggy.CORAL_STALL_CURRENT_THRESHOLD;
-                case INTAKE_ALGAE:
-                    return Math.abs(rollerMotor.getSupplyCurrent().getValueAsDouble()) > Settings.Froggy.ALGAE_STALL_CURRENT_THRESHOLD;
-                default:
-                    return false;
-            }
-        }).filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
+        isStallingCoral = BStream.create(() -> Math.abs(rollerMotor.getStatorCurrent().getValueAsDouble()) > Settings.Froggy.CORAL_STALL_CURRENT_THRESHOLD)
+            .filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
+        isStallingAlgae = BStream.create(() -> Math.abs(rollerMotor.getStatorCurrent().getValueAsDouble()) > Settings.Froggy.ALGAE_STALL_CURRENT_THRESHOLD)
+            .filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
@@ -111,8 +106,13 @@ public class FroggyImpl extends Froggy {
     }
 
     @Override
-    public boolean isStalling() {
-        return isStalling.get();
+    public boolean isStallingCoral() {
+        return isStallingCoral.get();
+    }
+
+    @Override
+    public boolean isStallingAlgae() {
+        return isStallingAlgae.get();
     }
 
     @Override
@@ -161,7 +161,8 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
 
         // ROLLER
-        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling", isStalling());
+        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling Coral", isStallingCoral());
+        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling Algae", isStallingAlgae());
         
         SmartDashboard.putNumber("Froggy/Roller/Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Froggy/Roller/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());

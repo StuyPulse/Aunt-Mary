@@ -76,6 +76,9 @@ public interface Settings {
                 SmartNumber MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 4.0);
                 SmartNumber MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 11.5);
 
+                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",4);
+                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 10);
+
                 SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
                 SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
             }
@@ -137,15 +140,15 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND = 1.5;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
+        double MAX_VELOCITY_METERS_PER_SECOND = 1.75;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 3.5;
 
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2);
 
         // Coral
         double FRONT_L2_HEIGHT_METERS = 1.538086;
         double FRONT_L3_HEIGHT_METERS = 1.036621;
-        double FRONT_L4_HEIGHT_METERS = 1.656494;
+        double FRONT_L4_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
         double BACK_L3_HEIGHT_METERS = 1.037109;
@@ -258,6 +261,9 @@ public interface Settings {
         LEDPattern RIGHT_SIDE_COLOR = LEDPattern.solid(Color.kBlue);
 
         LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kBrown);
+
+        LEDPattern TIMEOUT_COLOR = LEDPattern.solid(Color.kBlack);
+
     }
 
     public interface Driver {

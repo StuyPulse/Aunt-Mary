@@ -503,9 +503,9 @@ public class RobotContainer {
         "Red I to HP", "Red K to HP", "Red L to HP");
 
         AutonConfig BLUE_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP");
+        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Red I BackOut");
         AutonConfig RED_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Red I to HP", "Red K to HP", "Red L to HP");
+        "Red I to HP", "Red K to HP", "Red L to HP", "Red I BackOut");
         
         BLUE_ONE_PIECE_H.registerBlue(autonChooser);
         RED_ONE_PIECE_H.registerRed(autonChooser);

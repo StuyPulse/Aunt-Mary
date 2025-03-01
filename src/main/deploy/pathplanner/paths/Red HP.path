@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3665983606557375,
-        "y": 6.944006147540984
+        "x": 1.2467213114754097,
+        "y": 6.836116803278688
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3596641426222795,
-        "y": 6.153307676742085
+        "x": 1.2397870934419517,
+        "y": 6.045418332479789
       },
       "isLocked": false,
       "linkedName": "Red Top HP"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

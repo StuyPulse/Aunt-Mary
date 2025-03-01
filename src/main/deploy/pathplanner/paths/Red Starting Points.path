@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.931431206597222,
-        "y": 5.291489076967593
+        "x": 6.964856557377049,
+        "y": 5.1698258196721305
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.929951975988963,
-        "y": 4.313360589244379
+        "x": 6.96337732676879,
+        "y": 4.191697331948917
       },
       "isLocked": false,
       "linkedName": "Red Top Start"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

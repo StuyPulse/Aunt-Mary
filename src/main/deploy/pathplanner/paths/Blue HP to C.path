@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.843466026936238,
-        "y": 2.8984841545838695
+        "y": 2.898484154583869
       },
       "isLocked": false,
       "linkedName": "Blue Bottom HP"
@@ -20,8 +20,8 @@
         "y": 2.8778821672712045
       },
       "prevControl": {
-        "x": 1.6205844988132556,
-        "y": 0.6787310036528442
+        "x": 1.620584498813256,
+        "y": 0.6787310036528438
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

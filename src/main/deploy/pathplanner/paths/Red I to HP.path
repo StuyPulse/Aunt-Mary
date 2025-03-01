@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.601935040509258,
-        "y": 5.291489076967593
+        "x": 5.214651639344262,
+        "y": 5.241752049180327
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.923956643815056,
-        "y": 6.766562568789642
+        "x": 1.6697153082426506,
+        "y": 6.736076236655946
       },
       "isLocked": false,
-      "linkedName": "Red I"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3665983606557375,
-        "y": 6.944006147540984
+        "x": 1.2107581967213117,
+        "y": 6.88406762295082
       },
       "prevControl": {
-        "x": 4.326484256673776,
-        "y": 5.7002725889307
+        "x": 4.148736063281016,
+        "y": 5.577202714971719
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Top HP"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
