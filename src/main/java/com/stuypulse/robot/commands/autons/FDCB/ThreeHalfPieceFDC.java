@@ -35,7 +35,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.5),
+            new WaitCommand(0.3),
             new ShooterStop(),
 
             // To HP, Score D
@@ -64,7 +64,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.5),
+            new WaitCommand(0.3),
             new ShooterStop(),
 
             // To HP, Score C
@@ -92,7 +92,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.5),
+            new WaitCommand(0.3),
             new ShooterStop(),
 
             // Drive to HP

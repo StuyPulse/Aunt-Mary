@@ -32,17 +32,13 @@ import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
 import com.stuypulse.robot.commands.autons.misc.DoNothingAuton;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
-import com.stuypulse.robot.commands.autons.FDCB.OnePieceF;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
-import com.stuypulse.robot.commands.autons.FDCB.TwoPieceFD;
 import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
-import com.stuypulse.robot.commands.autons.IKLA.OnePieceI;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
-import com.stuypulse.robot.commands.autons.IKLA.TwoPieceIK;
 import com.stuypulse.robot.commands.autons.tests.CurvyLineTest;
 import com.stuypulse.robot.commands.autons.tests.RSquareTest;
 import com.stuypulse.robot.commands.autons.tests.SquareTest;
@@ -485,16 +481,6 @@ public class RobotContainer {
         AutonConfig RED_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
         "Red Mid Top to H");
 
-        AutonConfig BLUE_ONE_PIECE_I = new AutonConfig("1 Piece I", OnePieceI::new,
-        "Blue Top to I");
-        AutonConfig RED_ONE_PIECE_I = new AutonConfig("1 Piece I", OnePieceI::new,
-        "Red Top to I");
-
-        AutonConfig BLUE_TWO_PIECE_IK = new AutonConfig("2 Piece IK", TwoPieceIK::new,
-        "Blue I to HP");
-        AutonConfig RED_TWO_PIECE_IK = new AutonConfig("2 Piece IK", TwoPieceIK::new,
-        "Red I to HP");
-
         AutonConfig BLUE_THREE_PIECE_IKL = new AutonConfig("3 Piece IKL", ThreePieceIKL::new,
         "Blue I to HP", "Blue K to HP");
         AutonConfig RED_THREE_PIECE_IKL = new AutonConfig("3 Piece IKL", ThreePieceIKL::new,
@@ -512,12 +498,6 @@ public class RobotContainer {
         
         BLUE_ONE_PIECE_H.registerBlue(autonChooser);
         RED_ONE_PIECE_H.registerRed(autonChooser);
-       
-        BLUE_ONE_PIECE_I.registerBlue(autonChooser);
-        RED_ONE_PIECE_I.registerRed(autonChooser);
-
-        BLUE_TWO_PIECE_IK.registerBlue(autonChooser);
-        RED_TWO_PIECE_IK.registerRed(autonChooser);
 
         BLUE_THREE_PIECE_IKL.registerBlue(autonChooser);
         RED_THREE_PIECE_IKL.registerRed(autonChooser);
@@ -534,15 +514,6 @@ public class RobotContainer {
         "Blue Mid Bottom to G");
         AutonConfig RED_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
         "Red Mid Bottom to G");
-        AutonConfig BLUE_ONE_PIECE_F = new AutonConfig("1 Piece F", OnePieceF::new,
-        "Blue Bottom to F");
-        AutonConfig RED_ONE_PIECE_F = new AutonConfig("1 Piece F", OnePieceF::new,
-        "Red Bottom to F");
-
-        AutonConfig BLUE_TWO_PIECE_FD = new AutonConfig("2 Piece FD", TwoPieceFD::new,
-        "Blue F to HP");
-        AutonConfig RED_TWO_PIECE_FD = new AutonConfig("2 Piece FD", TwoPieceFD::new,
-        "Red F to HP");
 
         AutonConfig BLUE_THREE_PIECE_FDC = new AutonConfig("3 Piece FDC", ThreePieceFDC::new,
         "Blue F to HP", "Blue D to HP");
@@ -561,12 +532,6 @@ public class RobotContainer {
 
         BLUE_ONE_PIECE_G.registerBlue(autonChooser);
         RED_ONE_PIECE_G.registerRed(autonChooser);
-       
-        BLUE_ONE_PIECE_F.registerBlue(autonChooser);
-        RED_ONE_PIECE_F.registerRed(autonChooser);
-
-        BLUE_TWO_PIECE_FD.registerBlue(autonChooser);
-        RED_TWO_PIECE_FD.registerRed(autonChooser);
 
         BLUE_THREE_PIECE_FDC.registerBlue(autonChooser);
         RED_THREE_PIECE_FDC.registerRed(autonChooser);
@@ -631,6 +596,7 @@ public class RobotContainer {
 
         /** TESTS **/
 
+        /*
         AutonConfig BLUE_MOBILITY = new AutonConfig("Mobility", Mobility::new,
         "Mobility");
         AutonConfig RED_MOBILITY = new AutonConfig("Mobility", Mobility::new, 
@@ -650,6 +616,7 @@ public class RobotContainer {
         CURVY_LINE_TEST.registerRed(autonChooser);
         SQUARE_TEST.registerRed(autonChooser);
         RSQUARE_TEST.registerRed(autonChooser);
+        */
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

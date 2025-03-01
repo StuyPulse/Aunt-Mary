@@ -41,7 +41,7 @@
 //             ),
 //             new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.G, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
 //             new ShooterShootBackwards(),
-//             new WaitCommand(0.5),
+//             new WaitCommand(0.3),
 //             new ShooterStop(),
 
 //             // Acquire GH Algae, Score on Barge
