@@ -228,6 +228,7 @@ public interface Settings {
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(3.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
         Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245);
+        Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(135);
         
         Rotation2d ANGLE_TOLERANCE_FOR_CLOSED = Rotation2d.fromDegrees(8);
     }

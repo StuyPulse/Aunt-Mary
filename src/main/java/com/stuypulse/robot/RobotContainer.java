@@ -48,6 +48,7 @@ import com.stuypulse.robot.commands.climb.ClimbClose;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
+import com.stuypulse.robot.commands.climb.ClimbShimmy;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
@@ -385,10 +386,16 @@ public class RobotContainer {
         //     .onFalse(new FroggyPivotToStow());
 
         driver.getDPadDown()
-            .onTrue(new ElevatorToUnstuckCoral())
-            .onTrue(new ArmUnstuckCoral())
-            .onFalse(new ElevatorToFeed())
-            .onFalse(new ArmToFeed());
+            .onTrue(new ConditionalCommand(
+                new ElevatorToUnstuckCoral().alongWith(new ArmUnstuckCoral()),
+                new ClimbShimmy(),
+                () -> climb.getState() != ClimbState.OPEN
+            ))
+            .onFalse(new ConditionalCommand(
+                new ElevatorToFeed().alongWith(new ArmToFeed()),
+                new ClimbIdle(),
+                () -> climb.getState() != ClimbState.OPEN
+            ));
 
         // Get ready for climb
         driver.getLeftMenuButton()
