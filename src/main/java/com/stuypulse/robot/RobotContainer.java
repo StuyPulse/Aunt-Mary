@@ -603,7 +603,7 @@ public class RobotContainer {
 
         // AutonConfig BLUE_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
-        // AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
+         //AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
         // BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
@@ -613,7 +613,7 @@ public class RobotContainer {
         // RED_G_TWO_ALGAE.registerRed(autonChooser);
 
         // BLUE_G_THREE_ALGAE.registerBlue(autonChooser);
-        // RED_G_THREE_ALGAE.registerRed(autonChooser);
+         //RED_G_THREE_ALGAE.registerRed(autonChooser);
 
         /** TESTS **/
 

@@ -5,7 +5,7 @@ import com.stuypulse.robot.util.ReefUtil;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class SwerveDrivePidToNearestReefAlgae extends SequentialCommandGroup{
+public class SwerveDrivePidToNearestReefAlgae extends SequentialCommandGroup {
     public SwerveDrivePidToNearestReefAlgae() {
         addCommands(
             new SwerveDrivePIDToPose(() -> ReefUtil.getClosestAlgae().getReadyPose()),

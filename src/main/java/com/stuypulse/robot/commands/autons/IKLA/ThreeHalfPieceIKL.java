@@ -9,9 +9,12 @@ import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearanceAuton;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
@@ -31,12 +34,15 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
 
             // Score Preload on I
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.I, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2),
+                new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
+                    .withTranslationalConstraints(1.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
+                    .withTimeout(2)
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
             new ShooterStop(),
 
             // To HP, Score K
@@ -57,7 +63,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2),
+                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -65,7 +71,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
             new ShooterStop(),
 
             // To HP, Score L
@@ -85,7 +91,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2),
+                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -93,7 +99,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
             new ShooterStop(),
 
             // Drive to HP
@@ -105,10 +111,13 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                     )
             ),
-            new ShooterSetAcquire()
+            new ParallelCommandGroup(
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquire()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop()))
+            )
 
         );
 
