@@ -381,7 +381,7 @@ public class RobotContainer {
                         .andThen(new SwerveDriveNudgeForward()), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))
             .onFalse(new WaitUntilCommand(() -> swerve.isClearFromReef())
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+                .andThen(new ElevatorToProcessor().alongWith(new ArmToProcessor())))
             .onFalse(new ShooterHoldAlgae());
 
         // Auto processor
