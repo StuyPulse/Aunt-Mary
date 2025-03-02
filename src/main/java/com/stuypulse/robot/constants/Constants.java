@@ -15,6 +15,7 @@ public interface Constants {
     double WIDTH_WITH_BUMPERS_METERS = Units.inchesToMeters(36.16);
     
     double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.5);
+    double FROGGY_Y_OFFSET_WHEN_FULLY_EXTENDED = Units.inchesToMeters(30.05);
 
     public interface Elevator {
         double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR

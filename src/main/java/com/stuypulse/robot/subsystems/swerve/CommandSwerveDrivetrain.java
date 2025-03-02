@@ -29,9 +29,11 @@ import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.Odometry;
@@ -411,6 +413,27 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
                 - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
+    }
+
+    public boolean isFroggyClearFromCoralStation() {
+        Pose2d froggy = getPose().transformBy(
+            new Transform2d(
+                new Translation2d(0.0, -Constants.FROGGY_Y_OFFSET_WHEN_FULLY_EXTENDED), // froggy is 30 inches to the right of the center of the robot
+                new Rotation2d(getPose().getRotation().getRadians() - Math.PI / 2)));     // froggy is 90 degrees offset from center of the robot
+        Vector2D froggyHeadingAsVector = new Vector2D(froggy.getRotation().getCos(), froggy.getRotation().getCos());
+
+        Pose2d coralStation = Field.CoralStation.getClosestCoralStation(froggy).getPose();
+        Vector2D coralStationHeadingAsVector = new Vector2D(coralStation.getRotation().getCos(), coralStation.getRotation().getCos());
+
+        if (Robot.isBlue()) {
+            if (froggyHeadingAsVector.dot(coralStationHeadingAsVector) < 0) {
+                return Field.CoralStation.getDistanceToClosestStation(froggy) > Settings.Clearances.CLEARANCE_FROM_FROGGY_TO_CORAL_STATION;
+            } else return true;
+        } else {
+            if (froggyHeadingAsVector.dot(coralStationHeadingAsVector.rotate(Angle.k180deg, coralStationHeadingAsVector)) < 0) {
+                return Field.CoralStation.getDistanceToClosestStation(froggy) > Settings.Clearances.CLEARANCE_FROM_FROGGY_TO_CORAL_STATION;
+            } else return true;
+        }
     }
 
     @Override

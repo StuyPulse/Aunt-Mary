@@ -253,7 +253,8 @@ public class RobotContainer {
                         || arm.getState() == ArmState.L2_BACK), 
                 () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
             .onFalse(new FroggyRollerStop())
-            .onFalse(new FroggyPivotToStow());
+            .onFalse(new WaitUntilCommand(() -> swerve.isFroggyClearFromCoralStation())
+                .andThen(new FroggyPivotToStow()));
 
         // ground algae intake and send elevator/arm to feed
         driver.getLeftTriggerButton()

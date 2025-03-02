@@ -2,6 +2,7 @@ package com.stuypulse.robot.constants;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.ReefUtil.Algae;
 import com.stuypulse.robot.util.vision.AprilTag;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -167,6 +168,62 @@ public interface Field {
         }
         else {
             return klCoralStation;
+        }
+    }
+
+    public enum CoralStation {
+        BLUE_CD_CORAL_STATION(NamedTags.BLUE_CD_CORAL_STATION.getLocation(), new Translation2d(0, Units.inchesToMeters(25.80 * 2)), new Translation2d(Units.inchesToMeters(33.51 * 2), 0)),
+        BLUE_KL_CORAL_STATION(NamedTags.BLUE_KL_CORAL_STATION.getLocation(), new Translation2d(0, Units.inchesToMeters(Field.WIDTH - 25.80 * 2)), new Translation2d(Units.inchesToMeters(33.51 * 2), Units.inchesToMeters(Field.WIDTH))),
+        RED_CD_CORAL_STATION(NamedTags.RED_CD_CORAL_STATION.getLocation(), new Translation2d(Units.inchesToMeters(Field.LENGTH - 33.51 * 2), Units.inchesToMeters(Field.WIDTH)), new Translation2d(Units.inchesToMeters(Field.LENGTH - 33.51 * 2), 0)),
+        RED_KL_CORAL_STATION(NamedTags.RED_KL_CORAL_STATION.getLocation(), new Translation2d(Units.inchesToMeters(Field.LENGTH - 33.51 * 2), 0), new Translation2d(Units.inchesToMeters(Field.LENGTH), Units.inchesToMeters(25.80 * 2)));
+    
+        private Pose3d pose;
+        private Translation2d lineStart;
+        private Translation2d lineEnd;
+
+        private CoralStation(Pose3d pose, Translation2d lineStart, Translation2d lineEnd) {
+            this.pose = pose;
+            this.lineStart = lineStart;
+            this.lineEnd = lineEnd;
+        }
+
+        private Translation2d getLineStart() {
+            return lineStart;
+        }
+
+        private Translation2d getLineEnd() {
+            return lineEnd;
+        }
+        
+        public Pose2d getPose() {
+            return pose.toPose2d();
+        }
+
+        public static double distancePointToStation(Pose2d point, CoralStation station) {
+            double A = (station.getLineStart().getY() - station.getLineStart().getY()) / (station.getLineEnd().getX() - station.getLineEnd().getX());
+            double B = -1;
+            double C = station.getLineEnd().getY() - A * station.getLineEnd().getX();
+    
+            return Math.abs(A * point.getX() + B * point.getY() + C) / Math.sqrt(A*A + B*B);
+        }
+
+        public static CoralStation getClosestCoralStation(Pose2d point) {
+            double closestDistance = Double.MAX_VALUE;
+            CoralStation nearestStation = BLUE_CD_CORAL_STATION;
+
+            for (CoralStation station : CoralStation.values()) {
+                double distance = distancePointToStation(point, station);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    nearestStation = station;
+
+                }
+            }
+            return nearestStation;
+        }
+
+        public static double getDistanceToClosestStation(Pose2d point) {
+            return distancePointToStation(point, getClosestCoralStation(point));
         }
     }
 
