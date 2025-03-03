@@ -66,9 +66,9 @@ public interface Gains {
 
     public interface Froggy {
         public interface PID {
-            double kP = 0.00571;
+            double kP = 0.01571;
             double kI = 0.0;
-            double kD = 0.00007229;
+            double kD = 0.00017229;
         }
 
         public interface FF {

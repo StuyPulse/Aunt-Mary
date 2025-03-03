@@ -286,11 +286,9 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldCoral());
 
         // L1 raise pivot
-        driver.getRightBumper().onTrue(
-            new ConditionalCommand(
-                new FroggyPivotToL1(),
-                new BuzzController(driver), 
-                () -> Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE)));
+        driver.getRightBumper()
+            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()))
+            .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE)));
 
         // L4 coral score
         driver.getTopButton()
