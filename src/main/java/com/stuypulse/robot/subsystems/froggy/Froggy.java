@@ -8,6 +8,7 @@ package com.stuypulse.robot.subsystems.froggy;
 
 import java.util.Optional;
 
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.math.SLMath;
@@ -23,7 +24,12 @@ public abstract class Froggy extends SubsystemBase {
     public static final Froggy instance;
 
     static {
-        instance = new FroggyImpl();
+        if (Robot.isReal()) {
+            instance = new FroggyImpl();
+        }
+        else {
+            instance = new FroggySim();
+        }
     }
 
     public static Froggy getInstance() {
@@ -101,11 +107,13 @@ public abstract class Froggy extends SubsystemBase {
     public abstract boolean isStallingCoral();
     public abstract boolean isStallingAlgae();
 
+    public abstract Rotation2d getCurrentAngle();
+
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
     public abstract void setPivotOperatorOffset(Rotation2d offset);
     public abstract Rotation2d getPivotOperatorOffset();
 
-    public abstract SysIdRoutine getFroggySysIdRoutine();
+    public abstract SysIdRoutine getPivotSysIdRoutine();
 
     @Override
     public void periodic() {
