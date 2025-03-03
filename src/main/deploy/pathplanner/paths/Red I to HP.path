@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.214651639344262,
-        "y": 5.241752049180327
+        "x": 5.1786885245901635,
+        "y": 5.181813524590163
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6697153082426506,
-        "y": 6.736076236655946
+        "x": 1.847240869362254,
+        "y": 7.134304513391665
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red I"
     },
     {
       "anchor": {
-        "x": 1.2107581967213117,
-        "y": 6.88406762295082
+        "x": 1.7382172131147542,
+        "y": 7.195747950819672
       },
       "prevControl": {
-        "x": 4.148736063281016,
-        "y": 5.577202714971719
+        "x": 4.50917740302422,
+        "y": 5.51098443485028
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red Top HP"
     }
   ],
   "rotationTargets": [],
