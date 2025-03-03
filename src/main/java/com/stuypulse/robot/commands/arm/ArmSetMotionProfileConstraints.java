@@ -19,6 +19,6 @@ public class ArmSetMotionProfileConstraints extends InstantCommand {
 
     @Override
     public void initialize() {
-        arm.setMotionProfileConstraints(velLimit.getDegrees(), accelLimit.getDegrees());
+        arm.setMotionProfileConstraints(velLimit, accelLimit);
     }
 }

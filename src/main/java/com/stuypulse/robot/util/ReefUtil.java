@@ -13,33 +13,29 @@ import edu.wpi.first.math.geometry.Transform2d;
 public interface ReefUtil {
 
     public enum CoralBranch {
-        A(NamedTags.BLUE_AB.getLocation().toPose2d(), NamedTags.RED_AB.getLocation().toPose2d()),
-        B(NamedTags.BLUE_AB.getLocation().toPose2d(), NamedTags.RED_AB.getLocation().toPose2d()),
-        C(NamedTags.BLUE_CD.getLocation().toPose2d(), NamedTags.RED_CD.getLocation().toPose2d()),
-        D(NamedTags.BLUE_CD.getLocation().toPose2d(), NamedTags.RED_CD.getLocation().toPose2d()),
-        E(NamedTags.BLUE_EF.getLocation().toPose2d(), NamedTags.RED_EF.getLocation().toPose2d()),
-        F(NamedTags.BLUE_EF.getLocation().toPose2d(), NamedTags.RED_EF.getLocation().toPose2d()),
-        G(NamedTags.BLUE_GH.getLocation().toPose2d(), NamedTags.RED_GH.getLocation().toPose2d()),
-        H(NamedTags.BLUE_GH.getLocation().toPose2d(), NamedTags.RED_GH.getLocation().toPose2d()),
-        I(NamedTags.BLUE_IJ.getLocation().toPose2d(), NamedTags.RED_IJ.getLocation().toPose2d()),
-        J(NamedTags.BLUE_IJ.getLocation().toPose2d(), NamedTags.RED_IJ.getLocation().toPose2d()),
-        K(NamedTags.BLUE_KL.getLocation().toPose2d(), NamedTags.RED_KL.getLocation().toPose2d()),
-        L(NamedTags.BLUE_KL.getLocation().toPose2d(), NamedTags.RED_KL.getLocation().toPose2d());
+        A(NamedTags.BLUE_AB, NamedTags.RED_AB),
+        B(NamedTags.BLUE_AB, NamedTags.RED_AB),
+        C(NamedTags.BLUE_CD, NamedTags.RED_CD),
+        D(NamedTags.BLUE_CD, NamedTags.RED_CD),
+        E(NamedTags.BLUE_EF, NamedTags.RED_EF),
+        F(NamedTags.BLUE_EF, NamedTags.RED_EF),
+        G(NamedTags.BLUE_GH, NamedTags.RED_GH),
+        H(NamedTags.BLUE_GH, NamedTags.RED_GH),
+        I(NamedTags.BLUE_IJ, NamedTags.RED_IJ),
+        J(NamedTags.BLUE_IJ, NamedTags.RED_IJ),
+        K(NamedTags.BLUE_KL, NamedTags.RED_KL),
+        L(NamedTags.BLUE_KL, NamedTags.RED_KL);
 
-        private Pose2d correspondingRedAprilTagPose;
-        private Pose2d correspondingBlueAprilTagPose;
+        private NamedTags correspondingBlueAprilTag;
+        private NamedTags correspondingRedAprilTag;
 
-        private CoralBranch(Pose2d correspondingBlueAprilTagPose, Pose2d correspondingRedAprilTagPose) {
-            this.correspondingBlueAprilTagPose = correspondingBlueAprilTagPose;
-            this.correspondingRedAprilTagPose = correspondingRedAprilTagPose;
+        private CoralBranch(NamedTags correspondingBlueAprilTag, NamedTags correspondingRedAprilTag) {
+            this.correspondingBlueAprilTag = correspondingBlueAprilTag;
+            this.correspondingRedAprilTag = correspondingRedAprilTag;
         }
 
         public Pose2d getCorrespondingAprilTagPose() {
-            return Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
-        }
-
-        public Pose2d getOpposingAprilTagPose() {
-            return !Robot.isBlue() ? this.correspondingBlueAprilTagPose : this.correspondingRedAprilTagPose;
+            return Robot.isBlue() ? this.correspondingBlueAprilTag.getLocation().toPose2d() : this.correspondingRedAprilTag.getLocation().toPose2d();
         }
 
         public Pose2d getBranchPoseProjectedOntoReefFace() {

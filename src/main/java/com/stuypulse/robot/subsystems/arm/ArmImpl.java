@@ -142,9 +142,9 @@ public class ArmImpl extends Arm {
     }
 
     @Override
-    public void setMotionProfileConstraints(double velLimitDegreesPerSecond, double accelLimitDegreesPerSecondSquared) {
-        this.velLimitDegreesPerSecond.set(velLimitDegreesPerSecond);
-        this.accelLimitDegreesPerSecondSquared.set(accelLimitDegreesPerSecondSquared);
+    public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
+        this.velLimitDegreesPerSecond.set(velLimit.getDegrees());
+        this.accelLimitDegreesPerSecondSquared.set(accelLimit.getDegrees());
     }
 
     private void updateGains() {
@@ -194,6 +194,9 @@ public class ArmImpl extends Arm {
         else {
             motor.setVoltage(0);
         }
+
+        SmartDashboard.putNumber("Arm/Constraints/Max vel (deg per s)", velLimitDegreesPerSecond.get());
+        SmartDashboard.putNumber("Arm/Constraints/Max accel (deg per s per s)", accelLimitDegreesPerSecondSquared.get());
 
         SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
         SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());

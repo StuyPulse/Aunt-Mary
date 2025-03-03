@@ -103,6 +103,8 @@ public class ElevatorImpl extends Elevator {
 
     @Override
     public void setMotionProfileConstraints(double velLimitMetersPerSecond, double accelLimitMetersPerSecondSquared) {
+        this.velLimit = velLimitMetersPerSecond;
+        this.accelLimit = accelLimitMetersPerSecondSquared;
         Motors.Elevator.MOTOR_CONFIG.withMotionProfile(velLimitMetersPerSecond, accelLimitMetersPerSecondSquared);
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
     }
@@ -130,5 +132,8 @@ public class ElevatorImpl extends Elevator {
         SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+
+        SmartDashboard.putNumber("Elevator/Constraints/Max vel (m per s)", velLimit);
+        SmartDashboard.putNumber("Elevator/Constraints/Max accel (m per s per s)", accelLimit);
     }
 }

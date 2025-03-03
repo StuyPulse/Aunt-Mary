@@ -37,8 +37,8 @@ public class ArmSim extends Arm {
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
 
-    private SettableNumber velLimitDegreesPerSecond;
-    private SettableNumber accelLimitDegreesPerSecondSquared;
+    private SettableNumber velLimitRadiansPerSecond;
+    private SettableNumber accelLimitRadiansPerSecondSquared;
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
@@ -76,10 +76,10 @@ public class ArmSim extends Arm {
         
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
-        velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.MAX_VEL_TELEOP.getDegrees());
-        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.MAX_ACCEL_TELEOP.getDegrees());
+        velLimitRadiansPerSecond = new SettableNumber(Settings.Arm.MAX_VEL_TELEOP.getDegrees());
+        accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.MAX_ACCEL_TELEOP.getDegrees());
 
-        motionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
+        motionProfile = new MotionProfile(velLimitRadiansPerSecond, accelLimitRadiansPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
 
         voltageOverride = Optional.empty();
@@ -141,9 +141,9 @@ public class ArmSim extends Arm {
     }
 
     @Override
-    public void setMotionProfileConstraints(double velLimitDegreesPerSecond, double accelLimitDegreesPerSecondSquared) {
-        this.velLimitDegreesPerSecond.set(velLimitDegreesPerSecond);
-        this.accelLimitDegreesPerSecondSquared.set(accelLimitDegreesPerSecondSquared);
+    public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
+        this.velLimitRadiansPerSecond.set(velLimit.getRadians());
+        this.accelLimitRadiansPerSecondSquared.set(accelLimit.getRadians());
     }
     
     @Override
@@ -151,6 +151,9 @@ public class ArmSim extends Arm {
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetAngle().getRadians());
+
+        SmartDashboard.putNumber("Arm/Constraints/Max vel (deg per s)", Units.radiansToDegrees(velLimitRadiansPerSecond.get()));
+        SmartDashboard.putNumber("Arm/Constraints/Max accel (deg per s per s)", Units.radiansToDegrees(accelLimitRadiansPerSecondSquared.get()));
 
         SmartDashboard.putNumber("Arm/Setpoint (deg)", Units.radiansToDegrees(setpoint));
 

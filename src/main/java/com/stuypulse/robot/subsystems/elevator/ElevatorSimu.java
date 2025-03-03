@@ -159,6 +159,9 @@ public class ElevatorSimu extends Elevator {
 
         double setpoint = motionProfile.get(getTargetHeight());
 
+        SmartDashboard.putNumber("Elevator/Constraints/Max vel (m per s)", velLimitMetersPerSecond.get());
+        SmartDashboard.putNumber("Elevator/Constraints/Max accel (m per s per s)", accelLimitMetersPerSecond.get());
+
         SmartDashboard.putNumber("Elevator/Setpoint", setpoint);
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
