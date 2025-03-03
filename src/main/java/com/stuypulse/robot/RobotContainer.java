@@ -278,8 +278,7 @@ public class RobotContainer {
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
-                .andThen(new FroggyPivotToCoralGroundPickup()))
-            .onTrue(new FroggyRollerIntakeCoral())
+                .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
                 .andThen(new FroggyPivotToStow()))
             .onFalse(new FroggyRollerHoldCoral());
