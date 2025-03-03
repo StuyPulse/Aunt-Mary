@@ -6,17 +6,14 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
-
-import static edu.wpi.first.units.Units.Second;
-
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -32,7 +29,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ArmSim extends Arm {
@@ -40,6 +36,9 @@ public class ArmSim extends Arm {
     private final SingleJointedArmSim sim;
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
+
+    private SettableNumber velLimitDegreesPerSecond;
+    private SettableNumber accelLimitDegreesPerSecondSquared;
 
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
@@ -77,10 +76,10 @@ public class ArmSim extends Arm {
         
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
-        motionProfile = new MotionProfile(
-            Settings.Arm.MAX_VEL.getRadians(),
-            Settings.Arm.MAX_ACCEL.getRadians()
-        );
+        velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.MAX_VEL_TELEOP.getDegrees());
+        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.MAX_ACCEL_TELEOP.getDegrees());
+
+        motionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
 
         voltageOverride = Optional.empty();
@@ -141,6 +140,12 @@ public class ArmSim extends Arm {
         return this.operatorOffset;
     }
 
+    @Override
+    public void setMotionProfileConstraints(double velLimitDegreesPerSecond, double accelLimitDegreesPerSecondSquared) {
+        this.velLimitDegreesPerSecond.set(velLimitDegreesPerSecond);
+        this.accelLimitDegreesPerSecondSquared.set(accelLimitDegreesPerSecondSquared);
+    }
+    
     @Override
     public void periodic() {
         super.periodic();

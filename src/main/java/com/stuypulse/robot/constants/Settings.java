@@ -140,8 +140,11 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND = 1.75;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
+        double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 1.75;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 2.0;
+
+        double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 1.75;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.5;
 
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
@@ -194,8 +197,12 @@ public interface Settings {
 
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(350.0);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(700.0);
+        Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(350.0);
+        Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(700.0);
+
+        Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
+        Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
+
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
 

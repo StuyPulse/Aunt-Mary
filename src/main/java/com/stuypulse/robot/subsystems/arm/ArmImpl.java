@@ -45,6 +45,9 @@ public class ArmImpl extends Arm {
     private Controller controller;
     private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
+    private SettableNumber velLimitDegreesPerSecond;
+    private SettableNumber accelLimitDegreesPerSecondSquared;
+
     private Optional<Double> voltageOverride;
     private Rotation2d operatorOffset;
 
@@ -57,7 +60,10 @@ public class ArmImpl extends Arm {
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
-        MotionProfile motionProfile = new MotionProfile(Settings.Arm.MAX_VEL.getDegrees(), Settings.Arm.MAX_ACCEL.getDegrees());
+        velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.MAX_VEL_TELEOP.getDegrees());
+        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.MAX_ACCEL_TELEOP.getDegrees());
+
+        MotionProfile motionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
         kP = new SettableNumber(Gains.Arm.Empty.PID.kP);
@@ -133,6 +139,12 @@ public class ArmImpl extends Arm {
     @Override
     public Rotation2d getOperatorOffset() {
         return this.operatorOffset;
+    }
+
+    @Override
+    public void setMotionProfileConstraints(double velLimitDegreesPerSecond, double accelLimitDegreesPerSecondSquared) {
+        this.velLimitDegreesPerSecond.set(velLimitDegreesPerSecond);
+        this.accelLimitDegreesPerSecondSquared.set(accelLimitDegreesPerSecondSquared);
     }
 
     private void updateGains() {

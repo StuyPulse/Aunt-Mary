@@ -91,6 +91,7 @@ public abstract class Arm extends SubsystemBase {
     public abstract Rotation2d getOperatorOffset();
 
     public abstract SysIdRoutine getSysIdRoutine();
+    public abstract void setMotionProfileConstraints(double velLimit, double accelLimit);
 
     @Override
     public void periodic() {

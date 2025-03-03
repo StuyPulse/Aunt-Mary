@@ -15,7 +15,9 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.Nat;
@@ -40,6 +42,9 @@ public class ElevatorSimu extends Elevator {
     private final ElevatorSim sim;
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
+
+    private SettableNumber velLimitMetersPerSecond;
+    private SettableNumber accelLimitMetersPerSecond;
 
     private IStream accel;
 
@@ -81,9 +86,9 @@ public class ElevatorSimu extends Elevator {
         
         controller = new LinearSystemLoop<>(elevatorSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
-        motionProfile = new MotionProfile(
-            Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND,
-            Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND);
+        velLimitMetersPerSecond = new SettableNumber(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_TELEOP);
+        accelLimitMetersPerSecond = new SettableNumber(Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
+        motionProfile = new MotionProfile(velLimitMetersPerSecond, accelLimitMetersPerSecond);
 
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
@@ -140,6 +145,12 @@ public class ElevatorSimu extends Elevator {
     @Override
     public double getOperatorOffset() {
         return this.operatorOffset;
+    }
+
+    @Override
+    public void setMotionProfileConstraints(double velLimitMetersPerSecond, double accelLimitMetersPerSecondSquared) {
+        this.velLimitMetersPerSecond.set(velLimitMetersPerSecond);
+        this.accelLimitMetersPerSecond.set(accelLimitMetersPerSecondSquared);
     }
 
     @Override

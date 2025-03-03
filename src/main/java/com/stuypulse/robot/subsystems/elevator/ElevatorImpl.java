@@ -28,16 +28,25 @@ public class ElevatorImpl extends Elevator {
     private Optional<Double> voltageOverride;
     private double operatorOffset;
 
+    private double velLimit;
+    private double accelLimit;
+
     protected ElevatorImpl() {
         super();
         motor = new TalonFX(Ports.Elevator.MOTOR, Settings.CANIVORE_NAME);
-        Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
+
+        velLimit = Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_TELEOP;
+        accelLimit = Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_AUTON;
+        Motors.Elevator.MOTOR_CONFIG.withMotionProfile(velLimit, accelLimit);
+
+        Motors.Elevator.MOTOR_CONFIG.configure(motor);
 
         bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
 
         voltageOverride = Optional.empty();
         operatorOffset = 0;
+
     }
 
     @Override
@@ -90,6 +99,12 @@ public class ElevatorImpl extends Elevator {
     @Override
     public double getOperatorOffset() {
         return this.operatorOffset;
+    }
+
+    @Override
+    public void setMotionProfileConstraints(double velLimitMetersPerSecond, double accelLimitMetersPerSecondSquared) {
+        Motors.Elevator.MOTOR_CONFIG.withMotionProfile(velLimitMetersPerSecond, accelLimitMetersPerSecondSquared);
+        Motors.Elevator.MOTOR_CONFIG.configure(motor);
     }
 
     @Override

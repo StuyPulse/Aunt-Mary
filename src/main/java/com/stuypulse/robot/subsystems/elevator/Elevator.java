@@ -88,6 +88,7 @@ public abstract class Elevator extends SubsystemBase {
     public abstract double getOperatorOffset();
 
     public abstract SysIdRoutine getSysIdRoutine();
+    public abstract void setMotionProfileConstraints(double velLimitMetersPerSecond, double accelLimitMetersPerSecondSquared);
 
     @Override
     public void periodic() {

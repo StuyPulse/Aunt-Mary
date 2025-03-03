@@ -13,6 +13,7 @@ import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
+import com.stuypulse.robot.commands.arm.ArmSetMotionProfileConstraints;
 import com.stuypulse.robot.commands.arm.ArmToClimb;
 import com.stuypulse.robot.commands.arm.ArmToFeed;
 import com.stuypulse.robot.commands.arm.ArmUnstuckCoral;
@@ -52,6 +53,7 @@ import com.stuypulse.robot.commands.climb.ClimbShimmy;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
 import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
+import com.stuypulse.robot.commands.elevator.ElevatorSetMotionProfileConstraints;
 import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorToUnstuckCoral;
@@ -211,6 +213,14 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
             .onTrue(new VisionSetMegaTag1())
             .onFalse(new VisionSetMegaTag2());
+
+        RobotModeTriggers.autonomous()
+            .onTrue(new ElevatorSetMotionProfileConstraints(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_AUTON, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON))
+            .onTrue(new ArmSetMotionProfileConstraints(Settings.Arm.MAX_VEL_AUTON, Settings.Arm.MAX_ACCEL_AUTON));
+
+        RobotModeTriggers.teleop()
+            .onTrue(new ElevatorSetMotionProfileConstraints(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP))
+            .onTrue(new ArmSetMotionProfileConstraints(Settings.Arm.MAX_VEL_TELEOP, Settings.Arm.MAX_ACCEL_TELEOP));
 
         new Trigger(() -> RobotController.getBatteryVoltage() < RobotController.getBrownoutVoltage())
             .onTrue(new LEDDisable());
