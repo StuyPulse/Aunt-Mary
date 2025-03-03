@@ -121,6 +121,7 @@ import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
+import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
@@ -254,7 +255,8 @@ public class RobotContainer {
                         || arm.getState() == ArmState.L2_FRONT
                         || arm.getState() == ArmState.L2_BACK), 
                 () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
-            .onFalse(new FroggyRollerStop())
+            .onFalse(new FroggyRollerStop()
+                .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
                 .andThen(new FroggyPivotToStow()));
 

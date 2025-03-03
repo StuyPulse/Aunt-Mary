@@ -201,10 +201,10 @@ public interface Settings {
 
     public interface Froggy {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 3);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(10);
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(24);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(40);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(44);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
@@ -214,15 +214,15 @@ public interface Settings {
         SmartNumber ALGAE_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Outtake Speed", -0.5);
         SmartNumber CORAL_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Intake Speed", -1.0);
         SmartNumber CORAL_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Outtake Speed", 0.5);
-        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.15);
+        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.3);
         SmartNumber HOLD_CORAL_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Coral Speed", -0.15);
 
         double CORAL_STALL_CURRENT_THRESHOLD = 80.0;
         double ALGAE_STALL_CURRENT_THRESHOLD = 80.0;
         double STALL_DEBOUNCE_TIME = 0.0;
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(300);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(600);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(200);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400);
     }
 
     public interface Climb {
