@@ -143,7 +143,7 @@ public interface Settings {
         double MAX_VELOCITY_METERS_PER_SECOND = 1.75;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 3.5;
 
-        double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2);
+        double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         // Coral
         double FRONT_L2_HEIGHT_METERS = 1.538086;
