@@ -75,7 +75,7 @@ public class FroggyImpl extends Froggy {
     }
 
     @Override
-    public SysIdRoutine getFroggySysIdRoutine() {
+    public SysIdRoutine getPivotSysIdRoutine() {
         return SysId.getRoutine(
             1, 
             5, 
@@ -88,7 +88,8 @@ public class FroggyImpl extends Froggy {
         );
     }
 
-    private Rotation2d getCurrentAngle() {
+    @Override
+    public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations());
     }
 

@@ -23,15 +23,19 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Field.CoralStation;
 import com.stuypulse.robot.constants.Settings.Swerve.Alignment;
 import com.stuypulse.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
+import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.Odometry;
@@ -405,12 +409,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
     }
 
-    public boolean isClearFromReef() {
-        return Field.REEF_CENTER.getDistance(getPose().getTranslation()) 
-            > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF 
-                + Field.CENTER_OF_REEF_TO_REEF_FACE 
-                + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
-                - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
+    public boolean isFroggyFacingCoralStation(CoralStation coralStation) {
+        Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
+        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
+        Vector2D coralStationHeading = coralStation.getHeadingAsVector();
+
+        return froggyHeadingAsVector.dot(coralStationHeading) <= 0;
+    }
+
+    public boolean isFroggyFacingReef() {
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.REEF_CENTER));
+        Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
+        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
+
+        return reefCenterToRobot.dot(froggyHeadingAsVector) <= 0;
     }
 
     @Override
@@ -439,7 +451,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
 
         SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
-        SmartDashboard.putBoolean("Swerve/Is clear from Reef", isClearFromReef());
+        SmartDashboard.putBoolean("Swerve/Is Froggy Facing Reef", isFroggyFacingReef());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }

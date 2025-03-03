@@ -19,6 +19,7 @@ import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -48,7 +49,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
             // To HP, Score K
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
-                new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ElevatorToFeed().alongWith(new ArmToFeed())
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
@@ -77,7 +78,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
             // To HP, Score L
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
-                new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ElevatorToFeed().alongWith(new ArmToFeed())
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
@@ -105,7 +106,7 @@ public class ThreeHalfPieceIKL extends SequentialCommandGroup {
             // Drive to HP
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
-                new WaitUntilCommand(() -> CommandSwerveDrivetrain.getInstance().isClearFromReef())
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ElevatorToFeed().alongWith(new ArmToFeed())
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
