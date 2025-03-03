@@ -141,7 +141,7 @@ public interface Settings {
     public interface Elevator {
 
         double MAX_VELOCITY_METERS_PER_SECOND = 1.75;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 3.5;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND = 2.0;
 
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
@@ -245,6 +245,7 @@ public interface Settings {
         LEDPattern SCORE_COLOR = LEDPattern.solid(Color.kGreen);
         LEDPattern ABORT_COLOR = LEDPattern.solid(Color.kBlue);
 
+        LEDPattern PROCESSOR_SCORE_ANGLE = LEDPattern.solid(Color.kPurple);
         LEDPattern INTAKE_COLOR = LEDPattern.rainbow(255, 255);
 
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);

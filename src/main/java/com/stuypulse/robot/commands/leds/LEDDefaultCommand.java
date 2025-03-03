@@ -4,6 +4,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
+import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
@@ -57,6 +58,9 @@ public class LEDDefaultCommand extends Command{
         }
         else if (funnel.getState() == FunnelState.REVERSE) {
             leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
+        }
+        else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE) {
+            leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
         }
         else if (isIntaking()) {
             leds.applyPattern(Settings.LED.INTAKE_COLOR);
