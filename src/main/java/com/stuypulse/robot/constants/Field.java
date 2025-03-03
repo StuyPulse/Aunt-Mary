@@ -2,8 +2,8 @@ package com.stuypulse.robot.constants;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.util.ReefUtil.Algae;
 import com.stuypulse.robot.util.vision.AprilTag;
+import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -145,85 +145,67 @@ public interface Field {
     }
 
     /*** CORAL STATIONS ***/
-    public static Pose2d getTargetPoseForCDCoralStation() {
-        return Robot.isBlue()
-            ? NamedTags.BLUE_CD_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, 0, new Rotation2d()))
-            : NamedTags.RED_CD_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, 0, new Rotation2d()));
-    }
-
-    public static Pose2d getTargetPoseForKLCoralStation() {
-        return Robot.isBlue()
-            ? NamedTags.BLUE_KL_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, 0, new Rotation2d()))
-            : NamedTags.RED_KL_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2, 0, new Rotation2d()));
-    }
-
-    public static Pose2d getClosestCoralStationTargetPose() {
-        Pose2d robot = CommandSwerveDrivetrain.getInstance().getPose();
-
-        Pose2d cdCoralStation = getTargetPoseForCDCoralStation();
-        Pose2d klCoralStation = getTargetPoseForKLCoralStation();
-
-        if (robot.minus(cdCoralStation).getTranslation().getNorm() < robot.minus(klCoralStation).getTranslation().getNorm()) {
-            return cdCoralStation;
-        }
-        else {
-            return klCoralStation;
-        }
-    }
 
     public enum CoralStation {
-        BLUE_CD_CORAL_STATION(NamedTags.BLUE_CD_CORAL_STATION.getLocation(), new Translation2d(0, Units.inchesToMeters(25.80 * 2)), new Translation2d(Units.inchesToMeters(33.51 * 2), 0)),
-        BLUE_KL_CORAL_STATION(NamedTags.BLUE_KL_CORAL_STATION.getLocation(), new Translation2d(0, Units.inchesToMeters(Field.WIDTH - 25.80 * 2)), new Translation2d(Units.inchesToMeters(33.51 * 2), Units.inchesToMeters(Field.WIDTH))),
-        RED_CD_CORAL_STATION(NamedTags.RED_CD_CORAL_STATION.getLocation(), new Translation2d(Units.inchesToMeters(Field.LENGTH - 33.51 * 2), Units.inchesToMeters(Field.WIDTH)), new Translation2d(Units.inchesToMeters(Field.LENGTH - 33.51 * 2), 0)),
-        RED_KL_CORAL_STATION(NamedTags.RED_KL_CORAL_STATION.getLocation(), new Translation2d(Units.inchesToMeters(Field.LENGTH - 33.51 * 2), 0), new Translation2d(Units.inchesToMeters(Field.LENGTH), Units.inchesToMeters(25.80 * 2)));
+        BLUE_CD_CORAL_STATION(NamedTags.BLUE_CD_CORAL_STATION, new Translation2d(0, Field.WIDTH / 2 - Units.inchesToMeters(109.13)), new Translation2d(Units.inchesToMeters(65.84), 0)),
+        BLUE_KL_CORAL_STATION(NamedTags.BLUE_KL_CORAL_STATION, new Translation2d(0, Field.WIDTH / 2 + Units.inchesToMeters(109.13)), new Translation2d(Units.inchesToMeters(65.84), Field.WIDTH)),
+        RED_CD_CORAL_STATION(NamedTags.RED_CD_CORAL_STATION, new Translation2d(Field.LENGTH, Field.WIDTH / 2 + Units.inchesToMeters(109.13)), new Translation2d(Field.LENGTH - Units.inchesToMeters(65.84), Field.WIDTH)),
+        RED_KL_CORAL_STATION(NamedTags.RED_KL_CORAL_STATION, new Translation2d(Field.LENGTH, Field.WIDTH / 2 - Units.inchesToMeters(109.13)), new Translation2d(Field.LENGTH - Units.inchesToMeters(65.84), 0));
     
-        private Pose3d pose;
-        private Translation2d lineStart;
-        private Translation2d lineEnd;
+        private NamedTags correspondingAprilTag;
+        private Translation2d blueOriginLineStart; // Driver station wall
+        private Translation2d blueOriginLineEnd; // Side of field
 
-        private CoralStation(Pose3d pose, Translation2d lineStart, Translation2d lineEnd) {
-            this.pose = pose;
-            this.lineStart = lineStart;
-            this.lineEnd = lineEnd;
+        private CoralStation(NamedTags correspondingAprilTag, Translation2d blueOriginLineStart, Translation2d blueOriginLineEnd) {
+            this.correspondingAprilTag = correspondingAprilTag;
+            this.blueOriginLineStart = blueOriginLineStart;
+            this.blueOriginLineEnd = blueOriginLineEnd;
         }
 
         private Translation2d getLineStart() {
-            return lineStart;
+            return Robot.isBlue()
+                ? blueOriginLineStart
+                : transformToOppositeAlliance(new Pose2d(blueOriginLineStart, Rotation2d.kZero)).getTranslation();
         }
 
         private Translation2d getLineEnd() {
-            return lineEnd;
-        }
-        
-        public Pose2d getPose() {
-            return pose.toPose2d();
+            return Robot.isBlue()
+                ? blueOriginLineEnd
+                : transformToOppositeAlliance(new Pose2d(blueOriginLineEnd, Rotation2d.kZero)).getTranslation();
         }
 
-        public static double distancePointToStation(Pose2d point, CoralStation station) {
-            double A = (station.getLineStart().getY() - station.getLineStart().getY()) / (station.getLineEnd().getX() - station.getLineEnd().getX());
-            double B = -1;
-            double C = station.getLineEnd().getY() - A * station.getLineEnd().getX();
-    
-            return Math.abs(A * point.getX() + B * point.getY() + C) / Math.sqrt(A*A + B*B);
+        public Vector2D getHeadingAsVector() {
+            return new Vector2D(
+                Math.cos(correspondingAprilTag.getLocation().getRotation().getZ()), 
+                Math.sin(correspondingAprilTag.getLocation().getRotation().getZ()));
         }
 
-        public static CoralStation getClosestCoralStation(Pose2d point) {
+        // https://www.youtube.com/watch?v=KHuI9bXZS74
+        public double getDistanceToStation() {
+            Vector2D A = new Vector2D(getLineStart());
+            Vector2D B = new Vector2D(getLineEnd());
+            Vector2D C = new Vector2D(CommandSwerveDrivetrain.getInstance().getPose().getTranslation());
+            
+            return Math.abs((C.x - A.x) * (-B.y + A.y) + (C.y - A.y) * (B.x - A.x))
+                / Math.sqrt(Math.pow((-B.y + A.y), 2) + Math.pow((B.x - A.x), 2));
+        }
+
+        public static CoralStation getClosestCoralStation() {
             double closestDistance = Double.MAX_VALUE;
             CoralStation nearestStation = BLUE_CD_CORAL_STATION;
 
             for (CoralStation station : CoralStation.values()) {
-                double distance = distancePointToStation(point, station);
+                double distance = station.getDistanceToStation();
                 if (distance < closestDistance) {
                     closestDistance = distance;
                     nearestStation = station;
-
                 }
             }
             return nearestStation;
         }
 
-        public static double getDistanceToClosestStation(Pose2d point) {
-            return distancePointToStation(point, getClosestCoralStation(point));
+        public static double getDistanceToClosestStation(Pose2d pose) {
+            return getClosestCoralStation().getDistanceToStation();
         }
     }
 

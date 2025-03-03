@@ -45,11 +45,10 @@ public interface Settings {
     }
 
     public interface Clearances {
-        double CLEARANCE_DISTANCE_FROM_REEF = Units.inchesToMeters(14.25 + 1); // From bumper
-        double CLEARANCE_DISTANCE_FROM_REEF_FROGGY = Units.inchesToMeters(10); // From bumper
+        double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(14.25 + 1); // From bumper
+        double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(15); // From bumper
         // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT = Rotation2d.fromDegrees(30);
         // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK = Rotation2d.fromDegrees(200);
-        double CLEARANCE_FROM_FROGGY_TO_CORAL_STATION = Units.inchesToMeters(5);
     }
 
     public interface Swerve {
