@@ -58,7 +58,8 @@ public class LEDController extends SubsystemBase {
             leds.setData(ledsBuffer);
         }
         else {
-            leds.stop();
+            LEDPattern.kOff.applyTo(ledsBuffer);
+            leds.setData(ledsBuffer);
         }
     }
 }

@@ -221,9 +221,6 @@ public class RobotContainer {
         RobotModeTriggers.teleop()
             .onTrue(new ElevatorSetMotionProfileConstraints(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP))
             .onTrue(new ArmSetMotionProfileConstraints(Settings.Arm.MAX_VEL_TELEOP, Settings.Arm.MAX_ACCEL_TELEOP));
-
-        new Trigger(() -> RobotController.getBatteryVoltage() < RobotController.getBrownoutVoltage())
-            .onTrue(new LEDDisable());
     }
 
     /***************/

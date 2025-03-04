@@ -10,7 +10,6 @@ public class LEDDisable extends InstantCommand{
 
     public LEDDisable() {
         this.leds = LEDController.getInstance();
-        addRequirements(leds);
     }
 
     @Override
