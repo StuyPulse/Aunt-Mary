@@ -425,7 +425,7 @@ public class RobotContainer {
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
                 new ElevatorToUnstuckCoral().alongWith(new ArmUnstuckCoral()),
-                () -> climb.getState() == ClimbState.OPEN
+                () -> climb.getState() == ClimbState.OPEN || climb.getState() == ClimbState.IDLE || climb.getState() == ClimbState.CLIMBING
             ));
 
         // Get ready for climb

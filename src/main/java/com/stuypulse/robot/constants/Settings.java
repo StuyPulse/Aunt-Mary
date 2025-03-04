@@ -78,8 +78,8 @@ public interface Settings {
                 SmartNumber DEFUALT_MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
                 SmartNumber DEFAULT_MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
 
-                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.5);
-                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 15);
+                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.75);
+                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 16);
             }
 
             public interface Tolerances {
@@ -142,7 +142,7 @@ public interface Settings {
         double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 1.75;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 2.0;
 
-        double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 1.75;
+        double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.75;
 
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
@@ -239,9 +239,9 @@ public interface Settings {
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(3.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
         Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245);
-        Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(84);
+        Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
-        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED = Rotation2d.fromDegrees(8);
+        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(8);
     }
 
     public interface LED {
@@ -285,6 +285,8 @@ public interface Settings {
 
             SmartNumber MAX_TELEOP_SPEED = new SmartNumber("Driver Settings/Drive/Max Speed", Swerve.Constraints.MAX_VELOCITY.get());
             SmartNumber MAX_TELEOP_ACCEL = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.Constraints.MAX_ACCELERATION.get());
+
+            SmartNumber MAX_TELEOP_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Speed While Climbing", MAX_TELEOP_SPEED.get() / 2);
         }
 
         public interface Turn {
@@ -295,6 +297,8 @@ public interface Settings {
 
             SmartNumber MAX_TELEOP_TURN_SPEED = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad per s)", Swerve.Constraints.MAX_ANGULAR_VELOCITY.get());
             SmartNumber MAX_TELEOP_TURN_ACCEL = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", Swerve.Constraints.MAX_ANGULAR_ACCELERATION.get());
+
+            SmartNumber MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Speed While Climbing (rad per s)", MAX_TELEOP_TURN_SPEED.get() / 2);
         }
     }
 

@@ -81,7 +81,7 @@ public class ClimbImpl extends Climb {
                     }
                 }
                 else if (getState() == ClimbState.CLOSED) {
-                    if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED.getDegrees()) {
+                    if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
                         if (getCurrentAngle().getDegrees() > Settings.Climb.CLOSED_ANGLE.getDegrees()) {
                             motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
                         }
@@ -94,8 +94,13 @@ public class ClimbImpl extends Climb {
                     }
                 }
                 else if (getState() == ClimbState.SHIMMY) {
-                    if (getCurrentAngle().getDegrees() < Settings.Climb.SHIMMY_ANGLE.getDegrees()) {
-                        motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
+                    if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
+                        if (getCurrentAngle().getDegrees() > Settings.Climb.SHIMMY_ANGLE.getDegrees()) {
+                            motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
+                        }
+                        else {
+                            motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
+                        }
                     }
                     else {
                         motor.setVoltage(0);
