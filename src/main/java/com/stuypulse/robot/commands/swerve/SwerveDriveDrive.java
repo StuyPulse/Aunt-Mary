@@ -4,6 +4,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
+import com.stuypulse.robot.subsystems.climb.Climb;
+import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
@@ -34,8 +36,8 @@ public class SwerveDriveDrive extends Command {
                 new VDeadZone(Drive.DEADBAND),
                 x -> x.clamp(1),
                 x -> x.pow(Drive.POWER.get()),
-                x -> x.mul(Drive.MAX_TELEOP_SPEED.get()),
-                new VRateLimit(Drive.MAX_TELEOP_ACCEL),
+                x -> x.mul(!isClimbing() ? Drive.MAX_TELEOP_SPEED.get() : Drive.MAX_TELEOP_SPEED_WHILE_CLIMBING.get()),
+                new VRateLimit(!isClimbing() ? Drive.MAX_TELEOP_ACCEL.get() : Drive.MAX_TELEOP_ACCEL_WHILE_CLIMBING.get()),
                 new VLowPassFilter(Drive.RC));
 
         angularVelocity = IStream.create(driver::getRightX)
@@ -43,12 +45,16 @@ public class SwerveDriveDrive extends Command {
                 x -> -x,
                 x -> SLMath.deadband(x, Turn.DEADBAND.get()),
                 x -> SLMath.spow(x, Turn.POWER.get()),
-                x -> x * Turn.MAX_TELEOP_TURN_SPEED.get(),
+                x -> x * (!isClimbing() ? Turn.MAX_TELEOP_TURN_SPEED.get() : Turn.MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING.get()),
                 new LowPassFilter(Turn.RC));
 
         this.driver = driver;
 
         addRequirements(swerve);
+    }
+
+    public boolean isClimbing() {
+        return Climb.getInstance().getState() == ClimbState.OPEN || Climb.getInstance().getState() == ClimbState.SHIMMY;
     }
 
     private Vector2D getDriverInputAsVelocity() {
