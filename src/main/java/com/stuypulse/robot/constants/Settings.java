@@ -78,8 +78,8 @@ public interface Settings {
                 SmartNumber DEFUALT_MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
                 SmartNumber DEFAULT_MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
 
-                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",4.0);
-                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 15.0);
+                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.5);
+                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 15);
             }
 
             public interface Tolerances {
@@ -143,7 +143,7 @@ public interface Settings {
         double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 2.0;
 
         double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 1.75;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.5;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.75;
 
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
