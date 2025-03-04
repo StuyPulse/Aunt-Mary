@@ -42,10 +42,10 @@ public class SwerveDriveDriveAlignedToBargeScoreAllianceSide extends Command {
                 new LowPassFilter(Drive.RC));
 
         xController = new PIDController(Gains.Swerve.Alignment.XY.kP, Gains.Swerve.Alignment.XY.kI, Gains.Swerve.Alignment.XY.kD)
-            .setSetpointFilter(new MotionProfile(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION));
+            .setSetpointFilter(new MotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION));
 
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
-            .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION));
+            .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
                 
         addRequirements(swerve);
     }
@@ -53,7 +53,7 @@ public class SwerveDriveDriveAlignedToBargeScoreAllianceSide extends Command {
     @Override
     public void execute() {
         Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE, swerve.getPose().getX()), driverYVelocity.get())
-            .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED.get(), Settings.Swerve.Alignment.Constraints.MAX_VELOCITY.get()));
+            .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED.get(), Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY.get()));
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withVelocityX(targetVelocity.x)

@@ -384,7 +384,8 @@ public class RobotContainer {
                             .andThen(new ArmWaitUntilCanCatapult()
                                 .andThen(new ShooterShootAlgae())))), 
                 () -> swerve.getPose().getX() <= Field.LENGTH / 2))
-            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()));
+            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Acquire Closest Reef Algae
         driver.getDPadLeft()

@@ -24,8 +24,6 @@ public class SwerveDriveCoralScoreAlignWithClearanceAuton extends SequentialComm
         this.correspondingArmState = correspondingArmState;
 
         addCommands(
-            // new SwerveDrivePIDToBranchClear(branch::get, isScoringFrontSide)
-            //     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
             new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .withTranslationalConstraints(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY_AUTON.get(), Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                 .withTimeout(timeout)

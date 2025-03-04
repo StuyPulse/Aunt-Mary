@@ -60,13 +60,13 @@ public class SwerveDrivePIDToPose extends Command {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         controller = new HolonomicController(
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0.8, 0).position()),
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0.8, 0).position()),
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0, 0).position()),
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0, 0).position()),
             new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
-                .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.MAX_ANGULAR_ACCELERATION)));
+                .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION)));
 
-        maxVelocity = Settings.Swerve.Alignment.Constraints.MAX_VELOCITY.get();
-        maxAcceleration = Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION.get();
+        maxVelocity = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY.get();
+        maxAcceleration = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION.get();
 
         translationSetpoint = getNewTranslationSetpointGenerator();
 
@@ -109,7 +109,7 @@ public class SwerveDrivePIDToPose extends Command {
                 this.maxVelocity, 
                 this.maxAcceleration,
                 new Vector2D(swerve.getPose().getTranslation()),
-                swerve.getFieldRelativeSpeeds()));
+                Vector2D.kOrigin));
     }
 
     @Override
