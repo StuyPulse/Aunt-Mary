@@ -10,6 +10,7 @@ import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearanceAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
@@ -48,7 +49,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
 
             // To HP, Score D
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+                new SwerveDrivePIDToCoralStation(true),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ElevatorToFeed().alongWith(new ArmToFeed())
@@ -77,7 +78,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
 
             // To HP, Score C
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+                new SwerveDrivePIDToCoralStation(true),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ElevatorToFeed().alongWith(new ArmToFeed())
@@ -105,7 +106,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
 
            // To HP, Score B
            new ParallelCommandGroup(
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
+            new SwerveDrivePIDToCoralStation(true),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
                     new ElevatorToFeed().alongWith(new ArmToFeed())

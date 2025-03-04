@@ -109,6 +109,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProce
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorShooter;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
@@ -233,6 +234,8 @@ public class RobotContainer {
     private void configureDriverButtonBindings() {
 
         driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
+        driver.getLeftBumper().whileTrue(new SwerveDrivePIDToClosestCoralStation());
+        // ACTUAL LEFT BUMPER CONTROL IS COMMENTED OUT, MAKE SURE TO UNCOMMENT AFTER TESTING
 
         driver.getDPadRight()
             .onTrue(new ConditionalCommand(
@@ -282,10 +285,10 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Froggy pivot to processor
-        driver.getLeftBumper()
-            .onTrue(new FroggyPivotToProcessor())
-            .onTrue(new ElevatorToProcessor().alongWith(new ArmToProcessor())
-                .onlyIf(() -> !shooter.hasCoral()));
+        // driver.getLeftBumper()
+        //     .onTrue(new FroggyPivotToProcessor())
+        //     .onTrue(new ElevatorToProcessor().alongWith(new ArmToProcessor())
+        //         .onlyIf(() -> !shooter.hasCoral()));
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()

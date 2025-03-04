@@ -207,6 +207,24 @@ public interface Field {
         public static double getDistanceToClosestStation(Pose2d pose) {
             return getClosestCoralStation().getDistanceToStation();
         }
+
+        public static CoralStation getCoralStation(boolean isCD) {
+            if (isCD) {
+                return Robot.isBlue() ?
+                    CoralStation.BLUE_CD_CORAL_STATION : 
+                    CoralStation.RED_CD_CORAL_STATION; 
+            } else {
+                return Robot.isBlue() ?
+                    CoralStation.BLUE_KL_CORAL_STATION :
+                    CoralStation.RED_KL_CORAL_STATION;
+            }
+        }
+
+        public Pose2d getCoralStationPose() {
+            return Robot.isBlue() ?
+                this.correspondingAprilTag.getLocation().toPose2d() :
+                transformToOppositeAlliance(this.correspondingAprilTag.getLocation().toPose2d());
+        }
     }
 
     /**** EMPTY FIELD POSES ****/
