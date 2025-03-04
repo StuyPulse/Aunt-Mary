@@ -191,17 +191,16 @@ public interface Field {
         }
 
         public static CoralStation getClosestCoralStation() {
-            double closestDistance = Double.MAX_VALUE;
-            CoralStation nearestStation = BLUE_CD_CORAL_STATION;
-
-            for (CoralStation station : CoralStation.values()) {
-                double distance = station.getDistanceToStation();
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    nearestStation = station;
-                }
+            if (Robot.isBlue()) {
+                return BLUE_CD_CORAL_STATION.getDistanceToStation() <  BLUE_KL_CORAL_STATION.getDistanceToStation()
+                    ? BLUE_CD_CORAL_STATION
+                    : BLUE_KL_CORAL_STATION;
             }
-            return nearestStation;
+            else {
+                return RED_CD_CORAL_STATION.getDistanceToStation() <  RED_KL_CORAL_STATION.getDistanceToStation()
+                    ? RED_CD_CORAL_STATION
+                    : RED_KL_CORAL_STATION;
+            }
         }
 
         public static double getDistanceToClosestStation(Pose2d pose) {
@@ -220,10 +219,9 @@ public interface Field {
             }
         }
 
-        public Pose2d getCoralStationPose() {
-            return Robot.isBlue() ?
-                this.correspondingAprilTag.getLocation().toPose2d() :
-                transformToOppositeAlliance(this.correspondingAprilTag.getLocation().toPose2d());
+        public Pose2d getTargetPose() {
+            return this.correspondingAprilTag.getLocation().toPose2d()
+                .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + 0.1, 0, Rotation2d.kZero));
         }
     }
 

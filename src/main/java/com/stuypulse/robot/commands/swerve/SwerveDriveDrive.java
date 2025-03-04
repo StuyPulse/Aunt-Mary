@@ -54,7 +54,12 @@ public class SwerveDriveDrive extends Command {
     }
 
     public boolean isClimbing() {
-        return Climb.getInstance().getState() == ClimbState.OPEN || Climb.getInstance().getState() == ClimbState.SHIMMY;
+        switch (Climb.getInstance().getState()) {
+            case OPEN, SHIMMY, CLIMBING:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private Vector2D getDriverInputAsVelocity() {

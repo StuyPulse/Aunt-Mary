@@ -286,8 +286,8 @@ public interface Settings {
             SmartNumber MAX_TELEOP_SPEED = new SmartNumber("Driver Settings/Drive/Max Speed", Swerve.Constraints.MAX_VELOCITY.get());
             SmartNumber MAX_TELEOP_ACCEL = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.Constraints.MAX_ACCELERATION.get());
 
-            SmartNumber MAX_TELEOP_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Speed", Swerve.Constraints.MAX_VELOCITY.get() / 2);
-            SmartNumber MAX_TELEOP_ACCEL_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.Constraints.MAX_VELOCITY.get() / 2);
+            SmartNumber MAX_TELEOP_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Speed", MAX_TELEOP_SPEED.get() / 2);
+            SmartNumber MAX_TELEOP_ACCEL_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Accleration", MAX_TELEOP_ACCEL.get() / 2);
         }
 
         public interface Turn {
@@ -299,8 +299,8 @@ public interface Settings {
             SmartNumber MAX_TELEOP_TURN_SPEED = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad per s)", Swerve.Constraints.MAX_ANGULAR_VELOCITY.get());
             SmartNumber MAX_TELEOP_TURN_ACCEL = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", Swerve.Constraints.MAX_ANGULAR_ACCELERATION.get());
 
-            SmartNumber MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad per s)", Swerve.Constraints.MAX_ANGULAR_VELOCITY.get() / 2);
-            SmartNumber MAX_TELEOP_TURN_ACCEL_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", Swerve.Constraints.MAX_ANGULAR_ACCELERATION.get() / 2);
+            SmartNumber MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad per s)", MAX_TELEOP_TURN_SPEED.get() / 2);
+            SmartNumber MAX_TELEOP_TURN_ACCEL_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", MAX_TELEOP_TURN_ACCEL.get() / 2);
         }
     }
 

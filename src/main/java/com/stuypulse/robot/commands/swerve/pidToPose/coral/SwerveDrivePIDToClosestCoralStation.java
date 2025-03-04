@@ -5,6 +5,6 @@ import com.stuypulse.robot.constants.Field;
 
 public class SwerveDrivePIDToClosestCoralStation extends SwerveDrivePIDToPose {
     public SwerveDrivePIDToClosestCoralStation() {
-        super(Field.CoralStation.getClosestCoralStation().getCoralStationPose());
+        super(() -> Field.CoralStation.getClosestCoralStation().getTargetPose());
     }
 }
