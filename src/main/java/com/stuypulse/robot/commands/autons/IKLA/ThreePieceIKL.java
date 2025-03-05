@@ -43,7 +43,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.2),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             // To HP, Score K
@@ -72,7 +72,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.2),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             // To HP, Score L
@@ -100,7 +100,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.2),
+            new WaitCommand(0.15),
             new ShooterStop()
 
         );
