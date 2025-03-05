@@ -36,7 +36,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
             // Score Preload on F
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
-                    .withTranslationalConstraints(1.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
+                    .withTranslationalConstraints(2, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(2)
                     .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -64,7 +64,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 4),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -92,7 +92,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 4),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -120,7 +120,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.B, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.B, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -129,7 +129,9 @@ public class FourPieceFDCB extends SequentialCommandGroup {
             ),
             new ShooterShootBackwards(),
             new WaitCommand(0.2),
-            new ShooterStop()
+            new ShooterStop(),
+
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
 
         );
 
