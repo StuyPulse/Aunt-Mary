@@ -123,7 +123,7 @@ public interface Settings {
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
-        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.15);
+        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.25);
 
         double HAS_CORAL_DEBOUNCE = 0.0;
     }
