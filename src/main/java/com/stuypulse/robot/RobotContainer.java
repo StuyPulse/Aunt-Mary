@@ -511,8 +511,6 @@ public class RobotContainer {
 
         swerve.configureAutoBuilder();
 
-        autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
-
         /** TOP AUTONS **/
 
         AutonConfig BLUE_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
@@ -544,8 +542,8 @@ public class RobotContainer {
         BLUE_THREE_HALF_PIECE_IKL.registerBlue(autonChooser);
         RED_THREE_HALF_PIECE_IKL.registerRed(autonChooser);
 
-        BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
-        RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
+        BLUE_FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
+        RED_FOUR_PIECE_IKLA.registerDefaultRed(autonChooser);
 
         /** BOTTOM AUTONS **/
 
