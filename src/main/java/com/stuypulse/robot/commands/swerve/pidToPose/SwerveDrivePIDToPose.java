@@ -24,6 +24,7 @@ import com.stuypulse.stuylib.streams.vectors.filters.VMotionProfile;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -119,12 +120,20 @@ public class SwerveDrivePIDToPose extends Command {
         translationSetpoint = getNewTranslationSetpointGenerator();
     }
 
+    private boolean isAlignedX() {
+        return Math.abs(targetPose.getX() - swerve.getPose().getX()) < xTolerance.doubleValue();
+    }
+
+    private boolean isAlignedY() {
+        return Math.abs(targetPose.getY() - swerve.getPose().getY()) < yTolerance.doubleValue();
+    }
+
+    private boolean isAlignedTheta() {
+        return Math.abs(targetPose.getRotation().minus(swerve.getPose().getRotation()).getRadians()) < thetaTolerance.doubleValue();
+    }
+
     private boolean isAligned() {
-        Pose2d robotPose = swerve.getPose();
-        return Math.abs(targetPose.getX() - robotPose.getX()) < xTolerance.doubleValue()
-            && Math.abs(targetPose.getY() - robotPose.getY()) < yTolerance.doubleValue()
-            && Math.abs(targetPose.getRotation().getRadians() - robotPose.getRotation().getRadians()) < thetaTolerance.doubleValue()
-            && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        return isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
     }
 
     @Override
@@ -147,6 +156,9 @@ public class SwerveDrivePIDToPose extends Command {
         SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
 
         SmartDashboard.putBoolean("Alignment/Is Aligned", isAligned());
+        SmartDashboard.putBoolean("Alignment/Is Aligned X", isAlignedX());
+        SmartDashboard.putBoolean("Alignment/Is Aligned Y", isAlignedY());
+        SmartDashboard.putBoolean("Alignment/Is Aligned Theta", isAlignedTheta());
     }
 
     @Override
