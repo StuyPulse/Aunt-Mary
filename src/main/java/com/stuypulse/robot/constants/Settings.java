@@ -105,7 +105,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0; // 1 meter was better than 0.85 
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0 + Units.inchesToMeters(1);
             }
         }
     }
@@ -211,7 +211,7 @@ public interface Settings {
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(44);
-        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
+        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 25);
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
