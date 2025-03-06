@@ -106,6 +106,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0; // 1 meter was better than 0.85 
+                double HORIZONTAL_DISTANCE_FROM_MIDLINE = 1.0;
+
             }
         }
     }

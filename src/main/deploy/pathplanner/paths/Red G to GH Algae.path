@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.01118883243944,
-        "y": 4.031682041713169
+        "x": 6.8763041471026005,
+        "y": 4.015051609205804
       },
       "isLocked": false,
       "linkedName": "Red G"
     },
     {
       "anchor": {
-        "x": 5.797665841238838,
-        "y": 4.09498291015625
+        "x": 7.304524016203703,
+        "y": 4.034775573328922
       },
       "prevControl": {
-        "x": 7.572946602957589,
-        "y": 4.126097760881696
+        "x": 6.601504215666302,
+        "y": 4.049441206933752
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red GH Algae"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

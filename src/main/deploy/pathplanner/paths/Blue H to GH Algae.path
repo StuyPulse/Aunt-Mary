@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.382535807291666,
-        "y": 4.340860954083895
+        "x": 6.383176359953703,
+        "y": 4.018959416841206
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.128895060221353,
-        "y": 4.376954868861606
+        "x": 7.259206861369655,
+        "y": 4.021981139876351
       },
       "isLocked": false,
-      "linkedName": "Blue H"
+      "linkedName": "Blue G"
     },
     {
       "anchor": {
-        "x": 5.8211805071149545,
-        "y": 4.1560904366629465
+        "x": 7.230860460069444,
+        "y": 4.018959416841206
       },
       "prevControl": {
-        "x": 7.565040370396205,
-        "y": 4.138390677315848
+        "x": 6.752332143605946,
+        "y": 3.9886258284510427
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue GH Algae"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

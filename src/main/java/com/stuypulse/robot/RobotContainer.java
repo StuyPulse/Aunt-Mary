@@ -35,6 +35,7 @@ import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
@@ -608,10 +609,10 @@ public class RobotContainer {
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        // AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3");
-        // AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3");
+        AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        "Blue G to GH Algae");
+        AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        "Red G to GH Algae");
 
         // AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
         // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
@@ -623,8 +624,8 @@ public class RobotContainer {
          //AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
-        // BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
-        // RED_G_ONE_ALGAE.registerRed(autonChooser);
+        BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
+        RED_G_ONE_ALGAE.registerRed(autonChooser);
 
         // BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
         // RED_G_TWO_ALGAE.registerRed(autonChooser);
@@ -634,11 +635,12 @@ public class RobotContainer {
 
         /** TESTS **/
 
-        /*
+        
         AutonConfig BLUE_MOBILITY = new AutonConfig("Mobility", Mobility::new,
         "Mobility");
         AutonConfig RED_MOBILITY = new AutonConfig("Mobility", Mobility::new, 
         "Mobility");
+        /* 
         AutonConfig STRAIGHT_LINE_TEST = new AutonConfig("Straight Line Test", StraightLineTest::new,
         "Straight Line");
         AutonConfig CURVY_LINE_TEST = new AutonConfig("Curvy Line Test", CurvyLineTest::new,
@@ -647,9 +649,10 @@ public class RobotContainer {
         "Square Top", "Square Right", "Square Bottom", "Square Left");
         AutonConfig RSQUARE_TEST = new AutonConfig("RSquare Test", RSquareTest::new,
         "RSquare Top", "RSquare Right", "RSquare Bottom", "RSquare Left");
-
+        */
         BLUE_MOBILITY.registerBlue(autonChooser);
         RED_MOBILITY.registerRed(autonChooser);
+        /*
         STRAIGHT_LINE_TEST.registerRed(autonChooser);
         CURVY_LINE_TEST.registerRed(autonChooser);
         SQUARE_TEST.registerRed(autonChooser);
