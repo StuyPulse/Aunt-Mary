@@ -40,11 +40,15 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        
         robot = new RobotContainer();
         DataLogManager.start();
-        PortForwarder.add(5800, "10.6.94.11", 5801);
-        PortForwarder.add(5801, "10.6.94.12", 5802);
-
+        // Allows us to see the limelight feeds even while tethered through USB-B 
+        for (int port = 5800; port <= 5809; port++){   
+            PortForwarder.add(port, "10.6.94.11", port);
+            PortForwarder.add(port+10, "10.6.94.12", port);
+        }
+       
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
         // if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
