@@ -14,12 +14,12 @@ import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class SwerveDriveCoralScoreAlignWithClearanceAuton extends SequentialCommandGroup {
+public class SwerveDriveCoralScoreAlignAuton extends SequentialCommandGroup {
 
     private final ElevatorState correspondingElevatorState;
     private final ArmState correspondingArmState;
 
-    public SwerveDriveCoralScoreAlignWithClearanceAuton(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, ElevatorState correspondingElevatorState, ArmState correspondingArmState, double timeout) {
+    public SwerveDriveCoralScoreAlignAuton(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, ElevatorState correspondingElevatorState, ArmState correspondingArmState, double timeout) {
         this.correspondingElevatorState = correspondingElevatorState;
         this.correspondingArmState = correspondingArmState;
 
@@ -31,7 +31,7 @@ public class SwerveDriveCoralScoreAlignWithClearanceAuton extends SequentialComm
         );
     } 
 
-    public SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState, double timeout) {
+    public SwerveDriveCoralScoreAlignAuton(CoralBranch branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState, double timeout) {
         this(() -> branch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState, timeout);
     }
 
