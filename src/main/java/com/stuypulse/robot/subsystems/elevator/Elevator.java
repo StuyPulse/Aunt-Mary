@@ -37,6 +37,7 @@ public abstract class Elevator extends SubsystemBase {
 
     public enum ElevatorState {
         FEED(Settings.Elevator.FEED_HEIGHT_METERS),
+        L1(Settings.Elevator.L1_HEIGHT_METERS),
         L2_FRONT(Settings.Elevator.FRONT_L2_HEIGHT_METERS),
         L3_FRONT(Settings.Elevator.FRONT_L3_HEIGHT_METERS),
         L4_FRONT(Settings.Elevator.FRONT_L4_HEIGHT_METERS),

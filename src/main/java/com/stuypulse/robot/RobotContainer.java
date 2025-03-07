@@ -24,6 +24,7 @@ import com.stuypulse.robot.commands.arm.algae.ArmToCatapultReady;
 import com.stuypulse.robot.commands.arm.algae.ArmToCatapultShoot;
 import com.stuypulse.robot.commands.arm.algae.ArmToProcessor;
 import com.stuypulse.robot.commands.arm.algae.ArmWaitUntilCanCatapult;
+import com.stuypulse.robot.commands.arm.coral.ArmToL1;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
@@ -63,6 +64,7 @@ import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToProcessor;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL1;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
@@ -240,7 +242,7 @@ public class RobotContainer {
                     new FroggyRollerShootCoral(), 
                     () -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
                 new ConditionalCommand(
-                    new ShooterShootAlgae(), 
+                    new ShooterShootAlgae(),
                     new ConditionalCommand(
                         new ShooterShootBackwards(),
                         new ShooterShootForwards(),
@@ -261,7 +263,8 @@ public class RobotContainer {
                         || arm.getState() == ArmState.L3_FRONT
                         || arm.getState() == ArmState.L3_BACK
                         || arm.getState() == ArmState.L2_FRONT
-                        || arm.getState() == ArmState.L2_BACK), 
+                        || arm.getState() == ArmState.L2_BACK
+                        || arm.getState() == ArmState.L1_FRONT), 
                 () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
@@ -293,10 +296,11 @@ public class RobotContainer {
                 .andThen(new FroggyPivotToStow()))
             .onFalse(new FroggyRollerHoldCoral());
 
-        // L1 raise pivot
+        // L1
         driver.getRightBumper()
-            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()))
-            .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE)));
+            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()).onlyIf(() -> !shooter.hasCoral()))
+            .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
+            .onTrue(new ArmToL1().alongWith(new ElevatorToL1()).onlyIf(() -> shooter.hasCoral()));
 
         // L4 coral score
         driver.getTopButton()

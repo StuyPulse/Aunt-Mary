@@ -150,6 +150,8 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         // Coral
+        double L1_HEIGHT_METERS = 1.2;
+
         double FRONT_L2_HEIGHT_METERS = 1.538086;
         double FRONT_L3_HEIGHT_METERS = 1.036621;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
@@ -175,6 +177,7 @@ public interface Settings {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
+        Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-55);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);

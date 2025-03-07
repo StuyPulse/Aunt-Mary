@@ -69,7 +69,7 @@ public abstract class Shooter extends SubsystemBase {
 
     public boolean shouldShootForward() {
         switch (Arm.getInstance().getState()) {
-            case L2_FRONT, L2_BACK, L3_BACK, L4_BACK:
+            case L2_FRONT, L2_BACK, L3_BACK, L4_BACK, L1_FRONT:
                 return true;
             default:
                 return false;
