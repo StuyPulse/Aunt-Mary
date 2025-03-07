@@ -15,6 +15,7 @@ import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -41,6 +42,9 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         robot = new RobotContainer();
         DataLogManager.start();
+        PortForwarder.add(5800, "10.6.94.11", 5801);
+        PortForwarder.add(5801, "10.6.94.12", 5802);
+
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
         // if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
