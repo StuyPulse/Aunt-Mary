@@ -59,7 +59,7 @@ public interface Constants {
         double GEAR_RATIO = 48.0;
 
         Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-51);
-        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(105);
+        Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(95);
 
         Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(219.815204 - 90 - 60);
 
