@@ -57,8 +57,11 @@ public class OneGOneAlgae extends SequentialCommandGroup {
             // Acquire GH Algae, Score on Barge
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
-                new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                new WaitCommand(1.75)
+                    .andThen(
+                        new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2())
+                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                    )
             ),
             new ParallelCommandGroup(
                 new SwerveDrivePidToNearestReefAlgae(),
