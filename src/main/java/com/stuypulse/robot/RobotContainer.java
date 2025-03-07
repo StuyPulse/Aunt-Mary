@@ -200,6 +200,7 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.ACQUIRE_ALGAE
                 && shooter.getState() != ShooterState.HOLD_ALGAE 
                 && shooter.getState() != ShooterState.SHOOT_ALGAE 
+                && shooter.getState() != ShooterState.SHOOT_CORAL_L1
                 && shooter.getState() != ShooterState.SHOOT_CORAL_FORWARD
                 && shooter.getState() != ShooterState.SHOOT_CORAL_REVERSE
                 && climb.getState() != ClimbState.OPEN
