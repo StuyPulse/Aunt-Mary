@@ -99,6 +99,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
+import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
@@ -245,7 +246,10 @@ public class RobotContainer {
                     new ShooterShootAlgae(),
                     new ConditionalCommand(
                         new ShooterShootBackwards(),
-                        new ShooterShootForwards(),
+                        new ConditionalCommand(
+                            new ShooterShootL1(), 
+                            new ShooterShootForwards(), 
+                            () -> arm.getState() == ArmState.L1_FRONT),
                         shooter::shouldShootBackwards
                     ), 
                     () -> shooter.getState() == ShooterState.HOLD_ALGAE), 

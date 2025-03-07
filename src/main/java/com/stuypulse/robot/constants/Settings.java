@@ -117,6 +117,7 @@ public interface Settings {
     }
 
     public interface Shooter {
+        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.15);
         SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.75);
         SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.75);
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);

@@ -34,6 +34,7 @@ public abstract class Shooter extends SubsystemBase {
     public enum ShooterState {
         ACQUIRE_CORAL(Settings.Shooter.CORAL_ACQUIRE_SPEED),
         ACQUIRE_ALGAE(Settings.Shooter.ALGAE_ACQUIRE_SPEED),
+        SHOOT_CORAL_L1(Settings.Shooter.CORAL_SHOOT_SPEED_L1),
         SHOOT_CORAL_FORWARD(Settings.Shooter.CORAL_SHOOT_SPEED_FORWARD),
         SHOOT_CORAL_REVERSE(Settings.Shooter.CORAL_SHOOT_SPEED_REVERSE),
         SHOOT_ALGAE(Settings.Shooter.ALGAE_SHOOT_SPEED),
