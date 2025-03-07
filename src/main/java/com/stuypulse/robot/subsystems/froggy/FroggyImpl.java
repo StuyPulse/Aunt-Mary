@@ -90,7 +90,10 @@ public class FroggyImpl extends Froggy {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations());
+        double angleRotations = absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations();
+        return Rotation2d.fromRotations(angleRotations > Constants.Froggy.MAXIMUM_ANGLE.getRotations() + Units.degreesToRotations(10)
+            ? angleRotations - 1
+            : angleRotations);
     }
 
     private Rotation2d getTargetAngle() {
