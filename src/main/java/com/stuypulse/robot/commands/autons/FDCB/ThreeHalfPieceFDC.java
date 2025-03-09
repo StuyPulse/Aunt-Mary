@@ -8,7 +8,7 @@ import com.stuypulse.robot.commands.shooter.ShooterSetAcquire;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearanceAuton;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
@@ -36,14 +36,14 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
             // Score Preload on F
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
-                    .withTranslationalConstraints(1.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
-                    .withTimeout(2)
+                    .withTranslationalConstraints(2.35, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
+                    .withTimeout(1.75)
                     .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
                 new ElevatorToL4Front().alongWith(new ArmToL4Front())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.2),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             // To HP, Score D
@@ -64,7 +64,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -72,7 +72,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.2),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             // To HP, Score C
@@ -92,7 +92,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignWithClearanceAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
@@ -100,7 +100,7 @@ public class ThreeHalfPieceFDC extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.2),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
            // Drive to HP

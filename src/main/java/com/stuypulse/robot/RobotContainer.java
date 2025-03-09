@@ -24,6 +24,7 @@ import com.stuypulse.robot.commands.arm.algae.ArmToCatapultReady;
 import com.stuypulse.robot.commands.arm.algae.ArmToCatapultShoot;
 import com.stuypulse.robot.commands.arm.algae.ArmToProcessor;
 import com.stuypulse.robot.commands.arm.algae.ArmWaitUntilCanCatapult;
+import com.stuypulse.robot.commands.arm.coral.ArmToL1;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL2Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
@@ -35,6 +36,7 @@ import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
@@ -62,6 +64,7 @@ import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToProcessor;
+import com.stuypulse.robot.commands.elevator.coral.ElevatorToL1;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL2Front;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
@@ -96,6 +99,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
+import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
@@ -196,6 +200,7 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.ACQUIRE_ALGAE
                 && shooter.getState() != ShooterState.HOLD_ALGAE 
                 && shooter.getState() != ShooterState.SHOOT_ALGAE 
+                && shooter.getState() != ShooterState.SHOOT_CORAL_L1
                 && shooter.getState() != ShooterState.SHOOT_CORAL_FORWARD
                 && shooter.getState() != ShooterState.SHOOT_CORAL_REVERSE
                 && climb.getState() != ClimbState.OPEN
@@ -239,10 +244,13 @@ public class RobotContainer {
                     new FroggyRollerShootCoral(), 
                     () -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
                 new ConditionalCommand(
-                    new ShooterShootAlgae(), 
+                    new ShooterShootAlgae(),
                     new ConditionalCommand(
                         new ShooterShootBackwards(),
-                        new ShooterShootForwards(),
+                        new ConditionalCommand(
+                            new ShooterShootL1(), 
+                            new ShooterShootForwards(), 
+                            () -> arm.getState() == ArmState.L1_FRONT),
                         shooter::shouldShootBackwards
                     ), 
                     () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
@@ -260,7 +268,8 @@ public class RobotContainer {
                         || arm.getState() == ArmState.L3_FRONT
                         || arm.getState() == ArmState.L3_BACK
                         || arm.getState() == ArmState.L2_FRONT
-                        || arm.getState() == ArmState.L2_BACK), 
+                        || arm.getState() == ArmState.L2_BACK
+                        || arm.getState() == ArmState.L1_FRONT), 
                 () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
@@ -292,10 +301,11 @@ public class RobotContainer {
                 .andThen(new FroggyPivotToStow()))
             .onFalse(new FroggyRollerHoldCoral());
 
-        // L1 raise pivot
+        // L1
         driver.getRightBumper()
-            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()))
-            .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE)));
+            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()).onlyIf(() -> !shooter.hasCoral()))
+            .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
+            .onTrue(new ArmToL1().alongWith(new ElevatorToL1()).onlyIf(() -> shooter.hasCoral()));
 
         // L4 coral score
         driver.getTopButton()
@@ -510,8 +520,6 @@ public class RobotContainer {
 
         swerve.configureAutoBuilder();
 
-        autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
-
         /** TOP AUTONS **/
 
         AutonConfig BLUE_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
@@ -543,8 +551,8 @@ public class RobotContainer {
         BLUE_THREE_HALF_PIECE_IKL.registerBlue(autonChooser);
         RED_THREE_HALF_PIECE_IKL.registerRed(autonChooser);
 
-        BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
-        RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
+        BLUE_FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
+        RED_FOUR_PIECE_IKLA.registerDefaultRed(autonChooser);
 
         /** BOTTOM AUTONS **/
 
@@ -608,10 +616,10 @@ public class RobotContainer {
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        // AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3");
-        // AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3");
+        AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        "Blue G to GH Algae");
+        AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        "Red G to GH Algae");
 
         // AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
         // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
@@ -623,8 +631,8 @@ public class RobotContainer {
          //AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
-        // BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
-        // RED_G_ONE_ALGAE.registerRed(autonChooser);
+        BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
+        RED_G_ONE_ALGAE.registerRed(autonChooser);
 
         // BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
         // RED_G_TWO_ALGAE.registerRed(autonChooser);
@@ -634,11 +642,12 @@ public class RobotContainer {
 
         /** TESTS **/
 
-        /*
+        
         AutonConfig BLUE_MOBILITY = new AutonConfig("Mobility", Mobility::new,
         "Mobility");
         AutonConfig RED_MOBILITY = new AutonConfig("Mobility", Mobility::new, 
         "Mobility");
+        /* 
         AutonConfig STRAIGHT_LINE_TEST = new AutonConfig("Straight Line Test", StraightLineTest::new,
         "Straight Line");
         AutonConfig CURVY_LINE_TEST = new AutonConfig("Curvy Line Test", CurvyLineTest::new,
@@ -647,9 +656,10 @@ public class RobotContainer {
         "Square Top", "Square Right", "Square Bottom", "Square Left");
         AutonConfig RSQUARE_TEST = new AutonConfig("RSquare Test", RSquareTest::new,
         "RSquare Top", "RSquare Right", "RSquare Bottom", "RSquare Left");
-
+        */
         BLUE_MOBILITY.registerBlue(autonChooser);
         RED_MOBILITY.registerRed(autonChooser);
+        /*
         STRAIGHT_LINE_TEST.registerRed(autonChooser);
         CURVY_LINE_TEST.registerRed(autonChooser);
         SQUARE_TEST.registerRed(autonChooser);

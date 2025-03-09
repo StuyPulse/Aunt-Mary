@@ -78,8 +78,8 @@ public interface Settings {
                 SmartNumber DEFUALT_MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
                 SmartNumber DEFAULT_MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
 
-                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.75);
-                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 16);
+                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.85);
+                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 16.75);
             }
 
             public interface Tolerances {
@@ -100,12 +100,14 @@ public interface Settings {
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
-                double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(9);
+                double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0; // 1 meter was better than 0.85 
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0 - Units.inchesToMeters(3);
+
+                double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 1.0;
             }
         }
     }
@@ -115,13 +117,14 @@ public interface Settings {
     }
 
     public interface Shooter {
+        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.15);
         SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.75);
         SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.75);
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
-        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.15);
+        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.25);
 
         double HAS_CORAL_DEBOUNCE = 0.0;
     }
@@ -148,6 +151,9 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         // Coral
+        // double L1_HEIGHT_METERS = 1.125488;
+        double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
+
         double FRONT_L2_HEIGHT_METERS = 1.538086;
         double FRONT_L3_HEIGHT_METERS = 1.036621;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
@@ -173,6 +179,7 @@ public interface Settings {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
+        Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
@@ -206,8 +213,8 @@ public interface Settings {
     }
 
     public interface Froggy {
-        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 3);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20);
+        Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20 - 5);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(44);

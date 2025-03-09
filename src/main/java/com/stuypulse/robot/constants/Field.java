@@ -131,6 +131,21 @@ public interface Field {
     double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
+    /*** BARGE POSITIONS ***/
+    public static Pose2d getBargeTargetPose(Pose2d robot) {
+        if (Robot.isBlue()) {
+            return new Pose2d(new Translation2d(
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE, 
+                Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
+                NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d());
+        } else {
+            return new Pose2d(new Translation2d(
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE, 
+                Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
+                NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d());
+        }
+    }
+
     /*** PROCESSOR ***/
     public static Pose2d getTargetPoseForProcessorShooter() {
         return Robot.isBlue()
