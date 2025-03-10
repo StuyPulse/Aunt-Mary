@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.383176359953703,
-        "y": 4.018959416841206
+        "x": 5.328341674804688,
+        "y": 5.648430088588169
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.259206861369655,
-        "y": 4.021981139876351
+        "x": 5.077354902173816,
+        "y": 5.230676355445621
       },
       "isLocked": false,
-      "linkedName": "Blue G"
+      "linkedName": "Blue IJ Algae (1)"
     },
     {
       "anchor": {
-        "x": 7.230860460069444,
-        "y": 4.018959416841206
+        "x": 5.066466849190848,
+        "y": 5.2207794189453125
       },
       "prevControl": {
-        "x": 6.752332143605946,
-        "y": 3.9886258284510427
+        "x": 5.3314048574228865,
+        "y": 5.652804066760781
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue IJ Algae (2)"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "Blue To Algae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }
