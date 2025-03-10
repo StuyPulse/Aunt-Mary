@@ -182,7 +182,7 @@ public class RobotContainer {
         configureDriverButtonBindings();
         configureOperatorButtonBindings();
         configureAutons();
-        configureSysids();
+        //configureSysids();
 
         // swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -669,7 +669,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
-
+    /* 
     public void configureSysids() {
         autonChooser.addOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
         autonChooser.addOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
@@ -694,6 +694,7 @@ public class RobotContainer {
         autonChooser.addOption("Froggy Pivot Dynamic Forward", froggyPivotSysIdRoutine.dynamic(Direction.kForward));
         autonChooser.addOption("Froggy Pivot Dynamic Backward", froggyPivotSysIdRoutine.dynamic(Direction.kReverse));
     }
+        */
 
     public Command getAutonomousCommand() {
         return autonChooser.getSelected();
