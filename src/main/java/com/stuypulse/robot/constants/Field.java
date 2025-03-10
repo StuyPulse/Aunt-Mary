@@ -47,23 +47,23 @@ public interface Field {
         RED_PROCESSOR,
         BLUE_BARGE_RED_SIDE,
         RED_BARGE_RED_SIDE,
-        RED_KL,
+        RED_KL, // 6
         RED_AB,
         RED_CD,
         RED_EF,
         RED_GH,
-        RED_IJ,
+        RED_IJ, // 11
         BLUE_CD_CORAL_STATION,
         BLUE_KL_CORAL_STATION,
         BLUE_BARGE_BLUE_SIDE,
         RED_BARGE_BLUE_SIDE,
         BLUE_PROCESSOR,
-        BLUE_CD,
+        BLUE_CD, // 17
         BLUE_AB,
         BLUE_KL,
         BLUE_IJ,
         BLUE_GH,
-        BLUE_EF;
+        BLUE_EF; // 22
 
         public final AprilTag tag;
 

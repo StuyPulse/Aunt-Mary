@@ -294,6 +294,8 @@ public interface Settings {
             SmartNumber MAX_TELEOP_ACCEL = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.Constraints.MAX_ACCELERATION.get());
 
             SmartNumber MAX_TELEOP_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Speed While Climbing", MAX_TELEOP_SPEED.get() / 2);
+
+            SmartNumber BRANCH_VECTOR_SIMILARITY_THRESHOLD = new SmartNumber("Driver Settings/Drive/Deadband", 0.9);
         }
 
         public interface Turn {

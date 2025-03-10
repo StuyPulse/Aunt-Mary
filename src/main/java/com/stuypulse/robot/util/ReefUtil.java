@@ -1,14 +1,20 @@
 package com.stuypulse.robot.util;
 
+import java.util.ArrayList;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Field.NamedTags;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.math.Vector2D;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public interface ReefUtil {
 
@@ -40,6 +46,12 @@ public interface ReefUtil {
 
         public Pose2d getBranchPoseProjectedOntoReefFace() {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.kZero));
+        }
+
+        public Vector2D getVectorFromTagToBranch() {
+            Translation2d correspondingAprilTag = getCorrespondingAprilTagPose().getTranslation();
+            Translation2d correspondingBranchPose = getBranchPoseProjectedOntoReefFace().getTranslation();
+            return new Vector2D(correspondingBranchPose.minus(correspondingAprilTag));
         }
 
         public Pose2d getScorePose(int level, boolean isScoringFrontSide) {
@@ -94,6 +106,35 @@ public interface ReefUtil {
         }
 
         return nearestBranch;
+    }
+
+    public static NamedTags getNearestReefSide() {
+        return Robot.isBlue() ? getClosestCoralBranch().correspondingBlueAprilTag : getClosestCoralBranch().correspondingRedAprilTag;
+    }
+
+    public static ArrayList<CoralBranch> getBranchesOnReefSide(NamedTags reefSide) {
+        ArrayList<CoralBranch> branches = new ArrayList<>();
+        for (CoralBranch branch : CoralBranch.values()) {
+            if ((Robot.isBlue() && branch.correspondingBlueAprilTag == reefSide) || (!Robot.isBlue() && branch.correspondingRedAprilTag == reefSide)) {
+                branches.add(branch);
+            }
+        }
+        return branches;
+    }
+
+    public static CoralBranch compareJoystick(Gamepad driver) {
+        NamedTags nearestReefSide = ReefUtil.getNearestReefSide();
+        Vector2D joystick = driver.getLeftStick();
+        if (joystick.magnitude() > Settings.Driver.Drive.DEADBAND.get()) {
+            for (CoralBranch branch : ReefUtil.getBranchesOnReefSide(nearestReefSide)) {
+                Vector2D branchVector = branch.getVectorFromTagToBranch().normalize();
+                double similarity = joystick.dot(branchVector);
+                if (similarity > Settings.Driver.Drive.BRANCH_VECTOR_SIMILARITY_THRESHOLD.get()) { 
+                    return branch;
+                }
+            }
+        }
+        return ReefUtil.getClosestCoralBranch();
     }
 
     /*** REEF ALGAE ***/
