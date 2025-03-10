@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 1.677412418798617,
-        "y": 0.8471545847260362
+        "y": 0.8471545847260358
       },
       "isLocked": false,
       "linkedName": "Blue C"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
