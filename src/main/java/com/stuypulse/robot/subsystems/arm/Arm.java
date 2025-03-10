@@ -6,18 +6,16 @@
 
 package com.stuypulse.robot.subsystems.arm;
 
-import java.lang.StackWalker.Option;
 import java.util.Optional;
 
 import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.util.RobotVisualizer;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -40,7 +38,7 @@ public abstract class Arm extends SubsystemBase {
 
     public enum ArmState {
         FEED(Settings.Arm.FEED_ANGLE),
-        L1_FRONT(Settings.Arm.L1_ANGLE_FRONT),
+        L1(Settings.Arm.L1_ANGLE_FRONT),
         L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
         L2_BACK(Settings.Arm.L2_ANGLE_BACK),
         L3_FRONT(Settings.Arm.L3_ANGLE_FRONT),
@@ -74,6 +72,37 @@ public abstract class Arm extends SubsystemBase {
 
     public ArmState getState() {
         return this.state;
+    }
+
+    public static ArmState getState(int level, boolean isFrontFacingReef) {
+        if (isFrontFacingReef) {
+            if (level == 2) {
+                return ArmState.L2_FRONT;
+            } else if (level == 3) {
+                return ArmState.L3_FRONT;
+            } else if (level == 4) {
+                return ArmState.L4_FRONT;
+            }
+        } else {
+            if (level == 2) {
+                return ArmState.L2_BACK;
+            } else if (level == 3) {
+                return ArmState.L3_BACK;
+            } else if (level == 4) {
+                return ArmState.L4_BACK;
+            }
+        }
+        return ArmState.L1;
+    }
+
+    public static boolean isScoring(ArmState state) {
+        return state == ArmState.L4_FRONT
+            || state == ArmState.L4_BACK
+            || state == ArmState.L3_FRONT
+            || state == ArmState.L3_BACK
+            || state == ArmState.L2_FRONT
+            || state == ArmState.L2_BACK
+            || state == ArmState.L1;
     }
 
     public void setState(ArmState state) {

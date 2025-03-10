@@ -10,6 +10,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.BuzzController;
+import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
 import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
@@ -31,7 +32,6 @@ import com.stuypulse.robot.commands.arm.coral.ArmToL3Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL3Front;
 import com.stuypulse.robot.commands.arm.coral.ArmToL4Back;
 import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
-import com.stuypulse.robot.commands.autons.misc.DoNothingAuton;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
@@ -42,10 +42,6 @@ import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
-import com.stuypulse.robot.commands.autons.tests.CurvyLineTest;
-import com.stuypulse.robot.commands.autons.tests.RSquareTest;
-import com.stuypulse.robot.commands.autons.tests.SquareTest;
-import com.stuypulse.robot.commands.autons.tests.StraightLineTest;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbClose;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
@@ -74,12 +70,10 @@ import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToClimb;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilAtTargetAngle;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilCanMoveWithoutColliding;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldCoral;
@@ -92,7 +86,6 @@ import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.funnel.FunnelReverse;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
-import com.stuypulse.robot.commands.leds.LEDDisable;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
@@ -101,7 +94,6 @@ import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
@@ -109,11 +101,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAll
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide;
-import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorFroggy;
-import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorShooter;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -140,12 +128,11 @@ import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 
 import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -228,6 +215,26 @@ public class RobotContainer {
             .onTrue(new ArmSetMotionProfileConstraints(Settings.Arm.MAX_VEL_TELEOP, Settings.Arm.MAX_ACCEL_TELEOP));
     }
 
+    public static ParallelCommandGroup getElevatorArmCommands(int level, boolean isFrontFacingReef) {
+        if (isFrontFacingReef) {
+            if (level == 2) {
+                return new ElevatorToL2Front().alongWith(new ArmToL2Front());
+            } else if (level == 3) {
+                return new ElevatorToL3Front().alongWith(new ArmToL3Front());
+            } else if (level == 4) {
+                return new ElevatorToL4Front().alongWith(new ArmToL4Front());
+            } 
+        } else {
+            if (level == 2) {
+                return new ElevatorToL2Back().alongWith(new ArmToL2Back());
+            } else if (level == 3) {
+                return new ElevatorToL3Back().alongWith(new ArmToL3Back());
+            } else if (level == 4) {
+                return new ElevatorToL4Back().alongWith(new ArmToL4Back());
+            }
+        } return new ElevatorToL1().alongWith(new ArmToL1());
+    }
+
     /***************/
     /*** BUTTON ***/
     /***************/
@@ -250,7 +257,7 @@ public class RobotContainer {
                         new ConditionalCommand(
                             new ShooterShootL1(), 
                             new ShooterShootForwards(), 
-                            () -> arm.getState() == ArmState.L1_FRONT),
+                            () -> arm.getState() == ArmState.L1),
                         shooter::shouldShootBackwards
                     ), 
                     () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
@@ -263,13 +270,7 @@ public class RobotContainer {
                     .alongWith(new ElevatorToFeed().onlyIf(() -> elevator.getState() == ElevatorState.PROCESSOR)), 
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(new ElevatorToFeed().alongWith(new ArmToFeed()))
-                    .onlyIf(() -> arm.getState() == ArmState.L4_FRONT
-                        || arm.getState() == ArmState.L4_BACK
-                        || arm.getState() == ArmState.L3_FRONT
-                        || arm.getState() == ArmState.L3_BACK
-                        || arm.getState() == ArmState.L2_FRONT
-                        || arm.getState() == ArmState.L2_BACK
-                        || arm.getState() == ArmState.L1_FRONT), 
+                    .onlyIf(() -> Arm.isScoring(arm.getState())), 
                 () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
@@ -310,19 +311,8 @@ public class RobotContainer {
         // L4 coral score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveCoralScoreAlignWithClearance(4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL4Front().alongWith(new ArmToL4Front()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootBackwards()),
-                new SwerveDrivePIDToNearestBranchScore(4, false)
-                    .alongWith(new ShooterWaitUntilHasCoral()
-                        .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()), 
+                new ScoreRoutine(4, true),
+                new ScoreRoutine(4, false), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
@@ -331,20 +321,8 @@ public class RobotContainer {
         // L3 coral score
         driver.getRightButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveCoralScoreAlignWithClearance(3, true, ElevatorState.L3_FRONT, ArmState.L3_FRONT)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL3Front().alongWith(new ArmToL3Front()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootBackwards()),
-                new SwerveDriveCoralScoreAlignWithClearance(3, false, ElevatorState.L3_BACK, ArmState.L3_BACK)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L3_BACK || arm.getState() != ArmState.L3_BACK)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootForwards()), 
+                new ScoreRoutine(3, true),
+                new ScoreRoutine(3, false), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
@@ -353,19 +331,8 @@ public class RobotContainer {
         // L2 coral score
         driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDrivePIDToNearestBranchScore(2, true)
-                    .alongWith(new ShooterWaitUntilHasCoral()
-                        .andThen(new ElevatorToL2Front().alongWith(new ArmToL2Front()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()),
-                new SwerveDriveCoralScoreAlignWithClearance(2, false, ElevatorState.L2_BACK, ArmState.L2_BACK)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L2_BACK || arm.getState() != ArmState.L2_BACK)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootForwards()), 
+                new ScoreRoutine(2, true),
+                new ScoreRoutine(2, false), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
@@ -493,15 +460,9 @@ public class RobotContainer {
         operator.getRightMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
 
         // Arm/Elevator to heights
-        operator.getTopButton().onTrue(swerve.isFrontFacingReef() 
-            ? new ElevatorToL4Front().alongWith(new ArmToL4Front()) 
-            : new ElevatorToL4Back().alongWith(new ArmToL4Back()));
-        operator.getRightButton().onTrue(swerve.isFrontFacingReef() 
-            ? new ElevatorToL3Front().alongWith(new ArmToL3Front()) 
-            : new ElevatorToL3Back().alongWith(new ArmToL3Back()));
-        operator.getBottomButton().onTrue(swerve.isFrontFacingReef() 
-            ? new ElevatorToL2Front().alongWith(new ArmToL2Front()) 
-            : new ElevatorToL2Back().alongWith(new ArmToL2Back()));
+        operator.getTopButton().onTrue(RobotContainer.getElevatorArmCommands(4, swerve.isFrontFacingReef()));
+        operator.getRightButton().onTrue(RobotContainer.getElevatorArmCommands(3, swerve.isFrontFacingReef()));
+        operator.getBottomButton().onTrue(RobotContainer.getElevatorArmCommands(2, swerve.isFrontFacingReef()));
 
         // Elevator offsets
         operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());

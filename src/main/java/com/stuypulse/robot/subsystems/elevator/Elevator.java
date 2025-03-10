@@ -15,7 +15,6 @@ import com.stuypulse.robot.util.RobotVisualizer;
 import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -77,6 +76,27 @@ public abstract class Elevator extends SubsystemBase {
 
     public ElevatorState getState() {
         return state;
+    }
+
+    public static ElevatorState getState(int level, boolean isFrontFacingReef) {
+        if (isFrontFacingReef) {
+            if (level == 2) {
+                return ElevatorState.L2_FRONT;
+            } else if (level == 3) {
+                return ElevatorState.L3_FRONT;
+            } else if (level == 4) {
+                return ElevatorState.L4_FRONT;
+            }
+        } else {
+            if (level == 2) {
+                return ElevatorState.L2_BACK;
+            } else if (level == 3) {
+                return ElevatorState.L3_BACK;
+            } else if (level == 4) {
+                return ElevatorState.L4_BACK;
+            }
+        }
+        return ElevatorState.L1;
     }
 
     public abstract double getCurrentHeight();

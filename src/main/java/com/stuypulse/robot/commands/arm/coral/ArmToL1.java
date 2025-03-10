@@ -5,6 +5,6 @@ import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 
 public class ArmToL1 extends ArmSetState{
     public ArmToL1(){
-        super(ArmState.L1_FRONT);
+        super(ArmState.L1);
     }
 }
