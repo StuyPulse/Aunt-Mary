@@ -242,9 +242,9 @@ public class RobotContainer {
                 new ConditionalCommand(
                     new FroggyRollerShootCoral(),
                     new ConditionalCommand(
-                        new FroggyRollerShootAlgae(),
-                        new ShooterShootAlgae(), 
-                        () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE),
+                        new ShooterShootAlgae(),
+                        new FroggyRollerShootAlgae(), 
+                        () -> arm.getState() == ArmState.PROCESSOR),
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
                 new ConditionalCommand(
                     new ShooterShootAlgae(),
@@ -596,7 +596,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
-    
+
     public void configureSysids() {
         autonChooser.addOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
         autonChooser.addOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
