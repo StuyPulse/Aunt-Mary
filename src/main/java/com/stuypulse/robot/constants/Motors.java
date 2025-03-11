@@ -84,7 +84,7 @@ public interface Motors {
 			.withFFConstants(Gains.Elevator.FF.kS, Gains.Elevator.FF.kV, Gains.Elevator.FF.kA, Gains.Elevator.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Elevator_Static)
 			.withSensorToMechanismRatio(1 / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR)
-			.withMotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
+			.withMotionProfile(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
     }
 
     public interface Climb {

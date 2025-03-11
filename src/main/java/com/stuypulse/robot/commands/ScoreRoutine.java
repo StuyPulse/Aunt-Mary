@@ -4,17 +4,19 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.stuypulse.robot.RobotContainer;
-import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
-import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
+import com.stuypulse.robot.commands.superStructure.SuperStructureSetState;
+import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.subsystems.arm.Arm;
-import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.elevator.Elevator;
-import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
@@ -23,8 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class ScoreRoutine extends SequentialCommandGroup {
-    private final Arm arm;
-    private final Elevator elevator;
+    private final SuperStructure superStructure;
     private final Shooter shooter;
 
     public ScoreRoutine(int level, boolean isFrontFacingReef) {
@@ -32,24 +33,22 @@ public class ScoreRoutine extends SequentialCommandGroup {
     }
 
     public ScoreRoutine(int level, boolean isFrontFacingReef, Optional<CoralBranch> branch) {
-        arm = Arm.getInstance();
-        elevator = Elevator.getInstance();
+        superStructure = SuperStructure.getInstance();
         shooter = Shooter.getInstance();
 
-        ElevatorState elevatorState = Elevator.getState(level, isFrontFacingReef);
-        ArmState armState = Arm.getState(level, isFrontFacingReef);
+        SuperStructureState correspondingSuperStructureState = SuperStructure.getCorrespondingCoralScoreState(level, isFrontFacingReef);
         Supplier<CoralBranch> targetBranch = branch.isPresent() ? () -> branch.get() : () -> ReefUtil.getClosestCoralBranch();
 
         addCommands(
-            new SwerveDriveCoralScoreAlignWithClearance(targetBranch, level, isFrontFacingReef, elevatorState, armState)
+            new SwerveDriveCoralScoreAlignWithClearance(targetBranch, level, isFrontFacingReef, correspondingSuperStructureState)
                 .alongWith(
                     new WaitUntilCommand(Clearances::isArmClearFromReef)
                         .alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(RobotContainer.getElevatorArmCommands(level, isFrontFacingReef))
-                        .onlyIf(() -> elevator.getState() != elevatorState || arm.getState() != armState)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                        .andThen(new SuperStructureSetState(correspondingSuperStructureState))
+                        .onlyIf(() -> superStructure.getState() != correspondingSuperStructureState)
+                        .andThen(new SuperStructureWaitUntilAtTarget())
                 )
-                .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // Re-check positioning
+                .andThen(new SuperStructureWaitUntilAtTarget()) // Re-check positioning
                 .andThen(shooter.shouldShootBackwards() ? new ShooterShootBackwards() : new ShooterShootForwards())
         );
     }

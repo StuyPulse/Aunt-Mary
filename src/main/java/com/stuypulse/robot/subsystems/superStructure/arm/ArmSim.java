@@ -4,19 +4,16 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.subsystems.froggy;
-
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
-
-import static edu.wpi.first.units.Units.Second;
+package com.stuypulse.robot.subsystems.superStructure.arm;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -32,35 +29,35 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-public class FroggySim extends Froggy {
+public class ArmSim extends Arm {
 
     private final SingleJointedArmSim sim;
     private final LinearSystemLoop<N2, N1, N2> controller;
     private final MotionProfile motionProfile;
 
-    private Optional<Double> pivotVoltageOverride;
-    private Rotation2d pivotOperatorOffset;
+    private SettableNumber velLimitRadiansPerSecond;
+    private SettableNumber accelLimitRadiansPerSecondSquared;
 
-    protected FroggySim() {
+    private Optional<Double> voltageOverride;
+
+    protected ArmSim() {
         sim = new SingleJointedArmSim(
             DCMotor.getKrakenX60(1),
-            Constants.Froggy.GEAR_RATIO,
-            Constants.Froggy.MOI,
-            Constants.Froggy.LENGTH,
-            Constants.Froggy.MINIMUM_ANGLE.getRadians(),
-            Constants.Froggy.MAXIMUM_ANGLE.getRadians(),
+            Constants.Arm.GEAR_RATIO,
+            Constants.Arm.MOMENT_OF_INERTIA,
+            Constants.Arm.ARM_LENGTH,
+            Settings.Arm.MIN_ANGLE.getRadians(),
+            Settings.Arm.MAX_ANGLE.getRadians(),
             false,
-            Settings.Froggy.STOW_ANGLE.getRadians()
-
+            Settings.Arm.MIN_ANGLE.getRadians()
         );
 
         LinearSystem<N2, N1, N2> armSystem = LinearSystemId.createSingleJointedArmSystem(
             DCMotor.getKrakenX60(1), 
-            Constants.Froggy.MOI, 
-            Constants.Froggy.GEAR_RATIO);
+            Constants.Arm.MOMENT_OF_INERTIA, 
+            Constants.Arm.GEAR_RATIO);
 
         KalmanFilter<N2, N1, N2> kalmanFilter = new KalmanFilter<>(
             Nat.N2(), 
@@ -78,41 +75,37 @@ public class FroggySim extends Froggy {
         
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
-        motionProfile = new MotionProfile(
-            Settings.Froggy.MAX_VEL.getRadians(),
-            Settings.Froggy.MAX_ACCEL.getRadians()
-        );
+        velLimitRadiansPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
+        accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getDegrees());
+
+        motionProfile = new MotionProfile(velLimitRadiansPerSecond, accelLimitRadiansPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
 
-        pivotVoltageOverride = Optional.empty();
-        pivotOperatorOffset = Rotation2d.kZero;
+        voltageOverride = Optional.empty();
     }
 
     @Override
-    public SysIdRoutine getPivotSysIdRoutine() {
+    public SysIdRoutine getSysIdRoutine() {
         return SysId.getRoutine(
             3, 
             7, 
-            "Froggy Pivot", 
-            voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
+            "Arm", 
+            voltage -> setVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentAngle().getDegrees(), 
             () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
-            () -> pivotVoltageOverride.get(), 
+            () -> voltageOverride.get(), 
             getInstance()
         );
     }
 
     @Override
-    public boolean isAtTargetAngle() {
+    public boolean atTargetAngle() {
         return Math.abs(getCurrentAngle().getRadians() - getTargetAngle().getRadians()) < Settings.Arm.ANGLE_TOLERANCE.getRadians();
     }
 
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
-            SLMath.clamp(
-                getPivotState().getTargetAngle().getDegrees() + pivotOperatorOffset.getDegrees(),
-                Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
-                Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
+            SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
@@ -121,33 +114,44 @@ public class FroggySim extends Froggy {
     }
 
     @Override
-    public void setPivotVoltageOverride(Optional<Double> voltage) {
-        this.pivotVoltageOverride = voltage;
+    public void setVoltageOverride(Optional<Double> voltage) {
+        this.voltageOverride = voltage;
     }
 
     @Override
-    public boolean isStallingCoral() {
-        return false;
+    public double getVoltageOverride() {
+        if (voltageOverride.isPresent()) {
+            return voltageOverride.get();
+        }
+        else {
+            return 0;
+        }
     }
 
     @Override
-    public boolean isStallingAlgae() {
-        return false;
+    public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
+        this.velLimitRadiansPerSecond.set(velLimit.getRadians());
+        this.accelLimitRadiansPerSecondSquared.set(accelLimit.getRadians());
     }
-
+    
     @Override
     public void periodic() {
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetAngle().getRadians());
 
+        SmartDashboard.putNumber("Arm/Constraints/Max vel (deg per s)", Units.radiansToDegrees(velLimitRadiansPerSecond.get()));
+        SmartDashboard.putNumber("Arm/Constraints/Max accel (deg per s per s)", Units.radiansToDegrees(accelLimitRadiansPerSecondSquared.get()));
+
+        SmartDashboard.putNumber("Arm/Setpoint (deg)", Units.radiansToDegrees(setpoint));
+
         controller.setNextR(VecBuilder.fill(setpoint, 0));
         controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
-        if (Settings.EnabledSubsystems.FROGGY.get()) {
-            if (pivotVoltageOverride.isPresent()) {
-                sim.setInputVoltage(pivotVoltageOverride.get());
+        if (Settings.EnabledSubsystems.ARM.get()) {
+            if (voltageOverride.isPresent()) {
+                sim.setInputVoltage(voltageOverride.get());
             }
             else {
                 sim.setInputVoltage(controller.getU(0));
@@ -158,9 +162,5 @@ public class FroggySim extends Froggy {
         }
 
         sim.update(Settings.DT);
-
-        SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
-        SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", Units.radiansToDegrees(setpoint));
     }
 }

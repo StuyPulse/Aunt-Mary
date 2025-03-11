@@ -92,7 +92,6 @@ public abstract class Froggy extends SubsystemBase {
     public void setPivotState(PivotState state) {
         this.pivotState = state;
         setPivotVoltageOverride(Optional.empty());
-        setPivotOperatorOffset(Rotation2d.kZero);
     }
 
     public RollerState getRollerState() {
@@ -110,8 +109,6 @@ public abstract class Froggy extends SubsystemBase {
     public abstract Rotation2d getCurrentAngle();
 
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
-    public abstract void setPivotOperatorOffset(Rotation2d offset);
-    public abstract Rotation2d getPivotOperatorOffset();
 
     public abstract SysIdRoutine getPivotSysIdRoutine();
 

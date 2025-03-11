@@ -1,16 +1,15 @@
 package com.stuypulse.robot.commands.autons.HAlgae;
 
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
-import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
-import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
-import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
@@ -27,10 +26,10 @@ public class OnePieceH extends SequentialCommandGroup {
             // Score Preload on H
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
-                new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                new SuperStructureCoralL4Front()
+                    .andThen(new SuperStructureWaitUntilAtTarget())
             ),
-            new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.H, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT),
+            new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.H, 4, true, SuperStructureState.L4_FRONT),
             new ShooterShootBackwards(),
             new WaitCommand(3),
             new ShooterStop()

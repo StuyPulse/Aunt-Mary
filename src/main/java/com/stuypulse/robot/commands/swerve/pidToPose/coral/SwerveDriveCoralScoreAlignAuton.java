@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.arm.Arm;
-import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.elevator.Elevator;
-import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 

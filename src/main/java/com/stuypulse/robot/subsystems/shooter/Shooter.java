@@ -8,7 +8,7 @@ package com.stuypulse.robot.subsystems.shooter;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.util.RobotVisualizer;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

@@ -1,24 +1,19 @@
 package com.stuypulse.robot.commands.autons.GAlgae;
 
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
-import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
-import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL3;
-import com.stuypulse.robot.commands.arm.algae.ArmToCatapultReady;
-import com.stuypulse.robot.commands.arm.algae.ArmToCatapultShoot;
-import com.stuypulse.robot.commands.arm.algae.ArmWaitUntilCanCatapult;
-import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
-import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL3;
-import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
-import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAllianceSide;
@@ -27,9 +22,9 @@ import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNeare
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
@@ -51,8 +46,8 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
                     .withTranslationalConstraints(1.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(1.75)
                     .deadlineFor(new LEDApplyPattern(CoralBranch.G.isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-                new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                new SuperStructureCoralL4Front()
+                    .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootBackwards(),
             new WaitCommand(0.15),
@@ -63,8 +58,8 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
-                        new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2())
-                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                        new SuperStructureAlgaeL2()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
@@ -75,11 +70,11 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new ElevatorToBarge().alongWith(new ArmToCatapultReady())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
+                new SuperStructureCatapultReady()
+                    .andThen(new SuperStructureWaitUntilAtTarget()
                         .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
-                    .andThen(new ArmToCatapultShoot()
-                        .andThen(new ArmWaitUntilCanCatapult()
+                    .andThen(new SuperStructureCatapultShoot()
+                        .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))
             ),
             new ShooterShootAlgae(),
@@ -89,8 +84,8 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
                 new WaitCommand(0.2)
                     .andThen(
-                        new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3())
-                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                        new SuperStructureAlgaeL3()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
@@ -101,11 +96,11 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new ElevatorToBarge().alongWith(new ArmToCatapultReady())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
+                new SuperStructureCatapultReady()
+                    .andThen(new SuperStructureWaitUntilAtTarget()
                         .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
-                    .andThen(new ArmToCatapultShoot()
-                        .andThen(new ArmWaitUntilCanCatapult()
+                    .andThen(new SuperStructureCatapultShoot()
+                        .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))
             ),
 
@@ -114,8 +109,8 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
                 new WaitCommand(0.2)
                     .andThen(
-                        new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3())
-                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                        new SuperStructureAlgaeL3()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
@@ -126,14 +121,13 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[5]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new ElevatorToBarge().alongWith(new ArmToCatapultReady())
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
+                new SuperStructureCatapultReady()
+                    .andThen(new SuperStructureWaitUntilAtTarget()
                         .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
-                    .andThen(new ArmToCatapultShoot()
-                        .andThen(new ArmWaitUntilCanCatapult()
+                    .andThen(new SuperStructureCatapultShoot()
+                        .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))
             )
-
         );
 
     }

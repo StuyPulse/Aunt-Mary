@@ -142,16 +142,9 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 1.75;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 2.0;
-
-        double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.75;
-
         double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         // Coral
-        // double L1_HEIGHT_METERS = 1.125488;
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         double FRONT_L2_HEIGHT_METERS = 1.538086;
@@ -171,6 +164,14 @@ public interface Settings {
 
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
         double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
+
+        public interface Constraints {
+            double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 1.75;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 2.0;
+    
+            double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.75;
+        }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
@@ -203,11 +204,16 @@ public interface Settings {
 
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
-        Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(350.0);
-        Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(700.0);
+        public interface Constraints {
+            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(350.0);
+            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(700.0);
+    
+            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
+            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
 
-        Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
-        Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
+            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(350.0);
+            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
+        }
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
     }
@@ -308,35 +314,6 @@ public interface Settings {
             SmartNumber MAX_TELEOP_TURN_ACCEL = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", Swerve.Constraints.MAX_ANGULAR_ACCELERATION.get());
 
             SmartNumber MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Speed While Climbing (rad per s)", MAX_TELEOP_TURN_SPEED.get() / 2);
-        }
-    }
-
-    public interface Operator {
-        public interface Froggy {
-            Rotation2d MANUAL_ROTATION_VELOCITY = Rotation2d.fromDegrees(10);
-        }
-        
-        public interface Climb {
-            double CLIMB_UP_VOLTAGE = 0.0; // Claw is coming up, not robot
-            double CLIMB_DOWN_VOLTAGE = -0.0; // Claw is going down, not robot
-        }
-
-        public interface Elevator {
-            double VOLTAGE_OVERRIDE_DEADBAND = 0.1;
-            
-            double MAX_VOLTAGE_UP = 6.0;
-            double MAX_VOLTAGE_DOWN = -3.0;
-
-            double HEIGHT_OFFSET_PER_CLICK = Units.inchesToMeters(2);
-        }
-
-        public interface Arm {
-            double VOLTAGE_OVERRIDE_DEADBAND = 0.1;
-
-            double MAX_VOLTAGE_UP = 6.0;
-            double MAX_VOLTAGE_DOWN = -3.0;
-
-            Rotation2d ANGLE_OFFSET_PER_CLICK = Rotation2d.fromDegrees(5);
         }
     }
   
