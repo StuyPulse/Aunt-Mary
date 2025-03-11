@@ -1,12 +1,14 @@
 package com.stuypulse.robot.commands.autons.GAlgae;
 
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.stuypulse.robot.commands.arm.ArmToFeed;
 import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.arm.algae.ArmToAlgaeL2;
 import com.stuypulse.robot.commands.arm.algae.ArmToCatapultReady;
 import com.stuypulse.robot.commands.arm.algae.ArmToCatapultShoot;
 import com.stuypulse.robot.commands.arm.algae.ArmWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
+import com.stuypulse.robot.commands.elevator.ElevatorToFeed;
 import com.stuypulse.robot.commands.elevator.ElevatorWaitUntilAtTargetHeight;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToAlgaeL2;
 import com.stuypulse.robot.commands.elevator.algae.ElevatorToBarge;
@@ -25,6 +27,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranc
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
@@ -57,7 +60,7 @@ public class OneGOneAlgae extends SequentialCommandGroup {
             // Acquire GH Algae, Score on Barge
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
-                new WaitCommand(1.75)
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2())
                             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
@@ -67,8 +70,8 @@ public class OneGOneAlgae extends SequentialCommandGroup {
                 new SwerveDrivePidToNearestReefAlgae(),
                 new ShooterAcquireAlgae()
             ),
-            new WaitCommand(2.0),
             new ShooterHoldAlgae(),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
                 new ElevatorToBarge().alongWith(new ArmToCatapultReady())

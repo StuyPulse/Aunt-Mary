@@ -37,6 +37,8 @@ import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
+import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
@@ -165,9 +167,8 @@ public class RobotContainer {
         configureDefaultCommands();
         configureAutomaticCommands();
         configureDriverButtonBindings();
-        configureOperatorButtonBindings();
         configureAutons();
-        configureSysids();
+        //configureSysids();
 
         // swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -246,10 +247,12 @@ public class RobotContainer {
         driver.getDPadRight()
             .onTrue(new ConditionalCommand(
                 new ConditionalCommand(
-                    new FroggyRollerShootAlgae().onlyIf(() -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE)
-                        .alongWith(new ShooterShootAlgae().onlyIf(() -> arm.getState() == ArmState.PROCESSOR)), 
-                    new FroggyRollerShootCoral(), 
-                    () -> froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE), 
+                    new FroggyRollerShootCoral(),
+                    new ConditionalCommand(
+                        new ShooterShootAlgae(),
+                        new FroggyRollerShootAlgae(), 
+                        () -> arm.getState() == ArmState.PROCESSOR),
+                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
                 new ConditionalCommand(
                     new ShooterShootAlgae(),
                     new ConditionalCommand(
@@ -389,23 +392,6 @@ public class RobotContainer {
                 .andThen(new ElevatorToProcessor().alongWith(new ArmToProcessor())))
             .onFalse(new ShooterHoldAlgae());
 
-        // Auto processor
-        // driver.getDPadDown()
-        //     .whileTrue(new ConditionalCommand(
-        //         new SwerveDrivePIDToProcessorShooter()
-        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-        //                 .andThen(new ArmToProcessor().alongWith(new ElevatorToFeed()))
-        //                 .andThen(new ArmWaitUntilAtTarget().alongWith(new ElevatorWaitUntilAtTargetHeight())))
-        //             .andThen(new ShooterShootAlgae()), 
-        //         new SwerveDrivePIDToProcessorFroggy()
-        //             .alongWith(new FroggyPivotToProcessor().andThen(new FroggyPivotWaitUntilAtTargetAngle()))
-        //             .andThen(new FroggyRollerShootAlgae()), 
-        //         () -> shooter.getState() == ShooterState.HOLD_ALGAE))
-        //     .onFalse(new ArmToFeed().alongWith(new ElevatorToFeed()))
-        //     .onFalse(new ShooterStop())
-        //     .onFalse(new FroggyRollerStop())
-        //     .onFalse(new FroggyPivotToStow());
-
         // Unstuck Coral
         driver.getDPadDown()
             .onTrue(new ConditionalCommand(
@@ -434,57 +420,6 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
     }
 
-    private void configureOperatorButtonBindings() {
-        // Elevator Voltage Override
-        new Trigger(() -> Math.abs(operator.getLeftStick().y) > Settings.Operator.Elevator.VOLTAGE_OVERRIDE_DEADBAND)   
-            .whileTrue(new ElevatorOverrideVoltage(() -> -operator.getLeftStick().y > 0 
-                ? (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_UP))
-                : (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_DOWN))));
-        
-        // Arm Voltage Override
-        new Trigger(() -> Math.abs(operator.getRightStick().x) > Settings.Operator.Arm.VOLTAGE_OVERRIDE_DEADBAND)
-            .whileTrue(new ArmOverrideVoltage(() -> operator.getRightStick().x > 0 
-                ? (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_UP))
-                : (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_DOWN))));
-
-        // Shoot Backwards
-        operator.getLeftTriggerButton()
-            .whileTrue(new ConditionalCommand(
-                new ShooterShootForwards().alongWith(new FunnelReverse()),
-                new ShooterShootBackwards().alongWith(new FunnelReverse()),
-                () -> shooter.shouldShootBackwards()))
-            .onFalse(new ShooterStop());
-
-        // Shoot Forwards
-        operator.getRightTriggerButton()
-            .whileTrue(new ConditionalCommand(
-                new ShooterShootBackwards(), 
-                new ShooterShootForwards(), 
-                () -> shooter.shouldShootBackwards()))
-            .onFalse(new ShooterStop());
-
-        // Froggy pivot offsets
-        operator.getLeftBumper().whileTrue(new FroggyPivotMoveOperatorOffsetUp());
-        operator.getRightBumper().whileTrue(new FroggyPivotMoveOperatorOffsetDown());
-
-        // Climb voltage overrides
-        operator.getLeftMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
-        operator.getRightMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
-
-        // Arm/Elevator to heights
-        operator.getTopButton().onTrue(RobotContainer.getElevatorArmCommands(4, swerve.isFrontFacingReef()));
-        operator.getRightButton().onTrue(RobotContainer.getElevatorArmCommands(3, swerve.isFrontFacingReef()));
-        operator.getBottomButton().onTrue(RobotContainer.getElevatorArmCommands(2, swerve.isFrontFacingReef()));
-
-        // Elevator offsets
-        operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());
-        operator.getDPadDown().onTrue(new ElevatorOffsetTargetDown());
-
-        // Arm offsets
-        operator.getDPadLeft().onTrue(new ArmOffsetTargetDown());
-        operator.getDPadRight().onTrue(new ArmOffsetTargetUp());
-    }
-
     /**************/
     /*** AUTONS ***/
     /**************/
@@ -511,9 +446,9 @@ public class RobotContainer {
         "Red I to HP", "Red K to HP", "Red L to HP");
 
         AutonConfig BLUE_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue BackOut");
+        "Blue I to HP", "Blue K to HP", "Blue L to HP");
         AutonConfig RED_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Red I to HP", "Red K to HP", "Red L to HP", "Red BackOut");
+        "Red I to HP", "Red K to HP", "Red L to HP");
         
         BLUE_ONE_PIECE_H.registerBlue(autonChooser);
         RED_ONE_PIECE_H.registerRed(autonChooser);
@@ -529,10 +464,10 @@ public class RobotContainer {
 
         /** BOTTOM AUTONS **/
 
-        AutonConfig BLUE_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
-        "Blue Mid Bottom to G");
-        AutonConfig RED_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
-        "Red Mid Bottom to G");
+        // AutonConfig BLUE_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
+        // "Blue Mid Bottom to G");
+        // AutonConfig RED_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
+        // "Red Mid Bottom to G");
 
         AutonConfig BLUE_THREE_PIECE_FDC = new AutonConfig("3 Piece FDC", ThreePieceFDC::new,
         "Blue F to HP", "Blue D to HP");
@@ -545,12 +480,12 @@ public class RobotContainer {
         "Red F to HP", "Red D to HP", "Red C to HP");
 
         AutonConfig BLUE_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue BackOut");
+        "Blue F to HP", "Blue D to HP", "Blue C to HP");
         AutonConfig RED_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
-        "Red F to HP", "Red D to HP", "Red C to HP", "Red BackOut");
+        "Red F to HP", "Red D to HP", "Red C to HP");
 
-        BLUE_ONE_PIECE_G.registerBlue(autonChooser);
-        RED_ONE_PIECE_G.registerRed(autonChooser);
+        //BLUE_ONE_PIECE_G.registerBlue(autonChooser);
+        //RED_ONE_PIECE_G.registerRed(autonChooser);
 
         BLUE_THREE_PIECE_FDC.registerBlue(autonChooser);
         RED_THREE_PIECE_FDC.registerRed(autonChooser);
@@ -590,32 +525,31 @@ public class RobotContainer {
         // /** BOTTOM ALGAE AUTONS **/
 
         AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        "Blue G to GH Algae");
-        AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        "Red G to GH Algae");
+        "Blue G BackOut", "Blue GH BackOut");
+        //AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        //"Red G to GH Algae");
 
-        // AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
+        AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        "Blue G BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut");
         // AutonConfig RED_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
         // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3");
 
-        // AutonConfig BLUE_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
-        // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3", "Blue Barge 3 to EF Algae", "Blue EF Algae to Barge 3");
+        AutonConfig BLUE_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
+        "Blue G BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
          //AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
         BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
-        RED_G_ONE_ALGAE.registerRed(autonChooser);
+        //RED_G_ONE_ALGAE.registerRed(autonChooser);
 
-        // BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
+        BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
         // RED_G_TWO_ALGAE.registerRed(autonChooser);
 
-        // BLUE_G_THREE_ALGAE.registerBlue(autonChooser);
+        BLUE_G_THREE_ALGAE.registerBlue(autonChooser);
          //RED_G_THREE_ALGAE.registerRed(autonChooser);
 
         /** TESTS **/
 
-        
         AutonConfig BLUE_MOBILITY = new AutonConfig("Mobility", Mobility::new,
         "Mobility");
         AutonConfig RED_MOBILITY = new AutonConfig("Mobility", Mobility::new, 

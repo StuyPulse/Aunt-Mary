@@ -13,37 +13,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red G to GH Algae"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red GH Algae to Barge 3"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red Barge 3 to IJ Algae"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red IJ Algae to Barge 3"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red Barge 3 to EF Algae"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red EF Algae to Barge 3"
+            "pathName": null
           }
         }
       ]

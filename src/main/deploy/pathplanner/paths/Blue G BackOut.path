@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.04968523297991,
-        "y": 5.217973981584821
+        "x": 5.836278860909598,
+        "y": 4.018959416841206
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.754666137695312,
-        "y": 5.9416748046875
+        "x": 6.329734023160095,
+        "y": 4.016905543095809
       },
       "isLocked": false,
-      "linkedName": "Red IJ Algae"
+      "linkedName": "Blue G"
     },
     {
       "anchor": {
-        "x": 7.3,
-        "y": 5.004760742187499
+        "x": 6.336,
+        "y": 4.018959416841206
       },
       "prevControl": {
-        "x": 6.155333600725446,
-        "y": 5.477145385742188
+        "x": 5.830130396129713,
+        "y": 4.0240312695017435
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Barge 3"
+      "linkedName": "Blue G BackOut"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -45,10 +45,10 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Red To Barge",
+  "folder": "Blue BackOut",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.250605555943079,
-        "y": 2.9040492466517858
+        "x": 5.229284232003348,
+        "y": 2.9077728271484373
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.250605555943078,
-        "y": 2.9040492466517858
+        "x": 6.229284232003347,
+        "y": 2.9077728271484373
       },
       "isLocked": false,
       "linkedName": "Blue EF Algae"
     },
     {
       "anchor": {
-        "x": 5.8211805071149545,
-        "y": 4.1560904366629465
+        "x": 5.834493582589285,
+        "y": 4.145276750837053
       },
       "prevControl": {
-        "x": 5.8211294991629465,
-        "y": 3.5018114362444193
+        "x": 5.8344425746372774,
+        "y": 3.4909977504185257
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

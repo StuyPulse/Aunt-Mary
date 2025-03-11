@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.036270141601562,
-        "y": 5.243937029157366
+        "x": 5.066466849190848,
+        "y": 5.2207794189453125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.043921334402901,
-        "y": 6.140962873186384
+        "x": 5.074118041992188,
+        "y": 6.11780526297433
       },
       "isLocked": false,
-      "linkedName": "Blue IJ Algae"
+      "linkedName": "Blue IJ Algae (2)"
     },
     {
       "anchor": {
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

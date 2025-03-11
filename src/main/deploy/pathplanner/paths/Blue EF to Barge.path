@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.797665841238838,
-        "y": 4.09498291015625
+        "x": 5.457442801339286,
+        "y": 2.5129712785993297
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.039892140821703,
-        "y": 4.245731788685146
+        "x": 6.207361711774553,
+        "y": 2.5324563162667415
       },
       "isLocked": false,
-      "linkedName": "Red GH Algae"
+      "linkedName": "Blue EF Algae (1)"
     },
     {
       "anchor": {
         "x": 7.3,
-        "y": 5.004760742187499
+        "y": 4.996803501674107
       },
       "prevControl": {
-        "x": 6.953837402777962,
-        "y": 4.791802757816577
+        "x": 6.760032871791294,
+        "y": 2.8320770263671875
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Barge 3"
+      "linkedName": "Blue Barge 3"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -45,10 +45,10 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Red To Barge",
+  "folder": "Blue To Barge",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }
