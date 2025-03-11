@@ -8,7 +8,6 @@ import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.elevator.Elevator;
 import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
-import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -33,10 +32,6 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
     public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
         this(() -> branch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState);
-    }
-
-    public SwerveDriveCoralScoreAlignWithClearance(int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
-        this(ReefUtil::getClosestCoralBranch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState);
     }
 
     private boolean isClear() {

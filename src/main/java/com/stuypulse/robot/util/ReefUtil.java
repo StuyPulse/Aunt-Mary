@@ -1,6 +1,7 @@
 package com.stuypulse.robot.util;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
@@ -122,19 +123,20 @@ public interface ReefUtil {
         return branches;
     }
 
-    public static CoralBranch compareJoystick(Gamepad driver) {
+    public static Optional<CoralBranch> joystickOverride(Gamepad driver) {
         NamedTags nearestReefSide = ReefUtil.getNearestReefSide();
         Vector2D joystick = driver.getLeftStick();
+        Optional<CoralBranch> targetBranch = Optional.empty();
         if (joystick.magnitude() > Settings.Driver.Drive.DEADBAND.get()) {
             for (CoralBranch branch : ReefUtil.getBranchesOnReefSide(nearestReefSide)) {
                 Vector2D branchVector = branch.getVectorFromTagToBranch().normalize();
                 double similarity = joystick.dot(branchVector);
                 if (similarity > Settings.Driver.Drive.BRANCH_VECTOR_SIMILARITY_THRESHOLD.get()) { 
-                    return branch;
+                    targetBranch = Optional.of(branch);
                 }
             }
         }
-        return ReefUtil.getClosestCoralBranch();
+        return targetBranch;
     }
 
     /*** REEF ALGAE ***/

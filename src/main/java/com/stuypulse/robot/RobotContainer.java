@@ -308,35 +308,47 @@ public class RobotContainer {
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
             .onTrue(new ArmToL1().alongWith(new ElevatorToL1()).onlyIf(() -> shooter.hasCoral()));
 
-        // L4 coral score
+        // L4 Coral Score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(4, true),
-                new ScoreRoutine(4, false), 
-                () -> swerve.isFrontFacingReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
-            .onFalse(new ShooterStop());
-                
-        // L3 coral score
-        driver.getRightButton()
-            .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(3, true),
-                new ScoreRoutine(3, false), 
+                ReefUtil.joystickOverride(driver).isEmpty() ? 
+                    new ScoreRoutine(4, true) : 
+                    new ScoreRoutine(4, true, ReefUtil.joystickOverride(driver)),
+                ReefUtil.joystickOverride(driver).isEmpty() ? 
+                    new ScoreRoutine(4, false) : 
+                    new ScoreRoutine(4, false, ReefUtil.joystickOverride(driver)), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
             .onFalse(new ShooterStop());
 
-        // L2 coral score
+        // L3 Coral Score
+        driver.getRightButton()
+        .whileTrue(new ConditionalCommand(
+            ReefUtil.joystickOverride(driver).isEmpty() ? 
+                new ScoreRoutine(3, true) : 
+                new ScoreRoutine(3, true, ReefUtil.joystickOverride(driver)),
+            ReefUtil.joystickOverride(driver).isEmpty() ? 
+                new ScoreRoutine(3, false) : 
+                new ScoreRoutine(3, false, ReefUtil.joystickOverride(driver)), 
+            () -> swerve.isFrontFacingReef()))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+        .onFalse(new ShooterStop());
+
+        // L2 Coral Score
         driver.getBottomButton()
-            .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(2, true),
-                new ScoreRoutine(2, false), 
-                () -> swerve.isFrontFacingReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
-            .onFalse(new ShooterStop());
+        .whileTrue(new ConditionalCommand(
+            ReefUtil.joystickOverride(driver).isEmpty() ? 
+                new ScoreRoutine(2, true) : 
+                new ScoreRoutine(2, true, ReefUtil.joystickOverride(driver)),
+            ReefUtil.joystickOverride(driver).isEmpty() ? 
+                new ScoreRoutine(2, false) : 
+                new ScoreRoutine(2, false, ReefUtil.joystickOverride(driver)), 
+            () -> swerve.isFrontFacingReef()))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+        .onFalse(new ShooterStop());
 
         // Barge score
         driver.getLeftButton()
