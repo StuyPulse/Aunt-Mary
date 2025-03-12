@@ -172,7 +172,7 @@ public class ArmImpl extends Arm {
                     && Elevator.getInstance().getState() == ElevatorState.FEED
                     && Elevator.getInstance().atTargetHeight())
                 {
-                    motor.setVoltage(-0.4);
+                    motor.setVoltage(-0.8);
                 }
                 else {
                     motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
