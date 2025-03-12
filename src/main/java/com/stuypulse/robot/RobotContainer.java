@@ -59,6 +59,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Ba
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Back;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
@@ -287,20 +288,16 @@ public class RobotContainer {
                 new ConditionalCommand(
                     new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
                         .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
-                        .alongWith(new SuperStructureCatapultReady()
+                        .alongWith(new SuperStructureBarge118()
                             .andThen(new SuperStructureWaitUntilAtTarget()
                                 .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
-                            .andThen(new SuperStructureCatapultShoot()
-                                .andThen(new SuperStructureWaitUntilCanCatapult()
-                                    .andThen(new ShooterShootAlgae())))), 
+                            .andThen(new ShooterShootAlgae())), 
                     new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
                         .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
-                        .alongWith(new SuperStructureCatapultReady()
+                        .alongWith(new SuperStructureBarge118()
                             .andThen(new SuperStructureWaitUntilAtTarget()
                                 .alongWith(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide()))
-                            .andThen(new SuperStructureCatapultShoot()
-                                .andThen(new SuperStructureWaitUntilCanCatapult()
-                                    .andThen(new ShooterShootAlgae())))), 
+                            .andThen(new ShooterShootAlgae())), 
                     () -> swerve.getPose().getX() <= Field.LENGTH / 2
                 ),
                 new SwerveDrivePIDAssistToClosestCoralStation(driver),

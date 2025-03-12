@@ -34,8 +34,9 @@ public class SuperStructure extends SubsystemBase{
         ALGAE_L3_FRONT(ElevatorState.ALGAE_L3_FRONT, ArmState.ALGAE_L3_FRONT),
         ALGAE_L2_BACK(ElevatorState.ALGAE_L2_BACK, ArmState.ALGAE_L2_BACK),
         ALGAE_L3_BACK(ElevatorState.ALGAE_L3_BACK, ArmState.ALGAE_L3_BACK),
-        CATAPULT_READY(ElevatorState.BARGE, ArmState.CATAPULT_READY),
-        CATAPULT_SHOOT(ElevatorState.BARGE, ArmState.CATAPULT_SHOOT),
+        BARGE_118(ElevatorState.BARGE_118, ArmState.BARGE_118),
+        CATAPULT_READY(ElevatorState.CATAPULT, ArmState.CATAPULT_READY),
+        CATAPULT_SHOOT(ElevatorState.CATAPULT, ArmState.CATAPULT_SHOOT),
         PROCESSOR(ElevatorState.PROCESSOR, ArmState.PROCESSOR),
         CLIMB(ElevatorState.CLIMB, ArmState.CLIMB),
         UNSTUCK_CORAL(ElevatorState.UNSTUCK_CORAL, ArmState.UNSTUCK_CORAL);
