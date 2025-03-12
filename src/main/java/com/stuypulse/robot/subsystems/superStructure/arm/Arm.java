@@ -77,27 +77,6 @@ public abstract class Arm extends SubsystemBase {
         return this.state;
     }
 
-    public static ArmState getState(int level, boolean isFrontFacingReef) {
-        if (isFrontFacingReef) {
-            if (level == 2) {
-                return ArmState.L2_FRONT;
-            } else if (level == 3) {
-                return ArmState.L3_FRONT;
-            } else if (level == 4) {
-                return ArmState.L4_FRONT;
-            }
-        } else {
-            if (level == 2) {
-                return ArmState.L2_BACK;
-            } else if (level == 3) {
-                return ArmState.L3_BACK;
-            } else if (level == 4) {
-                return ArmState.L4_BACK;
-            }
-        }
-        return ArmState.L1;
-    }
-
     public void setState(ArmState state) {
         this.state = state;
         setVoltageOverride(Optional.empty());

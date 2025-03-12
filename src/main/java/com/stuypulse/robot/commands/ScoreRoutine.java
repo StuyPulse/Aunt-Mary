@@ -22,6 +22,7 @@ import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.input.Gamepad;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -53,7 +54,11 @@ public class ScoreRoutine extends SequentialCommandGroup {
                         .andThen(new SuperStructureWaitUntilAtTarget())
                 )
                 .andThen(new SuperStructureWaitUntilAtTarget()) // Re-check positioning
-                .andThen(shooter.shouldShootBackwards() ? new ShooterShootBackwards() : new ShooterShootForwards())
+                .andThen(new ConditionalCommand(
+                    new ShooterShootBackwards(),
+                    new ShooterShootForwards(),
+                    () -> shooter.shouldShootBackwards()
+                ))
         );
     }
 
