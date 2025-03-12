@@ -68,6 +68,8 @@ public class SuperStructure extends SubsystemBase{
 
     public void setState(SuperStructureState state) {
         this.state = state;
+        updateArmMotionProfileConstraints();
+        updateElevatorMotionProfileConstraints();
     }
 
     public SuperStructureState getState() {
@@ -128,8 +130,5 @@ public class SuperStructure extends SubsystemBase{
     public void periodic() {
         arm.setState(state.getArmState());
         elevator.setState(state.getElevatorState());
-
-        updateArmMotionProfileConstraints();
-        updateElevatorMotionProfileConstraints();
     }
 }
