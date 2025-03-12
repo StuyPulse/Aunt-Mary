@@ -65,6 +65,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwards;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAllianceSide;
@@ -311,19 +312,23 @@ public class RobotContainer {
         // Acquire Closest Reef Algae
         driver.getDPadLeft()
             .onTrue(new ShooterAcquireAlgae())
-            .onTrue(new ConditionalCommand(
+            .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
                     new SwerveDrivePidToNearestReefAlgae(true)
-                        .alongWith(new SuperStructureAlgaeL3Front()), 
+                        .alongWith(new SuperStructureAlgaeL3Front())
+                        .andThen(new SwerveDriveNudgeForward()), 
                     new SwerveDrivePidToNearestReefAlgae(false)
-                        .alongWith(new SuperStructureAlgaeL3Back()), 
+                        .alongWith(new SuperStructureAlgaeL3Back())
+                        .andThen(new SwerveDriveNudgeBackwards()), 
                     () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
                         || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())),
                 new ConditionalCommand(
                     new SwerveDrivePidToNearestReefAlgae(true)
-                        .alongWith(new SuperStructureAlgaeL2Front()), 
+                        .alongWith(new SuperStructureAlgaeL2Front())
+                        .andThen(new SwerveDriveNudgeForward()), 
                     new SwerveDrivePidToNearestReefAlgae(false)
-                        .alongWith(new SuperStructureAlgaeL2Back()), 
+                        .alongWith(new SuperStructureAlgaeL2Back())
+                        .andThen(new SwerveDriveNudgeBackwards()), 
                     () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
                         || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))

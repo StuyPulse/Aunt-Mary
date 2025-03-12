@@ -188,15 +188,16 @@ public interface ReefUtil {
             };
         }
 
-        public Pose2d getTargetPose() {
+        public Pose2d getTargetPose(boolean isFrontFacingReef) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), 
                 Constants.SHOOTER_Y_OFFSET, 
-                Rotation2d.k180deg));
+                isFrontFacingReef ? Rotation2d.k180deg :  Rotation2d.kZero));
         }
 
-        public Pose2d getReadyPose() {
-            return getTargetPose().transformBy(new Transform2d(-0.2, 0, Rotation2d.kZero));
+        public Pose2d getReadyPose(boolean isFrontFacingReef) {
+            return getTargetPose(isFrontFacingReef)
+                .transformBy(new Transform2d(isFrontFacingReef ? -0.2 : 0.2, 0, Rotation2d.kZero));
         }
     }
 
@@ -205,7 +206,7 @@ public interface ReefUtil {
         double closestDistance = Double.MAX_VALUE;
 
         for (Algae algaeBranch : Algae.values()) {
-            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(algaeBranch.getTargetPose()).getTranslation().getNorm();
+            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(algaeBranch.getTargetPose(true)).getTranslation().getNorm();
             if (distance < closestDistance) {
                 closestDistance = distance;
                 nearestAlgaeBranch = algaeBranch;

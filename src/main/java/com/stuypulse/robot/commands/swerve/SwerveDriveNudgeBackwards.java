@@ -5,10 +5,10 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveNudgeForward extends Command {
+public class SwerveDriveNudgeBackwards extends Command {
     private final CommandSwerveDrivetrain swerve;
     
-    public SwerveDriveNudgeForward() {
+    public SwerveDriveNudgeBackwards() {
         swerve = CommandSwerveDrivetrain.getInstance();
         addRequirements(swerve);
     }
@@ -16,7 +16,7 @@ public class SwerveDriveNudgeForward extends Command {
     @Override
     public void execute() {
         swerve.setControl(swerve.getRobotCentricSwerveRequest()
-            .withVelocityX(Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND)
+            .withVelocityX(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND)
             .withVelocityY(0)
             .withRotationalRate(0)
         );
