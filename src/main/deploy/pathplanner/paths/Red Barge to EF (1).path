@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2531049455915175,
-        "y": 2.9138937813895085
+        "x": 7.3,
+        "y": 5.004760742187499
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.253104945591516,
-        "y": 2.9138937813895085
+        "x": 6.53789324079241,
+        "y": 3.138379778180804
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red Barge 3"
     },
     {
       "anchor": {
-        "x": 5.797665841238838,
-        "y": 4.09498291015625
+        "x": 5.457442801339286,
+        "y": 2.5129712785993297
       },
       "prevControl": {
-        "x": 5.722582135881696,
-        "y": 3.5291516985212055
+        "x": 6.58119899204799,
+        "y": 2.9187395368303566
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red EF Algae (1)"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Red Utilities",
+  "folder": "Red To Algae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

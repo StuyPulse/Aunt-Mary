@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.486659410853053,
-        "y": 2.480717641161032
+        "x": 5.561744343243738,
+        "y": 2.2900196134750725
       },
       "isLocked": false,
-      "linkedName": "Blue EF Algae"
+      "linkedName": "Blue EF Algae (2)"
     },
     {
       "anchor": {
-        "x": 5.457442801339286,
-        "y": 2.5129712785993297
+        "x": 5.494729614257812,
+        "y": 2.48966064453125
       },
       "prevControl": {
-        "x": 5.2068187619500925,
-        "y": 2.9358271573440304
+        "x": 5.116964245731699,
+        "y": 3.1649860557000573
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": 119.99999999999999
   },
   "reversed": false,

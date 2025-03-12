@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2531049455915175,
-        "y": 2.9138937813895085
+        "x": 5.328341674804688,
+        "y": 5.648430088588169
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.253104945591516,
-        "y": 2.9138937813895085
+        "x": 6.363270131071853,
+        "y": 5.4185809908354345
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red IJ Algae (1)"
     },
     {
       "anchor": {
-        "x": 5.797665841238838,
-        "y": 4.09498291015625
+        "x": 7.3,
+        "y": 5.004760742187499
       },
       "prevControl": {
-        "x": 5.722582135881696,
-        "y": 3.5291516985212055
+        "x": 6.1478994421559685,
+        "y": 5.307335811256404
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red Barge 3"
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Red Utilities",
+  "folder": "Red To Barge",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 119.99999999999999
+    "velocity": 3.0,
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

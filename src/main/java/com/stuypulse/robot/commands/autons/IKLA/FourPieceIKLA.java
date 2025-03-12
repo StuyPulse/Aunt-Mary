@@ -128,7 +128,9 @@ public class FourPieceIKLA extends SequentialCommandGroup {
             ),
             new ShooterShootBackwards(),
             new WaitCommand(0.15),
-            new ShooterStop()
+            new ShooterStop(),
+
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
 
         );
 

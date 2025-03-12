@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2531049455915175,
-        "y": 2.9138937813895085
+        "x": 5.834493582589285,
+        "y": 4.145276750837053
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.253104945591516,
-        "y": 2.9138937813895085
+        "x": 6.4091882054462275,
+        "y": 4.1535667657616635
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red GH Algae"
     },
     {
       "anchor": {
-        "x": 5.797665841238838,
-        "y": 4.09498291015625
+        "x": 6.369975062779017,
+        "y": 4.145276750837053
       },
       "prevControl": {
-        "x": 5.722582135881696,
-        "y": 3.5291516985212055
+        "x": 5.79699591829046,
+        "y": 4.1280002712126125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red GH BackOut"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Red Utilities",
+  "folder": "Red BackOut",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

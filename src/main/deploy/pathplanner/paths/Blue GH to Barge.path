@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": "Blue To Barge",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": 180.0
   },
   "useDefaultConstraints": true

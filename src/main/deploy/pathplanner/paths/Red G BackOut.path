@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2531049455915175,
-        "y": 2.9138937813895085
+        "x": 5.82852565220424,
+        "y": 4.018959416841206
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.253104945591516,
-        "y": 2.9138937813895085
+        "x": 6.321980814454737,
+        "y": 4.016905543095809
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red G"
     },
     {
       "anchor": {
-        "x": 5.797665841238838,
-        "y": 4.09498291015625
+        "x": 6.336,
+        "y": 4.018959416841206
       },
       "prevControl": {
-        "x": 5.722582135881696,
-        "y": 3.5291516985212055
+        "x": 5.830130396129713,
+        "y": 4.0240312695017435
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red G BackOut"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Red Utilities",
+  "folder": "Red BackOut",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

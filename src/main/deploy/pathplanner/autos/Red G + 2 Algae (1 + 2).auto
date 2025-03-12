@@ -13,25 +13,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Red G BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Red G BackOut to GH"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Red GH BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Red GH to Barge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Barge to IJ (1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Barge to IJ (2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red IJ BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red IJ to Barge"
           }
         }
       ]

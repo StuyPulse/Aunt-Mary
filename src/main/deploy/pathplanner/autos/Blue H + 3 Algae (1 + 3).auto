@@ -13,37 +13,73 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Blue H BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Blue H BackOut to GH"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Blue GH BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Blue GH to Barge"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Blue Barge to IJ (1)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Blue Barge to IJ (2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue IJ BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue IJ to Barge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Barge to EF (1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Barge to EF (2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue EF BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue EF to Barge"
           }
         }
       ]

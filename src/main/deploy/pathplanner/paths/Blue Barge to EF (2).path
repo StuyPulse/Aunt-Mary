@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.457442801339286,
-        "y": 2.5129712785993297
+        "x": 5.494729614257812,
+        "y": 2.48966064453125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.210925774876269,
-        "y": 2.9483913223116405
+        "x": 5.248212587794796,
+        "y": 2.9250806882435607
       },
       "isLocked": false,
       "linkedName": "Blue EF Algae (1)"
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue EF Algae"
+      "linkedName": "Blue EF Algae (2)"
     }
   ],
   "rotationTargets": [],

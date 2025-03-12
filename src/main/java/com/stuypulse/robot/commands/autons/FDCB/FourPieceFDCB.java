@@ -128,9 +128,9 @@ public class FourPieceFDCB extends SequentialCommandGroup {
             ),
             new ShooterShootBackwards(),
             new WaitCommand(0.15),
-            new ShooterStop()
+            new ShooterStop(),
 
-            //CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
 
         );
 

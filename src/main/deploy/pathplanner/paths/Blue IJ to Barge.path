@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.394416029078633,
-        "y": 5.776961362588931
+        "x": 6.366054163019658,
+        "y": 5.427840519026582
       },
       "isLocked": false,
       "linkedName": "Blue IJ Algae (1)"
     },
     {
       "anchor": {
-        "x": 7.2357330322265625,
-        "y": 5.648430088588169
+        "x": 7.3,
+        "y": 4.996803501674107
       },
       "prevControl": {
-        "x": 6.170803385432812,
-        "y": 5.59674738419538
+        "x": 6.131298895324175,
+        "y": 5.263867293595938
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Barge 2"
+      "linkedName": "Blue Barge 3"
     }
   ],
   "rotationTargets": [],
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": "Blue To Barge",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true

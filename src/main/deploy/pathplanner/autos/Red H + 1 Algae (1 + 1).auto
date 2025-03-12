@@ -13,13 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Red H BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Red H BackOut to GH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red GH BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red GH to Barge"
           }
         }
       ]

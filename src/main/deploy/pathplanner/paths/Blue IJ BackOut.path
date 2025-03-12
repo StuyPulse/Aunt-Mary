@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.282966880237557,
-        "y": 5.45523211804308
+        "x": 5.313233381528907,
+        "y": 5.644211372170672
       },
       "isLocked": false,
       "linkedName": "Blue IJ Algae (2)"
@@ -20,8 +20,8 @@
         "y": 5.648430088588169
       },
       "prevControl": {
-        "x": 5.114079448068553,
-        "y": 5.381913520770877
+        "x": 5.067639519731596,
+        "y": 5.214308263121467
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": -119.99999999999999
   },
   "reversed": false,

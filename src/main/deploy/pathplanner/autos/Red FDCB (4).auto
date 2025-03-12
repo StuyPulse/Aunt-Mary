@@ -45,6 +45,12 @@
           "data": {
             "pathName": "Red HP to B"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red B BackOut"
+          }
         }
       ]
     }
