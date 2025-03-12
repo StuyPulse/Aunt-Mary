@@ -19,10 +19,10 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
         addCommands(
             new WaitUntilCommand(this::isClear)
-                .deadlineFor(new SwerveDrivePIDToBranchClear(branch::get, isScoringFrontSide))
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-            new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
+                .deadlineFor(new SwerveDrivePIDToBranchClear(branch, isScoringFrontSide))
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+            new SwerveDrivePIDToBranchScore(branch, level, isScoringFrontSide)
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
         );
     } 
 

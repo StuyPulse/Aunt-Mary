@@ -107,6 +107,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -256,12 +257,8 @@ public class RobotContainer {
         // L4 Coral Score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                ReefUtil.joystickOverride(driver).isEmpty() ? 
-                    new ScoreRoutine(4, true) : 
-                    new ScoreRoutine(4, true, ReefUtil.joystickOverride(driver)),
-                ReefUtil.joystickOverride(driver).isEmpty() ? 
-                    new ScoreRoutine(4, false) : 
-                    new ScoreRoutine(4, false, ReefUtil.joystickOverride(driver)), 
+                new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false)),
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
@@ -270,32 +267,24 @@ public class RobotContainer {
         // L3 Coral Score
         driver.getRightButton()
             .whileTrue(new ConditionalCommand(
-                ReefUtil.joystickOverride(driver).isEmpty() ? 
-                    new ScoreRoutine(3, true) : 
-                    new ScoreRoutine(3, true, ReefUtil.joystickOverride(driver)),
-                ReefUtil.joystickOverride(driver).isEmpty() ? 
-                    new ScoreRoutine(3, false) : 
-                    new ScoreRoutine(3, false, ReefUtil.joystickOverride(driver)), 
+                new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
 
         // L2 Coral Score
-        driver.getDPadLeft()
+        driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
-                ReefUtil.joystickOverride(driver).isEmpty() ? 
-                    new ScoreRoutine(2, true) : 
-                    new ScoreRoutine(2, true, ReefUtil.joystickOverride(driver)),
-                ReefUtil.joystickOverride(driver).isEmpty() ? 
-                    new ScoreRoutine(2, false) : 
-                    new ScoreRoutine(2, false, ReefUtil.joystickOverride(driver)), 
+                new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
 
-        // Barge score
+        // Barge score and align to coral station
         driver.getLeftButton()
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
@@ -324,7 +313,7 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Acquire Closest Reef Algae
-        driver.getBottomButton()
+        driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(
                 new SwerveDrivePidToNearestReefAlgae()
                     .alongWith(new SuperStructureAlgaeL3())

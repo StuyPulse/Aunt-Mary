@@ -290,6 +290,8 @@ public interface Settings {
         double BUZZ_TIME = 1.0;
         double BUZZ_INTENSITY = 1.0;
 
+        double BRANCH_OVERRIDE_DEADBAND = 0.15;
+
         public interface Drive {
             SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.08);
 

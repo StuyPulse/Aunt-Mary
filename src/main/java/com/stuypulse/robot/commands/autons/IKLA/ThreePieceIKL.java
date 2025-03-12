@@ -34,7 +34,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                 new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
                     .withTranslationalConstraints(2.35, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(1.75)
-                    .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),

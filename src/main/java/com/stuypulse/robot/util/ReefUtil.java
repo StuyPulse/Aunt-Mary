@@ -1,21 +1,15 @@
 package com.stuypulse.robot.util;
 
 import java.util.ArrayList;
-import java.util.Optional;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Field.NamedTags;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.math.Vector2D;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 
 public interface ReefUtil {
 
@@ -46,13 +40,7 @@ public interface ReefUtil {
         }
 
         public Pose2d getBranchPoseProjectedOntoReefFace() {
-            return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.kZero));
-        }
-
-        public Vector2D getVectorFromTagToBranch() {
-            Translation2d correspondingAprilTag = getCorrespondingAprilTagPose().getTranslation();
-            Translation2d correspondingBranchPose = getBranchPoseProjectedOntoReefFace().getTranslation();
-            return new Vector2D(correspondingBranchPose.minus(correspondingAprilTag));
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftBranchRobotRelative() ? -1 : 1), Rotation2d.kZero));
         }
 
         public Pose2d getScorePose(int level, boolean isScoringFrontSide) {
@@ -75,20 +63,27 @@ public interface ReefUtil {
             return getCorrespondingAprilTagPose().transformBy(
                 new Transform2d(
                     Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 
-                    Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? 0 : 0.055), 
+                    Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? 0 : 0.055), 
                     isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
         public Pose2d getClearancePose(boolean isScoringFrontSide) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM,
-                Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? 0 : 0.055), 
+                Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? 0 : 0.055), 
                 isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
-        public boolean isLeftPeg() {
+        public boolean isLeftBranchRobotRelative() {
             return switch (this) {
                 case A, C, E, G, I, K -> true;
+                default -> false;
+            };
+        }
+
+        public boolean isLeftBranchFieldRelative() {
+            return switch (this) {
+                case A, C, F, H, J, K -> true;
                 default -> false;
             };
         }
@@ -109,34 +104,55 @@ public interface ReefUtil {
         return nearestBranch;
     }
 
+    public enum ReefFace {
+        AB(NamedTags.BLUE_AB, NamedTags.RED_AB, CoralBranch.A, CoralBranch.B),
+        CD(NamedTags.BLUE_CD, NamedTags.RED_CD, CoralBranch.C, CoralBranch.D),
+        EF(NamedTags.BLUE_EF, NamedTags.RED_EF, CoralBranch.F, CoralBranch.E),
+        GH(NamedTags.BLUE_GH, NamedTags.RED_GH, CoralBranch.H, CoralBranch.G),
+        IJ(NamedTags.BLUE_IJ, NamedTags.RED_IJ, CoralBranch.J, CoralBranch.I),
+        KL(NamedTags.BLUE_KL, NamedTags.RED_KL, CoralBranch.K, CoralBranch.L);
+
+        private NamedTags correspondingBlueAprilTag;
+        private NamedTags correspondingRedAprilTag;
+        private CoralBranch leftBranchFieldRelative;
+        private CoralBranch rightBranchFieldRelative;
+
+        private ReefFace(NamedTags correspondingBlueAprilTag, NamedTags correspondingRedAprilTag, CoralBranch leftBranchFieldRelative, CoralBranch rightBranchFieldRelative) {
+            this.correspondingBlueAprilTag = correspondingBlueAprilTag;
+            this.correspondingRedAprilTag = correspondingRedAprilTag;
+            this.leftBranchFieldRelative = leftBranchFieldRelative;
+            this.rightBranchFieldRelative = rightBranchFieldRelative;
+        }
+
+        public CoralBranch getLeftBranchFieldRelative() {
+            return this.leftBranchFieldRelative;
+        }
+
+        public CoralBranch getRightBranchFieldRelative() {
+            return this.rightBranchFieldRelative;
+        }
+
+        public Pose2d getCorrespondingAprilTagPose() {
+            return Robot.isBlue() ? this.correspondingBlueAprilTag.getLocation().toPose2d() : this.correspondingRedAprilTag.getLocation().toPose2d();
+        }
+    }
+
+    public static ReefFace getClosestReefFace() {
+        ReefFace nearestReefFace = ReefFace.AB;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (ReefFace reefFace : ReefFace.values()) {
+            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(reefFace.getCorrespondingAprilTagPose()).getTranslation().getNorm();
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearestReefFace = reefFace;
+            }
+        }
+        return nearestReefFace;
+    }
+
     public static NamedTags getNearestReefSide() {
         return Robot.isBlue() ? getClosestCoralBranch().correspondingBlueAprilTag : getClosestCoralBranch().correspondingRedAprilTag;
-    }
-
-    public static ArrayList<CoralBranch> getBranchesOnReefSide(NamedTags reefSide) {
-        ArrayList<CoralBranch> branches = new ArrayList<>();
-        for (CoralBranch branch : CoralBranch.values()) {
-            if ((Robot.isBlue() && branch.correspondingBlueAprilTag == reefSide) || (!Robot.isBlue() && branch.correspondingRedAprilTag == reefSide)) {
-                branches.add(branch);
-            }
-        }
-        return branches;
-    }
-
-    public static Optional<CoralBranch> joystickOverride(Gamepad driver) {
-        NamedTags nearestReefSide = ReefUtil.getNearestReefSide();
-        Vector2D joystick = driver.getLeftStick();
-        Optional<CoralBranch> targetBranch = Optional.empty();
-        if (joystick.magnitude() > Settings.Driver.Drive.DEADBAND.get()) {
-            for (CoralBranch branch : ReefUtil.getBranchesOnReefSide(nearestReefSide)) {
-                Vector2D branchVector = branch.getVectorFromTagToBranch().normalize();
-                double similarity = joystick.dot(branchVector);
-                if (similarity > Settings.Driver.Drive.BRANCH_VECTOR_SIMILARITY_THRESHOLD.get()) { 
-                    targetBranch = Optional.of(branch);
-                }
-            }
-        }
-        return targetBranch;
     }
 
     /*** REEF ALGAE ***/
