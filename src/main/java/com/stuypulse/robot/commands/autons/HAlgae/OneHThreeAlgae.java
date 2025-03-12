@@ -16,7 +16,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntil
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
@@ -72,7 +72,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))
@@ -98,7 +98,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))
@@ -123,7 +123,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))

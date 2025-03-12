@@ -191,13 +191,15 @@ public interface ReefUtil {
         public Pose2d getTargetPose(boolean isFrontFacingReef) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), 
-                Constants.SHOOTER_Y_OFFSET, 
+                isFrontFacingReef ? Constants.SHOOTER_Y_OFFSET : -Constants.SHOOTER_Y_OFFSET, 
                 isFrontFacingReef ? Rotation2d.k180deg :  Rotation2d.kZero));
         }
 
         public Pose2d getReadyPose(boolean isFrontFacingReef) {
-            return getTargetPose(isFrontFacingReef)
-                .transformBy(new Transform2d(isFrontFacingReef ? -0.2 : 0.2, 0, Rotation2d.kZero));
+            return getTargetPose(isFrontFacingReef).transformBy(new Transform2d(
+                isFrontFacingReef ? -0.15 : 0.15,
+                0,
+                Rotation2d.kZero));
         }
     }
 

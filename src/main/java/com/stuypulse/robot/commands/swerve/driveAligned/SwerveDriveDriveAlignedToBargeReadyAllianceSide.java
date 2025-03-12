@@ -21,7 +21,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDriveAlignedToBargeScoreAllianceSide extends Command {
+public class SwerveDriveDriveAlignedToBargeReadyAllianceSide extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
@@ -30,7 +30,7 @@ public class SwerveDriveDriveAlignedToBargeScoreAllianceSide extends Command {
     private final Controller xController;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAlignedToBargeScoreAllianceSide(Gamepad driver) {
+    public SwerveDriveDriveAlignedToBargeReadyAllianceSide(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
@@ -52,7 +52,7 @@ public class SwerveDriveDriveAlignedToBargeScoreAllianceSide extends Command {
 
     @Override
     public void execute() {
-        Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_SCORE, swerve.getPose().getX()), driverYVelocity.get())
+        Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 - Settings.Clearances.CLEARANCE_DISTANCE_FROM_BARGE, swerve.getPose().getX()), driverYVelocity.get())
             .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED.get(), Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY.get()));
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
