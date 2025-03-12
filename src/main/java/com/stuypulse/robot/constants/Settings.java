@@ -47,8 +47,6 @@ public interface Settings {
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(14.25 + 1); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
-        // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT = Rotation2d.fromDegrees(30);
-        // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK = Rotation2d.fromDegrees(200);
     }
 
     public interface Swerve {
@@ -108,6 +106,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0 - Units.inchesToMeters(3);
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 1.0;
+
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.1; // From bumper
             }
         }
     }

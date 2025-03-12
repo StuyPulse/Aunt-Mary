@@ -49,7 +49,6 @@ public class SwerveDrivePIDToPose extends Command {
     private Number thetaTolerance;
     private Number maxVelocityWhenAligned;
 
-    private Pose2d startingPose;
     private VStream translationSetpoint;
 
     public SwerveDrivePIDToPose(Pose2d targetPose) {
@@ -102,6 +101,11 @@ public class SwerveDrivePIDToPose extends Command {
         return this;
     }
 
+    public SwerveDrivePIDToPose withoutMotionProfile() {
+        this.translationSetpoint = VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        return this;
+    }
+
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
     private VStream getNewTranslationSetpointGenerator() {
         return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
@@ -114,7 +118,6 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public void initialize() {
-        startingPose = swerve.getPose();
         translationSetpoint = getNewTranslationSetpointGenerator();
     }
 

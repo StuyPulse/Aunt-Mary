@@ -73,7 +73,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeOpp
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestCoralStation;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -306,7 +306,7 @@ public class RobotContainer {
                                     .andThen(new ShooterShootAlgae())))), 
                     () -> swerve.getPose().getX() <= Field.LENGTH / 2
                 ),
-                new SwerveDrivePIDToClosestCoralStation(),
+                new SwerveDrivePIDAssistToClosestCoralStation(driver),
                 () -> shooter.getState() == ShooterState.HOLD_ALGAE
             ))
             .onFalse(new SuperStructureFeed())
