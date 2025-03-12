@@ -57,8 +57,13 @@ public class SuperStructure extends SubsystemBase{
 
     private SuperStructureState state;
 
+    private final Arm arm;
+    private final Elevator elevator;
+
     private SuperStructure() {
         this.state = SuperStructureState.FEED;
+        this.arm = Arm.getInstance();
+        this.elevator = Elevator.getInstance();
     }
 
     public void setState(SuperStructureState state) {
@@ -99,8 +104,6 @@ public class SuperStructure extends SubsystemBase{
     }
 
     private void updateArmMotionProfileConstraints() {
-        Arm arm = Arm.getInstance();
-
         if (getState() == SuperStructureState.CATAPULT_SHOOT) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CATAPULT, Settings.Arm.Constraints.MAX_ACCEL_CATAPULT);
         }
@@ -113,8 +116,6 @@ public class SuperStructure extends SubsystemBase{
     }
 
     private void updateElevatorMotionProfileConstraints() {
-        Elevator elevator = Elevator.getInstance();
-
         if (Robot.getMode() == RobotMode.AUTON) {
             elevator.setMotionProfileConstraints(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_AUTON, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON);
         }
@@ -125,9 +126,6 @@ public class SuperStructure extends SubsystemBase{
 
     @Override
     public void periodic() {
-        Arm arm = Arm.getInstance();
-        Elevator elevator = Elevator.getInstance();
-
         arm.setState(state.getArmState());
         elevator.setState(state.getElevatorState());
 

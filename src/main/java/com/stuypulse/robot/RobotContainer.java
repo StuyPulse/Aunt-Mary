@@ -269,31 +269,31 @@ public class RobotContainer {
 
         // L3 Coral Score
         driver.getRightButton()
-        .whileTrue(new ConditionalCommand(
-            ReefUtil.joystickOverride(driver).isEmpty() ? 
-                new ScoreRoutine(3, true) : 
-                new ScoreRoutine(3, true, ReefUtil.joystickOverride(driver)),
-            ReefUtil.joystickOverride(driver).isEmpty() ? 
-                new ScoreRoutine(3, false) : 
-                new ScoreRoutine(3, false, ReefUtil.joystickOverride(driver)), 
-            () -> swerve.isFrontFacingReef()))
-        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-            .andThen(new SuperStructureFeed()))
-        .onFalse(new ShooterStop());
+            .whileTrue(new ConditionalCommand(
+                ReefUtil.joystickOverride(driver).isEmpty() ? 
+                    new ScoreRoutine(3, true) : 
+                    new ScoreRoutine(3, true, ReefUtil.joystickOverride(driver)),
+                ReefUtil.joystickOverride(driver).isEmpty() ? 
+                    new ScoreRoutine(3, false) : 
+                    new ScoreRoutine(3, false, ReefUtil.joystickOverride(driver)), 
+                () -> swerve.isFrontFacingReef()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed()))
+            .onFalse(new ShooterStop());
 
         // L2 Coral Score
         driver.getDPadLeft()
-        .whileTrue(new ConditionalCommand(
-            ReefUtil.joystickOverride(driver).isEmpty() ? 
-                new ScoreRoutine(2, true) : 
-                new ScoreRoutine(2, true, ReefUtil.joystickOverride(driver)),
-            ReefUtil.joystickOverride(driver).isEmpty() ? 
-                new ScoreRoutine(2, false) : 
-                new ScoreRoutine(2, false, ReefUtil.joystickOverride(driver)), 
-            () -> swerve.isFrontFacingReef()))
-        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-            .andThen(new SuperStructureFeed()))
-        .onFalse(new ShooterStop());
+            .whileTrue(new ConditionalCommand(
+                ReefUtil.joystickOverride(driver).isEmpty() ? 
+                    new ScoreRoutine(2, true) : 
+                    new ScoreRoutine(2, true, ReefUtil.joystickOverride(driver)),
+                ReefUtil.joystickOverride(driver).isEmpty() ? 
+                    new ScoreRoutine(2, false) : 
+                    new ScoreRoutine(2, false, ReefUtil.joystickOverride(driver)), 
+                () -> swerve.isFrontFacingReef()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed()))
+            .onFalse(new ShooterStop());
 
         // Barge score
         driver.getLeftButton()
