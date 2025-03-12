@@ -256,7 +256,6 @@ public class RobotContainer {
                 new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false)),
                 new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false)),
                 () -> swerve.isFrontFacingAllianceReef()))
-                () -> swerve.isFrontFacingAllianceReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());

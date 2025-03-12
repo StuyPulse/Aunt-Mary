@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.494729614257812,
-        "y": 2.48966064453125
+        "x": 5.567058890206473,
+        "y": 2.259002685546875
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.212615530831473,
-        "y": 2.7645424979073665
+        "x": 6.051929635381624,
+        "y": 2.854001421254422
       },
       "isLocked": false,
       "linkedName": "Blue EF Algae (1)"
@@ -20,8 +20,8 @@
         "y": 4.996803501674107
       },
       "prevControl": {
-        "x": 6.476530674525669,
-        "y": 2.867017473493304
+        "x": 6.167879201009057,
+        "y": 3.0121334087467337
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 6.5,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": "Blue To Barge",
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 0.0,
     "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true

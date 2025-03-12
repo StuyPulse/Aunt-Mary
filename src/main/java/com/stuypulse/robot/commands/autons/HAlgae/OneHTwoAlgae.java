@@ -8,8 +8,8 @@ import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
@@ -56,12 +56,12 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
-                        new SuperStructureAlgaeL2()
+                        new SuperStructureAlgaeL2Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDrivePidToNearestReefAlgae(),
+                new SwerveDrivePidToNearestReefAlgae(true),
                 new ShooterAcquireAlgae()
             ),
             new ShooterHoldAlgae(),
@@ -82,12 +82,12 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
                 new WaitCommand(0.2)
                     .andThen(
-                        new SuperStructureAlgaeL3()
+                        new SuperStructureAlgaeL3Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDrivePidToNearestReefAlgae(),
+                new SwerveDrivePidToNearestReefAlgae(true),
                 new ShooterAcquireAlgae()
             ),
             new ShooterHoldAlgae(),

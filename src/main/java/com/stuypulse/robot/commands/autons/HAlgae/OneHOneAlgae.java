@@ -8,7 +8,7 @@ import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
@@ -50,12 +50,12 @@ public class OneHOneAlgae extends SequentialCommandGroup {
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
-                        new SuperStructureAlgaeL2()
+                        new SuperStructureAlgaeL2Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDrivePidToNearestReefAlgae(),
+                new SwerveDrivePidToNearestReefAlgae(true),
                 new ShooterAcquireAlgae()
             ),
             new ShooterHoldAlgae(),
