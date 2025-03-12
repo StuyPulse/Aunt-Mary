@@ -6,28 +6,23 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ScoreRoutine;
-import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
-import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
+import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbClose;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
-import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.climb.ClimbShimmy;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
@@ -43,7 +38,6 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
-import com.stuypulse.robot.commands.funnel.FunnelReverse;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
@@ -58,8 +52,10 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Back;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Back;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
@@ -91,26 +87,23 @@ import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
-import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
-import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.Clearances;
-import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
+import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -259,7 +252,7 @@ public class RobotContainer {
             .whileTrue(new ConditionalCommand(
                 new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false)),
                 new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false)),
-                () -> swerve.isFrontFacingReef()))
+                () -> swerve.isFrontFacingAllianceReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
@@ -269,7 +262,7 @@ public class RobotContainer {
             .whileTrue(new ConditionalCommand(
                 new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
                 new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
-                () -> swerve.isFrontFacingReef()))
+                () -> swerve.isFrontFacingAllianceReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
@@ -279,7 +272,7 @@ public class RobotContainer {
             .whileTrue(new ConditionalCommand(
                 new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
                 new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
-                () -> swerve.isFrontFacingReef()))
+                () -> swerve.isFrontFacingAllianceReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
@@ -314,15 +307,22 @@ public class RobotContainer {
 
         // Acquire Closest Reef Algae
         driver.getDPadLeft()
-            .whileTrue(new ConditionalCommand(
-                new SwerveDrivePidToNearestReefAlgae()
-                    .alongWith(new SuperStructureAlgaeL3())
-                    .alongWith(new ShooterAcquireAlgae())
-                        .andThen(new SwerveDriveNudgeForward()), 
-                new SwerveDrivePidToNearestReefAlgae()
-                    .alongWith(new SuperStructureAlgaeL2())
-                    .alongWith(new ShooterAcquireAlgae())
-                        .andThen(new SwerveDriveNudgeForward()), 
+            .onTrue(new ShooterAcquireAlgae())
+            .onTrue(new ConditionalCommand(
+                new ConditionalCommand(
+                    new SwerveDrivePidToNearestReefAlgae(true)
+                        .alongWith(new SuperStructureAlgaeL3Front()), 
+                    new SwerveDrivePidToNearestReefAlgae(false)
+                        .alongWith(new SuperStructureAlgaeL3Back()), 
+                    () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
+                        || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())),
+                new ConditionalCommand(
+                    new SwerveDrivePidToNearestReefAlgae(true)
+                        .alongWith(new SuperStructureAlgaeL2Front()), 
+                    new SwerveDrivePidToNearestReefAlgae(false)
+                        .alongWith(new SuperStructureAlgaeL2Back()), 
+                    () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
+                        || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))

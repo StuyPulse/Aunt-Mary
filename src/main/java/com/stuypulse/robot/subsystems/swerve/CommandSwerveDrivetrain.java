@@ -401,8 +401,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vxMetersPerSecond).withVelocityY(robotSpeeds.vyMetersPerSecond).withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
     }
 
-    public boolean isFrontFacingReef() {
+    public boolean isFrontFacingAllianceReef() {
         Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.REEF_CENTER));
+        Rotation2d robotHeading = getPose().getRotation();
+        Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
+
+        return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
+    }
+
+    public boolean isFrontFacingOppositeAllianceReef() {
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.transformToOppositeAlliance(new Pose2d(Field.REEF_CENTER, Rotation2d.kZero)).getTranslation()));
         Rotation2d robotHeading = getPose().getRotation();
         Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
 
@@ -417,8 +425,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return froggyHeadingAsVector.dot(coralStationHeading) <= 0;
     }
 
-    public boolean isFroggyFacingReef() {
+    public boolean isFroggyFacingAllianceReef() {
         Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.REEF_CENTER));
+        Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
+        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
+
+        return reefCenterToRobot.dot(froggyHeadingAsVector) <= 0;
+    }
+
+    public boolean isFroggyFacingOppositeAllianceReef() {
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.transformToOppositeAlliance(new Pose2d(Field.REEF_CENTER, Rotation2d.kZero)).getTranslation()));
         Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
         Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
 
@@ -450,8 +466,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
         SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
 
-        SmartDashboard.putBoolean("Swerve/Is Front Facing Reef", isFrontFacingReef());
-        SmartDashboard.putBoolean("Swerve/Is Froggy Facing Reef", isFroggyFacingReef());
+        SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
+        SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());
+        SmartDashboard.putBoolean("Swerve/Is Froggy Facing Alliance Reef", isFroggyFacingAllianceReef());
+        SmartDashboard.putBoolean("Swerve/Is Froggy Facing Opposite Alliance Reef", isFroggyFacingOppositeAllianceReef());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
     }
