@@ -10,6 +10,7 @@ import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.HolonomicController;
 import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.robot.util.ReefUtil.ReefFace;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
@@ -25,6 +26,7 @@ import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.proto.ChassisSpeedsProto;
@@ -32,7 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDrivePIDAssistToClosestL1 extends Command {
+public class SwerveDrivePIDAssistToClosestL1Shooter extends Command {
 
     private final CommandSwerveDrivetrain swerve;
     private final Gamepad driver;
@@ -40,11 +42,13 @@ public class SwerveDrivePIDAssistToClosestL1 extends Command {
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
 
+    private ReefFace closestReefFace;
+
     private final HolonomicController controller;
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestL1Shooter(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -81,19 +85,30 @@ public class SwerveDrivePIDAssistToClosestL1 extends Command {
     }
 
     @Override
+    public void initialize() {
+        this.closestReefFace = ReefUtil.ReefFace.getClosestReefFace();
+    }
+
+    @Override
     public void execute() {
-        Pose2d targetPose = ReefUtil.ReefFace.getTargetPose(ReefUtil.ReefFace.getNearestReefSide());
+        Pose2d targetPose = closestReefFace.getL1ShooterTargetPose();
         targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
 
         controller.update(targetPose, swerve.getPose());
 
         ChassisSpeeds controllerFieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(controller.getOutput(), swerve.getPose().getRotation());
+
+        Rotation2d reefFaceParallelHeading = closestReefFace.getCorrespondingAprilTagPose().getRotation().rotateBy(Rotation2d.kCCW_90deg);
+        double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().dot(new Vector2D(reefFaceParallelHeading.getCos(), reefFaceParallelHeading.getSin()));
+        Vector2D driverVelocityVectorParallelToReefFace = new Vector2D(
+            driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getCos(), 
+            driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getSin());
         
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond + driverLinearVelocity.get().x)
-            .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond + driverLinearVelocity.get().y)
+            .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond + driverVelocityVectorParallelToReefFace.x)
+            .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond + driverVelocityVectorParallelToReefFace.y)
             .withRotationalRate(controllerFieldRelativeSpeeds.omegaRadiansPerSecond + driverAngularVelocity.get()));
-        
+
         SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
