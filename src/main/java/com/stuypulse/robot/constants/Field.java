@@ -189,21 +189,30 @@ public interface Field {
                 : transformToOppositeAlliance(new Pose2d(blueOriginLineEnd, Rotation2d.kZero)).getTranslation();
         }
 
-        // Don't ask me how this works. I asked chatgpt to write it for me
-        private Translation2d getClosestPointOnLine(Translation2d lineStart, Translation2d lineEnd, Translation2d point) {
+        // Kalimul said to add a comment that this is getting the closest point to a line
+        public Pose2d getTargetPose() {
+            Translation2d lineStart = getLineStart();
+            Translation2d lineEnd = getLineEnd();
+            Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
+
             Vector2D lineStartToEnd = new Vector2D(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
-            Vector2D lineStartToPoint = new Vector2D(point.getX() - lineStart.getX(), point.getY() - lineStart.getY());
+            Vector2D lineStartToPoint = new Vector2D(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
             
             double lineLengthSquared = lineStartToEnd.dot(lineStartToEnd);
             double dotProduct = lineStartToEnd.dot(lineStartToPoint);
             
             double t = dotProduct / lineLengthSquared; // Projection factor
             
-            // Clamp t to [0,1] to find closest point on the segment
-            t = Math.max(0, Math.min(1, t));
+            double coralStationLength = lineStart.getDistance(lineEnd);
+            double percentToIgnoreFromEachSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2) / coralStationLength;
             
-            Translation2d closestPoint = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
-            return closestPoint;
+            t = Math.max(percentToIgnoreFromEachSide, Math.min(1 - percentToIgnoreFromEachSide, t));
+            
+            Translation2d closestPointOnCoralStation = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
+
+            return new Pose2d(closestPointOnCoralStation, correspondingAprilTag.getLocation().toPose2d().getRotation()).transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION, 
+                0, Rotation2d.kZero));
         }
 
         public Vector2D getHeadingAsVector() {
@@ -249,11 +258,6 @@ public interface Field {
                     CoralStation.BLUE_KL_CORAL_STATION :
                     CoralStation.RED_KL_CORAL_STATION;
             }
-        }
-
-        public Pose2d getTargetPose() {
-            return new Pose2d(getClosestPointOnLine(getLineStart(), getLineEnd(), CommandSwerveDrivetrain.getInstance().getPose().getTranslation()), correspondingAprilTag.getLocation().toPose2d().getRotation())
-                .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION, 0, Rotation2d.kZero));
         }
     }
 

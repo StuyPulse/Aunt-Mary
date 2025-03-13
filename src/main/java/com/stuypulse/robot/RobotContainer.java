@@ -283,8 +283,10 @@ public class RobotContainer {
         //         new SwerveDrivePIDAssistToClosestCoralStation(driver),
         //         () -> shooter.getState() == ShooterState.HOLD_ALGAE
         //     ))
-        //     .onFalse(new SuperStructureFeed())
-        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+        // .onFalse(new SuperStructureFeed())
+        // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+        driver.getLeftButton()
+            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver));
 
         // Acquire Closest Reef Algae
         // driver.getDPadLeft()
