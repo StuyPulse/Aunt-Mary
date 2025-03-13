@@ -48,33 +48,27 @@ import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
-import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjambCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Back;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Back;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
-import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwards;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeScoreOppositeAllianceSide;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilClearFromBarge;
-import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeReadyAllianceSide;
-import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreAllianceSide;
-import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118AllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118OppositeAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilClearFromBarge118;
+import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ClearAllianceSide;
+import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ClearOppositeAllianceSide;
+import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreAllianceSide;
+import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
@@ -253,51 +247,75 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         // L3 Coral Score
-        driver.getRightButton()
-            .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
-                new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
-                () -> swerve.isFrontFacingAllianceReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop());
+        // driver.getRightButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
+        //         new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
+        //         () -> swerve.isFrontFacingAllianceReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new SuperStructureFeed()))
+        //     .onFalse(new ShooterStop());
 
-        // L2 Coral Score
-        driver.getBottomButton()
-            .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
-                new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
-                () -> swerve.isFrontFacingAllianceReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop());
+        // // L2 Coral Score
+        // driver.getBottomButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
+        //         new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
+        //         () -> swerve.isFrontFacingAllianceReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new SuperStructureFeed()))
+        //     .onFalse(new ShooterStop());
 
-        // Barge score and align to coral station
+        // // Barge catapult score and align to coral station
+        // driver.getLeftButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new ConditionalCommand(
+        //             new SwerveDriveDriveAlignedToCatapultAllianceSide(driver)
+        //                 .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+        //                 .alongWith(new SuperStructureCatapultReady()
+        //                     .andThen(new SuperStructureWaitUntilAtTarget()
+        //                         .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
+        //                     .andThen(new SuperStructureCatapultShoot()
+        //                         .andThen(new SuperStructureWaitUntilCanCatapult()
+        //                             .andThen(new ShooterShootAlgae())))), 
+        //             new SwerveDriveDriveAlignedToCatapultOppositeAllianceSide(driver)
+        //                 .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+        //                 .alongWith(new SuperStructureCatapultReady()
+        //                     .andThen(new SuperStructureWaitUntilAtTarget()
+        //                         .alongWith(new SwerveDriveWaitUntilAlignedToCatapultOppositeAllianceSide()))
+        //                     .andThen(new SuperStructureCatapultShoot()
+        //                         .andThen(new SuperStructureWaitUntilCanCatapult()
+        //                             .andThen(new ShooterShootAlgae())))), 
+        //             () -> swerve.getPose().getX() <= Field.LENGTH / 2
+        //         ),
+        //         new SwerveDrivePIDAssistToClosestCoralStation(driver),
+        //         () -> shooter.getState() == ShooterState.HOLD_ALGAE
+        //     ))
+        //     .onFalse(new SuperStructureFeed())
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+        
+        // // Barge 118 style score and align to coral station
         driver.getLeftButton()
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
-                    new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
-                        .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
-                        .alongWith(new SuperStructureCatapultReady()
-                            .andThen(new SuperStructureWaitUntilAtTarget()
-                                .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
-                            .andThen(new SuperStructureCatapultShoot()
-                                .andThen(new SuperStructureWaitUntilCanCatapult()
-                                    .andThen(new ShooterShootAlgae())))), 
-                    new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
-                        .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
-                        .alongWith(new SuperStructureCatapultReady()
-                            .andThen(new SuperStructureWaitUntilAtTarget()
-                                .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreOppositeAllianceSide()))
-                            .andThen(new SuperStructureCatapultShoot()
-                                .andThen(new SuperStructureWaitUntilCanCatapult()
+                    new SuperStructureBarge118()
+                        .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
+                            .deadlineFor(new SwerveDriveDriveAlignedToBarge118ClearAllianceSide(driver))
+                            .andThen(new SwerveDriveDriveAlignedToBarge118ScoreAllianceSide(driver)
+                                .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()
+                                    .andThen(new ShooterShootAlgae())))),
+                    new SuperStructureBarge118()
+                        .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
+                            .deadlineFor(new SwerveDriveDriveAlignedToBarge118ClearOppositeAllianceSide(driver))
+                            .andThen(new SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide(driver)
+                                .alongWith(new SwerveDriveWaitUntilAlignedToBarge118OppositeAllianceSide()
                                     .andThen(new ShooterShootAlgae())))), 
                     () -> swerve.getPose().getX() <= Field.LENGTH / 2
                 ),
                 new SwerveDrivePIDAssistToClosestCoralStation(driver),
                 () -> shooter.getState() == ShooterState.HOLD_ALGAE
             ))
-            .onFalse(new SuperStructureFeed())
+            .onFalse(new SwerveDriveWaitUntilClearFromBarge118().andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Acquire Closest Reef Algae

@@ -15,7 +15,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultS
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapultAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
@@ -70,7 +70,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))
@@ -96,7 +96,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))

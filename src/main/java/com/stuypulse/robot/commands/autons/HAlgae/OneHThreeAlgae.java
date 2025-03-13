@@ -17,7 +17,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntil
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapultAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
@@ -73,7 +73,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilAtTarget())
                             .andThen(new SuperStructureWaitUntilCanCatapult()
@@ -97,7 +97,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilAtTarget())
                             .andThen(new SuperStructureWaitUntilCanCatapult()
@@ -127,7 +127,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilAtTarget())
                             .andThen(new SuperStructureWaitUntilCanCatapult()

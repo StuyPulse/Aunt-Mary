@@ -45,7 +45,7 @@ public interface Settings {
     }
 
     public interface Clearances {
-        double CLEARANCE_DISTANCE_FROM_BARGE = 1.5;
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.5;
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(17.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
     }
@@ -103,7 +103,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_SCORE = 1.2;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.55;
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
@@ -125,7 +126,7 @@ public interface Settings {
         SmartNumber CORAL_SHOOT_SPEED_L4_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L4 Front Shoot Speed", -0.75);
         SmartNumber CORAL_SHOOT_SPEED_L4_BACK = new SmartNumber("Shooter/Target Speeds/Coral L4 Back Shoot Speed", 0.75);
 
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.2);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
 
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
@@ -207,7 +208,7 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
+        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(65);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);

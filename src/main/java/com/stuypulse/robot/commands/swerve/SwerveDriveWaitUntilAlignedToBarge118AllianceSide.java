@@ -8,16 +8,16 @@ import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounceRC;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveWaitUntilAlignedToBargeScoreOppositeAllianceSide extends Command{
+public class SwerveDriveWaitUntilAlignedToBarge118AllianceSide extends Command{
     private final BStream isAligned;
 
-    public SwerveDriveWaitUntilAlignedToBargeScoreOppositeAllianceSide() {
+    public SwerveDriveWaitUntilAlignedToBarge118AllianceSide() {
         isAligned = BStream.create(this::isAligned)
             .filtered(new BDebounceRC.Both(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE));
     }
 
     private boolean isAligned() {
-        return Math.abs((Field.LENGTH / 2 + Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_SCORE) - CommandSwerveDrivetrain.getInstance().getPose().getX())
+        return Math.abs((Field.LENGTH / 2 - Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118) - CommandSwerveDrivetrain.getInstance().getPose().getX())
             < Alignment.Tolerances.X_TOLERANCE.get();
     }
 
