@@ -54,9 +54,8 @@ public interface Settings {
         double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.1;
         double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
         double NUDGE_SPEED_METERS_PER_SECOND = 0.15;
-        public interface Constraints {
-            double MAX_MODULE_SPEED = 4.9;
-    
+        
+        public interface Constraints {    
             SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 4.0);
             SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 15.0);
             SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));

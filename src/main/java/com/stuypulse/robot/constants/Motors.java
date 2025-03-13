@@ -56,7 +56,6 @@ public interface Motors {
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO);
-			// .withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
     }
 
     public interface Froggy {
@@ -93,11 +92,8 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
-			.withPIDConstants(Gains.Climb.PID.kP, Gains.Climb.PID.kI, Gains.Climb.PID.kD, 0)
-			.withFFConstants(Gains.Climb.FF.kS, Gains.Climb.FF.kV, Gains.Climb.FF.kA, Gains.Climb.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Climb.GEAR_RATIO);
-			// .withRemoteSensor(Ports.Climb.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO);
     }
 
     public static class TalonFXConfig {
