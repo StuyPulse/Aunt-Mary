@@ -13,6 +13,7 @@ import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
+import com.stuypulse.stuylib.util.StopWatch;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.net.PortForwarder;
@@ -66,6 +67,8 @@ public class Robot extends TimedRobot {
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
         // if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
+
+        StopWatch.setDefaultEngine(StopWatch.kFPGAEngine);
     }
 
     @Override
