@@ -49,7 +49,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.shooter.ShooterUnjambCoralBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
@@ -383,7 +383,7 @@ public class RobotContainer {
                 .onlyIf(() -> climb.getState() == ClimbState.OPEN 
                     || climb.getState() == ClimbState.SHIMMY 
                     || climb.getState() == ClimbState.IDLE))
-            .onTrue(new ShooterUnjambCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
+            .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle())
             .onFalse(new ShooterStop());
     }
