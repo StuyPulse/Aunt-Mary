@@ -71,6 +71,7 @@ import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriv
 import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -231,10 +232,11 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldCoral());
 
         // L1
-        driver.getRightBumper()
+        driver.getLeftButton()
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()).onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
-            .onTrue(new SuperStructureCoralL1().onlyIf(() -> shooter.hasCoral()));
+            .onTrue(new SuperStructureCoralL1().onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new SwerveDrivePIDAssistToClosestL1(driver));
 
         // L4 Coral Score
         driver.getTopButton()
@@ -295,7 +297,7 @@ public class RobotContainer {
         //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // // Barge 118 style score and align to coral station
-        driver.getLeftButton()
+        driver.getRightBumper()
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
                     new SuperStructureBarge118()
