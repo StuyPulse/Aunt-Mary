@@ -247,24 +247,24 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         // L3 Coral Score
-        // driver.getRightButton()
-        //     .whileTrue(new ConditionalCommand(
-        //         new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
-        //         new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
-        //         () -> swerve.isFrontFacingAllianceReef()))
-        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-        //         .andThen(new SuperStructureFeed()))
-        //     .onFalse(new ShooterStop());
+        driver.getRightButton()
+            .whileTrue(new ConditionalCommand(
+                new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
+                () -> swerve.isFrontFacingAllianceReef()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed()))
+            .onFalse(new ShooterStop());
 
-        // // L2 Coral Score
-        // driver.getBottomButton()
-        //     .whileTrue(new ConditionalCommand(
-        //         new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
-        //         new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
-        //         () -> swerve.isFrontFacingAllianceReef()))
-        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-        //         .andThen(new SuperStructureFeed()))
-        //     .onFalse(new ShooterStop());
+        // L2 Coral Score
+        driver.getBottomButton()
+            .whileTrue(new ConditionalCommand(
+                new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
+                () -> swerve.isFrontFacingAllianceReef()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed()))
+            .onFalse(new ShooterStop());
 
         // // Barge catapult score and align to coral station
         // driver.getLeftButton()
