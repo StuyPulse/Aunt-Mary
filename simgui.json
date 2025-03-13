@@ -64,6 +64,9 @@
   },
   "NetworkTables": {
     "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
       "SmartDashboard": {
         "Alignment": {
           "open": true

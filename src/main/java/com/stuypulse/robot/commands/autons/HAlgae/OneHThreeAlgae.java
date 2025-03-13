@@ -7,6 +7,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
@@ -74,23 +75,21 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget()
                         .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
-                            .andThen(new ShooterShootAlgae())))
+                        .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new SuperStructureWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))
             ),
-            new ShooterShootAlgae(),
-
+            new SuperStructureFeed()
+                .andThen(
+                  new SuperStructureWaitUntilAtTarget()  
+                ),
             // Acquire IJ Algae, Score on Barge
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
-                new WaitCommand(0.2)
-                    .andThen(
-                        new SuperStructureAlgaeL3Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
-                    )
-            ),
-            new ParallelCommandGroup(
-                new SwerveDrivePidToNearestReefAlgae(true),
-                new ShooterAcquireAlgae()
+                new SuperStructureAlgaeL3Front()
+                            .andThen(new SuperStructureWaitUntilAtTarget()
+                                .andThen(new SwerveDrivePidToNearestReefAlgae(true)),
+                new ShooterAcquireAlgae())
             ),
             new ShooterHoldAlgae(),
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
@@ -100,13 +99,18 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget()
                         .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
-                            .andThen(new ShooterShootAlgae())))
+                        .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new SuperStructureWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))
             ),
+            new SuperStructureFeed()
+                .andThen(
+                  new SuperStructureWaitUntilAtTarget()  
+                ),
 
             // Acquire EF Algae, Score on Barge
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
                 new WaitCommand(0.2)
                     .andThen(
                         new SuperStructureAlgaeL3Front()
@@ -125,9 +129,14 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget()
                         .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
                     .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
-                            .andThen(new ShooterShootAlgae())))
-            )
+                        .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new SuperStructureWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))
+            ),
+            new SuperStructureFeed()
+                .andThen(
+                  new SuperStructureWaitUntilAtTarget()  
+                )
         );
 
     }
