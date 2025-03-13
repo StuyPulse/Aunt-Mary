@@ -2,8 +2,8 @@ package com.stuypulse.robot.commands.autons.FDCB;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
-import com.stuypulse.robot.commands.shooter.ShooterSetAcquire;
-import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -38,7 +38,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
-            new ShooterShootBackwards(),
+            new ShooterShootL4Front(),
             new WaitCommand(0.15),
             new ShooterStop(),
 
@@ -53,7 +53,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
-                new ShooterSetAcquire()
+                new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop())
@@ -67,7 +67,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
-            new ShooterShootBackwards(),
+            new ShooterShootL4Front(),
             new WaitCommand(0.15),
             new ShooterStop(),
 
@@ -82,7 +82,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
-                new ShooterSetAcquire()
+                new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop()))
@@ -95,7 +95,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
-            new ShooterShootBackwards(),
+            new ShooterShootL4Front(),
             new WaitCommand(0.15),
             new ShooterStop(),
 
@@ -110,7 +110,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
-                new ShooterSetAcquire()
+                new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop()))
@@ -126,7 +126,7 @@ public class FourPieceFDCB extends SequentialCommandGroup {
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
-            new ShooterShootBackwards(),
+            new ShooterShootL4Front(),
             new WaitCommand(0.15),
             new ShooterStop(),
 

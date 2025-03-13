@@ -66,9 +66,9 @@ public class Robot extends TimedRobot {
        
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
-        // if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
+        // if (isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
 
-        StopWatch.setDefaultEngine(StopWatch.kFPGAEngine);
+        if (isReal()) StopWatch.setDefaultEngine(StopWatch.kFPGAEngine);
     }
 
     @Override

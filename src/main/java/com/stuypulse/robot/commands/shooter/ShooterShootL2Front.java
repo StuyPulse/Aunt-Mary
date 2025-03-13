@@ -8,8 +8,8 @@ package com.stuypulse.robot.commands.shooter;
 
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
-public class ShooterHoldAlgae extends ShooterSetState {
-    public ShooterHoldAlgae() {
-        super(ShooterState.HOLD_ALGAE);
+public class ShooterShootL2Front extends ShooterSetState {
+    public ShooterShootL2Front() {
+        super(ShooterState.SHOOT_CORAL_L2_FRONT);
     }
 }

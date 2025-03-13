@@ -6,21 +6,10 @@
 
 package com.stuypulse.robot.commands.shooter;
 
-import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-public class ShooterShootForwards extends InstantCommand {
-    private final Shooter shooter;
-
-    public ShooterShootForwards() {
-        shooter = Shooter.getInstance();
-        addRequirements(shooter);
-    }
-
-    @Override
-    public void initialize() {
-        shooter.setState(ShooterState.SHOOT_CORAL_FORWARD);
+public class ShooterShootL4Back extends ShooterSetState {
+    public ShooterShootL4Back() {
+        super(ShooterState.SHOOT_CORAL_L4_BACK);
     }
 }

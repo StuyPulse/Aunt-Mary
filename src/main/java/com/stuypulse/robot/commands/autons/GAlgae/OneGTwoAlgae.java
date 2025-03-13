@@ -5,7 +5,7 @@ import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
-import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
@@ -47,7 +47,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
-            new ShooterShootBackwards(),
+            new ShooterShootL4Front(),
             new WaitCommand(0.15),
             new ShooterStop(),
 

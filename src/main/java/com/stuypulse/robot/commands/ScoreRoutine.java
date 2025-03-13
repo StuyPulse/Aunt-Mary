@@ -1,10 +1,7 @@
 package com.stuypulse.robot.commands;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
-import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureSetState;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -13,16 +10,11 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
-import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
-import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
-import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.input.Gamepad;
 
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -54,11 +46,7 @@ public class ScoreRoutine extends SequentialCommandGroup {
                         .andThen(new SuperStructureWaitUntilAtTarget())
                 )
                 .andThen(new SuperStructureWaitUntilAtTarget()) // Re-check positioning
-                .andThen(new ConditionalCommand(
-                    new ShooterShootBackwards(),
-                    new ShooterShootForwards(),
-                    () -> shooter.shouldShootBackwards()
-                ))
+                .andThen(Shooter.getCorrespondingShootCommand(level, isFrontFacingReef))
         );
     }
 

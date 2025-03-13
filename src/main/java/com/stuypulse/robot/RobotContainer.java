@@ -47,10 +47,10 @@ import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
-import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
-import com.stuypulse.robot.commands.shooter.ShooterShootForwards;
+import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
 import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.shooter.ShooterUnjambCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
@@ -160,11 +160,9 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.ACQUIRE_ALGAE
                 && shooter.getState() != ShooterState.HOLD_ALGAE 
                 && shooter.getState() != ShooterState.SHOOT_ALGAE 
-                && shooter.getState() != ShooterState.SHOOT_CORAL_L1
-                && shooter.getState() != ShooterState.SHOOT_CORAL_FORWARD
-                && shooter.getState() != ShooterState.SHOOT_CORAL_REVERSE
-                && climb.getState() != ClimbState.OPEN
-                && climb.getState() != ClimbState.CLIMBING));
+                && shooter.getState() != ShooterState.UNJAMB_CORAL_BACKWARDS
+                && !shooter.isShooting()
+                && !climb.isClimbing()));
     }
 
     private void configureAutomaticCommands() {
@@ -198,17 +196,7 @@ public class RobotContainer {
                         new FroggyRollerShootAlgae(), 
                         () -> superStructure.getState() == SuperStructureState.PROCESSOR),
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-                new ConditionalCommand(
-                    new ShooterShootAlgae(),
-                    new ConditionalCommand(
-                        new ShooterShootBackwards(),
-                        new ConditionalCommand(
-                            new ShooterShootL1(), 
-                            new ShooterShootForwards(), 
-                            () -> superStructure.getState() == SuperStructureState.L1),
-                        shooter::shouldShootBackwards
-                    ), 
-                    () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
+                new ShooterShootBasedOnSuperStructure(), 
                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE 
                     || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE
                     || superStructure.getState() == SuperStructureState.PROCESSOR))
@@ -363,7 +351,7 @@ public class RobotContainer {
                 .onlyIf(() -> climb.getState() == ClimbState.OPEN 
                     || climb.getState() == ClimbState.SHIMMY 
                     || climb.getState() == ClimbState.IDLE))
-            .onTrue(new ShooterShootBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
+            .onTrue(new ShooterUnjambCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle())
             .onFalse(new ShooterStop());
     }

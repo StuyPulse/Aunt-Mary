@@ -118,14 +118,21 @@ public interface Settings {
 
     public interface Shooter {
         SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.15);
-        SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.5);
-        SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.5);
+        SmartNumber CORAL_SHOOT_SPEED_L2_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L2 Front Shoot Speed", 0.4);
+        SmartNumber CORAL_SHOOT_SPEED_L2_BACK = new SmartNumber("Shooter/Target Speeds/Coral L2 Back Shoot Speed", 0.4);
+        SmartNumber CORAL_SHOOT_SPEED_L3_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L3 Front Shoot Speed", -0.4);
+        SmartNumber CORAL_SHOOT_SPEED_L3_BACK = new SmartNumber("Shooter/Target Speeds/Coral L3 Back Shoot Speed", 0.4);
+        SmartNumber CORAL_SHOOT_SPEED_L4_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L4 Front Shoot Speed", -0.75);
+        SmartNumber CORAL_SHOOT_SPEED_L4_BACK = new SmartNumber("Shooter/Target Speeds/Coral L4 Back Shoot Speed", 0.75);
+
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
-        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
 
+        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
         SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.25);
 
+        SmartNumber UNJAMB_CORAL_BACKWARDS_SPEED = new SmartNumber("Shooter/Target Speeds/Unjamb Coral Backwards Speed", -0.15);
+        
         double HAS_CORAL_DEBOUNCE = 0.0;
     }
 

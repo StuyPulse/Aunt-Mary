@@ -2,7 +2,7 @@ package com.stuypulse.robot.commands.autons.GAlgae;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
-import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
@@ -33,7 +33,7 @@ public class OnePieceG extends SequentialCommandGroup {
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
-            new ShooterShootBackwards(),
+            new ShooterShootL4Front(),
             new WaitCommand(0.15),
             new ShooterStop()
             
