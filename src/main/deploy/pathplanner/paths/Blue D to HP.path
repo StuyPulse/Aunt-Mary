@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8225941623865167,
-        "y": 0.9652696810756025
+        "x": 1.7055143142077105,
+        "y": 0.8451017519402297
       },
       "isLocked": false,
       "linkedName": "Blue D"
     },
     {
       "anchor": {
-        "x": 1.7913482666015625,
-        "y": 0.9482513427734375
+        "x": 1.7177947998046874,
+        "y": 0.8542946951729914
       },
       "prevControl": {
-        "x": 4.002363647577118,
-        "y": 2.672353652686721
+        "x": 3.9222201678680935,
+        "y": 2.634497725373125
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 6.5,
+    "maxAcceleration": 7.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

@@ -9,6 +9,7 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
+import com.stuypulse.robot.commands.autons.FDCB.PathlessFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
@@ -19,6 +20,7 @@ import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
+import com.stuypulse.robot.commands.autons.IKLA.PathlessFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
@@ -545,6 +547,20 @@ public class RobotContainer {
         SQUARE_TEST.registerRed(autonChooser);
         RSQUARE_TEST.registerRed(autonChooser);
         */
+
+        AutonConfig PATHLESS_BLUE_FOUR_PIECE_FDCB = new AutonConfig("Pathless 4 Piece FDCB", PathlessFourPieceFDCB::new, 
+        "Blue F to HP", "Blue B BackOut");
+        AutonConfig PATHLESS_RED_FOUR_PIECE_FDCB = new AutonConfig("Pathless 4 Piece FDCB", PathlessFourPieceFDCB::new, 
+        "Red F to HP", "Red B BackOut");
+        PATHLESS_BLUE_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        PATHLESS_RED_FOUR_PIECE_FDCB.registerRed(autonChooser);
+
+        AutonConfig PATHLESS_BLUE_FOUR_PIECE_IKLA = new AutonConfig("Pathless 4 Piece IKLA", PathlessFourPieceIKLA::new, 
+        "Blue I to HP", "Blue A BackOut");
+        AutonConfig PATHLESS_RED_FOUR_PIECE_IKLA = new AutonConfig("Pathless 4 Piece IKLA", PathlessFourPieceIKLA::new, 
+        "Red I to HP", "Red A BackOut");
+        PATHLESS_BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        PATHLESS_RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
