@@ -109,8 +109,12 @@ public class SuperStructure extends SubsystemBase{
     }
 
     private void updateArmMotionProfileConstraints() {
-        if (getState() == SuperStructureState.CATAPULT_SHOOT) {
+        ArmState armState = getState().getArmState();
+        if (armState == ArmState.CATAPULT_SHOOT) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CATAPULT, Settings.Arm.Constraints.MAX_ACCEL_CATAPULT);
+        }
+        else if (armState == ArmState.FEED) {
+            arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED);
         }
         else if (Robot.getMode() == RobotMode.AUTON) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_AUTON, Settings.Arm.Constraints.MAX_ACCEL_AUTON);

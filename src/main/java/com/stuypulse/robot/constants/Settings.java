@@ -224,6 +224,9 @@ public interface Settings {
         public interface Constraints {
             Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(450.0);
             Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(900.0);
+
+            Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
+            Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
     
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
