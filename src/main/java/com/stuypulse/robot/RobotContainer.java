@@ -49,7 +49,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.shooter.ShooterUnjambCoralBackwards;
+import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
@@ -78,6 +78,7 @@ import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriv
 import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriveAlignedToCatapultOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -238,10 +239,11 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldCoral());
 
         // L1
-        driver.getRightBumper()
+        driver.getLeftButton()
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()).onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
-            .onTrue(new SuperStructureCoralL1().onlyIf(() -> shooter.hasCoral()));
+            .onTrue(new SuperStructureCoralL1().onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new SwerveDrivePIDAssistToClosestL1(driver));
 
         // L4 Coral Score
         driver.getTopButton()
@@ -386,7 +388,7 @@ public class RobotContainer {
                 .onlyIf(() -> climb.getState() == ClimbState.OPEN 
                     || climb.getState() == ClimbState.SHIMMY 
                     || climb.getState() == ClimbState.IDLE))
-            .onTrue(new ShooterUnjambCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
+            .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
     }
