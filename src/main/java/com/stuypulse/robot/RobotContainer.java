@@ -162,7 +162,7 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.SHOOT_ALGAE 
                 && shooter.getState() != ShooterState.UNJAMB_CORAL_BACKWARDS
                 && !shooter.isShooting()
-                && !climb.isClimbing()));
+                && climb.getState() == ClimbState.CLOSED));
     }
 
     private void configureAutomaticCommands() {
@@ -273,20 +273,32 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         // Barge score and align to coral station
-        // driver.getLeftButton()
-        //     .whileTrue(new ConditionalCommand(
-        //         new ConditionalCommand(
-        //             new SwerveDriveWaitUntilClearFromBarge()
-        //                 .deadlineFor(new SwerveDriveDriveAlignedToBargeReadyAllianceSide(driver))
-        //             () -> swerve.getPose().getX() <= Field.LENGTH / 2
-        //         ),
-        //         new SwerveDrivePIDAssistToClosestCoralStation(driver),
-        //         () -> shooter.getState() == ShooterState.HOLD_ALGAE
-        //     ))
-        // .onFalse(new SuperStructureFeed())
-        // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         driver.getLeftButton()
-            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver));
+            .whileTrue(new ConditionalCommand(
+                new ConditionalCommand(
+                    new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
+                        .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+                        .alongWith(new SuperStructureCatapultReady()
+                            .andThen(new SuperStructureWaitUntilAtTarget()
+                                .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreAllianceSide()))
+                            .andThen(new SuperStructureCatapultShoot()
+                                .andThen(new SuperStructureWaitUntilCanCatapult()
+                                    .andThen(new ShooterShootAlgae())))), 
+                    new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
+                        .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+                        .alongWith(new SuperStructureCatapultReady()
+                            .andThen(new SuperStructureWaitUntilAtTarget()
+                                .alongWith(new SwerveDriveWaitUntilAlignedToBargeScoreOppositeAllianceSide()))
+                            .andThen(new SuperStructureCatapultShoot()
+                                .andThen(new SuperStructureWaitUntilCanCatapult()
+                                    .andThen(new ShooterShootAlgae())))), 
+                    () -> swerve.getPose().getX() <= Field.LENGTH / 2
+                ),
+                new SwerveDrivePIDAssistToClosestCoralStation(driver),
+                () -> shooter.getState() == ShooterState.HOLD_ALGAE
+            ))
+            .onFalse(new SuperStructureFeed())
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Acquire Closest Reef Algae
         // driver.getDPadLeft()
@@ -330,12 +342,12 @@ public class RobotContainer {
                 .andThen(new SuperStructureProcessor()))
             .onFalse(new ShooterHoldAlgae());
 
-        // Unstuck Coral
+        // Unstuck Coral and Climb Shimmy
         driver.getDPadDown()
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
                 new SuperStructureUnstuckCoral(),
-                () -> climb.getState() == ClimbState.OPEN || climb.getState() == ClimbState.IDLE || climb.getState() == ClimbState.CLIMBING
+                () -> climb.getState() != ClimbState.CLOSED
             ));
 
         // Get ready for climb

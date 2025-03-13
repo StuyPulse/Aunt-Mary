@@ -52,7 +52,7 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
                 new VDeadZone(Drive.DEADBAND),
                 x -> x.clamp(1),
                 x -> x.pow(Drive.POWER.get()),
-                x -> x.mul(!Climb.getInstance().isClimbing() ? Drive.MAX_TELEOP_SPEED.get() : Drive.MAX_TELEOP_SPEED_WHILE_CLIMBING.get()),
+                x -> x.mul(Drive.MAX_TELEOP_SPEED.get()),
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
 
@@ -61,7 +61,7 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
                 x -> -x,
                 x -> SLMath.deadband(x, Turn.DEADBAND.get()),
                 x -> SLMath.spow(x, Turn.POWER.get()),
-                x -> x * (!Climb.getInstance().isClimbing() ? Turn.MAX_TELEOP_TURN_SPEED.get() : Turn.MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING.get()),
+                x -> x * (Turn.MAX_TELEOP_TURN_SPEED.get()),
                 new LowPassFilter(Turn.RC));
 
         controller = new HolonomicController(

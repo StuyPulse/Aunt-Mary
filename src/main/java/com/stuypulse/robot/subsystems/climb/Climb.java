@@ -61,13 +61,6 @@ public abstract class Climb extends SubsystemBase {
         setVoltageOverride(Optional.empty());
     }
 
-    public boolean isClimbing() {
-        return switch (getState()) {
-            case OPEN, SHIMMY, CLIMBING -> true;
-            default -> false;
-        };
-    }
-
     public abstract Rotation2d getCurrentAngle();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
