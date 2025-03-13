@@ -299,27 +299,42 @@ public class RobotContainer {
         //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Acquire Closest Reef Algae
+        // driver.getDPadLeft()
+        //     .onTrue(new ShooterAcquireAlgae())
+        //     .whileTrue(new ConditionalCommand(
+        //         new ConditionalCommand(
+        //             new SwerveDrivePidToNearestReefAlgae(true)
+        //                 .alongWith(new SuperStructureAlgaeL3Front())
+        //                 .andThen(new SwerveDriveNudgeForward()), 
+        //             new SwerveDrivePidToNearestReefAlgae(false)
+        //                 .alongWith(new SuperStructureAlgaeL3Back())
+        //                 .andThen(new SwerveDriveNudgeBackwards()), 
+        //             () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
+        //                 || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())),
+        //         new ConditionalCommand(
+        //             new SwerveDrivePidToNearestReefAlgae(true)
+        //                 .alongWith(new SuperStructureAlgaeL2Front())
+        //                 .andThen(new SwerveDriveNudgeForward()), 
+        //             new SwerveDrivePidToNearestReefAlgae(false)
+        //                 .alongWith(new SuperStructureAlgaeL2Back())
+        //                 .andThen(new SwerveDriveNudgeBackwards()), 
+        //             () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
+        //                 || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())), 
+        //         () -> ReefUtil.getClosestAlgae().isHighAlgae()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new SuperStructureProcessor()))
+        //     .onFalse(new ShooterHoldAlgae());
+
+        // Acquire closest reef algae front only
         driver.getDPadLeft()
             .onTrue(new ShooterAcquireAlgae())
             .whileTrue(new ConditionalCommand(
-                new ConditionalCommand(
-                    new SwerveDrivePidToNearestReefAlgae(true)
-                        .alongWith(new SuperStructureAlgaeL3Front())
-                        .andThen(new SwerveDriveNudgeForward()), 
-                    new SwerveDrivePidToNearestReefAlgae(false)
-                        .alongWith(new SuperStructureAlgaeL3Back())
-                        .andThen(new SwerveDriveNudgeBackwards()), 
-                    () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
-                        || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())),
-                new ConditionalCommand(
-                    new SwerveDrivePidToNearestReefAlgae(true)
-                        .alongWith(new SuperStructureAlgaeL2Front())
-                        .andThen(new SwerveDriveNudgeForward()), 
-                    new SwerveDrivePidToNearestReefAlgae(false)
-                        .alongWith(new SuperStructureAlgaeL2Back())
-                        .andThen(new SwerveDriveNudgeBackwards()), 
-                    () -> (swerve.getPose().getX() < Field.LENGTH / 2 && swerve.isFrontFacingAllianceReef())
-                        || (swerve.getPose().getX() > Field.LENGTH / 2 && swerve.isFrontFacingOppositeAllianceReef())), 
+                new SwerveDrivePidToNearestReefAlgae(true)
+                    .alongWith(new SuperStructureAlgaeL3Front())
+                    .andThen(new SwerveDriveNudgeForward()),
+                new SwerveDrivePidToNearestReefAlgae(true)
+                    .alongWith(new SuperStructureAlgaeL2Front())
+                    .andThen(new SwerveDriveNudgeForward()), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))
