@@ -57,10 +57,10 @@ public class ScoreRoutine extends SequentialCommandGroup {
     private static Supplier<CoralBranch> getCoralBranchSupplierWithDriverInput(Gamepad driver) {
         return () -> {
             if (driver.getLeftX() > Settings.Driver.BRANCH_OVERRIDE_DEADBAND) {
-                return ReefUtil.ReefFace.getClosestReefFace().getRightBranchFieldRelative();
+                return ReefUtil.getClosestReefFace().getRightBranchFieldRelative();
             }
             else if (driver.getLeftX() < -Settings.Driver.BRANCH_OVERRIDE_DEADBAND) {
-                return ReefUtil.ReefFace.getClosestReefFace().getLeftBranchFieldRelative();
+                return ReefUtil.getClosestReefFace().getLeftBranchFieldRelative();
             }
             else {
                 return ReefUtil.getClosestCoralBranch();

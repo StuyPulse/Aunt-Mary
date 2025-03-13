@@ -140,18 +140,11 @@ public interface ReefUtil {
             return Robot.isBlue() ? this.correspondingBlueAprilTag.getLocation().toPose2d() : this.correspondingRedAprilTag.getLocation().toPose2d();
         }
 
-        public static ReefFace getClosestReefFace() {
-            ReefFace nearestReefFace = ReefFace.AB;
-            double closestDistance = Double.MAX_VALUE;
-
-            for (ReefFace reefFace : ReefFace.values()) {
-                double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(reefFace.getCorrespondingAprilTagPose()).getTranslation().getNorm();
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    nearestReefFace = reefFace;
-                }
-            }
-            return nearestReefFace;
+        public boolean isOnDriverStationSide() {
+            return switch (this) {
+                case KL, AB, CD -> true;
+                default -> false;
+            };
         }
 
         public static NamedTags getNearestReefSide() {
@@ -185,6 +178,20 @@ public interface ReefUtil {
             return new Pose2d(closestPointOnReefFace, getCorrespondingAprilTagPose().getRotation())
                 .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER, 0, Rotation2d.k180deg));
         }
+    }
+
+    public static ReefFace getClosestReefFace() {
+        ReefFace nearestReefFace = ReefFace.AB;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (ReefFace reefFace : ReefFace.values()) {
+            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(reefFace.getCorrespondingAprilTagPose()).getTranslation().getNorm();
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearestReefFace = reefFace;
+            }
+        }
+        return nearestReefFace;
     }
 
     /*** REEF ALGAE ***/

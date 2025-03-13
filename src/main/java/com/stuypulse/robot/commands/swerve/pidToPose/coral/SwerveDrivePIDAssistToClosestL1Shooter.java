@@ -86,7 +86,7 @@ public class SwerveDrivePIDAssistToClosestL1Shooter extends Command {
 
     @Override
     public void initialize() {
-        this.closestReefFace = ReefUtil.ReefFace.getClosestReefFace();
+        this.closestReefFace = ReefUtil.getClosestReefFace();
     }
 
     @Override
@@ -99,7 +99,8 @@ public class SwerveDrivePIDAssistToClosestL1Shooter extends Command {
         ChassisSpeeds controllerFieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(controller.getOutput(), swerve.getPose().getRotation());
 
         Rotation2d reefFaceParallelHeading = closestReefFace.getCorrespondingAprilTagPose().getRotation().rotateBy(Rotation2d.kCCW_90deg);
-        double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().dot(new Vector2D(reefFaceParallelHeading.getCos(), reefFaceParallelHeading.getSin()));
+        // double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().dot(new Vector2D(reefFaceParallelHeading.getCos(), reefFaceParallelHeading.getSin()));
+        double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().y * (closestReefFace.isOnDriverStationSide() ? -1 : 1);
         Vector2D driverVelocityVectorParallelToReefFace = new Vector2D(
             driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getCos(), 
             driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getSin());
