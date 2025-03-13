@@ -9,7 +9,7 @@ public class SwerveDrivePidToNearestReefAlgae extends SequentialCommandGroup {
     public SwerveDrivePidToNearestReefAlgae(boolean isFrontFacingReef) {
         addCommands(
             new SwerveDrivePIDToPose(() -> ReefUtil.getClosestAlgae().getReadyPose(isFrontFacingReef)),
-            new SwerveDrivePIDToPose(() -> ReefUtil.getClosestAlgae().getTargetPose(isFrontFacingReef))
+            new SwerveDrivePIDToPose(() -> ReefUtil.getClosestAlgae().getTargetPose(isFrontFacingReef)).withoutMotionProfile()
         );
     }
 }
