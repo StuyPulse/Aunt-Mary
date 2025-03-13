@@ -92,7 +92,7 @@ public interface Settings {
 
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
-                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.05;
+                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
@@ -109,7 +109,7 @@ public interface Settings {
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.1; // From bumper
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.3; // From bumper
             }
         }
     }
@@ -119,7 +119,7 @@ public interface Settings {
     }
 
     public interface Shooter {
-        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.15);
+        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.22);
         SmartNumber CORAL_SHOOT_SPEED_L2_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L2 Front Shoot Speed", 0.4);
         SmartNumber CORAL_SHOOT_SPEED_L2_BACK = new SmartNumber("Shooter/Target Speeds/Coral L2 Back Shoot Speed", 0.4);
         SmartNumber CORAL_SHOOT_SPEED_L3_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L3 Front Shoot Speed", -0.4);
@@ -130,7 +130,7 @@ public interface Settings {
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.2);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
 
-        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 1.0);
+        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 0.5);
         SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.25);
 
         SmartNumber UNJAMB_CORAL_BACKWARDS_SPEED = new SmartNumber("Shooter/Target Speeds/Unjamb Coral Backwards Speed", -0.15);
@@ -209,7 +209,7 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(65);
+        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
@@ -335,9 +335,5 @@ public interface Settings {
 
             SmartNumber MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Speed While Climbing (rad per s)", MAX_TELEOP_TURN_SPEED.get() / 2);
         }
-    }
-  
-    public interface Auton {
-        double SHOOTER_WAIT_TIME = 0.75;
     }
 }

@@ -78,6 +78,7 @@ import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriv
 import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriveAlignedToCatapultAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriveAlignedToCatapultOppositeAllianceSide;
+import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1Shooter;
@@ -108,6 +109,8 @@ import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -140,6 +143,8 @@ public class RobotContainer {
 
     // Robot container
     public RobotContainer() {
+        swerve.configureAutoBuilder();
+
         configureDefaultCommands();
         configureAutomaticCommands();
         configureDriverButtonBindings();
@@ -400,9 +405,6 @@ public class RobotContainer {
     /**************/
 
     public void configureAutons() {
-
-        swerve.configureAutoBuilder();
-
         /** TOP AUTONS **/
 
         AutonConfig BLUE_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,

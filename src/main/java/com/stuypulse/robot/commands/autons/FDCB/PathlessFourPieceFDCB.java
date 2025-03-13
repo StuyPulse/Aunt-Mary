@@ -33,7 +33,7 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
             // Score Preload on F
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
-                    .withTranslationalConstraints(2.35, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
+                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(1.75)
                     .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
                 new SuperStructureCoralL4Front()
@@ -118,8 +118,8 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
-                    .withTranslationalConstraints(5.85, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
-                    .withTimeout(4)
+                    .withTranslationalConstraints(6, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
+                    .withTimeout(2.25)
                     .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(

@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 1.677412418798617,
-        "y": 0.8471545847260358
+        "y": 0.8471545847260362
       },
       "isLocked": false,
       "linkedName": "Blue C"
     },
     {
       "anchor": {
-        "x": 1.7177947998046874,
-        "y": 0.8542946951729914
+        "x": 1.4624999999999997,
+        "y": 0.6144979508196718
       },
       "prevControl": {
-        "x": 3.7147785540494063,
-        "y": 2.7950582606876577
+        "x": 3.4594837542447188,
+        "y": 2.555261516334338
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.5,
-    "maxAcceleration": 7.5,
+    "maxAcceleration": 17.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.745966101792101,
-        "y": 5.41761698133413
+        "y": 5.417616981334129
       },
       "isLocked": false,
       "linkedName": "Blue Top HP"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.5,
-    "maxAcceleration": 7.5,
+    "maxAcceleration": 17.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

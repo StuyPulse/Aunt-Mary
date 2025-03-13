@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7177947998046874,
-        "y": 0.8542946951729914
+        "x": 1.4624999999999997,
+        "y": 0.6144979508196718
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8141365755025305,
-        "y": 2.887889312608832
+        "x": 3.558841775697843,
+        "y": 2.648092568255512
       },
       "isLocked": false,
       "linkedName": "Blue Bottom HP"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.5,
-    "maxAcceleration": 7.5,
+    "maxAcceleration": 17.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
