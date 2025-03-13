@@ -37,7 +37,7 @@ public interface Settings {
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
         SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
@@ -45,7 +45,7 @@ public interface Settings {
     }
 
     public interface Clearances {
-        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.5;
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4;
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(17.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
     }
@@ -104,7 +104,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.55;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.5;
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
