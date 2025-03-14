@@ -179,7 +179,7 @@ public interface ReefUtil {
                 .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER, 0, Rotation2d.k180deg));
         }
 
-        public Pose2d getL1FroggyTargetPose() {
+        public Pose2d getL1FroggyScorePose() {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY, 
                 0, 
@@ -188,7 +188,7 @@ public interface ReefUtil {
 
         public Pose2d getL1FroggyClearPose() {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
-                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROGGY, 
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROGGY + 0.05, 
                 0, 
                 Rotation2d.kCW_90deg));
         }

@@ -83,6 +83,8 @@ import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToP
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1Shooter;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
@@ -117,6 +119,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -248,10 +251,21 @@ public class RobotContainer {
 
         // L1
         driver.getRightBumper()
-            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()).onlyIf(() -> !shooter.hasCoral()))
+            .whileTrue(new ConditionalCommand(
+                new SwerveDrivePIDAssistToClosestL1Shooter(driver).onlyIf(() -> shooter.hasCoral()), 
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
+                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
+                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
+                        .andThen(new FroggyRollerShootCoral())), 
+                () -> shooter.hasCoral()))
+            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
+                .andThen(new FroggyPivotToL1())
+                .onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
             .onTrue(new SuperStructureCoralL1().onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new SwerveDrivePIDAssistToClosestL1Shooter(driver).onlyIf(() -> shooter.hasCoral()));
+            .onFalse(new FroggyPivotToStow().onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
+            .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() == RollerState.SHOOT_CORAL));
+
 
         // L4 Coral Score
         driver.getTopButton()

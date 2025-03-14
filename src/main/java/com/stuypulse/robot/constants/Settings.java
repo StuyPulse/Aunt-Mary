@@ -101,7 +101,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(10);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(5);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
