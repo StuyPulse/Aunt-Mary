@@ -35,16 +35,16 @@ public interface Gains {
     public interface Arm {
         public interface CoralAlgae  {
             public interface PID {
-                double kP = 0.072744;
+                double kP = 0.12428;
                 double kI = 0.0;
-                double kD = 0.015;
+                double kD = 0.0012076;
             }
 
             public interface FF {
-                double kS = 0.076049; 
-                double kV = 0.011872;
-                double kA = 0.0011738;
-                double kG = 0.69106;
+                double kS = 0.2272; 
+                double kV = 0.0093901;
+                double kA = 0.0010961;
+                double kG = 0.69269;
             }
         }
 
