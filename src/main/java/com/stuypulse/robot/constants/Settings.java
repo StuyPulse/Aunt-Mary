@@ -77,7 +77,7 @@ public interface Settings {
                 SmartNumber DEFAULT_MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
 
                 SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.85);
-                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 17.25);
+                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 17);
             }
 
             public interface Tolerances {
