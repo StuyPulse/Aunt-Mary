@@ -59,6 +59,9 @@ public class FunnelFourPiece extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Funnel.getInstance().hasCoral())
+                    .raceWith(
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    )
                     .andThen(new SwerveDriveCoralScoreAlignAuton(
                         CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3)
                         ),
@@ -90,6 +93,9 @@ public class FunnelFourPiece extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Funnel.getInstance().hasCoral())
+                    .raceWith(
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    )
                     .andThen(new SwerveDriveCoralScoreAlignAuton(
                         CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3)
                         ),
@@ -121,6 +127,8 @@ public class FunnelFourPiece extends SequentialCommandGroup {
         ),
         new ParallelCommandGroup(
             new WaitUntilCommand(() -> Funnel.getInstance().hasCoral())
+                .raceWith(
+                    new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()))
                 .andThen(
                     new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
                     .withTolerance(Units.inchesToMeters(3.0), Units.inchesToMeters(3.0), Units.degreesToRadians(5.0))

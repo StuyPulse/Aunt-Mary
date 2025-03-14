@@ -567,7 +567,10 @@ public class RobotContainer {
 
         AutonConfig FUNNEL_BLUE_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPiece::new,
         "Blue F to HP", "Blue B BackOut");
+        AutonConfig FUNNEL_RED_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPiece::new,
+        "Red F to HP", "Red B BackOut");
         FUNNEL_BLUE_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        FUNNEL_RED_FOUR_PIECE_FDCB.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
