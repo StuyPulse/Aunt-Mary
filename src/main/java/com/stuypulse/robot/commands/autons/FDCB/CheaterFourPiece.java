@@ -3,10 +3,14 @@ package com.stuypulse.robot.commands.autons.FDCB;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterShootL2Front;
+import com.stuypulse.robot.commands.shooter.ShooterShootL3Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
@@ -25,9 +29,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class PathlessFourPieceFDCB extends SequentialCommandGroup {
+public class CheaterFourPiece extends SequentialCommandGroup {
     
-    public PathlessFourPieceFDCB(PathPlannerPath... paths) {
+    public CheaterFourPiece(PathPlannerPath... paths) {
 
         addCommands(
 
@@ -57,7 +61,6 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
                 new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
@@ -66,11 +69,8 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new SuperStructureCoralL4Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
-                    )
+                new SuperStructureCoralL4Front()
+                    .andThen(new SuperStructureWaitUntilAtTarget())
             ),
 
             // To HP, Score C
@@ -89,7 +89,6 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
                 new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
@@ -97,14 +96,11 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
             ),
             new ParallelCommandGroup(
                 new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new SuperStructureCoralL4Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
-                    )
+                new SuperStructureCoralL4Front()
+                    .andThen(new SuperStructureWaitUntilAtTarget())
             ),
 
-           // To HP, Score B
+           // To HP, Score C3
            new ParallelCommandGroup(
             new ShooterShootL4Front()
                 .andThen(new WaitCommand(0.125))
@@ -120,27 +116,23 @@ public class PathlessFourPieceFDCB extends SequentialCommandGroup {
                 )
         ),
             new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
                 new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
+                new SwerveDrivePIDToBranchScore(CoralBranch.B, 2, true)
                     .withTolerance(Units.inchesToMeters(3.0), Units.inchesToMeters(3.0), Units.degreesToRadians(5.0))
                     .withTranslationalConstraints(6, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(3)
                     .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new SuperStructureCoralL4Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
-                    )
+                new SuperStructureCoralL2Front()
+                    .andThen(new SuperStructureWaitUntilAtTarget())
             ),
 
             new ParallelCommandGroup(
-                new ShooterShootL4Front()
+                new ShooterShootL2Front()
                     .andThen(new WaitCommand(0.125))
                         .andThen(new ShooterStop()),
                 new WaitCommand(0.1)

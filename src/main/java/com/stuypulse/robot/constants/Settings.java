@@ -109,7 +109,7 @@ public interface Settings {
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.3; // From bumper
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.1; // From bumper
             }
         }
     }
@@ -124,10 +124,10 @@ public interface Settings {
         SmartNumber CORAL_SHOOT_SPEED_L2_BACK = new SmartNumber("Shooter/Target Speeds/Coral L2 Back Shoot Speed", 0.4);
         SmartNumber CORAL_SHOOT_SPEED_L3_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L3 Front Shoot Speed", -0.4);
         SmartNumber CORAL_SHOOT_SPEED_L3_BACK = new SmartNumber("Shooter/Target Speeds/Coral L3 Back Shoot Speed", 0.4);
-        SmartNumber CORAL_SHOOT_SPEED_L4_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L4 Front Shoot Speed", -0.75);
+        SmartNumber CORAL_SHOOT_SPEED_L4_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L4 Front Shoot Speed", -1.0);
         SmartNumber CORAL_SHOOT_SPEED_L4_BACK = new SmartNumber("Shooter/Target Speeds/Coral L4 Back Shoot Speed", 0.75);
 
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.2);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.17);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
 
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 0.5);
