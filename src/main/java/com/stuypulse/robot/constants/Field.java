@@ -1,5 +1,8 @@
 package com.stuypulse.robot.constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.AprilTag;
@@ -37,6 +40,14 @@ public interface Field {
         return new Pose2d(
             rotated.getTranslation().plus(new Translation2d(LENGTH, WIDTH)),
             rotated.getRotation());
+    }
+
+    public static List<Pose2d> transformToOppositeAlliance(List<Pose2d> poses) {
+        List<Pose2d> newPoses = new ArrayList<>();
+        for (Pose2d pose : poses) {
+            newPoses.add(transformToOppositeAlliance(pose));
+        }
+        return newPoses;
     }
 
     /*** APRILTAGS ***/
