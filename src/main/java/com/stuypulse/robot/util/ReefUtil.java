@@ -178,6 +178,20 @@ public interface ReefUtil {
             return new Pose2d(closestPointOnReefFace, getCorrespondingAprilTagPose().getRotation())
                 .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER, 0, Rotation2d.k180deg));
         }
+
+        public Pose2d getL1FroggyTargetPose() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY, 
+                0, 
+                Rotation2d.kCW_90deg));
+        }
+
+        public Pose2d getL1FroggyClearPose() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROGGY, 
+                0, 
+                Rotation2d.kCW_90deg));
+        }
     }
 
     public static ReefFace getClosestReefFace() {
