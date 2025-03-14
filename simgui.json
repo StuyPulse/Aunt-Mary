@@ -80,6 +80,9 @@
           },
           "open": true
         },
+        "Funnel": {
+          "open": true
+        },
         "Shooter": {
           "open": true
         },
@@ -129,7 +132,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 9,
           "series": [
             {
               "color": [
@@ -174,7 +177,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 4,
           "series": [
             {
               "color": [
@@ -219,7 +222,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 332,
+          "height": 338,
           "series": [
             {
               "color": [

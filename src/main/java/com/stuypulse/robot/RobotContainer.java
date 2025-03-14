@@ -9,6 +9,7 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
+import com.stuypulse.robot.commands.autons.FDCB.FunnelFourPiece;
 import com.stuypulse.robot.commands.autons.FDCB.PathlessFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
@@ -563,6 +564,10 @@ public class RobotContainer {
         "Red I to HP", "Red A BackOut");
         PATHLESS_BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
         PATHLESS_RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
+
+        AutonConfig FUNNEL_BLUE_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPiece::new,
+        "Blue F to HP", "Blue B BackOut");
+        FUNNEL_BLUE_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

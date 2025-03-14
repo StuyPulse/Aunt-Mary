@@ -58,19 +58,18 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Funnel.getInstance().hasCoral()),
+                new WaitUntilCommand(() -> Funnel.getInstance().hasCoral())
+                    .andThen(new SwerveDriveCoralScoreAlignAuton(
+                        CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3)
+                        ),
                 new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop())
-                    )
-            ),
-            new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new SuperStructureCoralL4Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
+                                .andThen(
+                                    new SuperStructureCoralL4Front()
+                                        .andThen(new SuperStructureWaitUntilAtTarget())
+                                )
                     )
             ),
 
@@ -90,18 +89,18 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Funnel.getInstance().hasCoral()),
+                new WaitUntilCommand(() -> Funnel.getInstance().hasCoral())
+                    .andThen(new SwerveDriveCoralScoreAlignAuton(
+                        CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3)
+                        ),
                 new ShooterSetAcquireCoral()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                            .andThen(new ShooterStop()))
-            ),
-            new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new SuperStructureCoralL4Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new ShooterStop())
+                                .andThen(
+                                    new SuperStructureCoralL4Front()
+                                        .andThen(new SuperStructureWaitUntilAtTarget())
+                                )
                     )
             ),
 
@@ -120,24 +119,25 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                         .andThen(new SuperStructureWaitUntilAtTarget())
                 )
         ),
-            new ParallelCommandGroup(
-                new ShooterSetAcquireCoral()
-                    .andThen(
-                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                            .andThen(new ShooterStop()))
-            ),
-            new ParallelCommandGroup(
-                new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
+        new ParallelCommandGroup(
+            new WaitUntilCommand(() -> Funnel.getInstance().hasCoral())
+                .andThen(
+                    new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
                     .withTolerance(Units.inchesToMeters(3.0), Units.inchesToMeters(3.0), Units.degreesToRadians(5.0))
                     .withTranslationalConstraints(6, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(3)
-                    .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                    .andThen(
-                        new SuperStructureCoralL4Front()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
-                    )
-            ),
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
+                    ),
+            new ShooterSetAcquireCoral()
+                .andThen(
+                    new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                        .andThen(new ShooterStop())
+                            .andThen(
+                                new SuperStructureCoralL4Front()
+                                    .andThen(new SuperStructureWaitUntilAtTarget())
+                            )
+                )
+        ),
 
             new ParallelCommandGroup(
                 new ShooterShootL4Front()
