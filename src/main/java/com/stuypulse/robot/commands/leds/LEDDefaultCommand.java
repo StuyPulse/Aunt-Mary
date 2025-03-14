@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class LEDDefaultCommand extends Command{
     private final LEDController leds;
-    private final Shooter shooter;
-    private final Froggy froggy;
     private final Funnel funnel;
     private final Climb climb;
+    private final Froggy froggy;
+    private final Shooter shooter;
 
     public LEDDefaultCommand() {
         this.leds = LEDController.getInstance();
@@ -32,7 +32,6 @@ public class LEDDefaultCommand extends Command{
 
     private boolean isIntaking() {
         return shooter.getState() == ShooterState.ACQUIRE_ALGAE 
-            || shooter.getState() == ShooterState.ACQUIRE_CORAL
             || froggy.getRollerState() == RollerState.INTAKE_ALGAE 
             || froggy.getRollerState() == RollerState.INTAKE_CORAL;
     }
