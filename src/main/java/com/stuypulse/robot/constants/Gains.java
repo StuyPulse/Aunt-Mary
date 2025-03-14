@@ -43,7 +43,7 @@ public interface Gains {
             public interface FF {
                 double kS = 0.2272; 
                 double kV = 0.0095901;
-                double kA = 0.0014261;
+                double kA = 0.0014361;
                 double kG = 0.69269;
             }
         }

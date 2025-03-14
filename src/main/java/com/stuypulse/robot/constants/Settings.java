@@ -222,8 +222,8 @@ public interface Settings {
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
         public interface Constraints {
-            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(450.0);
-            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(900.0);
+            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(400.0);
+            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(800.0);
 
             Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
             Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
@@ -235,7 +235,7 @@ public interface Settings {
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
         }
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(7.0);
     }
 
     public interface Froggy {
