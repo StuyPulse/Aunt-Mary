@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDrivePIDAssistToClosestL1Shooter extends Command {
+public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final CommandSwerveDrivetrain swerve;
     private final Gamepad driver;
@@ -48,7 +48,7 @@ public class SwerveDrivePIDAssistToClosestL1Shooter extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1Shooter(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestL1ShooterReady(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -91,7 +91,7 @@ public class SwerveDrivePIDAssistToClosestL1Shooter extends Command {
 
     @Override
     public void execute() {
-        Pose2d targetPose = closestReefFace.getL1ShooterTargetPose();
+        Pose2d targetPose = closestReefFace.getL1ShooterClearPose();
         targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
 
         controller.update(targetPose, swerve.getPose());

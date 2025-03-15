@@ -51,6 +51,7 @@ import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
+import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
@@ -82,7 +83,8 @@ import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriv
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1Shooter;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
@@ -251,21 +253,28 @@ public class RobotContainer {
 
         // L1
         driver.getRightBumper()
-            .whileTrue(new ConditionalCommand(
-                new SwerveDrivePIDAssistToClosestL1Shooter(driver).onlyIf(() -> shooter.hasCoral()), 
-                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
-                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
-                        .andThen(new FroggyRollerShootCoral())), 
-                () -> shooter.hasCoral()))
-            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
-                .andThen(new FroggyPivotToL1())
-                .onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
-            .onTrue(new SuperStructureCoralL1().onlyIf(() -> shooter.hasCoral()))
-            .onFalse(new FroggyPivotToStow().onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
-            .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() == RollerState.SHOOT_CORAL));
-
+            .whileTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureCoralL1())
+                .onlyIf(() -> shooter.hasCoral()))
+            .onFalse(new FroggyPivotToStow().alongWith(new FroggyRollerStop()).onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));
+        
+        driver.getRightBumper().debounce(0.15)
+            .whileTrue(new ConditionalCommand(
+                new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
+                    .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
+                    .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
+                        .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
+                            .andThen(new ShooterShootL1()))),
+                new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
+                    .andThen(new FroggyPivotToL1())
+                    .alongWith(new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
+                        .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
+                        .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
+                            .andThen(new FroggyRollerShootCoral()))), 
+                () -> shooter.hasCoral()));
 
         // L4 Coral Score
         driver.getTopButton()

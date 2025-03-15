@@ -179,6 +179,11 @@ public interface ReefUtil {
                 .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER, 0, Rotation2d.k180deg));
         }
 
+        public Pose2d getL1ShooterClearPose() {
+            return getL1ShooterTargetPose().transformBy(new Transform2d(
+                Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER - Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero));
+        }
+
         public Pose2d getL1FroggyScorePose() {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY, 
@@ -191,6 +196,14 @@ public interface ReefUtil {
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROGGY + 0.05, 
                 0, 
                 Rotation2d.kCW_90deg));
+        }
+
+        public boolean isAlignedToL1ShooterTarget() {
+            Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
+            Pose2d targetPose = getL1ShooterTargetPose();
+            return Math.abs(robotPose.getX() - targetPose.getX()) < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE.get()
+                && Math.abs(robotPose.getY() - targetPose.getY()) < Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE.get()
+                && Math.abs(robotPose.getRotation().minus(targetPose.getRotation()).getRadians()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.get();
         }
     }
 
