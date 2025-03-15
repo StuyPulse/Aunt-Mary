@@ -350,8 +350,11 @@ public class RobotContainer {
             .onFalse(new SwerveDriveWaitUntilClearFromBarge118().andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
+        // Align to closest Coral Station
         driver.getRightStickButton()
-            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+            .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+                .until(() -> swerve.getPose().getX() < Field.REEF_CENTER.getX())
+                .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
                 .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire Closest Reef Algae
