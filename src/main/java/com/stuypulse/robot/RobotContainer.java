@@ -9,7 +9,7 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
-import com.stuypulse.robot.commands.autons.FDCB.FunnelFourPiece;
+import com.stuypulse.robot.commands.autons.FDCB.FunnelFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.PathlessFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
@@ -21,6 +21,7 @@ import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
+import com.stuypulse.robot.commands.autons.IKLA.FunnelFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.PathlessFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
@@ -203,6 +204,7 @@ public class RobotContainer {
 
         // Manual Shoot
         driver.getDPadRight()
+            .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
             .onTrue(new ConditionalCommand(
                 new ConditionalCommand(
                     new FroggyRollerShootCoral(),
@@ -234,6 +236,7 @@ public class RobotContainer {
             .onTrue(new SuperStructureFeed())
             .onTrue(new ShooterStop()) // Exit algae hold state
             .onTrue(new ClimbClose())
+            .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
@@ -245,11 +248,12 @@ public class RobotContainer {
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
+            .whileTrue(new LEDApplyPattern(Settings.LED.FROGGY_INTAKE_COLOR_CORAL))
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
                 .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
                 .andThen(new FroggyPivotToStow()))
-            .onFalse(new FroggyRollerHoldCoral());
+            .onFalse(new FroggyRollerHoldCoral()); 
 
         // L1
         driver.getRightBumper()
@@ -395,6 +399,7 @@ public class RobotContainer {
                     .alongWith(new SuperStructureAlgaeL2Front())
                     .andThen(new SwerveDriveNudgeForward()), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae()))
+            .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))
             .onFalse(new ShooterHoldAlgae());
@@ -591,12 +596,19 @@ public class RobotContainer {
         PATHLESS_BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
         PATHLESS_RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
 
-        AutonConfig FUNNEL_BLUE_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPiece::new,
-        "Blue F to HP", "Blue B BackOut");
-        AutonConfig FUNNEL_RED_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPiece::new,
-        "Red F to HP", "Red B BackOut");
+        AutonConfig FUNNEL_BLUE_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPieceFDCB::new,
+        "Blue F to HP");
+        AutonConfig FUNNEL_RED_FOUR_PIECE_FDCB = new AutonConfig("Funnel 4 Piece FDCB", FunnelFourPieceFDCB::new,
+        "Red F to HP");
         FUNNEL_BLUE_FOUR_PIECE_FDCB.registerBlue(autonChooser);
         FUNNEL_RED_FOUR_PIECE_FDCB.registerRed(autonChooser);
+
+        AutonConfig FUNNEL_BLUE_FOUR_PIECE_IKLA = new AutonConfig("Funnel 4 Piece IKLA", FunnelFourPieceIKLA::new,
+        "Blue I to HP");
+        AutonConfig FUNNEL_RED_FOUR_PIECE_IKLA = new AutonConfig("Funnel 4 Piece IKLA", FunnelFourPieceIKLA::new,
+        "Red I to HP");
+        FUNNEL_BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        FUNNEL_RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

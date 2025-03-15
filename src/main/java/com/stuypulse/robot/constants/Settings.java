@@ -111,7 +111,7 @@ public interface Settings {
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.1; // From bumper
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.23; // From bumper, 9 inches (2 corals)
             }
         }
     }
@@ -244,7 +244,6 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20 - 5);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(44);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
@@ -282,30 +281,26 @@ public interface Settings {
     public interface LED {
         LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kRed);
 
-        LEDPattern ALIGN_COLOR = LEDPattern.solid(Color.kYellow);
+        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kPink);
+
+        LEDPattern DEFAULT_ALIGN_COLOR = LEDPattern.solid(Color.kYellow);
+        LEDPattern ALIGN_RIGHT_COLOR = LEDPattern.solid(Color.kRed);
         LEDPattern SCORE_COLOR = LEDPattern.solid(Color.kGreen);
-        LEDPattern ABORT_COLOR = LEDPattern.solid(Color.kBlue);
 
         LEDPattern PROCESSOR_SCORE_ANGLE = LEDPattern.solid(Color.kPurple);
-        LEDPattern INTAKE_COLOR = LEDPattern.rainbow(255, 255);
-
+        LEDPattern INTAKE_COLOR_ALGAE = LEDPattern.solid(Color.kTurquoise);
+        LEDPattern FROGGY_INTAKE_COLOR_CORAL = LEDPattern.solid(Color.kWhite);
+        
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);
 
-        LEDPattern CLIMB_OPEN_COLOR = LEDPattern.rainbow(255, 255);
+        LEDPattern CLIMB_OPEN_COLOR = LEDPattern.solid(Color.kYellow);
 
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
 
+        LEDPattern SHIMMY_COLOR = LEDPattern.solid(Color.kRed);
+
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled
-
-        //Side Alignment color
-        LEDPattern LEFT_SIDE_COLOR = LEDPattern.solid(Color.kYellow);
-        LEDPattern RIGHT_SIDE_COLOR = LEDPattern.solid(Color.kBlue);
-
-        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kBrown);
-
-        LEDPattern TIMEOUT_COLOR = LEDPattern.solid(Color.kBlack);
-
     }
 
     public interface Driver {

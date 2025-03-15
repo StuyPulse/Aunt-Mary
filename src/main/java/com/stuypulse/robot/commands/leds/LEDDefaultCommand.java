@@ -12,6 +12,7 @@ import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LEDDefaultCommand extends Command{
@@ -30,13 +31,6 @@ public class LEDDefaultCommand extends Command{
         addRequirements(leds);
     }
 
-    private boolean isIntaking() {
-        return shooter.getState() == ShooterState.ACQUIRE_ALGAE 
-            || shooter.getState() == ShooterState.ACQUIRE_CORAL
-            || froggy.getRollerState() == RollerState.INTAKE_ALGAE 
-            || froggy.getRollerState() == RollerState.INTAKE_CORAL;
-    }
-
     private boolean isScoring() {
         return shooter.isShooting()
             || shooter.getState() == ShooterState.SHOOT_ALGAE
@@ -52,6 +46,9 @@ public class LEDDefaultCommand extends Command{
         else if (climb.getState() == ClimbState.OPEN) {
             leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
         }
+        else if (climb.getState() == ClimbState.SHIMMY) {
+            leds.applyPattern(Settings.LED.SHIMMY_COLOR);
+        }
         else if (climb.getState() == ClimbState.CLIMBING) {
             leds.applyPattern(Settings.LED.CLIMBING_COLOR);
         }
@@ -61,11 +58,12 @@ public class LEDDefaultCommand extends Command{
         else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE) {
             leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
         }
-        else if (isIntaking()) {
-            leds.applyPattern(Settings.LED.INTAKE_COLOR);
-        }
         else if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
         }
-    }
+        else {
+            leds.applyPattern(LEDPattern.kOff);
+        }
+    } 
+
 }

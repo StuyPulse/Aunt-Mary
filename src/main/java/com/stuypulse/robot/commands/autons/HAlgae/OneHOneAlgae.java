@@ -37,7 +37,7 @@ public class OneHOneAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBranchScore(CoralBranch.H, 4, true)
                     .withTranslationalConstraints(1.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(1.75)
-                    .deadlineFor(new LEDApplyPattern(CoralBranch.H.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.H.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),

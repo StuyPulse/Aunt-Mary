@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.autons.FDCB;
+package com.stuypulse.robot.commands.autons.IKLA;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
@@ -9,12 +9,14 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchClear;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -27,23 +29,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FunnelFourPiece extends SequentialCommandGroup {
+public class FunnelFourPieceIKLA extends SequentialCommandGroup {
     
-    public FunnelFourPiece(PathPlannerPath... paths) {
+    public FunnelFourPieceIKLA(PathPlannerPath... paths) {
 
         addCommands(
 
-            // Score Preload on F
+            // Score Preload on I
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
+                new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
                     .withTranslationalConstraints(3, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(1.75)
-                    .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
 
-            // To HP, Score D
+            // To HP, Score K
             new ParallelCommandGroup(
                 new ShooterShootL4Front()
                     .andThen(new WaitCommand(0.125))
@@ -66,7 +68,7 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -74,14 +76,14 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                     )
             ),
 
-            // To HP, Score C
+            // To HP, Score L
             new ParallelCommandGroup(
                 new ShooterShootL4Front()
                     .andThen(new WaitCommand(0.125))
                         .andThen(new ShooterStop()),
                 new WaitCommand(0.1)
                     .andThen(
-                        new SwerveDrivePIDToCoralStation(true)
+                        new SwerveDrivePIDToCoralStation(false)
                     ),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
@@ -96,7 +98,7 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -104,14 +106,14 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                     )
             ),
 
-           // To HP, Score B
+           // To HP, Score A
            new ParallelCommandGroup(
             new ShooterShootL4Front()
                 .andThen(new WaitCommand(0.125))
                     .andThen(new ShooterStop()),
             new WaitCommand(0.1)
                 .andThen(
-                    new SwerveDrivePIDToCoralStation(true)
+                    new SwerveDrivePIDToCoralStation(false)
                 ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
@@ -125,13 +127,13 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
-                                .withTolerance(Units.inchesToMeters(3.0), Units.inchesToMeters(3.0), Units.degreesToRadians(5.0))
-                                .withTranslationalConstraints(6, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
-                                .withTimeout(3)
-                                .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
-                            new SuperStructureCoralL4Front(),
-                            new SuperStructureWaitUntilAtTarget()
+                            new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.A, 4, true, SuperStructureState.L4_FRONT)
+                                .withTimeout(7),
+                            new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                                .andThen(
+                                    new SuperStructureCoralL4Front()
+                                        .andThen(new SuperStructureWaitUntilAtTarget())
+                                )
                         )
                     )
             ),
@@ -143,7 +145,7 @@ public class FunnelFourPiece extends SequentialCommandGroup {
                         .andThen(new ShooterStop()),
                 new WaitCommand(0.1)
                     .andThen(
-                        CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
+                        new SwerveDrivePIDToCoralStation(false)
                     ),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
