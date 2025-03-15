@@ -13,12 +13,15 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {
     private final SuperStructureState correspondingSuperStructureState;
+    private Supplier<Boolean> shouldSkipClearance;
 
-    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState) {
+    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState, Supplier<Boolean> shouldSkipClearance) {
         this.correspondingSuperStructureState = correspondingSuperStructureState;
+        this.shouldSkipClearance = shouldSkipClearance;
 
         addCommands(
             new WaitUntilCommand(this::isClear)
+                .until(shouldSkipClearance::get)
                 .deadlineFor(new SwerveDrivePIDToBranchClear(branch, isScoringFrontSide))
                 .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR)),
             new SwerveDrivePIDToBranchScore(branch, level, isScoringFrontSide)
@@ -26,8 +29,12 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
         );
     } 
 
+    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState, boolean shouldSkipClearance) {
+        this(branch, level, isScoringFrontSide, correspondingSuperStructureState, () -> shouldSkipClearance);
+    }
+
     public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, SuperStructureState correspondingSuperStructureState) {
-        this(() -> branch, level, isFrontFacingReef, correspondingSuperStructureState);
+        this(() -> branch, level, isFrontFacingReef, correspondingSuperStructureState, false);
     }
 
     private boolean isClear() {
