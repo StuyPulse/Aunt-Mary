@@ -153,7 +153,7 @@ public interface Settings {
 
     public interface Elevator {
 
-        double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
+        double FEED_HEIGHT_METERS = 1.047119;
 
         // Coral
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
@@ -279,7 +279,7 @@ public interface Settings {
     }
 
     public interface LED {
-        LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kRed);
+        LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kBlue);
 
         LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kPink);
 
