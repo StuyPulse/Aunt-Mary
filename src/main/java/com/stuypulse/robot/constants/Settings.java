@@ -107,7 +107,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.5;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.43;
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
@@ -129,7 +129,7 @@ public interface Settings {
         SmartNumber CORAL_SHOOT_SPEED_L4_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L4 Front Shoot Speed", -1.0);
         SmartNumber CORAL_SHOOT_SPEED_L4_BACK = new SmartNumber("Shooter/Target Speeds/Coral L4 Back Shoot Speed", 0.75);
 
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.17);
+        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.2);
         SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
 
         SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 0.5);
