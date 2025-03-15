@@ -94,7 +94,7 @@ public interface Settings {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
@@ -158,7 +158,7 @@ public interface Settings {
         // Coral
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
-        double FRONT_L2_HEIGHT_METERS = 1.538086;
+        double FRONT_L2_HEIGHT_METERS = 1.51086;
         double FRONT_L3_HEIGHT_METERS = 1.056621;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
@@ -175,16 +175,15 @@ public interface Settings {
         double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051;
 
         double PROCESSOR_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
-
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
         double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
 
         public interface Constraints {
             double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 2;
-            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 3.75;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 5;
     
             double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
-            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.75;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 5;
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
@@ -280,15 +279,16 @@ public interface Settings {
 
     public interface LED {
         LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kBlue);
+        LEDPattern CORAL_STATION_ALIGN_COLOR = LEDPattern.solid(Color.kRed);
 
-        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kPink);
+        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kWhite);
 
         LEDPattern DEFAULT_ALIGN_COLOR = LEDPattern.solid(Color.kYellow);
         LEDPattern ALIGN_RIGHT_COLOR = LEDPattern.solid(Color.kRed);
         LEDPattern SCORE_COLOR = LEDPattern.solid(Color.kGreen);
 
         LEDPattern PROCESSOR_SCORE_ANGLE = LEDPattern.solid(Color.kPurple);
-        LEDPattern INTAKE_COLOR_ALGAE = LEDPattern.solid(Color.kTurquoise);
+        LEDPattern INTAKE_COLOR_ALGAE = LEDPattern.solid(Color.kGreen);
         LEDPattern FROGGY_INTAKE_COLOR_CORAL = LEDPattern.solid(Color.kWhite);
         
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);

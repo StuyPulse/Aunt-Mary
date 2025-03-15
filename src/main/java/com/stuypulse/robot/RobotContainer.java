@@ -156,7 +156,7 @@ public class RobotContainer {
         configureAutomaticCommands();
         configureDriverButtonBindings();
         configureAutons();
-        //configureSysids();
+        // configureSysids();
 
         // swerve.registerTelemetry(telemetry::telemeterize);
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -261,24 +261,28 @@ public class RobotContainer {
             .whileTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureCoralL1())
                 .onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
+                .andThen(new FroggyPivotToL1())
+                .onlyIf(() -> !shooter.hasCoral()))
             .onFalse(new FroggyPivotToStow().alongWith(new FroggyRollerStop()).onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1));
         
-        driver.getRightBumper().debounce(0.15)
+        driver.getRightBumper().debounce(0.25)
+            .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
+                .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1)
+                .andThen(new LEDApplyPattern(Settings.LED.SCORE_COLOR)))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
                     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
                     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
                         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
                             .andThen(new ShooterShootL1()))),
-                new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
-                    .andThen(new FroggyPivotToL1())
-                    .alongWith(new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
-                        .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                        .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
-                            .andThen(new FroggyRollerShootCoral()))), 
-                () -> shooter.hasCoral()));
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
+                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
+                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
+                        .andThen(new FroggyRollerShootCoral())), 
+                () -> shooter.hasCoral()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));
 
         // L4 Coral Score
         driver.getTopButton()
@@ -336,6 +340,9 @@ public class RobotContainer {
         
         // // Barge 118 style score
         driver.getLeftButton()
+            .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
+                .until(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
+                .andThen(new LEDApplyPattern(Settings.LED.SCORE_COLOR)))
             .whileTrue(new ConditionalCommand(
                 new SuperStructureBarge118()
                     .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
@@ -356,9 +363,11 @@ public class RobotContainer {
         
         // Align to closest Coral Station
         driver.getRightStickButton()
+            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
             .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
                 .until(() -> swerve.getPose().getX() < Field.REEF_CENTER.getX())
                 .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire Closest Reef Algae
