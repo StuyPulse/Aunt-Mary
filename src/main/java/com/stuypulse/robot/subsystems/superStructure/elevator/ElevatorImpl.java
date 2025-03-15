@@ -19,11 +19,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Optional;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
-    private final DigitalInput bumpSwitchBottom;
+    private final Pigeon2 gyro;
 
     private Optional<Double> voltageOverride;
 
@@ -35,13 +36,13 @@ public class ElevatorImpl extends Elevator {
         motor = new TalonFX(Ports.Elevator.MOTOR, Settings.CANIVORE_NAME);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 
+        gyro = new Pigeon2(Ports.Elevator.PIGEON);
+
         velLimit = Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP;
         accelLimit = Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_AUTON;
         Motors.Elevator.MOTOR_CONFIG.withMotionProfile(velLimit, accelLimit);
 
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
-
-        bumpSwitchBottom = new DigitalInput(Ports.Elevator.BOTTOM_SWITCH);
 
         voltageOverride = Optional.empty();
     }
@@ -76,11 +77,7 @@ public class ElevatorImpl extends Elevator {
 
     @Override
     public double getAccelGs() {
-        return motor.getAcceleration().getValueAsDouble();
-    }
-
-    private boolean atBottom() {
-        return !bumpSwitchBottom.get();
+        return gyro.getAccelerationX().getValueAsDouble();
     }
 
     @Override
@@ -99,10 +96,6 @@ public class ElevatorImpl extends Elevator {
     @Override
     public void periodic() {
         super.periodic();
-
-        if (atBottom()) {
-            motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
-        }
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {
             if (voltageOverride.isPresent()) {

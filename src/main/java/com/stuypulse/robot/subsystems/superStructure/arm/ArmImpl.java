@@ -17,6 +17,7 @@ import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.ArmDriveFeedForward;
+import com.stuypulse.robot.util.ArmElevatorFeedForward;
 import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.control.Controller;
@@ -76,6 +77,7 @@ public class ArmImpl extends Arm {
         controller = new MotorFeedforward(kS, kV, kA).position()
             .add(new ArmFeedforward(kG))
             .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs))
+            // .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
             .add(new PIDController(kP, kI, kD))
             .setSetpointFilter(motionProfile);
 
