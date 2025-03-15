@@ -208,12 +208,10 @@ public class RobotContainer {
             .onTrue(new ConditionalCommand(
                 new ConditionalCommand(
                     new FroggyRollerShootCoral(),
-                    new ConditionalCommand(
-                        new ShooterShootAlgae(),
-                        new FroggyRollerShootAlgae(), 
-                        () -> superStructure.getState() == SuperStructureState.PROCESSOR),
+                    new ShooterShootAlgae().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR)
+                        .alongWith(new FroggyRollerShootAlgae().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL)),
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-                new ShooterShootBasedOnSuperStructure(), 
+                new ShooterShootBasedOnSuperStructure(),
                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE 
                     || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE
                     || superStructure.getState() == SuperStructureState.PROCESSOR))
@@ -242,7 +240,8 @@ public class RobotContainer {
 
         // Froggy pivot to processor
         driver.getLeftBumper()
-            .onTrue(new FroggyPivotToProcessor())
+            .onTrue(new FroggyPivotToProcessor()
+                .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL))
             .onTrue(new SuperStructureProcessor()
                 .onlyIf(() -> !shooter.hasCoral()));
 
