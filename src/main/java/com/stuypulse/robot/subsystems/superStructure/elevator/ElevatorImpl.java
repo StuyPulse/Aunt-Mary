@@ -77,7 +77,7 @@ public class ElevatorImpl extends Elevator {
 
     @Override
     public double getAccelGs() {
-        return gyro.getAccelerationY().getValueAsDouble();
+        return gyro.getAccelerationY().getValueAsDouble() - 1;
     }
 
     @Override
