@@ -14,6 +14,7 @@ import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -44,9 +45,10 @@ public class ScoreRoutine extends SequentialCommandGroup {
                         .andThen(new SuperStructureSetState(correspondingSuperStructureState))
                         .onlyIf(() -> superStructure.getState() != correspondingSuperStructureState)
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                )
-                .andThen(new SuperStructureWaitUntilAtTarget()) // Re-check positioning
-                .andThen(Shooter.getCorrespondingShootCommand(level, isFrontFacingReef))
+                ),
+            new SuperStructureWaitUntilAtTarget(), // Re-check positioning
+            Shooter.getCorrespondingShootCommand(level, isFrontFacingReef),
+            new LEDApplyPattern(Settings.LED.SCORE_COLOR)
         );
     }
 
