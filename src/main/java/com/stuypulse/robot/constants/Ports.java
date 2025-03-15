@@ -42,7 +42,6 @@ public interface Ports {
 
     public interface Elevator {
         int MOTOR = 31;
-        int PIGEON = 5;
     }
 
     public interface LED {

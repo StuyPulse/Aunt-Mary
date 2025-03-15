@@ -126,11 +126,6 @@ public class ElevatorSimu extends Elevator {
     }
 
     @Override
-    public double getAccelGs() {
-        return accel.get();
-    }
-
-    @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
     }

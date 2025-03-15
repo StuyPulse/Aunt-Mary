@@ -24,7 +24,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
-    private final Pigeon2 gyro;
 
     private Optional<Double> voltageOverride;
 
@@ -35,8 +34,6 @@ public class ElevatorImpl extends Elevator {
         super();
         motor = new TalonFX(Ports.Elevator.MOTOR, Settings.CANIVORE_NAME);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
-
-        gyro = new Pigeon2(Ports.Elevator.PIGEON);
 
         velLimit = Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP;
         accelLimit = Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_AUTON;
@@ -76,11 +73,6 @@ public class ElevatorImpl extends Elevator {
     }
 
     @Override
-    public double getAccelGs() {
-        return gyro.getAccelerationY().getValueAsDouble() - 1;
-    }
-
-    @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
     }
@@ -108,8 +100,6 @@ public class ElevatorImpl extends Elevator {
         else {
             motor.setVoltage(0);
         }
-
-        SmartDashboard.putNumber("Elevator/Accel (g)", getAccelGs());
 
         SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
