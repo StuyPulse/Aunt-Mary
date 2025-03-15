@@ -43,23 +43,23 @@ public interface Gains {
             public interface FF {
                 double kS = 0.2272; 
                 double kV = 0.0095901;
-                double kA = 0.0014361;
+                double kA = 0.0015361;
                 double kG = 0.69269;
             }
         }
 
         public interface Empty  {
             public interface PID {
-                double kP = 0.022194;
+                double kP = 0.080945;
                 double kI = 0.0;
-                double kD = 0.00021311;
+                double kD = 0.00078716;
             }
 
             public interface FF {
-                double kS = 0.041733; 
-                double kV = 0.011199;
-                double kA = 0.00123655;
-                double kG = 0.60473;
+                double kS = 0.078337; 
+                double kV = 0.010338;
+                double kA = 0.001046;
+                double kG = 0.3;
             }
         }
     }
