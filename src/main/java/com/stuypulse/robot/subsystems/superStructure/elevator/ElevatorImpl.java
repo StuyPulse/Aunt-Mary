@@ -109,6 +109,8 @@ public class ElevatorImpl extends Elevator {
             motor.setVoltage(0);
         }
 
+        SmartDashboard.putNumber("Elevator/Accel (g)", getAccelGs());
+
         SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
