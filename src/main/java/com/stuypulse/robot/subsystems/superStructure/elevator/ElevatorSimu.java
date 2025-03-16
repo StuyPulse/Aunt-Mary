@@ -120,9 +120,18 @@ public class ElevatorSimu extends Elevator {
         return sim.getPositionMeters();
     }
 
+    private boolean isWithinTolerance(double toleranceMeters) {
+        return Math.abs(getTargetHeight() - getCurrentHeight()) < toleranceMeters;
+    }
+
     @Override
     public boolean atTargetHeight() {
-        return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+        return isWithinTolerance(Settings.Elevator.HEIGHT_TOLERANCE_METERS);
+    }
+
+    @Override
+    public boolean atCanSkipClearanceHeight() {
+        return isWithinTolerance(Settings.Elevator.HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE);
     }
 
     @Override

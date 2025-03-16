@@ -24,14 +24,32 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
             new SwerveDrivePIDToBranchScore(branch, level, isScoringFrontSide)
                 .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
         );
+    }
+
+    public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState, double maxVel, double maxAccel) {
+        this.correspondingSuperStructureState = correspondingSuperStructureState;
+
+        addCommands(
+            new WaitUntilCommand(this::isClear)
+                .deadlineFor(new SwerveDrivePIDToBranchClear(branch, isScoringFrontSide)
+                    .withTranslationalConstraints(maxVel, maxAccel))
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+            new SwerveDrivePIDToBranchScore(branch, level, isScoringFrontSide)
+                .withTranslationalConstraints(maxVel, maxAccel)
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
+        );
     } 
 
     public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, SuperStructureState correspondingSuperStructureState) {
         this(() -> branch, level, isFrontFacingReef, correspondingSuperStructureState);
     }
 
+    public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, SuperStructureState correspondingSuperStructureState, double maxVel, double maxAccel) {
+        this(() -> branch, level, isFrontFacingReef, correspondingSuperStructureState, maxVel, maxAccel);
+    }
+
     private boolean isClear() {
         return SuperStructure.getInstance().getState() == correspondingSuperStructureState
-            && SuperStructure.getInstance().atTarget();
+            && SuperStructure.getInstance().canSkipClearance();
     }
 }

@@ -98,9 +98,18 @@ public class ArmImpl extends Arm {
         );
     }
 
+    private boolean isWithinTolerance(Rotation2d tolerance) {
+        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
+    }
+
     @Override
     public boolean atTargetAngle() {
-        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < Settings.Arm.ANGLE_TOLERANCE.getDegrees();
+        return isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE);
+    }
+
+    @Override
+    public boolean atCanSkipClearanceAngle() {
+        return isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE_TO_SKIP_CLEARANCE);
     }
 
     private Rotation2d getTargetAngle() {

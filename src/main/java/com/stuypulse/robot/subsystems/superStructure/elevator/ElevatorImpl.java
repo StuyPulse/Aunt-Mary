@@ -67,9 +67,18 @@ public class ElevatorImpl extends Elevator {
         return SLMath.clamp(getState().getTargetHeight(), Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
     }
 
+    private boolean isWithinTolerance(double toleranceMeters) {
+        return Math.abs(getTargetHeight() - getCurrentHeight()) < toleranceMeters;
+    }
+
     @Override
     public boolean atTargetHeight() {
-        return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
+        return isWithinTolerance(Settings.Elevator.HEIGHT_TOLERANCE_METERS);
+    }
+
+    @Override
+    public boolean atCanSkipClearanceHeight() {
+        return isWithinTolerance(Settings.Elevator.HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE);
     }
 
     @Override
