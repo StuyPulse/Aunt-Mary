@@ -12,7 +12,7 @@
         "y": 5.217973981584821
       },
       "isLocked": false,
-      "linkedName": "Red IJ Algae"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

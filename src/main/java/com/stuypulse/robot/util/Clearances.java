@@ -29,7 +29,10 @@ public interface Clearances {
     }
 
     public static boolean isFroggyClearFromAllObstables() {
-        return isFroggyClearFromCoralStations() && isFroggyClearFromFieldWalls() && isFroggyClearFromReef();
+        return isFroggyClearFromCoralStations() 
+            && isFroggyClearFromFieldWalls() 
+            && isFroggyClearFromAllianceReef()
+            && isFroggyClearFromOppositeAllianceReef();
     }
 
     private static boolean isFroggyClearFromCoralStations() {
@@ -71,11 +74,19 @@ public interface Clearances {
         return true;
     }
 
-    private static boolean isFroggyClearFromReef() {
+    private static boolean isFroggyClearFromAllianceReef() {
         return Field.REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROGGY 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.WIDTH_WITH_BUMPERS_METERS / 2)
-            || !CommandSwerveDrivetrain.getInstance().isFroggyFacingReef();
+            || !CommandSwerveDrivetrain.getInstance().isFroggyFacingAllianceReef();
+    }
+
+    private static boolean isFroggyClearFromOppositeAllianceReef() {
+        return Field.transformToOppositeAlliance(new Pose2d(Field.REEF_CENTER, Rotation2d.kZero)).getTranslation().getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
+            > (Settings.Clearances.CLEARANCE_DISTANCE_FROGGY 
+                + Field.CENTER_OF_REEF_TO_REEF_FACE 
+                + Constants.WIDTH_WITH_BUMPERS_METERS / 2)
+            || !CommandSwerveDrivetrain.getInstance().isFroggyFacingOppositeAllianceReef();
     }
 }

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7714437480737106,
-        "y": 1.2638544094105648
+        "x": 2.819261450700758,
+        "y": 1.4265286809716444
       },
       "isLocked": false,
       "linkedName": "Red F"
@@ -20,8 +20,8 @@
         "y": 0.842264344262295
       },
       "prevControl": {
-        "x": 4.987502875368607,
-        "y": 2.8808388960719995
+        "x": 4.785372801520587,
+        "y": 2.706668129611944
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

@@ -6,22 +6,10 @@
 
 package com.stuypulse.robot.commands.shooter;
 
-import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-public class ShooterHoldAlgae extends InstantCommand {
-
-    private final Shooter shooter;
-
+public class ShooterHoldAlgae extends ShooterSetState {
     public ShooterHoldAlgae() {
-        shooter = Shooter.getInstance();
-        addRequirements(shooter);
-    }
-
-    @Override
-    public void initialize() {
-        shooter.setState(ShooterState.HOLD_ALGAE);
+        super(ShooterState.HOLD_ALGAE);
     }
 }

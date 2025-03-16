@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 5.004760742187499
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.0420048304966505,
+        "y": 3.1903568812779013
+      },
+      "isLocked": false,
+      "linkedName": "Red Barge 3"
+    },
+    {
+      "anchor": {
+        "x": 5.514877755301339,
+        "y": 2.3440329415457586
+      },
+      "prevControl": {
+        "x": 6.918667602539062,
+        "y": 2.779028756277902
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red EF Algae (1)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Red To Algae",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

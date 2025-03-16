@@ -13,6 +13,7 @@ import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
+import com.stuypulse.stuylib.util.StopWatch;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.net.PortForwarder;
@@ -26,12 +27,25 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 
+    public enum RobotMode {
+        DISABLED,
+        AUTON,
+        TELEOP,
+        TEST
+    }
+
+    private static RobotMode mode;
+
     private RobotContainer robot;
     private Command auto;
 
     public static boolean isBlue() {
         return DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+    }
+
+    public static RobotMode getMode() {
+        return mode;
     }
 
     /*************************/
@@ -42,6 +56,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         
         robot = new RobotContainer();
+        mode = RobotMode.DISABLED;
         DataLogManager.start();
         // Allows us to see the limelight feeds even while tethered through USB-B 
         for (int port = 5800; port <= 5809; port++){   
@@ -51,7 +66,7 @@ public class Robot extends TimedRobot {
        
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
-        // if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
+        // if (isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
     }
 
     @Override
@@ -59,7 +74,6 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-
     }
 
     /*********************/
@@ -67,7 +81,9 @@ public class Robot extends TimedRobot {
     /*********************/
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        mode = RobotMode.DISABLED;
+    }
 
     @Override
     public void disabledPeriodic() {}
@@ -78,6 +94,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        mode = RobotMode.AUTON;
         auto = robot.getAutonomousCommand();
         
         if (auto != null) {
@@ -97,6 +114,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        mode = RobotMode.TELEOP;
         if (auto != null) {
             auto.cancel();
         }
@@ -116,6 +134,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        mode = RobotMode.TEST;
         CommandScheduler.getInstance().cancelAll();
     }
 

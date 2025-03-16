@@ -1,5 +1,8 @@
 package com.stuypulse.robot.constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.AprilTag;
@@ -39,6 +42,14 @@ public interface Field {
             rotated.getRotation());
     }
 
+    public static List<Pose2d> transformToOppositeAlliance(List<Pose2d> poses) {
+        List<Pose2d> newPoses = new ArrayList<>();
+        for (Pose2d pose : poses) {
+            newPoses.add(transformToOppositeAlliance(pose));
+        }
+        return newPoses;
+    }
+
     /*** APRILTAGS ***/
 
     enum NamedTags {
@@ -47,23 +58,23 @@ public interface Field {
         RED_PROCESSOR,
         BLUE_BARGE_RED_SIDE,
         RED_BARGE_RED_SIDE,
-        RED_KL,
+        RED_KL, // 6
         RED_AB,
         RED_CD,
         RED_EF,
         RED_GH,
-        RED_IJ,
+        RED_IJ, // 11
         BLUE_CD_CORAL_STATION,
         BLUE_KL_CORAL_STATION,
         BLUE_BARGE_BLUE_SIDE,
         RED_BARGE_BLUE_SIDE,
         BLUE_PROCESSOR,
-        BLUE_CD,
+        BLUE_CD, // 17
         BLUE_AB,
         BLUE_KL,
         BLUE_IJ,
         BLUE_GH,
-        BLUE_EF;
+        BLUE_EF; // 22
 
         public final AprilTag tag;
 
@@ -126,21 +137,22 @@ public interface Field {
         return null;
     }
 
-    /*** REEF POSITIONS ***/
+    /*** REEF ***/
     Translation2d REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + (93.5 - 14.0 * 2) / 2), Field.WIDTH / 2);
+    double LENGTH_OF_REEF_FACE = Units.inchesToMeters(37.04);
     double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
     /*** BARGE POSITIONS ***/
-    public static Pose2d getBargeTargetPose(Pose2d robot) {
+    public static Pose2d getCatapultTargetPose(Pose2d robot) {
         if (Robot.isBlue()) {
             return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE, 
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                 Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
                 NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d());
         } else {
             return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE, 
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                 Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
                 NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d());
         }
@@ -189,6 +201,32 @@ public interface Field {
                 : transformToOppositeAlliance(new Pose2d(blueOriginLineEnd, Rotation2d.kZero)).getTranslation();
         }
 
+        // Kalimul said to add a comment that this is getting the closest point to a line
+        public Pose2d getTargetPose() {
+            Translation2d lineStart = getLineStart();
+            Translation2d lineEnd = getLineEnd();
+            Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
+
+            Vector2D lineStartToEnd = new Vector2D(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
+            Vector2D lineStartToPoint = new Vector2D(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
+            
+            double lineLengthSquared = lineStartToEnd.dot(lineStartToEnd);
+            double dotProduct = lineStartToEnd.dot(lineStartToPoint);
+            
+            double t = dotProduct / lineLengthSquared; // Projection factor
+            
+            double coralStationLength = lineStart.getDistance(lineEnd);
+            double percentToIgnoreFromEachSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2) / coralStationLength;
+            
+            t = Math.max(percentToIgnoreFromEachSide, Math.min(1 - percentToIgnoreFromEachSide, t));
+            
+            Translation2d closestPointOnCoralStation = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
+
+            return new Pose2d(closestPointOnCoralStation, correspondingAprilTag.getLocation().toPose2d().getRotation()).transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION, 
+                0, Rotation2d.kZero));
+        }
+
         public Vector2D getHeadingAsVector() {
             return new Vector2D(
                 Math.cos(correspondingAprilTag.getLocation().getRotation().getZ()), 
@@ -206,23 +244,35 @@ public interface Field {
         }
 
         public static CoralStation getClosestCoralStation() {
-            double closestDistance = Double.MAX_VALUE;
-            CoralStation nearestStation = BLUE_CD_CORAL_STATION;
-
-            for (CoralStation station : CoralStation.values()) {
-                double distance = station.getDistanceToStation();
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    nearestStation = station;
-                }
+            if (Robot.isBlue()) {
+                return BLUE_CD_CORAL_STATION.getDistanceToStation() <  BLUE_KL_CORAL_STATION.getDistanceToStation()
+                    ? BLUE_CD_CORAL_STATION
+                    : BLUE_KL_CORAL_STATION;
             }
-            return nearestStation;
+            else {
+                return RED_CD_CORAL_STATION.getDistanceToStation() <  RED_KL_CORAL_STATION.getDistanceToStation()
+                    ? RED_CD_CORAL_STATION
+                    : RED_KL_CORAL_STATION;
+            }
         }
 
         public static double getDistanceToClosestStation(Pose2d pose) {
             return getClosestCoralStation().getDistanceToStation();
         }
+
+        public static CoralStation getCoralStation(boolean isCD) {
+            if (isCD) {
+                return Robot.isBlue() ?
+                    CoralStation.BLUE_CD_CORAL_STATION : 
+                    CoralStation.RED_CD_CORAL_STATION; 
+            } else {
+                return Robot.isBlue() ?
+                    CoralStation.BLUE_KL_CORAL_STATION :
+                    CoralStation.RED_KL_CORAL_STATION;
+            }
+        }
     }
+
 
     /**** EMPTY FIELD POSES ****/
 

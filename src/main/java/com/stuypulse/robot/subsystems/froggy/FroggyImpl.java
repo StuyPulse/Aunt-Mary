@@ -45,7 +45,6 @@ public class FroggyImpl extends Froggy {
     private MotionProfile motionProfile;
 
     private Optional<Double> pivotVoltageOverride;
-    private Rotation2d pivotOperatorOffset;
 
     protected FroggyImpl() {
         super();
@@ -64,7 +63,6 @@ public class FroggyImpl extends Froggy {
             .filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
 
         pivotVoltageOverride = Optional.empty();
-        pivotOperatorOffset = Rotation2d.kZero;
 
         motionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
 
@@ -99,7 +97,7 @@ public class FroggyImpl extends Froggy {
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
             SLMath.clamp(
-                getPivotState().getTargetAngle().getDegrees() + pivotOperatorOffset.getDegrees(),
+                getPivotState().getTargetAngle().getDegrees(),
                 Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
                 Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
     }
@@ -122,16 +120,6 @@ public class FroggyImpl extends Froggy {
     @Override
     public void setPivotVoltageOverride(Optional<Double> voltage) {
         this.pivotVoltageOverride = voltage;
-    }
-
-    @Override
-    public void setPivotOperatorOffset(Rotation2d offset) {
-        this.pivotOperatorOffset = offset;
-    }
-
-    @Override
-    public Rotation2d getPivotOperatorOffset() {
-        return this.pivotOperatorOffset;
     }
 
     @Override

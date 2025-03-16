@@ -34,7 +34,7 @@ public class SwerveDrivePIDToPose extends Command {
     private final CommandSwerveDrivetrain swerve;
 
     private final HolonomicController controller;
-    private final Supplier<Pose2d> poseSupplier;
+    private final Supplier<Pose2d> targetPose;
 
     private double maxVelocity;
     private double maxAcceleration;
@@ -49,15 +49,13 @@ public class SwerveDrivePIDToPose extends Command {
     private Number thetaTolerance;
     private Number maxVelocityWhenAligned;
 
-    private Pose2d startingPose;
-    private Pose2d targetPose;
     private VStream translationSetpoint;
 
     public SwerveDrivePIDToPose(Pose2d targetPose) {
         this(() -> targetPose);
     }
 
-    public SwerveDrivePIDToPose(Supplier<Pose2d> poseSupplier) {
+    public SwerveDrivePIDToPose(Supplier<Pose2d> targetPose) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         controller = new HolonomicController(
@@ -71,7 +69,7 @@ public class SwerveDrivePIDToPose extends Command {
 
         translationSetpoint = getNewTranslationSetpointGenerator();
 
-        this.poseSupplier = poseSupplier;
+        this.targetPose = targetPose;
 
         targetPose2d = Field.FIELD2D.getObject("Target Pose");
 
@@ -103,9 +101,14 @@ public class SwerveDrivePIDToPose extends Command {
         return this;
     }
 
+    public SwerveDrivePIDToPose withoutMotionProfile() {
+        this.translationSetpoint = VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        return this;
+    }
+
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
     private VStream getNewTranslationSetpointGenerator() {
-        return VStream.create(() -> new Vector2D(targetPose.getTranslation()))
+        return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
             .filtered(new TranslationMotionProfileIan(
                 this.maxVelocity, 
                 this.maxAcceleration,
@@ -115,21 +118,19 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public void initialize() {
-        startingPose = swerve.getPose();
-        targetPose = poseSupplier.get();
         translationSetpoint = getNewTranslationSetpointGenerator();
     }
 
     private boolean isAlignedX() {
-        return Math.abs(targetPose.getX() - swerve.getPose().getX()) < xTolerance.doubleValue();
+        return Math.abs(targetPose.get().getX() - swerve.getPose().getX()) < xTolerance.doubleValue();
     }
 
     private boolean isAlignedY() {
-        return Math.abs(targetPose.getY() - swerve.getPose().getY()) < yTolerance.doubleValue();
+        return Math.abs(targetPose.get().getY() - swerve.getPose().getY()) < yTolerance.doubleValue();
     }
 
     private boolean isAlignedTheta() {
-        return Math.abs(targetPose.getRotation().minus(swerve.getPose().getRotation()).getRadians()) < thetaTolerance.doubleValue();
+        return Math.abs(targetPose.get().getRotation().minus(swerve.getPose().getRotation()).getRadians()) < thetaTolerance.doubleValue();
     }
 
     private boolean isAligned() {
@@ -138,18 +139,18 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public void execute() {
-        targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
+        targetPose2d.setPose(Robot.isBlue() ? targetPose.get() : Field.transformToOppositeAlliance(targetPose.get()));
 
-        controller.update(new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.getRotation()), swerve.getPose());
+        controller.update(new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.get().getRotation()), swerve.getPose());
         
         swerve.setControl(swerve.getRobotCentricSwerveRequest()
             .withVelocityX(controller.getOutput().vxMetersPerSecond)
             .withVelocityY(controller.getOutput().vyMetersPerSecond)
             .withRotationalRate(controller.getOutput().omegaRadiansPerSecond));
         
-        SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
-        SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
-        SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
+        SmartDashboard.putNumber("Alignment/Target x", targetPose.get().getX());
+        SmartDashboard.putNumber("Alignment/Target y", targetPose.get().getY());
+        SmartDashboard.putNumber("Alignment/Target angle", targetPose.get().getRotation().getDegrees());
 
         SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
         SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);

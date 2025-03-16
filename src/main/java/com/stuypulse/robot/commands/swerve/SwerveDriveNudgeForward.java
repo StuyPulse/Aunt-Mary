@@ -16,7 +16,7 @@ public class SwerveDriveNudgeForward extends Command {
     @Override
     public void execute() {
         swerve.setControl(swerve.getRobotCentricSwerveRequest()
-            .withVelocityX(Settings.Swerve.NUDGE_FORWARD_SPEED_METERS_PER_SECOND)
+            .withVelocityX(Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND)
             .withVelocityY(0)
             .withRotationalRate(0)
         );

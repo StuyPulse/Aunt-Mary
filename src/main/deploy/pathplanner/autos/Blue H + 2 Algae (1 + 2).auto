@@ -13,25 +13,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue H to GH Algae"
+            "pathName": "Blue H BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue GH Algae to Barge 3"
+            "pathName": "Blue H BackOut to GH"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Barge 3 to IJ Algae"
+            "pathName": "Blue GH BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue IJ Algae to Barge 3"
+            "pathName": "Blue GH to Barge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Barge to IJ (1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Barge to IJ (2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue IJ BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue IJ to Barge"
           }
         }
       ]

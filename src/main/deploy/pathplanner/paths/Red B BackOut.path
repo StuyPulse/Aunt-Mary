@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.143314034598214,
+        "y": 3.6790130615234373
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.510870159180417,
+        "y": 3.6681510414449683
+      },
+      "isLocked": false,
+      "linkedName": "Red B"
+    },
+    {
+      "anchor": {
+        "x": 2.2097154889787944,
+        "y": 3.6790130615234373
+      },
+      "prevControl": {
+        "x": 2.689777618360771,
+        "y": 3.672576959658847
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red B BackOut"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Red BackOut",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

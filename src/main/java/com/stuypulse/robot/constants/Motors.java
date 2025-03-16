@@ -56,7 +56,6 @@ public interface Motors {
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO);
-			// .withRemoteSensor(Ports.Arm.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Arm.GEAR_RATIO)
     }
 
     public interface Froggy {
@@ -84,7 +83,7 @@ public interface Motors {
 			.withFFConstants(Gains.Elevator.FF.kS, Gains.Elevator.FF.kV, Gains.Elevator.FF.kA, Gains.Elevator.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Elevator_Static)
 			.withSensorToMechanismRatio(1 / Constants.Elevator.Encoders.POSITION_CONVERSION_FACTOR)
-			.withMotionProfile(Settings.Elevator.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
+			.withMotionProfile(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
     }
 
     public interface Climb {
@@ -93,11 +92,8 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
-			.withPIDConstants(Gains.Climb.PID.kP, Gains.Climb.PID.kI, Gains.Climb.PID.kD, 0)
-			.withFFConstants(Gains.Climb.FF.kS, Gains.Climb.FF.kV, Gains.Climb.FF.kA, Gains.Climb.FF.kG, 0)
 			.withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Climb.GEAR_RATIO);
-			// .withRemoteSensor(Ports.Climb.ABSOLUTE_ENCODER, FeedbackSensorSourceValue.FusedCANcoder, Constants.Froggy.GEAR_RATIO);
     }
 
     public static class TalonFXConfig {

@@ -64,8 +64,14 @@
   },
   "NetworkTables": {
     "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
       "SmartDashboard": {
         "Alignment": {
+          "Constraints": {
+            "open": true
+          },
           "open": true
         },
         "Enabled Subsystems": {
@@ -75,6 +81,9 @@
           "Pivot": {
             "open": true
           },
+          "open": true
+        },
+        "Funnel": {
           "open": true
         },
         "Shooter": {

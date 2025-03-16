@@ -45,6 +45,12 @@
           "data": {
             "pathName": "Blue HP to A"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue A BackOut"
+          }
         }
       ]
     }

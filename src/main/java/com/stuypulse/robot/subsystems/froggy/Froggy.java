@@ -40,7 +40,6 @@ public abstract class Froggy extends SubsystemBase {
         STOW(Settings.Froggy.STOW_ANGLE),
         ALGAE_GROUND_PICKUP(Settings.Froggy.ALGAE_GROUND_PICKUP_ANGLE),
         CORAL_GROUND_PICKUP(Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE),
-        GOLF_TEE_ALGAE_PICKUP(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE),
         L1_SCORE_ANGLE(Settings.Froggy.L1_SCORING_ANGLE),
         PROCESSOR_SCORE_ANGLE(Settings.Froggy.PROCESSOR_SCORE_ANGLE),
         CLIMB(Settings.Froggy.CLIMB_ANGLE);
@@ -92,7 +91,6 @@ public abstract class Froggy extends SubsystemBase {
     public void setPivotState(PivotState state) {
         this.pivotState = state;
         setPivotVoltageOverride(Optional.empty());
-        setPivotOperatorOffset(Rotation2d.kZero);
     }
 
     public RollerState getRollerState() {
@@ -110,8 +108,6 @@ public abstract class Froggy extends SubsystemBase {
     public abstract Rotation2d getCurrentAngle();
 
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
-    public abstract void setPivotOperatorOffset(Rotation2d offset);
-    public abstract Rotation2d getPivotOperatorOffset();
 
     public abstract SysIdRoutine getPivotSysIdRoutine();
 

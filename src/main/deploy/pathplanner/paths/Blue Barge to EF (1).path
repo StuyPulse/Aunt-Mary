@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 4.996803501674107
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.90591561453683,
+        "y": 3.7478737967354907
+      },
+      "isLocked": false,
+      "linkedName": "Blue Barge 3"
+    },
+    {
+      "anchor": {
+        "x": 5.567058890206473,
+        "y": 2.259002685546875
+      },
+      "prevControl": {
+        "x": 6.900712803431919,
+        "y": 3.06951904296875
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue EF Algae (1)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Blue To Algae",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.arm.Arm;
-import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.elevator.Elevator;
-import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
+import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
+import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
@@ -27,7 +27,7 @@ public class SwerveDriveCoralScoreAlignAuton extends SequentialCommandGroup {
             new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .withTranslationalConstraints(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY_AUTON.get(), Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                 .withTimeout(timeout)
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.LEFT_SIDE_COLOR : Settings.LED.RIGHT_SIDE_COLOR))
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
         );
     } 
 

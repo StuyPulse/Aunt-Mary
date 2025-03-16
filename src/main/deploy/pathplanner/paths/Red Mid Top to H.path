@@ -12,16 +12,16 @@
         "y": 4.3488064036661225
       },
       "isLocked": false,
-      "linkedName": "Red Mid Top Start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.268168041087962,
-        "y": 4.354403817026238
+        "x": 5.848877825055803,
+        "y": 4.340860954083895
       },
       "prevControl": {
-        "x": 7.283112509330749,
-        "y": 4.3678763677548975
+        "x": 6.863822293298591,
+        "y": 4.354333504812554
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

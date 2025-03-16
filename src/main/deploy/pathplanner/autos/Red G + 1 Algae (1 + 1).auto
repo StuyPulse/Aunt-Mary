@@ -13,13 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red G to GH Algae"
+            "pathName": "Red G BackOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red GH Algae to Barge 3"
+            "pathName": "Red G BackOut to GH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red GH BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red GH to Barge"
           }
         }
       ]
