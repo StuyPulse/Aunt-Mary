@@ -127,8 +127,8 @@ public class FunnelFourPieceIKLA extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.A, 4, true, SuperStructureState.L4_FRONT)
-                                .withTimeout(7),
+                            new SwerveDriveCoralScoreAlignWithClearance(CoralBranch.A, 4, true, SuperStructureState.L4_FRONT, 3, 10)
+                                .withTimeout(10),
                             new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                 .andThen(
                                     new SuperStructureCoralL4Front()

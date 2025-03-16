@@ -238,7 +238,7 @@ public class RobotContainer {
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
-        // Froggy pivot to processor
+        // Processor
         driver.getLeftBumper()
             .onTrue(new FroggyPivotToProcessor()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL))
@@ -337,7 +337,7 @@ public class RobotContainer {
         //     .onFalse(new SuperStructureFeed())
         //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
-        // // Barge 118 style score
+        // Barge 118 style score
         driver.getLeftButton()
             .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
                 .until(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
