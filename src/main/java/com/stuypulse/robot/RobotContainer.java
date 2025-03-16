@@ -364,7 +364,7 @@ public class RobotContainer {
         driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
             .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                .until(() -> swerve.getPose().getX() < Field.REEF_CENTER.getX())
+                .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
                 .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
