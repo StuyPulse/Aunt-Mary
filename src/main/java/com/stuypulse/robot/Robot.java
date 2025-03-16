@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
         
         robot = new RobotContainer();
         mode = RobotMode.DISABLED;
+
         DataLogManager.start();
         // Allows us to see the limelight feeds even while tethered through USB-B 
         for (int port = 5800; port <= 5809; port++){   
@@ -66,7 +68,10 @@ public class Robot extends TimedRobot {
        
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
+
         // if (isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
+
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     @Override
