@@ -53,7 +53,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
                     .andThen(new ShooterStop()),
             new WaitCommand(0.1)
                 .andThen(
-                    CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
+                    SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
                 ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
@@ -64,7 +64,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
         new ParallelCommandGroup(
         new ShooterSetAcquireCoral() 
             .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
-        new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
+        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.D, 4, true)
@@ -98,7 +98,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
         new ParallelCommandGroup(
         new ShooterSetAcquireCoral() 
             .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
-        new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
+        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.C, 4, true)
@@ -132,7 +132,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
     new ParallelCommandGroup(
         new ShooterSetAcquireCoral() 
             .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
-        new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
+        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
