@@ -214,7 +214,7 @@ public interface Settings {
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-10);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);

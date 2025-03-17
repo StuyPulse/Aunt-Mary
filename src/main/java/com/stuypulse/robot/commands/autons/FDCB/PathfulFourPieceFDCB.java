@@ -1,9 +1,8 @@
-package com.stuypulse.robot.commands.autons.IKLA;
+package com.stuypulse.robot.commands.autons.FDCB;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
-import com.stuypulse.robot.commands.shooter.ShooterShootL4Back;
 import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
@@ -24,18 +23,18 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class ThreePieceIKL extends SequentialCommandGroup {
+public class PathfulFourPieceFDCB extends SequentialCommandGroup {
     
-    public ThreePieceIKL(PathPlannerPath... paths) {
+    public PathfulFourPieceFDCB(PathPlannerPath... paths) {
 
         addCommands(
 
-            // Score Preload on I
+            // Score Preload on F
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
+                new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
                     .withTranslationalConstraints(2.35, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                     .withTimeout(1.75)
-                    .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
@@ -43,7 +42,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
             new WaitCommand(0.15),
             new ShooterStop(),
 
-            // To HP, Score K
+            // To HP, Score D
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
@@ -61,7 +60,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -72,7 +71,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
             new WaitCommand(0.15),
             new ShooterStop(),
 
-            // To HP, Score L
+            // To HP, Score C
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
@@ -89,7 +88,7 @@ public class ThreePieceIKL extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 3),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -98,7 +97,40 @@ public class ThreePieceIKL extends SequentialCommandGroup {
             ),
             new ShooterShootL4Front(),
             new WaitCommand(0.15),
-            new ShooterStop()
+            new ShooterStop(),
+
+           // To HP, Score B
+           new ParallelCommandGroup(
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
+            new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(
+                    new SuperStructureFeed()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
+                )
+            ),
+            new ParallelCommandGroup(
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
+                new ShooterSetAcquireCoral()
+                    .andThen(
+                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                            .andThen(new ShooterStop()))
+            ),
+            new ParallelCommandGroup(
+                new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
+                    .withTranslationalConstraints(5.85, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
+                    .withTimeout(4)
+                    .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                    .andThen(
+                        new SuperStructureCoralL4Front()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
+                    )
+            ),
+            new ShooterShootL4Front(),
+            new WaitCommand(0.15),
+            new ShooterStop(),
+
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
 
         );
 

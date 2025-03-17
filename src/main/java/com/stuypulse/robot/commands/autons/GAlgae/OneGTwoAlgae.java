@@ -73,9 +73,13 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new SuperStructureBarge118()
-                    .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new ShooterShootAlgae())
+                new SuperStructureCatapultReady()
+                    .andThen(new SuperStructureWaitUntilAtTarget()
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
+                    .andThen(new SuperStructureCatapultShoot()
+                        .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new SuperStructureWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))
             ),
 
             // Acquire IJ Algae, Score on Barge
@@ -95,9 +99,13 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new SuperStructureBarge118()
-                    .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new ShooterShootAlgae())
+                new SuperStructureCatapultReady()
+                    .andThen(new SuperStructureWaitUntilAtTarget()
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
+                    .andThen(new SuperStructureCatapultShoot()
+                        .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new SuperStructureWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))
             )
         );
 
