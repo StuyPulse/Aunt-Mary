@@ -74,9 +74,8 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureBarge118()
-                    .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()
-                            .andThen(new ShooterShootAlgae())))
+                    .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new ShooterShootAlgae())
             ),
 
             // Acquire IJ Algae, Score on Barge
@@ -97,9 +96,8 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
                 new SuperStructureBarge118()
-                    .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()
-                            .andThen(new ShooterShootAlgae())))
+                    .andThen(new SuperStructureWaitUntilAtTarget())
+                            .andThen(new ShooterShootAlgae())
             )
         );
 

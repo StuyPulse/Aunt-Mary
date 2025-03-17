@@ -53,7 +53,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
                     .andThen(new ShooterStop()),
             new WaitCommand(0.1)
                 .andThen(
-                    SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+                    CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
                 ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
@@ -68,7 +68,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.D, 4, true)
-                        .withTranslationalConstraints(3, 5)
+                        .withTranslationalConstraints(3.25, 5.25)
                         .withTimeout(5)
                         .deadlineFor(new LEDApplyPattern(CoralBranch.D.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
@@ -102,7 +102,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.C, 4, true)
-                        .withTranslationalConstraints(3, 5)
+                        .withTranslationalConstraints(3.25, 5.25)
                         .withTimeout(5)
                         .deadlineFor(new LEDApplyPattern(CoralBranch.C.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
@@ -136,7 +136,7 @@ public FunnelFullFourPieceFDCB(PathPlannerPath... paths) {
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
-                        .withTranslationalConstraints(3, 5)
+                        .withTranslationalConstraints(3.25, 5.5)
                         .withTimeout(5)
                         .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
