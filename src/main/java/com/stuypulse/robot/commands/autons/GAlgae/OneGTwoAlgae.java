@@ -10,12 +10,17 @@ import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118AllianceSide;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapultAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilClearFromBarge118;
+import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ClearAllianceSide;
+import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreAllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
@@ -68,14 +73,11 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new SuperStructureCatapultReady()
-                    .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
-                    .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
+                new SuperStructureBarge118()
+                    .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()
                             .andThen(new ShooterShootAlgae())))
             ),
-            new ShooterShootAlgae(),
 
             // Acquire IJ Algae, Score on Barge
             new ParallelCommandGroup(
@@ -94,11 +96,9 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge(),
-                new SuperStructureCatapultReady()
-                    .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
-                    .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
+                new SuperStructureBarge118()
+                    .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()
                             .andThen(new ShooterShootAlgae())))
             )
         );

@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.autons.FDCB;
+package com.stuypulse.robot.commands.autons.IKLA;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
@@ -30,23 +30,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FunnelFourPieceFDCB extends SequentialCommandGroup {
+public class FunnelFullFourPieceIKLA extends SequentialCommandGroup {
 
-public FunnelFourPieceFDCB(PathPlannerPath... paths) {
+public FunnelFullFourPieceIKLA(PathPlannerPath... paths) {
 
     addCommands(
 
-        // Score Preload on F
+        // Score Preload on I
         new ParallelCommandGroup(
-            new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
+            new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
                 .withTranslationalConstraints(3, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                 .withTimeout(1.75)
-                .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
             new SuperStructureCoralL4Front()
                 .andThen(new SuperStructureWaitUntilAtTarget())
         ),
 
-        // To HP, Score D
+        // To HP, Score K
         new ParallelCommandGroup(
             new ShooterShootL4Front()
                 .andThen(new WaitCommand(0.125))
@@ -62,25 +62,25 @@ public FunnelFourPieceFDCB(PathPlannerPath... paths) {
                 )
         ),
         new ParallelCommandGroup(
-            new ShooterSetAcquireCoral()
-                .andThen(
+        new ShooterSetAcquireCoral() 
+            .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
+        new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
+            .andThen(
+                new ParallelCommandGroup(
+                    new SwerveDrivePIDToBranchScore(CoralBranch.K, 4, true)
+                        .withTranslationalConstraints(3, 5)
+                        .withTimeout(5)
+                        .deadlineFor(new LEDApplyPattern(CoralBranch.K.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                        .andThen(new ShooterStop())
+                        .andThen(
+                            new SuperStructureCoralL4Front()
+                                .andThen(new SuperStructureWaitUntilAtTarget())
+                        )
                 )
-        ),
-        new ParallelCommandGroup(
-            new SwerveDrivePIDToBranchScore(CoralBranch.D, 4, true)
-                .withTranslationalConstraints(3, 5)
-                .withTimeout(5)
-                .deadlineFor(new LEDApplyPattern(CoralBranch.D.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
-            new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                .andThen(
-                    new SuperStructureCoralL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget())
-                )
-        ),
+            )
+    ),
 
-        // To HP, Score C
+        // To HP, Score L
         new ParallelCommandGroup(
             new ShooterShootL4Front()
                 .andThen(new WaitCommand(0.125))
@@ -96,24 +96,25 @@ public FunnelFourPieceFDCB(PathPlannerPath... paths) {
                 )
         ),
         new ParallelCommandGroup(
-            new ShooterSetAcquireCoral()
-                .andThen(
+        new ShooterSetAcquireCoral() 
+            .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
+        new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
+            .andThen(
+                new ParallelCommandGroup(
+                    new SwerveDrivePIDToBranchScore(CoralBranch.L, 4, true)
+                        .withTranslationalConstraints(3, 5)
+                        .withTimeout(5)
+                        .deadlineFor(new LEDApplyPattern(CoralBranch.L.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                        .andThen(new ShooterStop()))
-        ),
-        new ParallelCommandGroup(
-            new SwerveDrivePIDToBranchScore(CoralBranch.C, 4, true)
-                .withTranslationalConstraints(3, 5)
-                .withTimeout(5)
-                .deadlineFor(new LEDApplyPattern(CoralBranch.C.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
-            new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                .andThen(
-                    new SuperStructureCoralL4Front()
-                        .andThen(new SuperStructureWaitUntilAtTarget())
+                        .andThen(
+                            new SuperStructureCoralL4Front()
+                                .andThen(new SuperStructureWaitUntilAtTarget())
+                        )
                 )
-        ),
+            )
+    ),
 
-        // To HP, Score B
+        // To HP, Score A
         new ParallelCommandGroup(
         new ShooterShootL4Front()
             .andThen(new WaitCommand(0.125))
@@ -134,10 +135,10 @@ public FunnelFourPieceFDCB(PathPlannerPath... paths) {
         new WaitUntilCommand(() -> Funnel.getInstance().hasCoral() || Shooter.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
-                    new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
-                .withTranslationalConstraints(3, 5)
-                .withTimeout(7)
-                .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                    new SwerveDrivePIDToBranchScore(CoralBranch.A, 4, true)
+                        .withTranslationalConstraints(3, 5)
+                        .withTimeout(5)
+                        .deadlineFor(new LEDApplyPattern(CoralBranch.A.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
                             new SuperStructureCoralL4Front()

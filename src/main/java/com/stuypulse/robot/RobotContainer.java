@@ -10,6 +10,7 @@ import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FunnelFourPieceFDCB;
+import com.stuypulse.robot.commands.autons.FDCB.FunnelFullFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.PathlessFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
@@ -22,6 +23,7 @@ import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.FunnelFourPieceIKLA;
+import com.stuypulse.robot.commands.autons.IKLA.FunnelFullFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.PathlessFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
@@ -617,6 +619,20 @@ public class RobotContainer {
         "Red I to HP");
         FUNNEL_BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
         FUNNEL_RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
+
+        AutonConfig FUNNEL_FULL_BLUE_FOUR_PIECE_FDCB = new AutonConfig("Funnel Full 4 Piece FDCB", FunnelFullFourPieceFDCB::new,
+        "Blue F to HP");
+        AutonConfig FUNNEL_FULL_RED_FOUR_PIECE_FDCB = new AutonConfig("Funnel Full 4 Piece FDCB", FunnelFullFourPieceFDCB::new,
+        "Red F to HP");
+        FUNNEL_FULL_BLUE_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        FUNNEL_FULL_RED_FOUR_PIECE_FDCB.registerRed(autonChooser);
+
+        AutonConfig FUNNEL_FULL_BLUE_FOUR_PIECE_IKLA = new AutonConfig("Funnel Full 4 Piece IKLA", FunnelFullFourPieceIKLA::new,
+        "Blue I to HP");
+        AutonConfig FUNNEL_FULL_RED_FOUR_PIECE_IKLA = new AutonConfig("Funnel Full 4 Piece IKLA", FunnelFullFourPieceIKLA::new,
+        "Red I to HP");
+        FUNNEL_FULL_BLUE_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        FUNNEL_FULL_RED_FOUR_PIECE_IKLA.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
