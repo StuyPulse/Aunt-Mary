@@ -54,6 +54,7 @@ public interface Settings {
         double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.1;
         double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
         double NUDGE_SPEED_METERS_PER_SECOND = 0.15;
+        double NUDGE_SPEED_METERS_PER_SECOND_AUTON = 1.4;
         
         public interface Constraints {    
             SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 4.0);
@@ -214,7 +215,7 @@ public interface Settings {
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-10);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
