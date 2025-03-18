@@ -444,7 +444,6 @@ public class RobotContainer {
 
         AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        
         PATHFUL_FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
 
         /** BOTTOM AUTONS **/
@@ -467,7 +466,6 @@ public class RobotContainer {
         "Blue H BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue GH BackOut");
         AutonConfig H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
         "Blue H BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
-
         H_TWO_ALGAE.registerBlue(autonChooser);
         H_THREE_ALGAE.registerBlue(autonChooser);
 
@@ -477,7 +475,6 @@ public class RobotContainer {
         "Blue G BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut");
         AutonConfig G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         "Blue G BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
-
         G_TWO_ALGAE.registerBlue(autonChooser);
         G_THREE_ALGAE.registerBlue(autonChooser);
 

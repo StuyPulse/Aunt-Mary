@@ -301,6 +301,8 @@ public interface Settings {
 
         LEDPattern SHIMMY_COLOR = LEDPattern.solid(Color.kRed);
 
+        LEDPattern TIMEOUT_COLOR = LEDPattern.solid(Color.kPurple);
+
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled
     }
