@@ -55,9 +55,6 @@ public FourPieceFDCB(PathPlannerPath... paths) {
             new WaitCommand(0.1)
                 .andThen(
                     SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                    //    .until(() -> CommandSwerveDrivetrain.getInstance().getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-                    //.andThen(new SwerveDrivePIDToCoralStation(true).withoutMotionProfile())
-                    //.deadlineFor(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(

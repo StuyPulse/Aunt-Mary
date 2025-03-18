@@ -10,12 +10,14 @@ import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.PathfulFourPieceFDCB;
+import com.stuypulse.robot.commands.autons.FDCB.CheaterFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.IKLA.PathfulFourPieceIKLA;
+import com.stuypulse.robot.commands.autons.IKLA.CheaterFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
@@ -436,13 +438,14 @@ public class RobotContainer {
         "Blue I to HP");
         FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
-        AutonConfig BLUE_PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
+        AutonConfig CHEATER_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Cheater)", CheaterFourPieceIKLA::new,
+         "Blue I to HP");
+         CHEATER_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+
+        AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        AutonConfig RED_PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
-        "Red I to HP", "Red K to HP", "Red L to HP", "Red A BackOut");
         
-        BLUE_PATHFUL_FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
-        RED_PATHFUL_FOUR_PIECE_IKLA.registerDefaultRed(autonChooser);
+        PATHFUL_FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
 
         /** BOTTOM AUTONS **/
 
@@ -450,12 +453,13 @@ public class RobotContainer {
         "Blue F to HP");
         FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
-        AutonConfig BLUE_PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
+        AutonConfig CHEATER_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Cheater)", CheaterFourPieceFDCB::new,
+         "Blue F to HP");
+         CHEATER_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+
+        AutonConfig PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        AutonConfig RED_PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
-        "Red F to HP", "Red D to HP", "Red C to HP", "Red B BackOut");
-        BLUE_PATHFUL_FOUR_PIECE_FDCB.registerBlue(autonChooser);
-        RED_PATHFUL_FOUR_PIECE_FDCB.registerRed(autonChooser);
+        PATHFUL_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 

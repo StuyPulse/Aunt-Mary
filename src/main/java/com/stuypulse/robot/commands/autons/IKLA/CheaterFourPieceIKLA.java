@@ -7,6 +7,7 @@ import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
@@ -31,9 +32,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FourPieceIKLA extends SequentialCommandGroup {
+public class CheaterFourPieceIKLA extends SequentialCommandGroup {
 
-public FourPieceIKLA(PathPlannerPath... paths) {
+public CheaterFourPieceIKLA(PathPlannerPath... paths) {
 
     addCommands(
 
@@ -113,7 +114,7 @@ public FourPieceIKLA(PathPlannerPath... paths) {
             )
     ),
 
-        // To HP, Score A
+        // To HP, Score A2
         new ParallelCommandGroup(
         new ShooterShootL4Front()
             .andThen(new WaitCommand(0.125))
@@ -134,13 +135,13 @@ public FourPieceIKLA(PathPlannerPath... paths) {
         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
-                    new SwerveDrivePIDToBranchScore(CoralBranch.A, 4, true)
+                    new SwerveDrivePIDToBranchScore(CoralBranch.A, 2, true)
                         .withTranslationalConstraints(3.25, 5.5)
                         .withTimeout(5)
                         .deadlineFor(new LEDApplyPattern(CoralBranch.A.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
-                            new SuperStructureCoralL4Front()
+                            new SuperStructureCoralL2Front()
                                 .andThen(new SuperStructureWaitUntilAtTarget())
                         )
                 )

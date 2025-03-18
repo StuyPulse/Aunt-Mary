@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.autons.IKLA;
+package com.stuypulse.robot.commands.autons.FDCB;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
@@ -7,6 +7,7 @@ import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
@@ -31,23 +32,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FourPieceIKLA extends SequentialCommandGroup {
+public class CheaterFourPieceFDCB extends SequentialCommandGroup {
 
-public FourPieceIKLA(PathPlannerPath... paths) {
+public CheaterFourPieceFDCB(PathPlannerPath... paths) {
 
     addCommands(
 
-        // Score Preload on I
+        // Score Preload on F
         new ParallelCommandGroup(
-            new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
+            new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
                 .withTranslationalConstraints(3, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON.get())
                 .withTimeout(1.75)
-                .deadlineFor(new LEDApplyPattern(CoralBranch.I.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
             new SuperStructureCoralL4Front()
                 .andThen(new SuperStructureWaitUntilAtTarget())
         ),
 
-        // To HP, Score K
+        // To HP, Score D
         new ParallelCommandGroup(
             new ShooterShootL4Front()
                 .andThen(new WaitCommand(0.125))
@@ -68,9 +69,9 @@ public FourPieceIKLA(PathPlannerPath... paths) {
         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
-                    new SwerveDrivePIDToBranchScore(CoralBranch.K, 4, true)
+                    new SwerveDrivePIDToBranchScore(CoralBranch.D, 4, true)
                         .withTimeout(5)
-                        .deadlineFor(new LEDApplyPattern(CoralBranch.K.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                        .deadlineFor(new LEDApplyPattern(CoralBranch.D.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
                             new SuperStructureCoralL4Front()
@@ -80,14 +81,14 @@ public FourPieceIKLA(PathPlannerPath... paths) {
             )
     ),
 
-        // To HP, Score L
+        // To HP, Score C
         new ParallelCommandGroup(
             new ShooterShootL4Front()
                 .andThen(new WaitCommand(0.125))
                     .andThen(new ShooterStop()),
             new WaitCommand(0.1)
                 .andThen(
-                    new SwerveDrivePIDToCoralStation(false)
+                    new SwerveDrivePIDToCoralStation(true)
                 ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
@@ -101,9 +102,9 @@ public FourPieceIKLA(PathPlannerPath... paths) {
         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
-                    new SwerveDrivePIDToBranchScore(CoralBranch.L, 4, true)
+                    new SwerveDrivePIDToBranchScore(CoralBranch.C, 4, true)
                         .withTimeout(5)
-                        .deadlineFor(new LEDApplyPattern(CoralBranch.L.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                        .deadlineFor(new LEDApplyPattern(CoralBranch.C.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
                             new SuperStructureCoralL4Front()
@@ -113,14 +114,14 @@ public FourPieceIKLA(PathPlannerPath... paths) {
             )
     ),
 
-        // To HP, Score A
+        // To HP, Score B2
         new ParallelCommandGroup(
         new ShooterShootL4Front()
             .andThen(new WaitCommand(0.125))
                 .andThen(new ShooterStop()),
         new WaitCommand(0.1)
             .andThen(
-                new SwerveDrivePIDToCoralStation(false)
+                new SwerveDrivePIDToCoralStation(true)
             ),
         new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
             .andThen(
@@ -134,13 +135,13 @@ public FourPieceIKLA(PathPlannerPath... paths) {
         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
-                    new SwerveDrivePIDToBranchScore(CoralBranch.A, 4, true)
+                    new SwerveDrivePIDToBranchScore(CoralBranch.B, 2, true)
                         .withTranslationalConstraints(3.25, 5.5)
                         .withTimeout(5)
-                        .deadlineFor(new LEDApplyPattern(CoralBranch.A.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                        .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
-                            new SuperStructureCoralL4Front()
+                            new SuperStructureCoralL2Front()
                                 .andThen(new SuperStructureWaitUntilAtTarget())
                         )
                 )
@@ -153,7 +154,7 @@ public FourPieceIKLA(PathPlannerPath... paths) {
                     .andThen(new ShooterStop()),
             new WaitCommand(0.1)
                 .andThen(
-                    new SwerveDrivePIDToCoralStation(false)
+                    new SwerveDrivePIDToCoralStation(true)
                 ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
