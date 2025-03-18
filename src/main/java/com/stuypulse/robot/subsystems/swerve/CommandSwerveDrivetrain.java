@@ -395,7 +395,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public boolean isFrontFacingAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.REEF_CENTER));
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.ALLIANCE_REEF_CENTER));
         Rotation2d robotHeading = getPose().getRotation();
         Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
 
@@ -403,7 +403,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public boolean isFrontFacingOppositeAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.transformToOppositeAlliance(new Pose2d(Field.REEF_CENTER, Rotation2d.kZero)).getTranslation()));
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.OPPOSITE_ALLIANCE_REEF_CENTER));
         Rotation2d robotHeading = getPose().getRotation();
         Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
 
@@ -419,7 +419,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public boolean isFroggyFacingAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.REEF_CENTER));
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.ALLIANCE_REEF_CENTER));
         Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
         Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
 
@@ -427,7 +427,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public boolean isFroggyFacingOppositeAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.transformToOppositeAlliance(new Pose2d(Field.REEF_CENTER, Rotation2d.kZero)).getTranslation()));
+        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.transformToOppositeAlliance(Field.OPPOSITE_ALLIANCE_REEF_CENTER)));
         Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
         Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
 

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 4.996803501674107
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.370663346079945,
+        "y": 4.981983315396812
+      },
+      "isLocked": false,
+      "linkedName": "Blue Barge 3"
+    },
+    {
+      "anchor": {
+        "x": 6.017827868852459,
+        "y": 4.996803501674107
+      },
+      "prevControl": {
+        "x": 6.645423692791245,
+        "y": 5.004210387741394
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Barge BackOut"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.5,
+    "maxAcceleration": 7.5,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Blue BackOut",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

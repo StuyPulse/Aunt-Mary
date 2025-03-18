@@ -41,6 +41,10 @@ public interface Field {
             rotated.getTranslation().plus(new Translation2d(LENGTH, WIDTH)),
             rotated.getRotation());
     }
+    
+    public static Translation2d transformToOppositeAlliance(Translation2d translation) {
+        return new Translation2d(LENGTH - translation.getX(), WIDTH - translation.getY());
+    }
 
     public static List<Pose2d> transformToOppositeAlliance(List<Pose2d> poses) {
         List<Pose2d> newPoses = new ArrayList<>();
@@ -138,7 +142,8 @@ public interface Field {
     }
 
     /*** REEF ***/
-    Translation2d REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + (93.5 - 14.0 * 2) / 2), Field.WIDTH / 2);
+    Translation2d ALLIANCE_REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + (93.5 - 14.0 * 2) / 2), Field.WIDTH / 2);
+    Translation2d OPPOSITE_ALLIANCE_REEF_CENTER = transformToOppositeAlliance(ALLIANCE_REEF_CENTER);
     double LENGTH_OF_REEF_FACE = Units.inchesToMeters(37.04);
     double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);

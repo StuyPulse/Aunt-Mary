@@ -12,6 +12,7 @@ public class SuperStructureSetState extends InstantCommand{
     public SuperStructureSetState(SuperStructureState state) {
         this.superStructure = SuperStructure.getInstance();
         this.state = state;
+        addRequirements(superStructure);
     }
 
     @Override

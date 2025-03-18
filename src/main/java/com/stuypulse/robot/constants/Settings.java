@@ -54,6 +54,7 @@ public interface Settings {
         double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.1;
         double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
         double NUDGE_SPEED_METERS_PER_SECOND = 0.15;
+        double NUDGE_SPEED_METERS_PER_SECOND_AUTON = 1.4;
         
         public interface Constraints {    
             SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 4.0);
@@ -111,7 +112,7 @@ public interface Settings {
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.23; // From bumper, 9 inches (2 corals)
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.203; // From bumper, 8 inches (2 corals - 1 inch)
             }
         }
     }
@@ -187,7 +188,7 @@ public interface Settings {
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
-        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.25;
+        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.5;
     }
 
     public interface Arm {
@@ -214,7 +215,7 @@ public interface Settings {
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
@@ -238,7 +239,7 @@ public interface Settings {
         }
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
-        Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(10.0);
+        Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(15.0);
     }
 
     public interface Froggy {
@@ -300,6 +301,8 @@ public interface Settings {
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
 
         LEDPattern SHIMMY_COLOR = LEDPattern.solid(Color.kRed);
+
+        LEDPattern TIMEOUT_COLOR = LEDPattern.solid(Color.kPurple);
 
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled

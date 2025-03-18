@@ -12,10 +12,23 @@ import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public interface Clearances {
     public static boolean isArmClearFromReef() {
-        return Field.REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
+        return isArmClearFromAllianceReef() && isArmClearFromOppositeAllianceReef();
+    }
+
+    private static boolean isArmClearFromOppositeAllianceReef() {
+        return Field.OPPOSITE_ALLIANCE_REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
+            > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM 
+                + Field.CENTER_OF_REEF_TO_REEF_FACE 
+                + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
+                - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
+    }
+
+    private static boolean isArmClearFromAllianceReef() {
+        return Field.ALLIANCE_REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
@@ -75,7 +88,7 @@ public interface Clearances {
     }
 
     private static boolean isFroggyClearFromAllianceReef() {
-        return Field.REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
+        return Field.ALLIANCE_REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROGGY 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.WIDTH_WITH_BUMPERS_METERS / 2)
@@ -83,7 +96,7 @@ public interface Clearances {
     }
 
     private static boolean isFroggyClearFromOppositeAllianceReef() {
-        return Field.transformToOppositeAlliance(new Pose2d(Field.REEF_CENTER, Rotation2d.kZero)).getTranslation().getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
+        return Field.OPPOSITE_ALLIANCE_REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROGGY 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.WIDTH_WITH_BUMPERS_METERS / 2)

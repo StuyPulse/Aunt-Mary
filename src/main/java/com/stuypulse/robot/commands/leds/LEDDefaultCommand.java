@@ -11,12 +11,15 @@ import com.stuypulse.robot.subsystems.funnel.Funnel.FunnelState;
 import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
 
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LEDDefaultCommand extends Command{
     private final LEDController leds;
+    private final SuperStructure superStructure;
     private final Shooter shooter;
     private final Froggy froggy;
     private final Funnel funnel;
@@ -24,6 +27,7 @@ public class LEDDefaultCommand extends Command{
 
     public LEDDefaultCommand() {
         this.leds = LEDController.getInstance();
+        this.superStructure = SuperStructure.getInstance();
         this.shooter = Shooter.getInstance();
         this.froggy = Froggy.getInstance();
         this.funnel = Funnel.getInstance();
@@ -55,7 +59,7 @@ public class LEDDefaultCommand extends Command{
         else if (funnel.getState() == FunnelState.REVERSE) {
             leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
         }
-        else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE) {
+        else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE || superStructure.getState() == SuperStructureState.PROCESSOR) {
             leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
         }
         else if (shooter.hasCoral() || funnel.hasCoral()) {
