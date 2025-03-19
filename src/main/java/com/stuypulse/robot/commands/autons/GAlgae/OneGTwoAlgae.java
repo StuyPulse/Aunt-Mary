@@ -7,6 +7,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
+import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
@@ -15,6 +16,9 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultR
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
+import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwards;
+import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwardsAuton;
+import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118AllianceSide;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapultAllianceSide;
@@ -66,47 +70,55 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDrivePidToNearestReefAlgae(true),
+                new SwerveDrivePidToNearestReefAlgae(true).withTimeout(2),
                 new ShooterAcquireAlgae()
             ),
             new ShooterHoldAlgae(),
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBarge(),
-                new SuperStructureCatapultReady()
-                    .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
-                    .andThen(new SuperStructureCatapultShoot()
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                    .andThen(new SuperStructureBarge118()),
+                new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new SuperStructureWaitUntilCanCatapult()
-                                .andThen(new ShooterShootAlgae())))
+                            .andThen(new SwerveDriveNudgeBackwardsAuton().withTimeout(0.5))
+                                .andThen(new ShooterShootAlgae())
             ),
+
+            new WaitCommand(0.5),
 
             // Acquire IJ Algae, Score on Barge
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
-                new WaitCommand(0.2)
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+                new WaitUntilCommand(0.2)
                     .andThen(
                         new SuperStructureAlgaeL3Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDrivePidToNearestReefAlgae(true),
+                new SwerveDrivePidToNearestReefAlgae(true).withTimeout(2),
                 new ShooterAcquireAlgae()
             ),
             new ShooterHoldAlgae(),
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBarge(),
-                new SuperStructureCatapultReady()
-                    .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapultAllianceSide()))
-                    .andThen(new SuperStructureCatapultShoot()
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                    .andThen(new SuperStructureBarge118()),
+                new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new SuperStructureWaitUntilCanCatapult()
-                                .andThen(new ShooterShootAlgae())))
+                            .andThen(new SwerveDriveNudgeBackwardsAuton().withTimeout(0.5))
+                                .andThen(new ShooterShootAlgae())
+            ),
+            
+            new WaitCommand(0.5),
+
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
+            new ParallelCommandGroup(
+                new WaitCommand(0.2)
+                    .andThen(
+                        new SuperStructureFeed()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
+                    )
             )
+
         );
 
     }

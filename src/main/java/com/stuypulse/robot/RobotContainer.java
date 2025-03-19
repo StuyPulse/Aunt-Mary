@@ -465,16 +465,16 @@ public class RobotContainer {
         AutonConfig H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
         "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
         AutonConfig H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae", OneHThreeAlgae::new,
-        "Blue H BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
+        "Blue H BackOut", "Blue GH BackOut", "Blue Barge to EF (1)", "Blue Barge BackOut");
         H_TWO_ALGAE.registerBlue(autonChooser);
         H_THREE_ALGAE.registerBlue(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/
 
         AutonConfig G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        "Blue G BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut");
+        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue Barge BackOut");
         AutonConfig G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
-        "Blue G BackOut", "Blue GH BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
+        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue Barge BackOut");
         G_TWO_ALGAE.registerBlue(autonChooser);
         G_THREE_ALGAE.registerBlue(autonChooser);
 
