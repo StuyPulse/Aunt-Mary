@@ -88,7 +88,7 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
             // Acquire IJ Algae, Score on Barge
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
-                new WaitUntilCommand(0.2)
+                new WaitCommand(0.2)
                     .andThen(
                         new SuperStructureAlgaeL3Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
@@ -110,10 +110,10 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
             
             new WaitCommand(0.5),
 
-            // Acquire EF< Score on Barge
+            // Acquire EF Algae, Score on Barge
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
-                new WaitUntilCommand(0.2)
+                new WaitCommand(0.2)
                     .andThen(
                         new SuperStructureAlgaeL3Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
@@ -124,6 +124,7 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
                 new ShooterAcquireAlgae()
             ),
             new ShooterHoldAlgae(),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(new SuperStructureBarge118()),
@@ -132,8 +133,17 @@ public class OneGThreeAlgae extends SequentialCommandGroup {
                             .andThen(new SwerveDriveNudgeBackwardsAuton().withTimeout(0.5))
                                 .andThen(new ShooterShootAlgae())
             ),
-            
-            new WaitCommand(0.5)
+
+            new WaitCommand(0.5),
+
+            new ParallelCommandGroup(
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4]),
+                new WaitCommand(0.2)
+                    .andThen(
+                        new SuperStructureAlgaeL3Front()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
+                    )
+            )
 
         );
 

@@ -88,7 +88,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             // Acquire IJ Algae, Score on Barge
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
-                new WaitUntilCommand(0.2)
+                new WaitCommand(0.2)
                     .andThen(
                         new SuperStructureAlgaeL3Front()
                             .andThen(new SuperStructureWaitUntilAtTarget())
