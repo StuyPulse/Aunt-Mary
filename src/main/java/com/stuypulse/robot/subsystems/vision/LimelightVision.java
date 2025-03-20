@@ -3,13 +3,16 @@ package com.stuypulse.robot.subsystems.vision;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.constants.Cameras;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Cameras.Camera;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
+import com.stuypulse.robot.util.vision.LimelightHelpers.RawFiducial;
 import com.stuypulse.stuylib.network.SmartBoolean;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -103,9 +106,28 @@ public class LimelightVision extends SubsystemBase{
             : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
     }
 
+    private void setTagWhiteListAll(Pose2d robot) {
+        if (robot.getX() > Field.LENGTH / 2) {
+            if (Robot.isBlue()) {
+                setTagWhitelist(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+            } else {
+                setTagWhitelist(12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+            }
+        } else {
+            if (Robot.isBlue()) {
+                setTagWhitelist(12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+            } else {
+                setTagWhitelist(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+            }
+        }
+    }
+
+    // based on which side of the field the robot is currently on, blacklist all tags on the opposite side
+
     @Override
     public void periodic() {
         this.maxTagCount = 0;
+        setTagWhiteListAll(CommandSwerveDrivetrain.getInstance().getPose());
 
         for (Camera camera : Cameras.LimelightCameras) {
             if (camera.isEnabled()) {

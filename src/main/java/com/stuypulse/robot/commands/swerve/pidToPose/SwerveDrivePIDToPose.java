@@ -3,6 +3,7 @@ package com.stuypulse.robot.commands.swerve.pidToPose;
 import java.util.function.Supplier;
 
 import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
@@ -28,6 +29,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 
 public class SwerveDrivePIDToPose extends Command {
 
@@ -160,6 +162,14 @@ public class SwerveDrivePIDToPose extends Command {
         SmartDashboard.putBoolean("Alignment/Is Aligned X", isAlignedX());
         SmartDashboard.putBoolean("Alignment/Is Aligned Y", isAlignedY());
         SmartDashboard.putBoolean("Alignment/Is Aligned Theta", isAlignedTheta());
+    }
+
+    @Override
+    public WrapperCommand finallyDo(Runnable end) {
+        return finallyDo(interrupted -> {
+            new LEDApplyPattern(Settings.LED.TIMEOUT_COLOR).schedule();
+            end.run();
+        });
     }
 
     @Override
