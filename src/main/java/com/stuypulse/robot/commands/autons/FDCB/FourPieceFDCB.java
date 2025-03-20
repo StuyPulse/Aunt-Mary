@@ -135,7 +135,7 @@ public FourPieceFDCB(PathPlannerPath... paths) {
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
-                        .withTranslationalConstraints(3.25, 5.5)
+                        .withTranslationalConstraints(3.5, 5.75)
                         .withTimeout(5)
                         .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())

@@ -108,7 +108,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.43;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.68;
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
@@ -212,7 +212,7 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
+        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(0);
@@ -220,7 +220,8 @@ public interface Settings {
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
-        Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
+        // Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 10);
+        Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(182.513809);
 
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
@@ -230,6 +231,9 @@ public interface Settings {
 
             Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
             Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+
+            Rotation2d MAX_VEL_CLIMB = Rotation2d.fromDegrees(200.0);
+            Rotation2d MAX_ACCEL_CLIMB = Rotation2d.fromDegrees(400.0);
     
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);

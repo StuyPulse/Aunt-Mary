@@ -12,6 +12,7 @@ import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.PathfulFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.CheaterFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
+import com.stuypulse.robot.commands.autons.FDCB.HybridFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
@@ -19,6 +20,7 @@ import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.IKLA.PathfulFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.CheaterFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
+import com.stuypulse.robot.commands.autons.IKLA.HybridFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbClose;
@@ -443,9 +445,13 @@ public class RobotContainer {
          "Blue I to HP");
          CHEATER_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
-        AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
+        AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful USE)", PathfulFourPieceIKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
         PATHFUL_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+
+        // AutonConfig HYBRID_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Hybrid)", HybridFourPieceIKLA::new,
+        //  "Blue I to HP");
+        //  HYBRID_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
         /** BOTTOM AUTONS **/
 
@@ -457,9 +463,13 @@ public class RobotContainer {
          "Blue F to HP");
          CHEATER_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
-        AutonConfig PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
+        AutonConfig PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful USE)", PathfulFourPieceFDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         PATHFUL_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+
+        // AutonConfig HYBRID_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Hybrid)", HybridFourPieceFDCB::new,
+        // "Blue F to HP");
+        // HYBRID_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 

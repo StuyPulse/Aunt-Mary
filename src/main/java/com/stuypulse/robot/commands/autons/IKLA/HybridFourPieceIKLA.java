@@ -31,9 +31,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FourPieceIKLA extends SequentialCommandGroup {
+public class HybridFourPieceIKLA extends SequentialCommandGroup {
 
-public FourPieceIKLA(PathPlannerPath... paths) {
+public HybridFourPieceIKLA(PathPlannerPath... paths) {
 
     addCommands(
 
@@ -49,19 +49,18 @@ public FourPieceIKLA(PathPlannerPath... paths) {
 
         // To HP, Score K
         new ParallelCommandGroup(
-            new ShooterShootL4Front()
-                .andThen(new WaitCommand(0.125))
-                    .andThen(new ShooterStop()),
-            new WaitCommand(0.1)
-                .andThen(
-                    SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                ),
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                    .andThen(
+                        new SuperStructureFeed()
+                            .andThen(new SuperStructureWaitUntilAtTarget())
+                    )
+            ),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
                     new SuperStructureFeed()
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                )
-        ),
+                ),
         new ParallelCommandGroup(
         new ShooterSetAcquireCoral() 
             .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
