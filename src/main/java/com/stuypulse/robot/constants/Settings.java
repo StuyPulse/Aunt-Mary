@@ -250,32 +250,31 @@ public interface Settings {
     }
 
     public interface LED {
-        LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kRed);
+        LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kBlue);
+        LEDPattern CORAL_STATION_ALIGN_COLOR = LEDPattern.solid(Color.kRed);
 
-        LEDPattern ALIGN_COLOR = LEDPattern.solid(Color.kYellow);
+        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kWhite);
+
+        LEDPattern DEFAULT_ALIGN_COLOR = LEDPattern.solid(Color.kYellow);
+        LEDPattern ALIGN_RIGHT_COLOR = LEDPattern.solid(Color.kRed);
         LEDPattern SCORE_COLOR = LEDPattern.solid(Color.kGreen);
-        LEDPattern ABORT_COLOR = LEDPattern.solid(Color.kBlue);
 
         LEDPattern PROCESSOR_SCORE_ANGLE = LEDPattern.solid(Color.kPurple);
-        LEDPattern INTAKE_COLOR = LEDPattern.rainbow(255, 255);
-
+        LEDPattern INTAKE_COLOR_ALGAE = LEDPattern.solid(Color.kGreen);
+        LEDPattern FROGGY_INTAKE_COLOR_CORAL = LEDPattern.solid(Color.kWhite);
+        
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);
 
-        LEDPattern CLIMB_OPEN_COLOR = LEDPattern.rainbow(255, 255);
+        LEDPattern CLIMB_OPEN_COLOR = LEDPattern.solid(Color.kYellow);
 
         LEDPattern CLIMBING_COLOR = LEDPattern.solid(Color.kGreen);
 
+        LEDPattern SHIMMY_COLOR = LEDPattern.solid(Color.kRed);
+
+        LEDPattern TIMEOUT_COLOR = LEDPattern.solid(Color.kPurple);
+
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled
-
-        //Side Alignment color
-        LEDPattern LEFT_SIDE_COLOR = LEDPattern.solid(Color.kYellow);
-        LEDPattern RIGHT_SIDE_COLOR = LEDPattern.solid(Color.kBlue);
-
-        LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kBrown);
-
-        LEDPattern TIMEOUT_COLOR = LEDPattern.solid(Color.kBlack);
-
     }
 
     public interface Driver {

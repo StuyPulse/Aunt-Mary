@@ -375,7 +375,7 @@ public class RobotContainer {
         driver.getLeftButton()
             .whileTrue(new ConditionalCommand(
                 new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
                     .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
@@ -383,7 +383,7 @@ public class RobotContainer {
                             .andThen(new ArmWaitUntilCanCatapult()
                                 .andThen(new ShooterShootAlgae())))), 
                 new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.ALIGN_COLOR))
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
                     .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
                         .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
                             .alongWith(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide()))
@@ -413,6 +413,7 @@ public class RobotContainer {
         driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
             .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
 
         // Unstuck Coral

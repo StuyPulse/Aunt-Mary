@@ -1,8 +1,12 @@
 package com.stuypulse.robot.commands.leds;
 
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.arm.Arm;
+import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
+import com.stuypulse.robot.subsystems.elevator.Elevator;
+import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
@@ -12,6 +16,7 @@ import com.stuypulse.robot.subsystems.led.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LEDDefaultCommand extends Command{
@@ -20,6 +25,8 @@ public class LEDDefaultCommand extends Command{
     private final Froggy froggy;
     private final Funnel funnel;
     private final Climb climb;
+    private final Arm arm;
+    private final Elevator elevator;
 
     public LEDDefaultCommand() {
         this.leds = LEDController.getInstance();
@@ -27,14 +34,9 @@ public class LEDDefaultCommand extends Command{
         this.froggy = Froggy.getInstance();
         this.funnel = Funnel.getInstance();
         this.climb = Climb.getInstance();
+        this.arm = Arm.getInstance();
+        this.elevator = Elevator.getInstance();
         addRequirements(leds);
-    }
-
-    private boolean isIntaking() {
-        return shooter.getState() == ShooterState.ACQUIRE_ALGAE 
-            || shooter.getState() == ShooterState.ACQUIRE_CORAL
-            || froggy.getRollerState() == RollerState.INTAKE_ALGAE 
-            || froggy.getRollerState() == RollerState.INTAKE_CORAL;
     }
 
     private boolean isScoring() {
@@ -53,20 +55,23 @@ public class LEDDefaultCommand extends Command{
         else if (climb.getState() == ClimbState.OPEN) {
             leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
         }
+        else if (climb.getState() == ClimbState.SHIMMY) {
+            leds.applyPattern(Settings.LED.SHIMMY_COLOR);
+        }
         else if (climb.getState() == ClimbState.CLIMBING) {
             leds.applyPattern(Settings.LED.CLIMBING_COLOR);
         }
         else if (funnel.getState() == FunnelState.REVERSE) {
             leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
         }
-        else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE) {
+        else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE || arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR) {
             leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
-        }
-        else if (isIntaking()) {
-            leds.applyPattern(Settings.LED.INTAKE_COLOR);
         }
         else if (shooter.hasCoral() || funnel.hasCoral()) {
             leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
+        }
+        else {
+            leds.applyPattern(LEDPattern.kOff);
         }
     }
 }
