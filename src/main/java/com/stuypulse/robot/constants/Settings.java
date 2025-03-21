@@ -173,6 +173,8 @@ public interface Settings {
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
         double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
 
+        double SKIP_CLEARANCE_METERS = Units.inchesToMeters(10);
+
         double HEIGHT_TOLERANCE_METERS = 0.04;
     }
 

@@ -40,7 +40,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
     }
 
     private boolean isClear() {
-        return (Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
-                && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle());
+        return (Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().canSkipClearance() 
+                && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().canSkipClearance());
     }
 }

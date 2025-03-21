@@ -128,6 +128,11 @@ public class ElevatorSimu extends Elevator {
     }
 
     @Override
+    public boolean canSkipClearance() {
+        return getCurrentHeight() - getTargetHeight() < 1;
+    }
+
+    @Override
     public double getAccelGs() {
         return accel.get();
     }
@@ -135,16 +140,6 @@ public class ElevatorSimu extends Elevator {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
-    }
-
-    @Override
-    public void setOperatorOffset(double offset) {
-        this.operatorOffset = offset;
-    }
-
-    @Override
-    public double getOperatorOffset() {
-        return this.operatorOffset;
     }
 
     @Override

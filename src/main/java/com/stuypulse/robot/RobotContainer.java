@@ -10,8 +10,6 @@ import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.BuzzController;
-import com.stuypulse.robot.commands.arm.ArmOffsetTargetDown;
-import com.stuypulse.robot.commands.arm.ArmOffsetTargetUp;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
 import com.stuypulse.robot.commands.arm.ArmSetMotionProfileConstraints;
 import com.stuypulse.robot.commands.arm.ArmToClimb;
@@ -52,8 +50,6 @@ import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbOverrideVoltage;
 import com.stuypulse.robot.commands.climb.ClimbShimmy;
-import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetDown;
-import com.stuypulse.robot.commands.elevator.ElevatorOffsetTargetUp;
 import com.stuypulse.robot.commands.elevator.ElevatorOverrideVoltage;
 import com.stuypulse.robot.commands.elevator.ElevatorSetMotionProfileConstraints;
 import com.stuypulse.robot.commands.elevator.ElevatorToClimb;
@@ -324,6 +320,7 @@ public class RobotContainer {
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
                         .andThen(new FroggyRollerShootCoral()))
+                    .onlyIf(() -> !shooter.hasCoral())
                 )
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new ArmToFeed().alongWith(new ElevatorToFeed())).onlyIf(() -> arm.getState() == ArmState.L1 && arm.atTargetAngle() && elevator.getState() == ElevatorState.L1 && elevator.atTargetHeight()));
 

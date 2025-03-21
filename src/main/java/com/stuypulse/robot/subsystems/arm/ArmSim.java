@@ -105,6 +105,12 @@ public class ArmSim extends Arm {
         return Math.abs(getCurrentAngle().getRadians() - getTargetAngle().getRadians()) < Settings.Arm.ANGLE_TOLERANCE.getRadians();
     }
 
+    @Override
+    public boolean canSkipClearance() {
+        return (getTargetAngle().getDegrees() - getCurrentAngle().getDegrees() < 10);
+    }
+    
+
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
             SLMath.clamp(getState().getTargetAngle().getDegrees() + operatorOffset.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
@@ -128,16 +134,6 @@ public class ArmSim extends Arm {
         else {
             return 0;
         }
-    }
-
-    @Override
-    public void setOperatorOffset(Rotation2d offset) {
-        this.operatorOffset = offset;
-    }
-
-    @Override
-    public Rotation2d getOperatorOffset() {
-        return this.operatorOffset;
     }
 
     @Override

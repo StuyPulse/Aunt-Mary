@@ -77,10 +77,10 @@ public class ElevatorImpl extends Elevator {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
     }
 
-    // @Override
-    // public boolean canSkipClearance() {
-    //     if (getTargetHeight() - getCurrentHeight() < 
-    // }
+    @Override
+    public boolean canSkipClearance() {
+        return getCurrentHeight() - getTargetHeight() < Settings.Elevator.SKIP_CLEARANCE_METERS;
+    }
 
     @Override
     public double getAccelGs() {
@@ -94,16 +94,6 @@ public class ElevatorImpl extends Elevator {
     @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
-    }
-
-    @Override
-    public void setOperatorOffset(double offset) {
-        this.operatorOffset = offset;
-    }
-
-    @Override
-    public double getOperatorOffset() {
-        return this.operatorOffset;
     }
 
     @Override
