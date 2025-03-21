@@ -126,7 +126,7 @@ public class LimelightVision extends SubsystemBase{
             }
         }
 
-        // SmartDashboard.putString("Vision/Megatag Mode", this.megaTagMode.toString());
+        SmartDashboard.putString("Vision/Megatag Mode", this.megaTagMode.toString());
     }
 }
  

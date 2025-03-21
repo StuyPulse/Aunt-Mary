@@ -31,6 +31,8 @@ public interface Settings {
 
     String CANIVORE_NAME = "CANIVORE";
 
+    SmartBoolean DEBUG_MODE = new SmartBoolean("Is Debug Mode Enabled", false);
+
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
@@ -38,7 +40,7 @@ public interface Settings {
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
         SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
         SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", true);
@@ -261,10 +263,6 @@ public interface Settings {
         SmartNumber CORAL_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Outtake Speed", 0.2);
         SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.3);
         SmartNumber HOLD_CORAL_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Coral Speed", -0.15);
-
-        double CORAL_STALL_CURRENT_THRESHOLD = 80.0;
-        double ALGAE_STALL_CURRENT_THRESHOLD = 80.0;
-        double STALL_DEBOUNCE_TIME = 0.0;
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(200);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400);

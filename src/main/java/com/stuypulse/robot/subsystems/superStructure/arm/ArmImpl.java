@@ -194,20 +194,22 @@ public class ArmImpl extends Arm {
             motor.setVoltage(0);
         }
 
-        SmartDashboard.putNumber("Arm/Constraints/Max vel (deg per s)", velLimitDegreesPerSecond.get());
-        SmartDashboard.putNumber("Arm/Constraints/Max accel (deg per s per s)", accelLimitDegreesPerSecondSquared.get());
-
-        SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
-        SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());
-
         SmartDashboard.putNumber("Arm/Setpoint (deg)", controller.getSetpoint());
         SmartDashboard.putNumber("Arm/Angle Error (deg)", controller.getError());
         
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
         SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 
-        SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        if (Settings.DEBUG_MODE.get()) {
+            SmartDashboard.putNumber("Arm/Constraints/Current Max vel (deg per s)", velLimitDegreesPerSecond.get());
+            SmartDashboard.putNumber("Arm/Constraints/Current Max accel (deg per s per s)", accelLimitDegreesPerSecondSquared.get());
+
+            SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
+            SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());
+
+            SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
+            SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+            SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        }
     }
 }

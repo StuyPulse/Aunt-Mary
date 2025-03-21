@@ -32,7 +32,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class FroggySim extends Froggy {
@@ -123,16 +122,6 @@ public class FroggySim extends Froggy {
     @Override
     public void setPivotVoltageOverride(Optional<Double> voltage) {
         this.pivotVoltageOverride = voltage;
-    }
-
-    @Override
-    public boolean isStallingCoral() {
-        return false;
-    }
-
-    @Override
-    public boolean isStallingAlgae() {
-        return false;
     }
 
     @Override

@@ -110,11 +110,13 @@ public class ElevatorImpl extends Elevator {
             motor.setVoltage(0);
         }
 
-        SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-
-        SmartDashboard.putNumber("Elevator/Constraints/Max vel (m per s)", velLimit);
-        SmartDashboard.putNumber("Elevator/Constraints/Max accel (m per s per s)", accelLimit);
+        if (Settings.DEBUG_MODE.get()) {
+            SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
+            SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+            SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+    
+            SmartDashboard.putNumber("Elevator/Constraints/Current Max vel (m per s)", velLimit);
+            SmartDashboard.putNumber("Elevator/Constraints/Current Max accel (m per s per s)", accelLimit);
+        }
     }
 }

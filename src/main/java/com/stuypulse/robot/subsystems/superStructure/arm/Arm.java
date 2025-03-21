@@ -93,13 +93,15 @@ public abstract class Arm extends SubsystemBase {
     public abstract void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit);
 
     @Override
-    public void periodic() {
-        RobotVisualizer.getInstance().updateArmAngle(getCurrentAngle(), atTargetAngle());
-        
-        // SmartDashboard.putString("Arm/State", getState().toString());
+    public void periodic() {        
+        SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());
 
         SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Arm/Target Angle (deg)", getState().getTargetAngle().getDegrees());
+
+        if (Settings.DEBUG_MODE.get()) {
+            RobotVisualizer.getInstance().updateArmAngle(getCurrentAngle(), atTargetAngle());
+        }
     }
 }

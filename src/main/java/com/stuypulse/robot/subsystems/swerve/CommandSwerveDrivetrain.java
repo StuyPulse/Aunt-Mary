@@ -439,31 +439,37 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Pose/X", getPose().getX());
         SmartDashboard.putNumber("Swerve/Pose/Y", getPose().getY());
         SmartDashboard.putNumber("Swerve/Pose/Theta", getPose().getRotation().getDegrees());
-        SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
-        SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
-
-        SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
-        SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
-
-        SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
         for (int i = 0; i < 4; i++) {
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Speed (m per s)", getModule(i).getCurrentState().speedMetersPerSecond);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Speed (m per s)", getModule(i).getTargetState().speedMetersPerSecond);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Angle (deg)", getModule(i).getCurrentState().angle.getDegrees() % 360);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Angle (deg)", getModule(i).getTargetState().angle.getDegrees() % 360);
-            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Stator Current", getModule(i).getDriveMotor().getStatorCurrent().getValueAsDouble());
         }
 
-        SmartDashboard.putNumber("Swerve/Gyro/Accel x (g)", getPigeon2().getAccelerationX().getValueAsDouble());
-        SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
-        SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
-
-        SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
-        SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());
-        SmartDashboard.putBoolean("Swerve/Is Froggy Facing Alliance Reef", isFroggyFacingAllianceReef());
-        SmartDashboard.putBoolean("Swerve/Is Froggy Facing Opposite Alliance Reef", isFroggyFacingOppositeAllianceReef());
-
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
+
+        if (Settings.DEBUG_MODE.get()) {
+            for (int i = 0; i < 4; i++) {
+                SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Stator Current", getModule(i).getDriveMotor().getStatorCurrent().getValueAsDouble());
+            }
+
+            SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
+            SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+    
+            SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
+            SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
+    
+            SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
+
+            SmartDashboard.putNumber("Swerve/Gyro/Accel x (g)", getPigeon2().getAccelerationX().getValueAsDouble());
+            SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
+            SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
+
+            SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
+            SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());
+            SmartDashboard.putBoolean("Swerve/Is Froggy Facing Alliance Reef", isFroggyFacingAllianceReef());
+            SmartDashboard.putBoolean("Swerve/Is Froggy Facing Opposite Alliance Reef", isFroggyFacingOppositeAllianceReef());
+        }
     }
 }

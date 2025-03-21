@@ -64,6 +64,6 @@ public abstract class Funnel extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putString("Funnel/State", getState().toString());
+        SmartDashboard.putString("Funnel/State", getState().toString());
     }
 }

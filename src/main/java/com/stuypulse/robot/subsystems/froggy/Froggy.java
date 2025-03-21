@@ -102,8 +102,6 @@ public abstract class Froggy extends SubsystemBase {
     }
 
     public abstract boolean isAtTargetAngle();
-    public abstract boolean isStallingCoral();
-    public abstract boolean isStallingAlgae();
 
     public abstract Rotation2d getCurrentAngle();
 
@@ -113,7 +111,7 @@ public abstract class Froggy extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putString("Froggy/Pivot State", getPivotState().toString());
-        // SmartDashboard.putString("Froggy/Roller State", getRollerState().toString());
+        SmartDashboard.putString("Froggy/Pivot State", getPivotState().toString());
+        SmartDashboard.putString("Froggy/Roller State", getRollerState().toString());
     }
 }

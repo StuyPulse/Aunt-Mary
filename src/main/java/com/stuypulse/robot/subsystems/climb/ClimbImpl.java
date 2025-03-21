@@ -120,14 +120,17 @@ public class ClimbImpl extends Climb {
             motor.setVoltage(0);
         }
 
-        SmartDashboard.putNumber("Climb/Absolute Encoder angle raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
         SmartDashboard.putNumber("Climb/Absolute Encoder angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations()));
 
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        if (Settings.DEBUG_MODE.get()) {
+            SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
+            SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+            SmartDashboard.putNumber("Climb/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+
+            SmartDashboard.putNumber("Climb/Absolute Encoder angle raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+        }
     }
 }
