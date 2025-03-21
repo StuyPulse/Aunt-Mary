@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
         // if (isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
 
-        PathfindingCommand.warmupCommand().schedule();
+        // PathfindingCommand.warmupCommand().schedule();
     }
 
     @Override

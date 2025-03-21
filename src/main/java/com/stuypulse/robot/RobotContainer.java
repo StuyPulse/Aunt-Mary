@@ -12,11 +12,11 @@ import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.PathfulFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.CheaterFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
-import com.stuypulse.robot.commands.autons.FDCB.HybridFourPieceFDCB;
-import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
-import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
-import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
-import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
+// import com.stuypulse.robot.commands.autons.FDCB.HybridFourPieceFDCB;
+// import com.stuypulse.robot.commands.autons.GAlgae.OneGThreeAlgae;
+// import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
+// import com.stuypulse.robot.commands.autons.HAlgae.OneHThreeAlgae;
+// import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.IKLA.PathfulFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.CheaterFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
@@ -77,7 +77,7 @@ import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriv
 import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriveAlignedToCatapultAllianceSide;
 import com.stuypulse.robot.commands.swerve.driveAligned.catapult.SwerveDriveDriveAlignedToCatapultOppositeAllianceSide;
-import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
+// import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
@@ -357,14 +357,21 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
-        driver.getRightStickButton()
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()));
+
+        
+            driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-                .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
-
+           
         // Acquire Closest Reef Algae
         // driver.getDPadLeft()
         //     .onTrue(new ShooterAcquireAlgae())
@@ -449,9 +456,9 @@ public class RobotContainer {
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
         PATHFUL_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
-        // AutonConfig HYBRID_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Hybrid)", HybridFourPieceIKLA::new,
-        //  "Blue I to HP");
-        //  HYBRID_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        AutonConfig HYBRID_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Hybrid)", HybridFourPieceIKLA::new,
+         "Blue I to HP");
+         HYBRID_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
         /** BOTTOM AUTONS **/
 
@@ -473,20 +480,20 @@ public class RobotContainer {
 
         /**  TOP ALGAE AUTONS **/
 
-        AutonConfig H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
-        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
+        // AutonConfig H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
+        // "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
         // AutonConfig H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae (DONT USE)", OneHThreeAlgae::new,
         // "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE.registerBlue(autonChooser);
+        // H_TWO_ALGAE.registerBlue(autonChooser);
         // H_THREE_ALGAE.registerBlue(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
+        // AutonConfig G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        // "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
         // AutonConfig G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae (DONT USE)", OneGThreeAlgae::new,
         // "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE.registerBlue(autonChooser);
+        // G_TWO_ALGAE.registerBlue(autonChooser);
         // G_THREE_ALGAE.registerBlue(autonChooser);
 
         /** TESTS **/
