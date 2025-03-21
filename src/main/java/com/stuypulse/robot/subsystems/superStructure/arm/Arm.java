@@ -96,7 +96,7 @@ public abstract class Arm extends SubsystemBase {
     public void periodic() {
         RobotVisualizer.getInstance().updateArmAngle(getCurrentAngle(), atTargetAngle());
         
-        SmartDashboard.putString("Arm/State", getState().toString());
+        // SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());
 
         SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());

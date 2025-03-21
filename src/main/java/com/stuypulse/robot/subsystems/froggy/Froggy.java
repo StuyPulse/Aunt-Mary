@@ -113,7 +113,7 @@ public abstract class Froggy extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putString("Froggy/Pivot State", getPivotState().toString());
-        SmartDashboard.putString("Froggy/Roller State", getRollerState().toString());
+        // SmartDashboard.putString("Froggy/Pivot State", getPivotState().toString());
+        // SmartDashboard.putString("Froggy/Roller State", getRollerState().toString());
     }
 }

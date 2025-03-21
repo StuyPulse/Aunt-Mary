@@ -111,6 +111,6 @@ public abstract class Shooter extends SubsystemBase {
         else {
             RobotVisualizer.getInstance().updateShooter(0, hasCoral());
         }
-        SmartDashboard.putString("Shooter/State", getState().toString());
+        // SmartDashboard.putString("Shooter/State", getState().toString());
     }
 }
