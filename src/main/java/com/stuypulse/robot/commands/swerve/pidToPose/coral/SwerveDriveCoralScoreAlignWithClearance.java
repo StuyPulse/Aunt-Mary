@@ -29,7 +29,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
             new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftPeg() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
         );
-    } 
+    }
 
     public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, ElevatorState correspondingElevatorState, ArmState correspondingArmState) {
         this(() -> branch, level, isFrontFacingReef, correspondingElevatorState, correspondingArmState);
@@ -42,7 +42,5 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
     private boolean isClear() {
         return (Elevator.getInstance().getState() == correspondingElevatorState && Elevator.getInstance().atTargetHeight() 
                 && Arm.getInstance().getState() == correspondingArmState && Arm.getInstance().atTargetAngle());
-                // || (correspondingArmState.getTargetAngle().getDegrees() < 90 && Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Clearances.MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT.getDegrees())
-                // || (correspondingArmState.getTargetAngle().getDegrees() > 90 && Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Clearances.MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK.getDegrees());
     }
 }

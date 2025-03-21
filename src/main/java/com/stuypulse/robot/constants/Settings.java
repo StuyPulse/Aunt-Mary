@@ -103,6 +103,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(5);
+
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE = 1.0 - Units.inchesToMeters(3);
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 1.0;
@@ -178,7 +180,7 @@ public interface Settings {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
-        Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
+        Rotation2d L1_ANGLE = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);

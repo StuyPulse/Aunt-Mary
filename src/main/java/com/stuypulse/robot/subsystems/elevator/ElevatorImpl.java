@@ -77,6 +77,11 @@ public class ElevatorImpl extends Elevator {
         return Math.abs(getTargetHeight() - getCurrentHeight()) < Settings.Elevator.HEIGHT_TOLERANCE_METERS;
     }
 
+    // @Override
+    // public boolean canSkipClearance() {
+    //     if (getTargetHeight() - getCurrentHeight() < 
+    // }
+
     @Override
     public double getAccelGs() {
         return motor.getAcceleration().getValueAsDouble();

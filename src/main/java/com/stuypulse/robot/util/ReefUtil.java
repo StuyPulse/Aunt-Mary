@@ -9,6 +9,7 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public interface ReefUtil {
 
@@ -94,6 +95,87 @@ public interface ReefUtil {
         }
 
         return nearestBranch;
+    }
+
+    /*** REEF FACE ***/
+    public enum ReefFace {
+        AB(NamedTags.BLUE_AB, NamedTags.RED_AB, CoralBranch.A, CoralBranch.B),
+        CD(NamedTags.BLUE_CD, NamedTags.RED_CD, CoralBranch.C, CoralBranch.D),
+        EF(NamedTags.BLUE_EF, NamedTags.RED_EF, CoralBranch.F, CoralBranch.E),
+        GH(NamedTags.BLUE_GH, NamedTags.RED_GH, CoralBranch.H, CoralBranch.G),
+        IJ(NamedTags.BLUE_IJ, NamedTags.RED_IJ, CoralBranch.J, CoralBranch.I),
+        KL(NamedTags.BLUE_KL, NamedTags.RED_KL, CoralBranch.K, CoralBranch.L);
+
+        private NamedTags correspondingBlueAprilTag;
+        private NamedTags correspondingRedAprilTag;
+        private CoralBranch leftBranchFieldRelative;
+        private CoralBranch rightBranchFieldRelative;
+
+        private ReefFace(NamedTags correspondingBlueAprilTag, NamedTags correspondingRedAprilTag, CoralBranch leftBranchFieldRelative, CoralBranch rightBranchFieldRelative) {
+            this.correspondingBlueAprilTag = correspondingBlueAprilTag;
+            this.correspondingRedAprilTag = correspondingRedAprilTag;
+            this.leftBranchFieldRelative = leftBranchFieldRelative;
+            this.rightBranchFieldRelative = rightBranchFieldRelative;
+        }
+
+        public CoralBranch getLeftBranchFieldRelative() {
+            return this.leftBranchFieldRelative;
+        }
+
+        public CoralBranch getRightBranchFieldRelative() {
+            return this.rightBranchFieldRelative;
+        }
+
+        public Pose2d getCorrespondingAprilTagPose() {
+            return Robot.isBlue() ? this.correspondingBlueAprilTag.getLocation().toPose2d() : this.correspondingRedAprilTag.getLocation().toPose2d();
+        }
+
+        public boolean isOnDriverStationSide() {
+            return switch (this) {
+                case KL, AB, CD -> true;
+                default -> false;
+            };
+        }
+
+        public static NamedTags getNearestReefSide() {
+            return Robot.isBlue() ? getClosestReefFace().correspondingBlueAprilTag : getClosestReefFace().correspondingRedAprilTag;
+        }
+
+        private Translation2d getLineStart() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.LENGTH_OF_REEF_FACE / 2, Rotation2d.kZero)).getTranslation();
+        }
+
+        private Translation2d getLineEnd() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, -Field.LENGTH_OF_REEF_FACE / 2, Rotation2d.kZero)).getTranslation();
+        }
+
+        public Pose2d getL1FroggyScorePose() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY, 
+                0, 
+                Rotation2d.kCW_90deg));
+        }
+
+        public Pose2d getL1FroggyClearPose() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROGGY + 0.05, 
+                0, 
+                Rotation2d.kCW_90deg));
+        }
+    }
+
+    public static ReefFace getClosestReefFace() {
+        ReefFace nearestReefFace = ReefFace.AB;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (ReefFace reefFace : ReefFace.values()) {
+            double distance = CommandSwerveDrivetrain.getInstance().getPose().minus(reefFace.getCorrespondingAprilTagPose()).getTranslation().getNorm();
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearestReefFace = reefFace;
+            }
+        }
+        return nearestReefFace;
     }
 
     /*** REEF ALGAE ***/

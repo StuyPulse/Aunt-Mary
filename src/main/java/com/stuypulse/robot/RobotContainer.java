@@ -114,6 +114,8 @@ import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProce
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
@@ -250,7 +252,7 @@ public class RobotContainer {
                         new ConditionalCommand(
                             new ShooterShootL1(), 
                             new ShooterShootForwards(), 
-                            () -> arm.getState() == ArmState.L1_FRONT),
+                            () -> arm.getState() == ArmState.L1),
                         shooter::shouldShootBackwards
                     ), 
                     () -> shooter.getState() == ShooterState.HOLD_ALGAE), 
@@ -269,7 +271,7 @@ public class RobotContainer {
                         || arm.getState() == ArmState.L3_BACK
                         || arm.getState() == ArmState.L2_FRONT
                         || arm.getState() == ArmState.L2_BACK
-                        || arm.getState() == ArmState.L1_FRONT), 
+                        || arm.getState() == ArmState.L1), 
                 () -> arm.getState() == ArmState.PROCESSOR || elevator.getState() == ElevatorState.PROCESSOR))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
@@ -301,11 +303,29 @@ public class RobotContainer {
                 .andThen(new FroggyPivotToStow()))
             .onFalse(new FroggyRollerHoldCoral());
 
-        // L1
+        // L1; if held, scores Loki L1; if tapped, scores Froggy L1
         driver.getRightBumper()
-            .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE).andThen(new FroggyPivotToL1()).onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
-            .onTrue(new ArmToL1().alongWith(new ElevatorToL1()).onlyIf(() -> shooter.hasCoral()));
+            .whileTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new ArmToL1().alongWith(new ElevatorToL1()))
+                .onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
+                .andThen(new FroggyPivotToL1())
+                .onlyIf(() -> !shooter.hasCoral()))
+            .onFalse(new FroggyPivotToStow().alongWith(new FroggyRollerStop()).onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1));
+        
+        driver.getRightBumper().debounce(0.25)
+            .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
+                .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1)
+                .andThen(new LEDApplyPattern(Settings.LED.SCORE_COLOR)))
+            .whileTrue(
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
+                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
+                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
+                        .andThen(new FroggyRollerShootCoral()))
+                )
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new ArmToFeed().alongWith(new ElevatorToFeed())).onlyIf(() -> arm.getState() == ArmState.L1 && arm.atTargetAngle() && elevator.getState() == ElevatorState.L1 && elevator.atTargetHeight()));
 
         // L4 coral score
         driver.getTopButton()
