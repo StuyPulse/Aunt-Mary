@@ -178,7 +178,6 @@ public class RobotContainer {
         configureDefaultCommands();
         configureAutomaticCommands();
         configureDriverButtonBindings();
-        configureOperatorButtonBindings();
         configureAutons();
         configureSysids();
 
@@ -453,63 +452,6 @@ public class RobotContainer {
             .onTrue(new ShooterShootBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle())
             .onFalse(new ShooterStop());
-    }
-
-    private void configureOperatorButtonBindings() {
-        // Elevator Voltage Override
-        new Trigger(() -> Math.abs(operator.getLeftStick().y) > Settings.Operator.Elevator.VOLTAGE_OVERRIDE_DEADBAND)   
-            .whileTrue(new ElevatorOverrideVoltage(() -> -operator.getLeftStick().y > 0 
-                ? (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_UP))
-                : (-operator.getLeftStick().y * Math.abs(Settings.Operator.Elevator.MAX_VOLTAGE_DOWN))));
-        
-        // Arm Voltage Override
-        new Trigger(() -> Math.abs(operator.getRightStick().x) > Settings.Operator.Arm.VOLTAGE_OVERRIDE_DEADBAND)
-            .whileTrue(new ArmOverrideVoltage(() -> operator.getRightStick().x > 0 
-                ? (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_UP))
-                : (operator.getRightStick().x * Math.abs(Settings.Operator.Arm.MAX_VOLTAGE_DOWN))));
-
-        // Shoot Backwards
-        operator.getLeftTriggerButton()
-            .whileTrue(new ConditionalCommand(
-                new ShooterShootForwards().alongWith(new FunnelReverse()),
-                new ShooterShootBackwards().alongWith(new FunnelReverse()),
-                () -> shooter.shouldShootBackwards()))
-            .onFalse(new ShooterStop());
-
-        // Shoot Forwards
-        operator.getRightTriggerButton()
-            .whileTrue(new ConditionalCommand(
-                new ShooterShootBackwards(), 
-                new ShooterShootForwards(), 
-                () -> shooter.shouldShootBackwards()))
-            .onFalse(new ShooterStop());
-
-        // Froggy pivot offsets
-        operator.getLeftBumper().whileTrue(new FroggyPivotMoveOperatorOffsetUp());
-        operator.getRightBumper().whileTrue(new FroggyPivotMoveOperatorOffsetDown());
-
-        // Climb voltage overrides
-        operator.getLeftMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_DOWN_VOLTAGE));
-        operator.getRightMenuButton().whileTrue(new ClimbOverrideVoltage(Settings.Operator.Climb.CLIMB_UP_VOLTAGE)); 
-
-        // Arm/Elevator to heights
-        operator.getTopButton().onTrue(swerve.isFrontFacingReef() 
-            ? new ElevatorToL4Front().alongWith(new ArmToL4Front()) 
-            : new ElevatorToL4Back().alongWith(new ArmToL4Back()));
-        operator.getRightButton().onTrue(swerve.isFrontFacingReef() 
-            ? new ElevatorToL3Front().alongWith(new ArmToL3Front()) 
-            : new ElevatorToL3Back().alongWith(new ArmToL3Back()));
-        operator.getBottomButton().onTrue(swerve.isFrontFacingReef() 
-            ? new ElevatorToL2Front().alongWith(new ArmToL2Front()) 
-            : new ElevatorToL2Back().alongWith(new ArmToL2Back()));
-
-        // Elevator offsets
-        operator.getDPadUp().onTrue(new ElevatorOffsetTargetUp());
-        operator.getDPadDown().onTrue(new ElevatorOffsetTargetDown());
-
-        // Arm offsets
-        operator.getDPadLeft().onTrue(new ArmOffsetTargetDown());
-        operator.getDPadRight().onTrue(new ArmOffsetTargetUp());
     }
 
     /**************/
