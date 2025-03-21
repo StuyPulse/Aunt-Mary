@@ -8,6 +8,9 @@ package com.stuypulse.robot.subsystems.shooter;
 
 import com.stuypulse.stuylib.network.SmartBoolean;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class ShooterSim extends Shooter {
 
     private SmartBoolean hasCoral;
@@ -24,6 +27,8 @@ public class ShooterSim extends Shooter {
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         super.periodic();
+        SmartDashboard.putNumber("Loop Times/Shooter", Timer.getFPGATimestamp() - startTime);
     }
 }

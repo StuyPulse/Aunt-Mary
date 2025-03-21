@@ -8,6 +8,8 @@ import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SuperStructure extends SubsystemBase{
@@ -142,7 +144,9 @@ public class SuperStructure extends SubsystemBase{
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         arm.setState(state.getArmState());
         elevator.setState(state.getElevatorState());
+        SmartDashboard.putNumber("Loop Times/Super Structure", Timer.getFPGATimestamp() - startTime);
     }
 }

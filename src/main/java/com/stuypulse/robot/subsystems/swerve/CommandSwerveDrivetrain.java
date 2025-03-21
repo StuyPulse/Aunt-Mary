@@ -32,6 +32,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -436,6 +437,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         SmartDashboard.putNumber("Swerve/Pose/X", getPose().getX());
         SmartDashboard.putNumber("Swerve/Pose/Y", getPose().getY());
         SmartDashboard.putNumber("Swerve/Pose/Theta", getPose().getRotation().getDegrees());
@@ -465,5 +467,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putBoolean("Swerve/Is Froggy Facing Opposite Alliance Reef", isFroggyFacingOppositeAllianceReef());
 
         Field.FIELD2D.getRobotObject().setPose(Robot.isBlue() ? getPose() : Field.transformToOppositeAlliance(getPose()));
+        SmartDashboard.putNumber("Loop Times/Swerve", Timer.getFPGATimestamp() - startTime);
     }
 }

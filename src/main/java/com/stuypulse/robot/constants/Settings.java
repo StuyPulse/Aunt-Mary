@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public interface Settings {
 
-    double DT = 0.020;
+    double DT = 0.001;
 
     String CANIVORE_NAME = "CANIVORE";
 

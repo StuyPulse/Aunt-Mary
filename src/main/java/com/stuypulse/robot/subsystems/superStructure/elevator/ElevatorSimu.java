@@ -31,6 +31,7 @@ import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -147,6 +148,7 @@ public class ElevatorSimu extends Elevator {
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetHeight());
@@ -173,5 +175,6 @@ public class ElevatorSimu extends Elevator {
         }
 
         sim.update(Settings.DT);
+        SmartDashboard.putNumber("Loop Times/Elevator", Timer.getFPGATimestamp() - startTime);
     }
 }

@@ -11,6 +11,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.MegaTagMode;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
@@ -22,6 +23,7 @@ import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -40,6 +42,12 @@ public class Robot extends TimedRobot {
     private RobotContainer robot;
     private Command auto;
 
+    private double lastTime;
+
+    public Robot() {
+        super(Settings.DT);
+    }
+
     public static boolean isBlue() {
         return DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
@@ -55,9 +63,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        
         robot = new RobotContainer();
         mode = RobotMode.DISABLED;
+
+        lastTime = Timer.getFPGATimestamp();
 
         DataLogManager.start();
         // Allows us to see the limelight feeds even while tethered through USB-B 
@@ -77,6 +86,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        SmartDashboard.putNumber("Loop Time", Timer.getFPGATimestamp() - lastTime);
+        lastTime = Timer.getFPGATimestamp();
 
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     }

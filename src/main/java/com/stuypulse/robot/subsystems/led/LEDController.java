@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -53,6 +54,7 @@ public class LEDController extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         if (Settings.EnabledSubsystems.LEDS.get()) {
             leds.start();
             leds.setData(ledsBuffer);
@@ -61,5 +63,6 @@ public class LEDController extends SubsystemBase {
             LEDPattern.kOff.applyTo(ledsBuffer);
             leds.setData(ledsBuffer);
         }
+        SmartDashboard.putNumber("Loop Times/LEDS", Timer.getFPGATimestamp() - startTime);
     }
 }

@@ -27,6 +27,7 @@ import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -145,6 +146,7 @@ public class ArmSim extends Arm {
     
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetAngle().getRadians());
@@ -171,5 +173,6 @@ public class ArmSim extends Arm {
         }
 
         sim.update(Settings.DT);
+        SmartDashboard.putNumber("Loop Times/ARM", Timer.getFPGATimestamp() - startTime);
     }
 }
