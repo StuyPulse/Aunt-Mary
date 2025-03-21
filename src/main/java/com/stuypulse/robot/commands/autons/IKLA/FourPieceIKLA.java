@@ -43,7 +43,7 @@ public class FourPieceIKLA extends SequentialCommandGroup {
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.15),
+            new WaitCommand(0.25),
             new ShooterStop(),
 
             // To HP, Score K
@@ -72,7 +72,7 @@ public class FourPieceIKLA extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.15),
+            new WaitCommand(0.125),
             new ShooterStop(),
 
             // To HP, Score L
@@ -100,7 +100,7 @@ public class FourPieceIKLA extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.15),
+            new WaitCommand(0.125),
             new ShooterStop(),
 
            // To HP, Score A
@@ -131,7 +131,7 @@ public class FourPieceIKLA extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootBackwards(),
-            new WaitCommand(0.15),
+            new WaitCommand(0.125),
             new ShooterStop(),
 
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
