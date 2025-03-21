@@ -396,6 +396,7 @@ public class RobotContainer {
 
         // Acquire Closest Reef Algae
         driver.getDPadLeft()
+            .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.isArmClearFromReef()))
             .whileTrue(new ConditionalCommand(
                 new SwerveDrivePidToNearestReefAlgae()
                     .alongWith(new ElevatorToAlgaeL3().alongWith(new ArmToAlgaeL3()))
@@ -405,7 +406,8 @@ public class RobotContainer {
                     .alongWith(new ElevatorToAlgaeL2().alongWith(new ArmToAlgaeL2()))
                     .alongWith(new ShooterAcquireAlgae())
                         .andThen(new SwerveDriveNudgeForward()), 
-                () -> ReefUtil.getClosestAlgae().isHighAlgae()))
+                () -> ReefUtil.getClosestAlgae().isHighAlgae())
+                .onlyIf(() -> Clearances.isArmClearFromReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new ElevatorToProcessor().alongWith(new ArmToProcessor())))
             .onFalse(new ShooterHoldAlgae());
