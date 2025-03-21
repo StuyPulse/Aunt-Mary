@@ -47,8 +47,6 @@ public interface Settings {
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(14.25 + 1); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
-        // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_FRONT = Rotation2d.fromDegrees(30);
-        // Rotation2d MIN_ARM_ANGLE_TO_IGNORE_CLEARANCE_BACK = Rotation2d.fromDegrees(200);
     }
 
     public interface Swerve {
@@ -95,7 +93,7 @@ public interface Settings {
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
@@ -117,7 +115,7 @@ public interface Settings {
     }
 
     public interface Shooter {
-        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.15);
+        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.22);
         SmartNumber CORAL_SHOOT_SPEED_FORWARD = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Forward", 0.75);
         SmartNumber CORAL_SHOOT_SPEED_REVERSE = new SmartNumber("Shooter/Target Speeds/Coral Shoot Speed Reverse", -0.75);
         SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.15);
@@ -142,20 +140,19 @@ public interface Settings {
 
     public interface Elevator {
 
-        double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 1.75;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 2.0;
+        double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 2.0;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 5.0;
 
-        double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
-        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 3.75;
+        double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2.0;
+        double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 5.0;
 
-        double FEED_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
+        double FEED_HEIGHT_METERS = 1.047119;
 
         // Coral
-        // double L1_HEIGHT_METERS = 1.125488;
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
-        double FRONT_L2_HEIGHT_METERS = 1.538086;
-        double FRONT_L3_HEIGHT_METERS = 1.036621;
+        double FRONT_L2_HEIGHT_METERS = 1.51086;
+        double FRONT_L3_HEIGHT_METERS = 1.056621;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
@@ -188,9 +185,6 @@ public interface Settings {
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
-        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
-        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
-
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
@@ -209,7 +203,7 @@ public interface Settings {
         Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
         Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
     }
 
     public interface Froggy {
