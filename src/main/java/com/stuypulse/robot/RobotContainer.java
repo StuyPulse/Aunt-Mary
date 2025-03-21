@@ -10,6 +10,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.BuzzController;
+import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.arm.ArmOverrideVoltage;
 import com.stuypulse.robot.commands.arm.ArmSetMotionProfileConstraints;
 import com.stuypulse.robot.commands.arm.ArmToClimb;
@@ -67,8 +68,6 @@ import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL3Front;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Back;
 import com.stuypulse.robot.commands.elevator.coral.ElevatorToL4Front;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetDown;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotMoveOperatorOffsetUp;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToClimb;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
@@ -327,66 +326,95 @@ public class RobotContainer {
         // L4 coral score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveCoralScoreAlignWithClearance(4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL4Front().alongWith(new ArmToL4Front()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootBackwards()),
-                new SwerveDrivePIDToNearestBranchScore(4, false)
-                    .alongWith(new ShooterWaitUntilHasCoral()
-                        .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()), 
+                new ScoreRoutine(driver, 4, true, ArmState.L4_FRONT, ElevatorState.L4_FRONT).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 4, false, ArmState.L4_BACK, ElevatorState.L4_BACK).alongWith(new WaitUntilCommand(() -> false)),
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+                .andThen(new ArmToFeed().alongWith(new ElevatorToFeed())))
             .onFalse(new ShooterStop());
-                
+
         // L3 coral score
         driver.getRightButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveCoralScoreAlignWithClearance(3, true, ElevatorState.L3_FRONT, ArmState.L3_FRONT)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL3Front().alongWith(new ArmToL3Front()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootBackwards()),
-                new SwerveDriveCoralScoreAlignWithClearance(3, false, ElevatorState.L3_BACK, ArmState.L3_BACK)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L3_BACK || arm.getState() != ArmState.L3_BACK)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootForwards()), 
+                new ScoreRoutine(driver, 3, true, ArmState.L3_FRONT, ElevatorState.L3_FRONT).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 3, false, ArmState.L3_BACK, ElevatorState.L3_BACK).alongWith(new WaitUntilCommand(() -> false)),
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+                .andThen(new ArmToFeed().alongWith(new ElevatorToFeed())))
             .onFalse(new ShooterStop());
 
         // L2 coral score
         driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDrivePIDToNearestBranchScore(2, true)
-                    .alongWith(new ShooterWaitUntilHasCoral()
-                        .andThen(new ElevatorToL2Front().alongWith(new ArmToL2Front()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ShooterShootForwards()),
-                new SwerveDriveCoralScoreAlignWithClearance(2, false, ElevatorState.L2_BACK, ArmState.L2_BACK)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
-                        .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
-                        .onlyIf(() -> elevator.getState() != ElevatorState.L2_BACK || arm.getState() != ArmState.L2_BACK)
-                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
-                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
-                    .andThen(new ShooterShootForwards()), 
+                new ScoreRoutine(driver, 2, true, ArmState.L2_FRONT, ElevatorState.L2_FRONT).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 2, false, ArmState.L2_BACK, ElevatorState.L2_BACK).alongWith(new WaitUntilCommand(() -> false)),
                 () -> swerve.isFrontFacingReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+                .andThen(new ArmToFeed().alongWith(new ElevatorToFeed())))
             .onFalse(new ShooterStop());
+            
+        // driver.getTopButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new SwerveDriveCoralScoreAlignWithClearance(4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT)
+        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
+        //                 .andThen(new ElevatorToL4Front().alongWith(new ArmToL4Front()))
+        //                 .onlyIf(() -> elevator.getState() != ElevatorState.L4_FRONT || arm.getState() != ArmState.L4_FRONT)
+        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+        //             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
+        //             .andThen(new ShooterShootBackwards()),
+        //         new SwerveDrivePIDToNearestBranchScore(4, false)
+        //             .alongWith(new ShooterWaitUntilHasCoral()
+        //                 .andThen(new ElevatorToL4Back().alongWith(new ArmToL4Back()))
+        //                 .onlyIf(() -> elevator.getState() != ElevatorState.L4_BACK || arm.getState() != ArmState.L4_BACK)
+        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+        //             .andThen(new ShooterShootForwards()), 
+        //         () -> swerve.isFrontFacingReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+        //     .onFalse(new ShooterStop());
+                
+        // // L3 coral score
+        // driver.getRightButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new SwerveDriveCoralScoreAlignWithClearance(3, true, ElevatorState.L3_FRONT, ArmState.L3_FRONT)
+        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
+        //                 .andThen(new ElevatorToL3Front().alongWith(new ArmToL3Front()))
+        //                 .onlyIf(() -> elevator.getState() != ElevatorState.L3_FRONT || arm.getState() != ArmState.L3_FRONT)
+        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+        //             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
+        //             .andThen(new ShooterShootBackwards()),
+        //         new SwerveDriveCoralScoreAlignWithClearance(3, false, ElevatorState.L3_BACK, ArmState.L3_BACK)
+        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
+        //                 .andThen(new ElevatorToL3Back().alongWith(new ArmToL3Back()))
+        //                 .onlyIf(() -> elevator.getState() != ElevatorState.L3_BACK || arm.getState() != ArmState.L3_BACK)
+        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+        //             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
+        //             .andThen(new ShooterShootForwards()), 
+        //         () -> swerve.isFrontFacingReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+        //     .onFalse(new ShooterStop());
+
+        // // L2 coral score
+        // driver.getBottomButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new SwerveDrivePIDToNearestBranchScore(2, true)
+        //             .alongWith(new ShooterWaitUntilHasCoral()
+        //                 .andThen(new ElevatorToL2Front().alongWith(new ArmToL2Front()))
+        //                 .onlyIf(() -> elevator.getState() != ElevatorState.L2_FRONT || arm.getState() != ArmState.L2_FRONT)
+        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+        //             .andThen(new ShooterShootForwards()),
+        //         new SwerveDriveCoralScoreAlignWithClearance(2, false, ElevatorState.L2_BACK, ArmState.L2_BACK)
+        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).alongWith(new ShooterWaitUntilHasCoral())
+        //                 .andThen(new ElevatorToL2Back().alongWith(new ArmToL2Back()))
+        //                 .onlyIf(() -> elevator.getState() != ElevatorState.L2_BACK || arm.getState() != ArmState.L2_BACK)
+        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())))
+        //             .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())) // check again since robot may have moved
+        //             .andThen(new ShooterShootForwards()), 
+        //         () -> swerve.isFrontFacingReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new ElevatorToFeed().alongWith(new ArmToFeed())))
+        //     .onFalse(new ShooterStop());
 
         // Barge score
         driver.getLeftButton()

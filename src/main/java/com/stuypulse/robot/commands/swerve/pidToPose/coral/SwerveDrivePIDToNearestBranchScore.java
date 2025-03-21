@@ -11,7 +11,7 @@ public class SwerveDrivePIDToNearestBranchScore extends ParallelDeadlineGroup{
         // super(() -> ReefUtil.getClosestCoralBranch(), level, isScoringFrontSide);
         super(
             new SwerveDrivePIDToBranchScore(() -> ReefUtil.getClosestCoralBranch(), level, isScoringFrontSide),
-            new LEDApplyPattern(() -> ReefUtil.getClosestCoralBranch().isLeftPeg() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)
+            new LEDApplyPattern(() -> ReefUtil.getClosestCoralBranch().isLeftPegFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)
         );
     }
 }

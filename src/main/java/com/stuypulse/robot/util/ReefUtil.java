@@ -40,7 +40,7 @@ public interface ReefUtil {
         }
 
         public Pose2d getBranchPoseProjectedOntoReefFace() {
-            return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.kZero));
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(0, Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPegRobotRelative    () ? -1 : 1), Rotation2d.kZero));
         }
 
         public Pose2d getScorePose(int level, boolean isScoringFrontSide) {
@@ -63,20 +63,27 @@ public interface ReefUtil {
             return getCorrespondingAprilTagPose().transformBy(
                 new Transform2d(
                     Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 
-                    Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? 0 : 0.055), 
+                    Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPegRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? -0.025 : 0.055), 
                     isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
         public Pose2d getClearancePose(boolean isScoringFrontSide) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM,
-                Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? 0 : 0.055), 
+                Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPegRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? -0.025 : 0.055), 
                 isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
-        public boolean isLeftPeg() {
+        public boolean isLeftPegRobotRelative() {
             return switch (this) {
                 case A, C, E, G, I, K -> true;
+                default -> false;
+            };
+        }
+
+        public boolean isLeftPegFieldRelative() {
+            return switch (this) {
+                case A, C, F, H, J, K -> true;
                 default -> false;
             };
         }

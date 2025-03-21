@@ -5,7 +5,7 @@ import com.stuypulse.robot.subsystems.elevator.Elevator.ElevatorState;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public abstract class ElevatorToHeight extends InstantCommand{
+public class ElevatorToHeight extends InstantCommand{
 
     private final Elevator elevator;
     private final ElevatorState state;

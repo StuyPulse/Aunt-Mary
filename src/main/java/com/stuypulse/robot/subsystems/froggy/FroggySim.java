@@ -126,26 +126,6 @@ public class FroggySim extends Froggy {
     }
 
     @Override
-    public void setPivotOperatorOffset(Rotation2d offset) {
-        this.pivotOperatorOffset = offset;
-    }
-
-    @Override
-    public Rotation2d getPivotOperatorOffset() {
-        return this.pivotOperatorOffset;
-    }
-
-    @Override
-    public boolean isStallingCoral() {
-        return false;
-    }
-
-    @Override
-    public boolean isStallingAlgae() {
-        return false;
-    }
-
-    @Override
     public void periodic() {
         super.periodic();
 

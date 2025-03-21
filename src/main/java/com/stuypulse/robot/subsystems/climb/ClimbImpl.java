@@ -126,8 +126,8 @@ public class ClimbImpl extends Climb {
         SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
 
-        SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Climb/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());
+        // SmartDashboard.putNumber("Climb/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Climb/Stator Current", motor.getStatorCurrent().getValueAsDouble());
     }
 }

@@ -38,14 +38,10 @@ public class FroggyImpl extends Froggy {
     private TalonFX pivotMotor;
     private DutyCycleEncoder absoluteEncoder;
 
-    private BStream isStallingCoral;
-    private BStream isStallingAlgae;
-
     private Controller controller;
     private MotionProfile motionProfile;
 
     private Optional<Double> pivotVoltageOverride;
-    private Rotation2d pivotOperatorOffset;
 
     protected FroggyImpl() {
         super();
@@ -58,13 +54,7 @@ public class FroggyImpl extends Froggy {
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
-        isStallingCoral = BStream.create(() -> Math.abs(rollerMotor.getStatorCurrent().getValueAsDouble()) > Settings.Froggy.CORAL_STALL_CURRENT_THRESHOLD)
-            .filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
-        isStallingAlgae = BStream.create(() -> Math.abs(rollerMotor.getStatorCurrent().getValueAsDouble()) > Settings.Froggy.ALGAE_STALL_CURRENT_THRESHOLD)
-            .filtered(new BDebounce.Both(Settings.Froggy.STALL_DEBOUNCE_TIME));
-
         pivotVoltageOverride = Optional.empty();
-        pivotOperatorOffset = Rotation2d.kZero;
 
         motionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
 
@@ -99,7 +89,7 @@ public class FroggyImpl extends Froggy {
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
             SLMath.clamp(
-                getPivotState().getTargetAngle().getDegrees() + pivotOperatorOffset.getDegrees(),
+                getPivotState().getTargetAngle().getDegrees(),
                 Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
                 Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
     }
@@ -110,28 +100,8 @@ public class FroggyImpl extends Froggy {
     }
 
     @Override
-    public boolean isStallingCoral() {
-        return isStallingCoral.get();
-    }
-
-    @Override
-    public boolean isStallingAlgae() {
-        return isStallingAlgae.get();
-    }
-
-    @Override
     public void setPivotVoltageOverride(Optional<Double> voltage) {
         this.pivotVoltageOverride = voltage;
-    }
-
-    @Override
-    public void setPivotOperatorOffset(Rotation2d offset) {
-        this.pivotOperatorOffset = offset;
-    }
-
-    @Override
-    public Rotation2d getPivotOperatorOffset() {
-        return this.pivotOperatorOffset;
     }
 
     @Override
@@ -156,20 +126,18 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putBoolean("Froggy/Pivot/At Target Angle", isAtTargetAngle());
         SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 
-        SmartDashboard.putNumber("Froggy/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Pivot/Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
+        // SmartDashboard.putNumber("Froggy/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Froggy/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Froggy/Pivot/Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
 
         SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
 
         // ROLLER
-        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling Coral", isStallingCoral());
-        SmartDashboard.putBoolean("Froggy/Roller/Is Stalling Algae", isStallingAlgae());
         
-        SmartDashboard.putNumber("Froggy/Roller/Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Roller/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Froggy/Roller/Stator Current", rollerMotor.getStatorCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Froggy/Roller/Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
+        // SmartDashboard.putNumber("Froggy/Roller/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Froggy/Roller/Stator Current", rollerMotor.getStatorCurrent().getValueAsDouble());
     }
 }

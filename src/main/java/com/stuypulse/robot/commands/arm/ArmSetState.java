@@ -5,7 +5,7 @@ import com.stuypulse.robot.subsystems.arm.Arm.ArmState;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public abstract class ArmSetState extends InstantCommand{
+public class ArmSetState extends InstantCommand{
     private final Arm arm;
     private final ArmState state;
 
