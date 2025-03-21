@@ -450,7 +450,7 @@ public class RobotContainer {
                     || climb.getState() == ClimbState.SHIMMY 
                     || climb.getState() == ClimbState.IDLE))
             .onTrue(new ShooterShootBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
-            .onFalse(new ClimbIdle())
+            .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
     }
 
