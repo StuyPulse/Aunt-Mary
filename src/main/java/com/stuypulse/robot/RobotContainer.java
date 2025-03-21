@@ -355,11 +355,18 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()));
+
+        // Align to closest Coral Station without path finding
         driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-                .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
 
@@ -434,14 +441,14 @@ public class RobotContainer {
 
         /** TOP AUTONS **/
 
-        AutonConfig FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Blue I to HP");
-        FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
-        FOUR_PIECE_IKLA.registerDefaultRed(autonChooser);
+        // AutonConfig FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
+        // "Blue I to HP");
+        // FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
+        // FOUR_PIECE_IKLA.registerDefaultRed(autonChooser);
 
-        AutonConfig CHEATER_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Cheater)", CheaterFourPieceIKLA::new,
-         "Blue I to HP");
-         CHEATER_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        // AutonConfig CHEATER_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Cheater)", CheaterFourPieceIKLA::new,
+        //  "Blue I to HP");
+        //  CHEATER_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
         AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
@@ -449,13 +456,13 @@ public class RobotContainer {
 
         /** BOTTOM AUTONS **/
 
-        AutonConfig FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
-        "Blue F to HP");
-        FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        // AutonConfig FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
+        // "Blue F to HP");
+        // FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
-        AutonConfig CHEATER_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Cheater)", CheaterFourPieceFDCB::new,
-         "Blue F to HP");
-         CHEATER_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        // AutonConfig CHEATER_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Cheater)", CheaterFourPieceFDCB::new,
+        //  "Blue F to HP");
+        //  CHEATER_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         AutonConfig PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
@@ -463,27 +470,27 @@ public class RobotContainer {
 
         /**  TOP ALGAE AUTONS **/
 
-        AutonConfig H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
-        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
+        // AutonConfig H_TWO_ALGAE = new AutonConfig("1 Piece H + 2 Algae", OneHTwoAlgae::new,
+        // "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
         // AutonConfig H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae (DONT USE)", OneHThreeAlgae::new,
         // "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE.registerBlue(autonChooser);
+        // H_TWO_ALGAE.registerBlue(autonChooser);
         // H_THREE_ALGAE.registerBlue(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
+        // AutonConfig G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
+        // "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge BackOut");
         // AutonConfig G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae (DONT USE)", OneGThreeAlgae::new,
         // "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE.registerBlue(autonChooser);
+        // G_TWO_ALGAE.registerBlue(autonChooser);
         // G_THREE_ALGAE.registerBlue(autonChooser);
 
         /** TESTS **/
 
-        AutonConfig MOBILITY = new AutonConfig("Mobility", Mobility::new,
-        "Mobility");
-        MOBILITY.registerBlue(autonChooser);
+        // AutonConfig MOBILITY = new AutonConfig("Mobility", Mobility::new,
+        // "Mobility");
+        // MOBILITY.registerBlue(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
