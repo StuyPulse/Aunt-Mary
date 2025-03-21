@@ -185,6 +185,9 @@ public interface Settings {
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
+        Rotation2d ALGAE_L2_ANGLE = Rotation2d.fromDegrees(-41.489999);
+        Rotation2d ALGAE_L3_ANGLE = Rotation2d.fromDegrees(-41.489999);
+
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
@@ -210,7 +213,6 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20 - 5);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(0);
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(44);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
