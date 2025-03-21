@@ -234,6 +234,9 @@ public interface Settings {
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
 
+            Rotation2d MAX_VEL_CLIMB = Rotation2d.fromDegrees(200.0);
+            Rotation2d MAX_ACCEL_CLIMB = Rotation2d.fromDegrees(600.0);
+
             Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
         }
