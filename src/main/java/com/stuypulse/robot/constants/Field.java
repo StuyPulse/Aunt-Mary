@@ -161,6 +161,8 @@ public interface Field {
 
     /*** CORAL STATIONS ***/
 
+    /*** CORAL STATIONS ***/
+
     public enum CoralStation {
         BLUE_CD_CORAL_STATION(NamedTags.BLUE_CD_CORAL_STATION, new Translation2d(0, Field.WIDTH / 2 - Units.inchesToMeters(109.13)), new Translation2d(Units.inchesToMeters(65.84), 0)),
         BLUE_KL_CORAL_STATION(NamedTags.BLUE_KL_CORAL_STATION, new Translation2d(0, Field.WIDTH / 2 + Units.inchesToMeters(109.13)), new Translation2d(Units.inchesToMeters(65.84), Field.WIDTH)),
@@ -189,6 +191,32 @@ public interface Field {
                 : transformToOppositeAlliance(new Pose2d(blueOriginLineEnd, Rotation2d.kZero)).getTranslation();
         }
 
+        // Kalimul said to add a comment that this is getting the closest point to a line
+        public Pose2d getTargetPose() {
+            Translation2d lineStart = getLineStart();
+            Translation2d lineEnd = getLineEnd();
+            Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
+
+            Vector2D lineStartToEnd = new Vector2D(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
+            Vector2D lineStartToPoint = new Vector2D(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
+            
+            double lineLengthSquared = lineStartToEnd.dot(lineStartToEnd);
+            double dotProduct = lineStartToEnd.dot(lineStartToPoint);
+            
+            double t = dotProduct / lineLengthSquared; // Projection factor
+            
+            double coralStationLength = lineStart.getDistance(lineEnd);
+            double percentToIgnoreFromEachSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2) / coralStationLength;
+            
+            t = Math.max(percentToIgnoreFromEachSide, Math.min(1 - percentToIgnoreFromEachSide, t));
+            
+            Translation2d closestPointOnCoralStation = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
+
+            return new Pose2d(closestPointOnCoralStation, correspondingAprilTag.getLocation().toPose2d().getRotation()).transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION, 
+                0, Rotation2d.kZero));
+        }
+
         public Vector2D getHeadingAsVector() {
             return new Vector2D(
                 Math.cos(correspondingAprilTag.getLocation().getRotation().getZ()), 
@@ -206,21 +234,32 @@ public interface Field {
         }
 
         public static CoralStation getClosestCoralStation() {
-            double closestDistance = Double.MAX_VALUE;
-            CoralStation nearestStation = BLUE_CD_CORAL_STATION;
-
-            for (CoralStation station : CoralStation.values()) {
-                double distance = station.getDistanceToStation();
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    nearestStation = station;
-                }
+            if (Robot.isBlue()) {
+                return BLUE_CD_CORAL_STATION.getDistanceToStation() <  BLUE_KL_CORAL_STATION.getDistanceToStation()
+                    ? BLUE_CD_CORAL_STATION
+                    : BLUE_KL_CORAL_STATION;
             }
-            return nearestStation;
+            else {
+                return RED_CD_CORAL_STATION.getDistanceToStation() <  RED_KL_CORAL_STATION.getDistanceToStation()
+                    ? RED_CD_CORAL_STATION
+                    : RED_KL_CORAL_STATION;
+            }
         }
 
         public static double getDistanceToClosestStation(Pose2d pose) {
             return getClosestCoralStation().getDistanceToStation();
+        }
+
+        public static CoralStation getCoralStation(boolean isCD) {
+            if (isCD) {
+                return Robot.isBlue() ?
+                    CoralStation.BLUE_CD_CORAL_STATION : 
+                    CoralStation.RED_CD_CORAL_STATION; 
+            } else {
+                return Robot.isBlue() ?
+                    CoralStation.BLUE_KL_CORAL_STATION :
+                    CoralStation.RED_KL_CORAL_STATION;
+            }
         }
     }
 

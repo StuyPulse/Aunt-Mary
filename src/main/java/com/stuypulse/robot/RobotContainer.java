@@ -113,6 +113,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProce
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToProcessorShooter;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToNearestBranchScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
@@ -409,22 +410,10 @@ public class RobotContainer {
                 .andThen(new ElevatorToProcessor().alongWith(new ArmToProcessor())))
             .onFalse(new ShooterHoldAlgae());
 
-        // Auto processor
-        // driver.getDPadDown()
-        //     .whileTrue(new ConditionalCommand(
-        //         new SwerveDrivePIDToProcessorShooter()
-        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-        //                 .andThen(new ArmToProcessor().alongWith(new ElevatorToFeed()))
-        //                 .andThen(new ArmWaitUntilAtTarget().alongWith(new ElevatorWaitUntilAtTargetHeight())))
-        //             .andThen(new ShooterShootAlgae()), 
-        //         new SwerveDrivePIDToProcessorFroggy()
-        //             .alongWith(new FroggyPivotToProcessor().andThen(new FroggyPivotWaitUntilAtTargetAngle()))
-        //             .andThen(new FroggyRollerShootAlgae()), 
-        //         () -> shooter.getState() == ShooterState.HOLD_ALGAE))
-        //     .onFalse(new ArmToFeed().alongWith(new ElevatorToFeed()))
-        //     .onFalse(new ShooterStop())
-        //     .onFalse(new FroggyRollerStop())
-        //     .onFalse(new FroggyPivotToStow());
+        driver.getRightStickButton()
+            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+                .onlyIf(() -> !shooter.hasCoral()));
 
         // Unstuck Coral
         driver.getDPadDown()
