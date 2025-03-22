@@ -47,6 +47,8 @@ public interface Settings {
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(14.25 + 1); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
+
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = Units.inchesToMeters(10);
     }
 
     public interface Swerve {
@@ -199,6 +201,8 @@ public interface Settings {
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
+
+        Rotation2d BARGE_118 = Rotation2d.fromDegrees(90);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
