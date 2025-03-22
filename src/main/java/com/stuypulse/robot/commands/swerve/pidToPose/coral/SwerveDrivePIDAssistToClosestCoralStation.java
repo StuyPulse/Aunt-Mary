@@ -51,17 +51,17 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
             .filtered(
                 new VDeadZone(Drive.DEADBAND),
                 x -> x.clamp(1),
-                x -> x.pow(Drive.POWER.get()),
-                x -> x.mul(Drive.MAX_TELEOP_SPEED.get()),
+                x -> x.pow(Drive.POWER),
+                x -> x.mul(Drive.MAX_TELEOP_SPEED),
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
 
         driverAngularVelocity = IStream.create(driver::getRightX)
             .filtered(
                 x -> -x,
-                x -> SLMath.deadband(x, Turn.DEADBAND.get()),
-                x -> SLMath.spow(x, Turn.POWER.get()),
-                x -> x * (Turn.MAX_TELEOP_TURN_SPEED.get()),
+                x -> SLMath.deadband(x, Turn.DEADBAND),
+                x -> SLMath.spow(x, Turn.POWER),
+                x -> x * (Turn.MAX_TELEOP_TURN_SPEED),
                 new LowPassFilter(Turn.RC));
 
         controller = new HolonomicController(

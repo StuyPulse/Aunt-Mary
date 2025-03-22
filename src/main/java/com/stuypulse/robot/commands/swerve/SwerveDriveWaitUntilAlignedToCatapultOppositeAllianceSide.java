@@ -18,7 +18,7 @@ public class SwerveDriveWaitUntilAlignedToCatapultOppositeAllianceSide extends C
 
     private boolean isAligned() {
         return Math.abs((Field.LENGTH / 2 + Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT) - CommandSwerveDrivetrain.getInstance().getPose().getX())
-            < Alignment.Tolerances.X_TOLERANCE.get();
+            < Alignment.Tolerances.X_TOLERANCE;
     }
 
     @Override

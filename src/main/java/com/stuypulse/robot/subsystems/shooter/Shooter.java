@@ -54,14 +54,14 @@ public abstract class Shooter extends SubsystemBase {
         UNJAMB_CORAL_BACKWARDS(Settings.Shooter.UNJAMB_CORAL_BACKWARDS_SPEED),
         STOP(0);
 
-        private Number speed;
+        private double speed;
 
-        private ShooterState(Number speed) {
+        private ShooterState(double speed) {
             this.speed = speed;
         }
 
         public double getSpeed() {
-            return this.speed.doubleValue();
+            return this.speed;
         }
     }
 

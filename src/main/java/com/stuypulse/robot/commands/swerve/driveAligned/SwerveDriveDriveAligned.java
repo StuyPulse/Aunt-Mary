@@ -41,8 +41,8 @@ public class SwerveDriveDriveAligned extends Command {
             .filtered(
                 new VDeadZone(Drive.DEADBAND),
                 x -> x.clamp(1),
-                x -> x.pow(Drive.POWER.get()),
-                x -> x.mul(Drive.MAX_TELEOP_SPEED.get()),
+                x -> x.pow(Drive.POWER),
+                x -> x.mul(Drive.MAX_TELEOP_SPEED),
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
 

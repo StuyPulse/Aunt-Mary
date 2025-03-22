@@ -57,36 +57,36 @@ public interface Settings {
         double NUDGE_SPEED_METERS_PER_SECOND_AUTON = 1.4;
         
         public interface Constraints {    
-            SmartNumber MAX_VELOCITY = new SmartNumber("Swerve/Motion/Max Velocity (m per s)", 4.0);
-            SmartNumber MAX_ACCELERATION = new SmartNumber("Swerve/Motion/Max Acceleration (m per s^2)", 15.0);
-            SmartNumber MAX_ANGULAR_VELOCITY = new SmartNumber("Swerve/Motion/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
-            SmartNumber MAX_ANGULAR_ACCELERATION = new SmartNumber("Swerve/Motion/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
+            double MAX_VELOCITY_M_PER_S = 4.0;
+            double MAX_ACCEL_M_PER_S_SQUARED = 15.0;
+            double MAX_ANGULAR_VEL_RAD_PER_S = Units.degreesToRadians(400);
+            double MAX_ANGULAR_ACCEL_RAD_PER_S = Units.degreesToRadians(900);
     
             PathConstraints DEFAULT_CONSTRAINTS =
                 new PathConstraints(
-                    MAX_VELOCITY.get(),
-                    MAX_ACCELERATION.get(),
-                    MAX_ANGULAR_VELOCITY.get(),
-                    MAX_ANGULAR_ACCELERATION.get());
+                    MAX_VELOCITY_M_PER_S,
+                    MAX_ACCEL_M_PER_S_SQUARED,
+                    MAX_ANGULAR_VEL_RAD_PER_S,
+                    MAX_ANGULAR_ACCEL_RAD_PER_S);
         }
 
         public interface Alignment {
             public interface Constraints {
-                SmartNumber DEFAULT_MAX_VELOCITY = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)", 4.0);
-                SmartNumber DEFAULT_MAX_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 15.0);
-                SmartNumber DEFUALT_MAX_ANGULAR_VELOCITY = new SmartNumber("Alignment/Constraints/Max Angular Velocity (rad per s)", Units.degreesToRadians(400));
-                SmartNumber DEFAULT_MAX_ANGULAR_ACCELERATION = new SmartNumber("Alignment/Constraints/Max Angular Acceleration (rad per s^2)", Units.degreesToRadians(900));
+                double DEFAULT_MAX_VELOCITY = 4.0;
+                double DEFAULT_MAX_ACCELERATION = 15.0;
+                double DEFUALT_MAX_ANGULAR_VELOCITY = Units.degreesToRadians(400);
+                double DEFAULT_MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(900);
 
-                SmartNumber MAX_VELOCITY_AUTON = new SmartNumber("Alignment/Constraints/Max Velocity (m per s)",5.85); //5.85
-                SmartNumber MAX_ACCELERATION_AUTON = new SmartNumber("Alignment/Constraints/Max Acceleration (m per s^2)", 17); //17
+                double MAX_VELOCITY_AUTON = 5.85;
+                double MAX_ACCELERATION_AUTON = 17;
             }
 
             public interface Tolerances {
-                SmartNumber X_TOLERANCE = new SmartNumber("Alignment/Tolerances/X Tolerance (m)", Units.inchesToMeters(2.0)); 
-                SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Tolerances/Y Tolerance (m)", Units.inchesToMeters(2.0));
-                SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Tolerances/Theta Tolerance (rad)", Units.degreesToRadians(5));
+                double X_TOLERANCE = Units.inchesToMeters(2.0); 
+                double Y_TOLERANCE = Units.inchesToMeters(2.0);
+                double THETA_TOLERANCE = Units.degreesToRadians(5);
     
-                SmartNumber MAX_VELOCITY_WHEN_ALIGNED = new SmartNumber("Alignment/Tolerances/Max Velocity When Aligned", 0.15);
+                double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
                 double ALIGNMENT_DEBOUNCE = 0.15;
             }
@@ -122,28 +122,28 @@ public interface Settings {
     }
 
     public interface Shooter {
-        SmartNumber CORAL_SHOOT_SPEED_L1 = new SmartNumber("Shooter/Target Speeds/Coral L1 Shoot Speed", 0.22);
-        SmartNumber CORAL_SHOOT_SPEED_L2_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L2 Front Shoot Speed", 0.4);
-        SmartNumber CORAL_SHOOT_SPEED_L2_BACK = new SmartNumber("Shooter/Target Speeds/Coral L2 Back Shoot Speed", 0.4);
-        SmartNumber CORAL_SHOOT_SPEED_L3_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L3 Front Shoot Speed", -0.4);
-        SmartNumber CORAL_SHOOT_SPEED_L3_BACK = new SmartNumber("Shooter/Target Speeds/Coral L3 Back Shoot Speed", 0.4);
-        SmartNumber CORAL_SHOOT_SPEED_L4_FRONT = new SmartNumber("Shooter/Target Speeds/Coral L4 Front Shoot Speed", -1.0);
-        SmartNumber CORAL_SHOOT_SPEED_L4_BACK = new SmartNumber("Shooter/Target Speeds/Coral L4 Back Shoot Speed", 0.75);
+        double CORAL_SHOOT_SPEED_L1 = 0.22;
+        double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
+        double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
+        double CORAL_SHOOT_SPEED_L3_FRONT = 0.4;
+        double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
+        double CORAL_SHOOT_SPEED_L4_FRONT = 1.0;
+        double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
 
-        SmartNumber CORAL_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Coral Acquire Speed", 0.2);
-        SmartNumber ALGAE_ACQUIRE_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Acquire Speed", -1.0);
+        double CORAL_ACQUIRE_SPEED = 0.2;
+        double ALGAE_ACQUIRE_SPEED = -1.0;
 
-        SmartNumber ALGAE_SHOOT_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Shoot Speed", 0.5);
-        SmartNumber ALGAE_HOLD_SPEED = new SmartNumber("Shooter/Target Speeds/Algae Hold Speed", -0.25);
+        double ALGAE_SHOOT_SPEED = 0.5;
+        double ALGAE_HOLD_SPEED = -0.25;
 
-        SmartNumber UNJAMB_CORAL_BACKWARDS_SPEED = new SmartNumber("Shooter/Target Speeds/Unjamb Coral Backwards Speed", -0.15);
+        double UNJAMB_CORAL_BACKWARDS_SPEED = -0.15;
         
         double HAS_CORAL_DEBOUNCE = 0.0;
     }
 
     public interface Funnel {
-        SmartNumber FORWARD_SPEED = new SmartNumber("Funnel/Forward Speed", 1.0);
-        SmartNumber REVERSE_SPEED = new SmartNumber("Funnel/Reverse Speed", -1.0);
+        double FORWARD_SPEED = 1.0;
+        double REVERSE_SPEED = -1.0;
 
         double STALL_CURRENT = 19;
         double STALL_DETECTION_TIME = 0.25;
@@ -309,27 +309,27 @@ public interface Settings {
         double BRANCH_OVERRIDE_DEADBAND = 0.15;
 
         public interface Drive {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.08);
+            double DEADBAND = 0.08;
 
-            SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
-            SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
+            double RC = 0.05;
+            double POWER = 2;
 
-            SmartNumber MAX_TELEOP_SPEED = new SmartNumber("Driver Settings/Drive/Max Speed", Swerve.Constraints.MAX_VELOCITY.get());
-            SmartNumber MAX_TELEOP_ACCEL = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.Constraints.MAX_ACCELERATION.get());
+            double MAX_TELEOP_SPEED = Swerve.Constraints.MAX_VELOCITY_M_PER_S;
+            double MAX_TELEOP_ACCEL = Swerve.Constraints.MAX_ACCEL_M_PER_S_SQUARED;
 
-            SmartNumber MAX_TELEOP_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Drive/Max Speed While Climbing", MAX_TELEOP_SPEED.get() / 2);
+            double MAX_TELEOP_SPEED_WHILE_CLIMBING = MAX_TELEOP_SPEED / 2;
         }
 
         public interface Turn {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.08);
+            double DEADBAND = 0.08;
 
-            SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
-            SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);
+            double RC = 0.05;
+            double POWER = 2;
 
-            SmartNumber MAX_TELEOP_TURN_SPEED = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad per s)", Swerve.Constraints.MAX_ANGULAR_VELOCITY.get());
-            SmartNumber MAX_TELEOP_TURN_ACCEL = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad per s^2)", Swerve.Constraints.MAX_ANGULAR_ACCELERATION.get());
+            double MAX_TELEOP_TURN_SPEED = Swerve.Constraints.MAX_ANGULAR_VEL_RAD_PER_S;
+            double MAX_TELEOP_TURN_ACCEL = Swerve.Constraints.MAX_ANGULAR_ACCEL_RAD_PER_S;
 
-            SmartNumber MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = new SmartNumber("Driver Settings/Turn/Max Turn Speed While Climbing (rad per s)", MAX_TELEOP_TURN_SPEED.get() / 2);
+            double MAX_TELEOP_TURN_SPEED_WHILE_CLIMBING = MAX_TELEOP_TURN_SPEED / 2;
         }
     }
 }

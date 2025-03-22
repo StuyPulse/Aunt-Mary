@@ -24,7 +24,7 @@ public interface Clearances {
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
-                - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
+                - Math.hypot(Alignment.Tolerances.X_TOLERANCE, Alignment.Tolerances.Y_TOLERANCE));
     }
 
     private static boolean isArmClearFromAllianceReef() {
@@ -32,7 +32,7 @@ public interface Clearances {
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
                 + Constants.LENGTH_WITH_BUMPERS_METERS / 2 
-                - Math.hypot(Alignment.Tolerances.X_TOLERANCE.get(), Alignment.Tolerances.Y_TOLERANCE.get()));
+                - Math.hypot(Alignment.Tolerances.X_TOLERANCE, Alignment.Tolerances.Y_TOLERANCE));
     }
 
     public static boolean canMoveFroggyWithoutColliding(PivotState targetState) {

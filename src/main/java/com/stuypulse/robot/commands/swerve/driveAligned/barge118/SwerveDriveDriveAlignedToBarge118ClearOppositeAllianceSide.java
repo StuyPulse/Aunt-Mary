@@ -35,9 +35,9 @@ public class SwerveDriveDriveAlignedToBarge118ClearOppositeAllianceSide extends 
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
             .filtered(
-                x -> SLMath.deadband(x, Settings.Driver.Drive.DEADBAND.get()),
-                x -> SLMath.spow(x, Settings.Driver.Drive.POWER.get()),
-                x -> x * Settings.Driver.Drive.MAX_TELEOP_SPEED.get(),
+                x -> SLMath.deadband(x, Settings.Driver.Drive.DEADBAND),
+                x -> SLMath.spow(x, Settings.Driver.Drive.POWER),
+                x -> x * Settings.Driver.Drive.MAX_TELEOP_SPEED,
                 new RateLimit(Drive.MAX_TELEOP_ACCEL),
                 new LowPassFilter(Drive.RC));
 
@@ -53,7 +53,7 @@ public class SwerveDriveDriveAlignedToBarge118ClearOppositeAllianceSide extends 
     @Override
     public void execute() {
         Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118, swerve.getPose().getX()), driverYVelocity.get())
-            .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED.get(), Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY.get()));
+            .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY));
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withVelocityX(targetVelocity.x)
