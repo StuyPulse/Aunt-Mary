@@ -13,9 +13,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Fr
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
-import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwards;
-import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwardsAuton;
-import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeForward;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDriveWithRobotRelativeSpeeds;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetPoseToStartOfPath;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118AllianceSide;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapultAllianceSide;
@@ -76,7 +74,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureBarge118()),
                 new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new SwerveDriveNudgeBackwardsAuton().withTimeout(0.5))
+                            .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_AUTON, 0, 0).withTimeout(0.5))
                                 .andThen(new ShooterShootAlgae())
             ),
 
@@ -101,7 +99,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureBarge118()),
                 new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new SwerveDriveNudgeBackwardsAuton().withTimeout(0.5))
+                            .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_AUTON, 0, 0).withTimeout(0.5))
                                 .andThen(new ShooterShootAlgae())
             ),
             
@@ -127,7 +125,7 @@ public class OneHThreeAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureBarge118()),
                 new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new SwerveDriveNudgeBackwardsAuton().withTimeout(0.5))
+                            .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_AUTON, 0, 0).withTimeout(0.5))
                                 .andThen(new ShooterShootAlgae())
             ),
 
