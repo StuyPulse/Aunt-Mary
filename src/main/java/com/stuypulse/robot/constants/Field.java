@@ -137,12 +137,12 @@ public interface Field {
     public static Pose2d getBargeTargetPose(Pose2d robot) {
         if (Robot.isBlue()) {
             return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT, 
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118, 
                 Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
                 NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d());
         } else {
             return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT, 
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118, 
                 Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
                 NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d());
         }

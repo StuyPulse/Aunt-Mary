@@ -378,25 +378,6 @@ public class RobotContainer {
                 
                 () -> swerve.getPose().getX() < Field.LENGTH / 2)
             ) 
-            // .whileTrue(new ConditionalCommand(
-            //     new SwerveDriveWaitUntilClearFromBarge()
-            //         .deadlineFor(new SwerveDriveDriveAlignedToBargeClearAllianceSide(driver))
-            //         .andThen(new ArmToBarge118().alongWith(new ElevatorToBarge()))
-            //         .andThen(new ArmWaitUntilAtTarget().alongWith(new ElevatorWaitUntilAtTargetHeight()))
-            //         .andThen(new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
-            //             .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()
-            //                 .andThen(new ShooterShootAlgae()))),     
-
-            //     new SwerveDriveWaitUntilClearFromBarge()
-            //         .deadlineFor(new SwerveDriveDriveAlignedToBargeClearOppositeAllianceSide(driver))
-            //         .andThen(new ArmToBarge118().alongWith(new ElevatorToBarge()))
-            //         .andThen(new ArmWaitUntilAtTarget().alongWith(new ElevatorWaitUntilAtTargetHeight()))
-            //         .andThen(new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
-            //             .alongWith(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide()
-            //                 .andThen(new ShooterShootAlgae()))),
-                
-            //     () -> swerve.getPose().getX() < Field.LENGTH / 2)
-            // ) 
             .onFalse(new SwerveDriveWaitUntilClearFromBarge().andThen(new ArmToFeed().alongWith(new ElevatorToFeed())))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 

@@ -107,8 +107,8 @@ public interface Settings {
 
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(5);
 
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT = 1.0 - Units.inchesToMeters(3);
-                // double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.43;
+                // double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT = 1.0 - Units.inchesToMeters(3);
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.43;
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 1.0;
 

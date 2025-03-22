@@ -52,7 +52,7 @@ public class SwerveDriveDriveAlignedToBargeScoreAllianceSide extends Command {
 
     @Override
     public void execute() {
-        Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT, swerve.getPose().getX()), driverYVelocity.get())
+        Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118, swerve.getPose().getX()), driverYVelocity.get())
             .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED.get(), Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY.get()));
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
