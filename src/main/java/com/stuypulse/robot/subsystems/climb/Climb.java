@@ -6,8 +6,6 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
-import java.util.Optional;
-
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.math.SLMath;
@@ -58,12 +56,9 @@ public abstract class Climb extends SubsystemBase {
 
     public void setState(ClimbState state) {
         this.state = state;
-        setVoltageOverride(Optional.empty());
     }
 
     public abstract Rotation2d getCurrentAngle();
-
-    public abstract void setVoltageOverride(Optional<Double> voltage);
 
     @Override
     public void periodic() {

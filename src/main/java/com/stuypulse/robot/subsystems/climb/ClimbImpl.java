@@ -23,8 +23,6 @@ public class ClimbImpl extends Climb {
     private TalonFX motor;
     private DutyCycleEncoder absoluteEncoder;
 
-    private Optional<Double> voltageOverride;
-
     protected ClimbImpl() {
         super();
         motor = new TalonFX(Ports.Climb.MOTOR);
@@ -33,8 +31,6 @@ public class ClimbImpl extends Climb {
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(false);
-
-        voltageOverride = Optional.empty();
     }
 
     private Rotation2d getTargetAngle() {
@@ -49,70 +45,60 @@ public class ClimbImpl extends Climb {
     }
 
     @Override
-    public void setVoltageOverride(Optional<Double> voltage) {
-        this.voltageOverride = voltage;
-    }
-
-    @Override
     public void periodic() {
         super.periodic();
         if (Settings.EnabledSubsystems.CLIMB.get()) {
-            if (voltageOverride.isPresent()) {
-                motor.setVoltage(voltageOverride.get());
-            }
-            else {
-                double angleErrorDegrees = getTargetAngle().getDegrees() - getCurrentAngle().getDegrees();
-                SmartDashboard.putNumber("Climb/Angle Error (deg)", angleErrorDegrees);
+            double angleErrorDegrees = getTargetAngle().getDegrees() - getCurrentAngle().getDegrees();
+            SmartDashboard.putNumber("Climb/Angle Error (deg)", angleErrorDegrees);
 
-                if (getState() == ClimbState.IDLE) {
+            if (getState() == ClimbState.IDLE) {
+                motor.setVoltage(0);
+            }
+            else if (getState() == ClimbState.OPEN) {
+                if (angleErrorDegrees < 0) {
+                    if (Math.abs(angleErrorDegrees) < 15) {
+                        motor.setVoltage(-Settings.Climb.OPEN_VOLTAGE_LOW);
+                    }
+                    else {
+                        motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
+                    }
+                }
+                else {
                     motor.setVoltage(0);
                 }
-                else if (getState() == ClimbState.OPEN) {
-                    if (angleErrorDegrees < 0) {
-                        if (Math.abs(angleErrorDegrees) < 15) {
-                            motor.setVoltage(-Settings.Climb.OPEN_VOLTAGE_LOW);
-                        }
-                        else {
-                            motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
-                        }
+            }
+            else if (getState() == ClimbState.CLOSED) {
+                if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
+                    if (getCurrentAngle().getDegrees() > Settings.Climb.CLOSED_ANGLE.getDegrees()) {
+                        motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
                     }
                     else {
-                        motor.setVoltage(0);
+                        motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
                     }
                 }
-                else if (getState() == ClimbState.CLOSED) {
-                    if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
-                        if (getCurrentAngle().getDegrees() > Settings.Climb.CLOSED_ANGLE.getDegrees()) {
-                            motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
-                        }
-                        else {
-                            motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
-                        }
+                else {
+                    motor.setVoltage(0);
+                }
+            }
+            else if (getState() == ClimbState.SHIMMY) {
+                if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
+                    if (getCurrentAngle().getDegrees() > Settings.Climb.SHIMMY_ANGLE.getDegrees()) {
+                        motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
                     }
                     else {
-                        motor.setVoltage(0);
+                        motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
                     }
                 }
-                else if (getState() == ClimbState.SHIMMY) {
-                    if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
-                        if (getCurrentAngle().getDegrees() > Settings.Climb.SHIMMY_ANGLE.getDegrees()) {
-                            motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
-                        }
-                        else {
-                            motor.setVoltage(Settings.Climb.DEFAULT_VOLTAGE);
-                        }
-                    }
-                    else {
-                        motor.setVoltage(0);
-                    }
+                else {
+                    motor.setVoltage(0);
                 }
-                else if (getState() == ClimbState.CLIMBING) {
-                    if (getCurrentAngle().getDegrees() < Settings.Climb.CLIMBED_ANGLE.getDegrees()) {
-                        motor.setVoltage(Settings.Climb.CLIMB_VOLTAGE);
-                    }
-                    else {
-                        motor.setVoltage(0);
-                    }
+            }
+            else if (getState() == ClimbState.CLIMBING) {
+                if (getCurrentAngle().getDegrees() < Settings.Climb.CLIMBED_ANGLE.getDegrees()) {
+                    motor.setVoltage(Settings.Climb.CLIMB_VOLTAGE);
+                }
+                else {
+                    motor.setVoltage(0);
                 }
             }
         }
