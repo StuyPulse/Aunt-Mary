@@ -199,8 +199,8 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-45);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-20);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d BARGE_118 = Rotation2d.fromDegrees(90);
