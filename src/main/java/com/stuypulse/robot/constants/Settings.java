@@ -107,7 +107,7 @@ public interface Settings {
 
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(5);
 
-                // double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT = 1.0 - Units.inchesToMeters(3);
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_CATAPULT = 1.0 - Units.inchesToMeters(3);
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.43;
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 1.0;
@@ -187,7 +187,7 @@ public interface Settings {
 
         Rotation2d L1_ANGLE = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181 + 2);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(182.513809);

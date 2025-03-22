@@ -17,7 +17,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBackwards;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBargeAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118AllianceSide;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
@@ -73,7 +73,7 @@ public class OneGOneAlgae extends SequentialCommandGroup {
                 new SwerveDrivePIDToBarge(),
                 new ElevatorToBarge().alongWith(new ArmToCatapultReady())
                     .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-                        .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
+                        .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()))
                     .andThen(new ArmToCatapultShoot()
                         .andThen(new ArmWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))

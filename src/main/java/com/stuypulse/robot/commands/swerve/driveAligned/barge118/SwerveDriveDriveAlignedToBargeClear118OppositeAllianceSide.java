@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.swerve.driveAligned;
+package com.stuypulse.robot.commands.swerve.driveAligned.barge118;
 
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
@@ -21,7 +21,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDriveAlignedToBargeClearOppositeAllianceSide extends Command {
+public class SwerveDriveDriveAlignedToBargeClear118OppositeAllianceSide extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
@@ -30,7 +30,7 @@ public class SwerveDriveDriveAlignedToBargeClearOppositeAllianceSide extends Com
     private final Controller xController;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAlignedToBargeClearOppositeAllianceSide(Gamepad driver) {
+    public SwerveDriveDriveAlignedToBargeClear118OppositeAllianceSide(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
