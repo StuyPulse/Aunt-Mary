@@ -360,49 +360,57 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         // Barge score
-        driver.getLeftButton()
-            .whileTrue(new ConditionalCommand(
-                new ArmToBarge118().alongWith(new ElevatorToBarge())
-                    .andThen(new WaitUntilCommand(() -> arm.atTargetAngle() && elevator.atTargetHeight()).alongWith(new SwerveDriveWaitUntilClearFromBarge()))
-                        .deadlineFor(new SwerveDriveDriveAlignedToBargeClearAllianceSide(driver))
-                    .andThen(new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver))
-                    .andThen(new SwerveDriveWaitUntilAlignedToBargeAllianceSide())
-                    .andThen(new ShooterShootAlgae()),    
-                
-                new ArmToBarge118().alongWith(new ElevatorToBarge())
-                    .andThen(new WaitUntilCommand(() -> arm.atTargetAngle() && elevator.atTargetHeight()).alongWith(new SwerveDriveWaitUntilClearFromBarge()))
-                        .deadlineFor(new SwerveDriveDriveAlignedToBargeClearOppositeAllianceSide(driver))
-                    .andThen(new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver))
-                    .andThen(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide())
-                    .andThen(new ShooterShootAlgae()), 
-                
-                () -> swerve.getPose().getX() < Field.LENGTH / 2)
-            ) 
-            .onFalse(new SwerveDriveWaitUntilClearFromBarge().andThen(new ArmToFeed()).alongWith(new ElevatorToFeed()))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
-
-        // CATAPULTING (HVR REVERT)
         // driver.getLeftButton()
         //     .whileTrue(new ConditionalCommand(
-        //         new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
-        //             .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-        //             .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
-        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-        //                     .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
-        //                 .andThen(new ArmToCatapultShoot()
-        //                     .andThen(new ArmWaitUntilCanCatapult()
-        //                         .andThen(new ShooterShootAlgae())))), 
-        //         new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
-        //             .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-        //             .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
-        //                 .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
-        //                     .alongWith(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide()))
-        //                 .andThen(new ArmToCatapultShoot()
-        //                     .andThen(new ArmWaitUntilCanCatapult()
-        //                         .andThen(new ShooterShootAlgae())))), 
-        //         () -> swerve.getPose().getX() <= Field.LENGTH / 2))
-        //     .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
+        //         new ArmToBarge118().alongWith(new ElevatorToBarge())
+        //         .andThen(new WaitUntilCommand(() -> arm.atTargetAngle() && elevator.atTargetHeight()).alongWith(new SwerveDriveWaitUntilClearFromBarge()))
+        //             .deadlineFor(new SwerveDriveDriveAlignedToBargeClearAllianceSide(driver))
+        //         .andThen(new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver))
+        //         .andThen(new SwerveDriveWaitUntilAlignedToBargeAllianceSide())
+        //         .andThen(new ShooterShootAlgae()), 
+        //         // new ArmToBarge118().alongWith(new ElevatorToBarge())
+        //         //     // .andThen(new WaitUntilCommand(() -> arm.atTargetAngle() && elevator.atTargetHeight()).alongWith(new SwerveDriveWaitUntilClearFromBarge()))
+        //         //     .andThen(new SwerveDriveDriveAlignedToBargeClearAllianceSide(driver))
+        //         //         // .deadlineFor(new SwerveDriveDriveAlignedToBargeClearAllianceSide(driver))
+        //         //     .deadlineFor(new WaitUntilCommand(() -> arm.atTargetAngle() && elevator.atTargetHeight()).alongWith(new SwerveDriveWaitUntilClearFromBarge()))
+        //         //     .andThen(new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver))
+        //         //     .andThen(new SwerveDriveWaitUntilAlignedToBargeAllianceSide())
+        //         //     .andThen(new ShooterShootAlgae()),    
+                
+        //         new ArmToBarge118().alongWith(new ElevatorToBarge())
+        //             .andThen(new WaitUntilCommand(() -> arm.atTargetAngle() && elevator.atTargetHeight()).alongWith(new SwerveDriveWaitUntilClearFromBarge()))
+        //                 .deadlineFor(new SwerveDriveDriveAlignedToBargeClearOppositeAllianceSide(driver))
+        //             .andThen(new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver))
+        //             .andThen(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide())
+        //             .andThen(new ShooterShootAlgae()), 
+                
+        //         () -> swerve.getPose().getX() < Field.LENGTH / 2)
+        //     ) 
+        //     .onFalse(new SwerveDriveWaitUntilClearFromBarge().andThen(new ArmToFeed()).alongWith(new ElevatorToFeed()))
         //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+
+        // CATAPULTING (HVR REVERT)
+        driver.getLeftButton()
+            .whileTrue(new ConditionalCommand(
+                new SwerveDriveDriveAlignedToBargeScoreAllianceSide(driver)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
+                    .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
+                            .alongWith(new SwerveDriveWaitUntilAlignedToBargeAllianceSide()))
+                        .andThen(new ArmToCatapultShoot()
+                            .andThen(new ArmWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))), 
+                new SwerveDriveDriveAlignedToBargeScoreOppositeAllianceSide(driver)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
+                    .alongWith(new ElevatorToBarge().alongWith(new ArmToCatapultReady())
+                        .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget())
+                            .alongWith(new SwerveDriveWaitUntilAlignedToBargeOppositeAllianceSide()))
+                        .andThen(new ArmToCatapultShoot()
+                            .andThen(new ArmWaitUntilCanCatapult()
+                                .andThen(new ShooterShootAlgae())))), 
+                () -> swerve.getPose().getX() <= Field.LENGTH / 2))
+            .onFalse(new ElevatorToFeed().alongWith(new ArmToFeed()))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Acquire Closest Reef Algae
         driver.getDPadLeft()
