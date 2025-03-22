@@ -1,7 +1,15 @@
+
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.commands;
 
-import java.util.function.Supplier;
+import com.stuypulse.stuylib.input.Gamepad;
 
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureSetState;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -13,11 +21,11 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+
+import java.util.function.Supplier;
 
 public class ScoreRoutine extends SequentialCommandGroup {
     private final SuperStructure superStructure;

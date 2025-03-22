@@ -1,3 +1,4 @@
+
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -15,7 +16,6 @@ import com.stuypulse.robot.commands.shooter.ShooterShootL3Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootL4Back;
 import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.util.RobotVisualizer;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

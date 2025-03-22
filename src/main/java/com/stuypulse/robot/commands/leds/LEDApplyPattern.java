@@ -1,3 +1,4 @@
+
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -6,12 +7,12 @@
 
 package com.stuypulse.robot.commands.leds;
 
-import java.util.function.Supplier;
-
 import com.stuypulse.robot.subsystems.led.LEDController;
 
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import java.util.function.Supplier;
 
 public class LEDApplyPattern extends Command {
     protected final LEDController leds;

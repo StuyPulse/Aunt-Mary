@@ -1,3 +1,10 @@
+
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 package com.stuypulse.robot.commands;
 
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
@@ -6,11 +13,9 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Fr
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveWithRobotRelativeSpeeds;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToNearestReefAlgaePickup;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToNearestReefAlgaeReady;
-import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
-import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil;
 

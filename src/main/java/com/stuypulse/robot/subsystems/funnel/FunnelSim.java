@@ -1,3 +1,4 @@
+
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -6,8 +7,8 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.network.SmartBoolean;
+
 
 public class FunnelSim extends Funnel {
 
