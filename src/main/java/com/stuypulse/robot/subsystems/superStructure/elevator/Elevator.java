@@ -116,7 +116,7 @@ public abstract class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());
         SmartDashboard.putBoolean("Elevator/At Target Height", atTargetHeight());
 
-        if (Settings.DEBUG_MODE.get()) {
+        if (Settings.DEBUG_MODE) {
             RobotVisualizer.getInstance().updateElevatorHeight(getCurrentHeight(), atTargetHeight());
         }
     }

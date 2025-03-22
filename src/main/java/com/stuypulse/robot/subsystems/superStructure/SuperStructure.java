@@ -69,6 +69,8 @@ public class SuperStructure extends SubsystemBase{
 
     public void setState(SuperStructureState state) {
         this.state = state;
+        arm.setState(state.getArmState());
+        elevator.setState(state.getElevatorState());
         updateArmMotionProfileConstraints();
         updateElevatorMotionProfileConstraints();
     }
@@ -133,11 +135,5 @@ public class SuperStructure extends SubsystemBase{
         else {
             elevator.setMotionProfileConstraints(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
         }
-    }
-
-    @Override
-    public void periodic() {
-        arm.setState(state.getArmState());
-        elevator.setState(state.getElevatorState());
     }
 }

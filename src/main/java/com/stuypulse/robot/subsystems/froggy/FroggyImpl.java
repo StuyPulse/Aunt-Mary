@@ -129,7 +129,7 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", controller.getSetpoint());
 
-        if (Settings.DEBUG_MODE.get()) {
+        if (Settings.DEBUG_MODE) {
             // PIVOT
             SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 

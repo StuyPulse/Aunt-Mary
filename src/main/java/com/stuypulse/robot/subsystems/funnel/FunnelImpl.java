@@ -62,7 +62,7 @@ public class FunnelImpl extends Funnel {
 
         SmartDashboard.putBoolean("Funnel/Has Coral", hasCoral());
 
-        if (Settings.DEBUG_MODE.get()) {
+        if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Funnel/Stator Current", motor.getStatorCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Funnel/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
             

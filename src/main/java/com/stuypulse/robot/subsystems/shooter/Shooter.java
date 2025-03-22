@@ -107,7 +107,7 @@ public abstract class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putString("Shooter/State", getState().toString());
 
-        if (Settings.DEBUG_MODE.get()) {
+        if (Settings.DEBUG_MODE) {
             if (Settings.EnabledSubsystems.SHOOTER.get()) {
                 RobotVisualizer.getInstance().updateShooter(getState().getSpeed(), hasCoral());
             }

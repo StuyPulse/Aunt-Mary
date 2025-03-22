@@ -28,10 +28,8 @@ import edu.wpi.first.wpilibj.util.Color;
 public interface Settings {
 
     double DT = 0.020;
-
+    boolean DEBUG_MODE = true;
     String CANIVORE_NAME = "CANIVORE";
-
-    SmartBoolean DEBUG_MODE = new SmartBoolean("Is Debug Mode Enabled", false);
 
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);

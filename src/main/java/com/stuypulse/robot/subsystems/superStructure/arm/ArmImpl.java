@@ -200,7 +200,7 @@ public class ArmImpl extends Arm {
         SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
         SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 
-        if (Settings.DEBUG_MODE.get()) {
+        if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Arm/Constraints/Current Max vel (deg per s)", velLimitDegreesPerSecond.get());
             SmartDashboard.putNumber("Arm/Constraints/Current Max accel (deg per s per s)", accelLimitDegreesPerSecondSquared.get());
 
