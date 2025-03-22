@@ -147,7 +147,7 @@ public class ArmImpl extends Arm {
     }
 
     private void updateGains() {
-        if (Shooter.getInstance().hasCoral() || getState() == ArmState.CATAPULT_READY || getState() == ArmState.CATAPULT_SHOOT || getState() == ArmState.BARGE_118) {
+        if (Shooter.getInstance().hasCoral() || getState() == ArmState.BARGE_118) {
             kP.set(Gains.Arm.CoralAlgae.PID.kP);
             kI.set(Gains.Arm.CoralAlgae.PID.kI);
             kD.set(Gains.Arm.CoralAlgae.PID.kD);

@@ -23,7 +23,7 @@ public class ShooterShootBasedOnSuperStructure extends InstantCommand{
             case L3_BACK -> ShooterState.SHOOT_CORAL_L3_BACK;
             case L4_FRONT -> ShooterState.SHOOT_CORAL_L4_FRONT;
             case L4_BACK -> ShooterState.SHOOT_CORAL_L4_BACK;
-            case PROCESSOR, BARGE_118, CATAPULT_READY, CATAPULT_SHOOT -> ShooterState.SHOOT_ALGAE;
+            case PROCESSOR, BARGE_118 -> ShooterState.SHOOT_ALGAE;
             default -> ShooterState.SHOOT_CORAL_L1;
         };
     }

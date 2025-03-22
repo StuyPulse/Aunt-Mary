@@ -170,7 +170,6 @@ public interface Settings {
         double BACK_L4_HEIGHT_METERS = 1.7304;
 
         // Algae
-        double CATAPULT_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double BARGE_188_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.205811;
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.622803;
@@ -215,10 +214,6 @@ public interface Settings {
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
-
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         

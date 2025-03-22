@@ -35,8 +35,6 @@ public class SuperStructure extends SubsystemBase{
         ALGAE_L2_BACK(ElevatorState.ALGAE_L2_BACK, ArmState.ALGAE_L2_BACK),
         ALGAE_L3_BACK(ElevatorState.ALGAE_L3_BACK, ArmState.ALGAE_L3_BACK),
         BARGE_118(ElevatorState.BARGE_118, ArmState.BARGE_118),
-        CATAPULT_READY(ElevatorState.CATAPULT, ArmState.CATAPULT_READY),
-        CATAPULT_SHOOT(ElevatorState.CATAPULT, ArmState.CATAPULT_SHOOT),
         PROCESSOR(ElevatorState.PROCESSOR, ArmState.PROCESSOR),
         CLIMB(ElevatorState.CLIMB, ArmState.CLIMB),
         UNSTUCK_CORAL(ElevatorState.UNSTUCK_CORAL, ArmState.UNSTUCK_CORAL);
@@ -114,10 +112,7 @@ public class SuperStructure extends SubsystemBase{
 
     private void updateArmMotionProfileConstraints() {
         ArmState armState = getState().getArmState();
-        if (armState == ArmState.CATAPULT_SHOOT) {
-            arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CATAPULT, Settings.Arm.Constraints.MAX_ACCEL_CATAPULT);
-        }
-        else if (armState == ArmState.FEED) {
+        if (armState == ArmState.FEED) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED);
         }
         else if (armState == ArmState.CLIMB) {

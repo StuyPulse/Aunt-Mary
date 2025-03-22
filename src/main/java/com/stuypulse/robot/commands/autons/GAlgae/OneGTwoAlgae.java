@@ -12,9 +12,6 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarg
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwards;
 import com.stuypulse.robot.commands.swerve.SwerveDriveNudgeBackwardsAuton;
