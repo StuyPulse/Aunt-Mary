@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.1407786885245907,
-        "y": 4.04298155737705
+        "x": 3.143314034598214,
+        "y": 3.6790130615234373
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8040675954381475,
-        "y": 4.049838200668875
+        "x": 2.3192444907202665,
+        "y": 2.0536630572979533
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red B"
     },
     {
       "anchor": {
-        "x": 1.8820696721311476,
-        "y": 4.04298155737705
+        "x": 1.726229508196721,
+        "y": 0.842264344262295
       },
       "prevControl": {
-        "x": 2.132061998842637,
-        "y": 4.041022837035592
+        "x": 2.2159816848204494,
+        "y": 1.8356359036679606
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Red Bottom HP"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "Red to Reef",
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

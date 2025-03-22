@@ -114,26 +114,21 @@ public class FunnelFourPieceIKLA extends SequentialCommandGroup {
                 )
             ),
             new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
                 new ShooterSetAcquire()
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                            .andThen(new ShooterStop()))
-            ),
-            new ParallelCommandGroup(
-                new ShooterSetAcquire() 
-                    .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
-                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
-                            .andThen(
-                                new ParallelCommandGroup(
-                                    new SwerveDrivePIDToBranchScore(CoralBranch.A, 4, true)
-                                        .withTranslationalConstraints(3.25, 5.5)
-                                        .withTimeout(5)
-                                        .deadlineFor(new LEDApplyPattern(CoralBranch.A.isLeftPegFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
-                                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                                            .andThen(
-                                                new ElevatorToL4Front().alongWith(new ArmToL4Front())
-                                                    .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
+                            .andThen(new ShooterStop())),
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
+                    .andThen(
+                        new ParallelCommandGroup(
+                            new SwerveDrivePIDToBranchScore(CoralBranch.A, 4, true)
+                                .withTranslationalConstraints(3.25, 5.5)
+                                .withTimeout(5)
+                                .deadlineFor(new LEDApplyPattern(CoralBranch.A.isLeftPegFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
+                                    .andThen(
+                                        new ElevatorToL4Front().alongWith(new ArmToL4Front())
+                                            .andThen(new ElevatorWaitUntilAtTargetHeight().alongWith(new ArmWaitUntilAtTarget()))
                         )
                 )
             )

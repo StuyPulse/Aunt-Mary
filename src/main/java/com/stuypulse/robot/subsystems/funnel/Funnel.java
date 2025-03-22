@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +17,12 @@ public abstract class Funnel extends SubsystemBase {
     private static final Funnel instance;
 
     static {
-        instance = new FunnelImpl();
+        if (Robot.isReal()) {
+            instance = new FunnelImpl();
+        }
+        else {
+            instance = new FunnelSim();
+        }
     }
 
     public static Funnel getInstance() {

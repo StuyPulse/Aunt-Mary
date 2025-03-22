@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.130766078404018,
-        "y": 3.987458147321428
+        "x": 3.153311593191964,
+        "y": 4.056981985909598
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4307846866812923,
-        "y": 3.9855380966188827
+        "x": 2.6641779148956406,
+        "y": 4.972283149069261
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue A"
     },
     {
       "anchor": {
-        "x": 2.008438110351562,
-        "y": 3.987458147321428
+        "x": 1.6063524590163931,
+        "y": 7.09984631147541
       },
       "prevControl": {
-        "x": 2.3820491423180936,
-        "y": 3.9898671591817343
+        "x": 2.5481945604104546,
+        "y": 5.241035103793767
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue Top HP"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -55.0
   },
   "reversed": false,
   "folder": "Blue To Reef",

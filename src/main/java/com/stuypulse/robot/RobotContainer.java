@@ -482,14 +482,14 @@ public class RobotContainer {
         // "Red I to HP", "Red K to HP", "Red L to HP");
 
         AutonConfig BLUE_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue BackOut");
+        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
         AutonConfig RED_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
-        "Red I to HP", "Red K to HP", "Red L to HP", "Red BackOut");
+        "Red I to HP", "Red K to HP", "Red L to HP", "Red A BackOut");
 
         AutonConfig BLUE_FUNNEL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece Funnel IKLA", FunnelFourPieceIKLA::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue BackOut");
-        AutonConfig RED_FUNNEL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece FUnnel IKLA", FunnelFourPieceIKLA::new,
-        "Red I to HP", "Red K to HP", "Red L to HP", "Red BackOut");
+        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+        AutonConfig RED_FUNNEL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece Funnel IKLA", FunnelFourPieceIKLA::new,
+        "Red I to HP", "Red K to HP", "Red L to HP", "Red A BackOut");
         
         // BLUE_ONE_PIECE_H.registerBlue(autonChooser);
         // RED_ONE_PIECE_H.registerRed(autonChooser);
@@ -524,14 +524,14 @@ public class RobotContainer {
         // "Red F to HP", "Red D to HP", "Red C to HP");
 
         AutonConfig BLUE_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue BackOut");
+        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         AutonConfig RED_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
-        "Red F to HP", "Red D to HP", "Red C to HP", "Red BackOut");
+        "Red F to HP", "Red D to HP", "Red C to HP", "Red B BackOut");
 
         AutonConfig BLUE_FUNNEL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece Funnel FDCB", FunnelFourPieceFDCB::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue BackOut");
+        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         AutonConfig RED_FUNNEL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece Funnel FDCB", FunnelFourPieceFDCB::new,
-        "Red F to HP", "Red D to HP", "Red C to HP", "Red BackOut");
+        "Red F to HP", "Red D to HP", "Red C to HP", "Red B BackOut");
 
         // BLUE_ONE_PIECE_G.registerBlue(autonChooser);
         // RED_ONE_PIECE_G.registerRed(autonChooser);
