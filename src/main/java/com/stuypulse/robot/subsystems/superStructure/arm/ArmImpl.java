@@ -196,9 +196,6 @@ public class ArmImpl extends Arm {
 
         SmartDashboard.putNumber("Arm/Setpoint (deg)", controller.getSetpoint());
         SmartDashboard.putNumber("Arm/Angle Error (deg)", controller.getError());
-        
-        SmartDashboard.putBoolean("Arm/Absolute Encoder is Connected", absoluteEncoder.isConnected());
-        SmartDashboard.putNumber("Arm/Absolute Encoder Value raw (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 
         if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Arm/Constraints/Current Max vel (deg per s)", velLimitDegreesPerSecond.get());
