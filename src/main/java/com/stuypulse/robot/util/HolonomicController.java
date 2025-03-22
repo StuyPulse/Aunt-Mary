@@ -6,10 +6,8 @@ import com.stuypulse.stuylib.math.Angle;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 
-public class HolonomicController implements Sendable {
+public class HolonomicController {
     private Controller xController;
     private Controller yController;
     private AngleController angleController;
@@ -50,19 +48,5 @@ public class HolonomicController implements Sendable {
         return xController.isDone(xToleranceMeters)
                 && yController.isDone(yToleranceMeters)
                 && angleController.isDoneDegrees(angleToleranceDegrees);
-    }
-
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("Holonomic Controller");
-        builder.addDoubleProperty("Angle Setpoint (degrees)", () -> angleController.getSetpoint().toDegrees(), null);
-        builder.addDoubleProperty("Angle Measurement (degrees)", () -> angleController.getMeasurement().toDegrees(), null);
-        builder.addDoubleProperty("X Setpoint (meters)", () -> xController.getSetpoint(), null);
-        builder.addDoubleProperty("X Measurement (meters)", () -> xController.getMeasurement(), null);
-        builder.addDoubleProperty("Y Setpoint (meters)", () -> yController.getSetpoint(), null);
-        builder.addDoubleProperty("Y Measurement (meters)", () -> yController.getMeasurement(), null);
-        builder.addDoubleProperty("X Error (meters)", () -> xController.getError(), null);
-        builder.addDoubleProperty("Y Error (meters)", () -> yController.getError(), null);
-        builder.addDoubleProperty("Angle Error (degrees)", () -> angleController.getError().getRotation2d().getDegrees(), null);
     }
 }
