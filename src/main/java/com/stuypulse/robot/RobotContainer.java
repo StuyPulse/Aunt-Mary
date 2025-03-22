@@ -34,12 +34,14 @@ import com.stuypulse.robot.commands.arm.coral.ArmToL4Front;
 import com.stuypulse.robot.commands.autons.misc.DoNothingAuton;
 import com.stuypulse.robot.commands.autons.misc.Mobility;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
+import com.stuypulse.robot.commands.autons.FDCB.FunnelFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.ThreeHalfPieceFDC;
 import com.stuypulse.robot.commands.autons.FDCB.ThreePieceFDC;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGOneAlgae;
 import com.stuypulse.robot.commands.autons.GAlgae.OnePieceG;
 import com.stuypulse.robot.commands.autons.HAlgae.OnePieceH;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
+import com.stuypulse.robot.commands.autons.IKLA.FunnelFourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.ThreeHalfPieceIKL;
 import com.stuypulse.robot.commands.autons.IKLA.ThreePieceIKL;
 import com.stuypulse.robot.commands.autons.tests.CurvyLineTest;
@@ -464,71 +466,87 @@ public class RobotContainer {
 
         /** TOP AUTONS **/
 
-        AutonConfig BLUE_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
-        "Blue Mid Top to H");
-        AutonConfig RED_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
-        "Red Mid Top to H");
+        // AutonConfig BLUE_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
+        // "Blue Mid Top to H");
+        // AutonConfig RED_ONE_PIECE_H = new AutonConfig("1 Piece H", OnePieceH::new,
+        // "Red Mid Top to H");
 
-        AutonConfig BLUE_THREE_PIECE_IKL = new AutonConfig("3 Piece IKL", ThreePieceIKL::new,
-        "Blue I to HP", "Blue K to HP");
-        AutonConfig RED_THREE_PIECE_IKL = new AutonConfig("3 Piece IKL", ThreePieceIKL::new,
-        "Red I to HP", "Red K to HP");
+        // AutonConfig BLUE_THREE_PIECE_IKL = new AutonConfig("3 Piece IKL", ThreePieceIKL::new,
+        // "Blue I to HP", "Blue K to HP");
+        // AutonConfig RED_THREE_PIECE_IKL = new AutonConfig("3 Piece IKL", ThreePieceIKL::new,
+        // "Red I to HP", "Red K to HP");
 
-        AutonConfig BLUE_THREE_HALF_PIECE_IKL = new AutonConfig("3.5 Piece IKL", ThreeHalfPieceIKL::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP");
-        AutonConfig RED_THREE_HALF_PIECE_IKL = new AutonConfig("3.5 Piece IKL", ThreeHalfPieceIKL::new,
-        "Red I to HP", "Red K to HP", "Red L to HP");
+        // AutonConfig BLUE_THREE_HALF_PIECE_IKL = new AutonConfig("3.5 Piece IKL", ThreeHalfPieceIKL::new,
+        // "Blue I to HP", "Blue K to HP", "Blue L to HP");
+        // AutonConfig RED_THREE_HALF_PIECE_IKL = new AutonConfig("3.5 Piece IKL", ThreeHalfPieceIKL::new,
+        // "Red I to HP", "Red K to HP", "Red L to HP");
 
         AutonConfig BLUE_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue BackOut");
         AutonConfig RED_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
         "Red I to HP", "Red K to HP", "Red L to HP", "Red BackOut");
+
+        AutonConfig BLUE_FUNNEL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece Funnel IKLA", FunnelFourPieceIKLA::new,
+        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue BackOut");
+        AutonConfig RED_FUNNEL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece FUnnel IKLA", FunnelFourPieceIKLA::new,
+        "Red I to HP", "Red K to HP", "Red L to HP", "Red BackOut");
         
-        BLUE_ONE_PIECE_H.registerBlue(autonChooser);
-        RED_ONE_PIECE_H.registerRed(autonChooser);
+        // BLUE_ONE_PIECE_H.registerBlue(autonChooser);
+        // RED_ONE_PIECE_H.registerRed(autonChooser);
 
-        BLUE_THREE_PIECE_IKL.registerBlue(autonChooser);
-        RED_THREE_PIECE_IKL.registerRed(autonChooser);
+        // BLUE_THREE_PIECE_IKL.registerBlue(autonChooser);
+        // RED_THREE_PIECE_IKL.registerRed(autonChooser);
 
-        BLUE_THREE_HALF_PIECE_IKL.registerBlue(autonChooser);
-        RED_THREE_HALF_PIECE_IKL.registerRed(autonChooser);
+        // BLUE_THREE_HALF_PIECE_IKL.registerBlue(autonChooser);
+        // RED_THREE_HALF_PIECE_IKL.registerRed(autonChooser);
 
         BLUE_FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
         RED_FOUR_PIECE_IKLA.registerDefaultRed(autonChooser);
 
+        BLUE_FUNNEL_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        RED_FUNNEL_FOUR_PIECE_IKLA.registerRed(autonChooser);
+
         /** BOTTOM AUTONS **/
 
-        AutonConfig BLUE_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
-        "Blue Mid Bottom to G");
-        AutonConfig RED_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
-        "Red Mid Bottom to G");
+        // AutonConfig BLUE_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
+        // "Blue Mid Bottom to G");
+        // AutonConfig RED_ONE_PIECE_G = new AutonConfig("1 Piece G", OnePieceG::new,
+        // "Red Mid Bottom to G");
 
-        AutonConfig BLUE_THREE_PIECE_FDC = new AutonConfig("3 Piece FDC", ThreePieceFDC::new,
-        "Blue F to HP", "Blue D to HP");
-        AutonConfig RED_THREE_PIECE_FDC = new AutonConfig("3 Piece FDC", ThreePieceFDC::new,
-        "Red F to HP", "Red D to HP");
+        // AutonConfig BLUE_THREE_PIECE_FDC = new AutonConfig("3 Piece FDC", ThreePieceFDC::new,
+        // "Blue F to HP", "Blue D to HP");
+        // AutonConfig RED_THREE_PIECE_FDC = new AutonConfig("3 Piece FDC", ThreePieceFDC::new,
+        // "Red F to HP", "Red D to HP");
 
-        AutonConfig BLUE_THREE_HALF_PIECE_FDC = new AutonConfig("3.5 Piece FDC", ThreeHalfPieceFDC::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP");
-        AutonConfig RED_THREE_HALF_PIECE_FDC = new AutonConfig("3.5 Piece FDC", ThreeHalfPieceFDC::new,
-        "Red F to HP", "Red D to HP", "Red C to HP");
+        // AutonConfig BLUE_THREE_HALF_PIECE_FDC = new AutonConfig("3.5 Piece FDC", ThreeHalfPieceFDC::new,
+        // "Blue F to HP", "Blue D to HP", "Blue C to HP");
+        // AutonConfig RED_THREE_HALF_PIECE_FDC = new AutonConfig("3.5 Piece FDC", ThreeHalfPieceFDC::new,
+        // "Red F to HP", "Red D to HP", "Red C to HP");
 
         AutonConfig BLUE_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue BackOut");
         AutonConfig RED_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
         "Red F to HP", "Red D to HP", "Red C to HP", "Red BackOut");
 
-        BLUE_ONE_PIECE_G.registerBlue(autonChooser);
-        RED_ONE_PIECE_G.registerRed(autonChooser);
+        AutonConfig BLUE_FUNNEL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece Funnel FDCB", FunnelFourPieceFDCB::new,
+        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue BackOut");
+        AutonConfig RED_FUNNEL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece Funnel FDCB", FunnelFourPieceFDCB::new,
+        "Red F to HP", "Red D to HP", "Red C to HP", "Red BackOut");
 
-        BLUE_THREE_PIECE_FDC.registerBlue(autonChooser);
-        RED_THREE_PIECE_FDC.registerRed(autonChooser);
+        // BLUE_ONE_PIECE_G.registerBlue(autonChooser);
+        // RED_ONE_PIECE_G.registerRed(autonChooser);
 
-        BLUE_THREE_HALF_PIECE_FDC.registerBlue(autonChooser);
-        RED_THREE_HALF_PIECE_FDC.registerRed(autonChooser);
+        // BLUE_THREE_PIECE_FDC.registerBlue(autonChooser);
+        // RED_THREE_PIECE_FDC.registerRed(autonChooser);
+
+        // BLUE_THREE_HALF_PIECE_FDC.registerBlue(autonChooser);
+        // RED_THREE_HALF_PIECE_FDC.registerRed(autonChooser);
 
         BLUE_FOUR_PIECE_FDCB.registerBlue(autonChooser);
         RED_FOUR_PIECE_FDCB.registerRed(autonChooser);
+
+        BLUE_FUNNEL_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        RED_FUNNEL_FOUR_PIECE_FDCB.registerRed(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 
@@ -558,10 +576,10 @@ public class RobotContainer {
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        "Blue G to GH Algae");
-        AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
-        "Red G to GH Algae");
+        // AutonConfig BLUE_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        // "Blue G to GH Algae");
+        // AutonConfig RED_G_ONE_ALGAE = new AutonConfig("1 Piece G + 1 Algae", OneGOneAlgae::new,
+        // "Red G to GH Algae");
 
         // AutonConfig BLUE_G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
         // "Blue Mid Bottom to G", "Blue G to GH Algae", "Blue GH Algae to Barge 3", "Blue Barge 3 to IJ Algae", "Blue IJ Algae to Barge 3");
@@ -573,8 +591,8 @@ public class RobotContainer {
          //AutonConfig RED_G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae", OneGThreeAlgae::new,
         // "Red Mid Bottom to G", "Red G to GH Algae", "Red GH Algae to Barge 3", "Red Barge 3 to IJ Algae", "Red IJ Algae to Barge 3", "Red Barge 3 to EF Algae", "Red EF Algae to Barge 3");
 
-        BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
-        RED_G_ONE_ALGAE.registerRed(autonChooser);
+        // BLUE_G_ONE_ALGAE.registerBlue(autonChooser);
+        // RED_G_ONE_ALGAE.registerRed(autonChooser);
 
         // BLUE_G_TWO_ALGAE.registerBlue(autonChooser);
         // RED_G_TWO_ALGAE.registerRed(autonChooser);
