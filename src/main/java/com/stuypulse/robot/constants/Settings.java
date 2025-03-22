@@ -48,7 +48,7 @@ public interface Settings {
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(14.25 + 1); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
 
-        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = Units.inchesToMeters(10);
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4;
     }
 
     public interface Swerve {

@@ -56,14 +56,14 @@ public class SwerveDriveDriveAlignedToBargeClearAllianceSide extends Command {
                 driverYVelocity.get())
             .clamp(Settings.Driver.Drive.MAX_TELEOP_SPEED.get());
         
-        swerve.getFieldCentricSwerveRequest()
+        swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withVelocityX(targetVelocity.x)
             .withVelocityY(targetVelocity.y)
             .withRotationalRate(
                 angleController.update(
                     Angle.k180deg, 
                     Angle.fromRotation2d(swerve.getPose().getRotation())
-            ));
+            )));
     }
 
 

@@ -88,12 +88,12 @@ public abstract class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (Settings.EnabledSubsystems.SHOOTER.get()) {
-        //     RobotVisualizer.getInstance().updateShooter(getState().getSpeed(), hasCoral());
-        // }
-        // else {
-        //     RobotVisualizer.getInstance().updateShooter(0, hasCoral());
-        // }
+        if (Settings.EnabledSubsystems.SHOOTER.get()) {
+            RobotVisualizer.getInstance().updateShooter(getState().getSpeed(), hasCoral());
+        }
+        else {
+            RobotVisualizer.getInstance().updateShooter(0, hasCoral());
+        }
         SmartDashboard.putString("Shooter/State", getState().toString());
     }
 }
