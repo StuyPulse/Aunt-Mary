@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import java.util.Optional;
 
@@ -41,9 +42,6 @@ public class ArmImpl extends Arm {
 
     private TalonFX motor;
     private DutyCycleEncoder absoluteEncoder;
-
-    private Controller controller;
-    private SettableNumber kP, kI, kD, kS, kV, kA, kG;
 
     private SettableNumber velLimitDegreesPerSecond;
     private SettableNumber accelLimitDegreesPerSecondSquared;
@@ -59,26 +57,13 @@ public class ArmImpl extends Arm {
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
+        motor.setPosition(getCurrentAngleFromAbsoluteEncoder().getRotations());
+
         velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
-        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getDegrees());
+        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
 
         MotionProfile motionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
-
-        kP = new SettableNumber(Gains.Arm.Empty.PID.kP);
-        kI = new SettableNumber(Gains.Arm.Empty.PID.kI);
-        kD = new SettableNumber(Gains.Arm.Empty.PID.kD);
-        kS = new SettableNumber(Gains.Arm.Empty.FF.kS);
-        kV = new SettableNumber(Gains.Arm.Empty.FF.kV);
-        kA = new SettableNumber(Gains.Arm.Empty.FF.kA);
-        kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
-
-        controller = new MotorFeedforward(kS, kV, kA).position()
-            .add(new ArmFeedforward(kG))
-            .add(new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs))
-            // .add(new ArmElevatorFeedForward(kG, Elevator.getInstance()::getAccelGs))
-            .add(new PIDController(kP, kI, kD))
-            .setSetpointFilter(motionProfile);
 
         voltageOverride = Optional.empty();
     }
@@ -90,8 +75,8 @@ public class ArmImpl extends Arm {
             6, 
             "Arm", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getDegrees(), 
-            () -> Units.rotationsToDegrees(motor.getVelocity().getValueAsDouble()), 
+            () -> getCurrentAngle().getRotations(), 
+            () -> motor.getVelocity().getValueAsDouble(), 
             () -> motor.getMotorVoltage().getValueAsDouble(), 
             getInstance()
         );
@@ -118,6 +103,10 @@ public class ArmImpl extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
+        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+    }
+
+    private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
         double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations();
         return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
             ? encoderAngle 
@@ -143,34 +132,14 @@ public class ArmImpl extends Arm {
     public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
         this.velLimitDegreesPerSecond.set(velLimit.getDegrees());
         this.accelLimitDegreesPerSecondSquared.set(accelLimit.getDegrees());
-    }
-
-    private void updateGains() {
-        if (Shooter.getInstance().hasCoral() || getState() == ArmState.BARGE_118) {
-            kP.set(Gains.Arm.CoralAlgae.PID.kP);
-            kI.set(Gains.Arm.CoralAlgae.PID.kI);
-            kD.set(Gains.Arm.CoralAlgae.PID.kD);
-            kS.set(Gains.Arm.CoralAlgae.FF.kS);
-            kV.set(Gains.Arm.CoralAlgae.FF.kV);
-            kA.set(Gains.Arm.CoralAlgae.FF.kA);
-            kG.set(Gains.Arm.CoralAlgae.FF.kG);
-        } else {
-            kP.set(Gains.Arm.Empty.PID.kP);
-            kI.set(Gains.Arm.Empty.PID.kI);
-            kD.set(Gains.Arm.Empty.PID.kD);
-            kS.set(Gains.Arm.Empty.FF.kS);
-            kV.set(Gains.Arm.Empty.FF.kV);
-            kA.set(Gains.Arm.Empty.FF.kA);
-            kG.set(Gains.Arm.Empty.FF.kG);
-        }
+        Motors.Arm.MOTOR_CONFIG.withMotionProfile(velLimit.getRotations(), accelLimit.getRotations());
+        Motors.Arm.MOTOR_CONFIG.configure(motor);
     }
 
     @Override
     public void periodic() {
         super.periodic();
-        
-        updateGains();
-        
+                
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
                 motor.setVoltage(voltageOverride.get());
@@ -185,16 +154,22 @@ public class ArmImpl extends Arm {
                     motor.setVoltage(-0.8);
                 }
                 else {
-                    motor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+                    if (Shooter.getInstance().hasCoral() || Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
+                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                            .withSlot(0)
+                            .withUpdateFreqHz(50));
+                    }
+                    else {
+                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                            .withSlot(1)
+                            .withUpdateFreqHz(50));
+                    }
                 }
             }
         }
         else {
             motor.setVoltage(0);
         }
-
-        SmartDashboard.putNumber("Arm/Setpoint (deg)", controller.getSetpoint());
-        SmartDashboard.putNumber("Arm/Angle Error (deg)", controller.getError());
 
         if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Arm/Constraints/Current Max vel (deg per s)", velLimitDegreesPerSecond.get());
