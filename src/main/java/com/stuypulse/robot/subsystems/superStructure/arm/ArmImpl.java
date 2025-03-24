@@ -42,6 +42,7 @@ public class ArmImpl extends Arm {
 
     private TalonFX motor;
     private DutyCycleEncoder absoluteEncoder;
+    private boolean hasUsedAbsoluteEncoderToSetArm;
 
     private SettableNumber velLimitDegreesPerSecond;
     private SettableNumber accelLimitDegreesPerSecondSquared;
@@ -60,7 +61,7 @@ public class ArmImpl extends Arm {
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
-        motor.setPosition(getCurrentAngleFromAbsoluteEncoder().getRotations());
+        hasUsedAbsoluteEncoderToSetArm = false;
 
         velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
         accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
@@ -145,6 +146,11 @@ public class ArmImpl extends Arm {
     @Override
     public void periodic() {
         super.periodic();
+
+        if (!hasUsedAbsoluteEncoderToSetArm && getCurrentAngleFromAbsoluteEncoder().getRotations() != 0) {
+            motor.setPosition(getCurrentAngleFromAbsoluteEncoder().getRotations());
+            hasUsedAbsoluteEncoderToSetArm = true;
+        }
                 
         if (Settings.EnabledSubsystems.ARM.get()) {
             if (voltageOverride.isPresent()) {
@@ -164,14 +170,12 @@ public class ArmImpl extends Arm {
                         this.kG.set(Gains.Arm.CoralAlgae.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0)
-                            .withUpdateFreqHz(50)
                             .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                     else {
                         this.kG.set(Gains.Arm.Empty.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(1)
-                            .withUpdateFreqHz(50)
                             .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                 }
