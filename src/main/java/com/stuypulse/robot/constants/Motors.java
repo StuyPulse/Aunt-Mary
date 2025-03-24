@@ -178,8 +178,12 @@ public interface Motors {
 
         public TalonFXConfig withGravityType(GravityTypeValue gravityType) {
             slot0Configs.GravityType = gravityType;
+            slot1Configs.GravityType = gravityType;
+            slot2Configs.GravityType = gravityType;
 
             configuration.withSlot0(slot0Configs);
+            configuration.withSlot1(slot1Configs);
+            configuration.withSlot2(slot2Configs);
 
             return this;
         }
