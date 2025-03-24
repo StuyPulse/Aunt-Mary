@@ -138,7 +138,7 @@ public interface Settings {
         double ALGAE_SHOOT_SPEED = 0.5;
         double ALGAE_HOLD_SPEED = -0.25;
 
-        double UNJAMB_CORAL_BACKWARDS_SPEED = -0.15;
+        double UNJAMB_CORAL_BACKWARDS_SPEED = -0.3;
         
         double HAS_CORAL_DEBOUNCE = 0.0;
     }
