@@ -8,12 +8,7 @@
 package com.stuypulse.robot.subsystems.froggy;
 
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
-import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
-
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
@@ -27,6 +22,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import java.util.Optional;
 
@@ -37,7 +33,6 @@ public class FroggyImpl extends Froggy {
     private DutyCycleEncoder absoluteEncoder;
 
     private Controller controller;
-    private MotionProfile motionProfile;
 
     private Optional<Double> pivotVoltageOverride;
 
@@ -52,14 +47,16 @@ public class FroggyImpl extends Froggy {
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
 
+        pivotMotor.setPosition(getCurrentAngleFromAbsoluteEncoder().getRotations());
+
         pivotVoltageOverride = Optional.empty();
 
-        motionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
+        // motionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
 
-        controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
-            .add(new ArmFeedforward(Gains.Froggy.FF.kG))
-            .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
-            .setSetpointFilter(motionProfile);
+        // controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
+        //     .add(new ArmFeedforward(Gains.Froggy.FF.kG))
+        //     .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
+        //     .setSetpointFilter(motionProfile);
     }
 
     @Override
@@ -102,6 +99,13 @@ public class FroggyImpl extends Froggy {
         this.pivotVoltageOverride = voltage;
     }
 
+    private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
+        double encoderAngle = absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations();
+        return Rotation2d.fromRotations(encoderAngle > Constants.Froggy.MINIMUM_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
+            ? encoderAngle 
+            : encoderAngle + 1);
+    }
+
     @Override
     public void periodic() {
         super.periodic();
@@ -110,14 +114,15 @@ public class FroggyImpl extends Froggy {
             rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
             if (pivotVoltageOverride.isPresent()) {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
-            } 
-            else {
-                pivotMotor.setVoltage(controller.update(getTargetAngle().getDegrees(), getCurrentAngle().getDegrees()));
+            } else {
+                pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                    .withSlot(0)
+                    .withFeedForward(Gains.Froggy.FF.kG)
+                    .withUpdateFreqHz(50));
             }
-        }
-        else {
+        } else {
             rollerMotor.set(0);
-            pivotMotor.setVoltage(0);
+            pivotMotor.set(0);
         }
 
         // PIVOT

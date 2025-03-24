@@ -76,7 +76,11 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.CounterClockwise_Positive)
-			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO);
+			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO)
+            .withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD, 0)
+            .withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, 0)
+            .withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
+            .withMotionProfile(Settings.Froggy.MAX_VEL.getRotations(), Settings.Froggy.MAX_ACCEL.getRotations());
     }
 
     public interface Elevator {
