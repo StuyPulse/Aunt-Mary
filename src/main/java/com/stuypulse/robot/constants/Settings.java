@@ -127,9 +127,9 @@ public interface Settings {
         double CORAL_SHOOT_SPEED_L1 = 0.22;
         double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
-        double CORAL_SHOOT_SPEED_L3_FRONT = 0.4;
+        double CORAL_SHOOT_SPEED_L3_FRONT = -0.4;
         double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
-        double CORAL_SHOOT_SPEED_L4_FRONT = 1.0;
+        double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
 
         double CORAL_ACQUIRE_SPEED = 0.2;

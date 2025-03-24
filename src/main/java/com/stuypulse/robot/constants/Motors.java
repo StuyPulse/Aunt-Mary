@@ -57,9 +57,10 @@ public interface Motors {
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
             .withPIDConstants(Gains.Arm.CoralAlgae.PID.kP, Gains.Arm.CoralAlgae.PID.kI, Gains.Arm.CoralAlgae.PID.kD, 0)
-            .withFFConstants(Gains.Arm.CoralAlgae.FF.kS, Gains.Arm.CoralAlgae.FF.kV, Gains.Arm.CoralAlgae.FF.kA, 0)
+            .withFFConstants(Gains.Arm.CoralAlgae.FF.kS, Gains.Arm.CoralAlgae.FF.kV, Gains.Arm.CoralAlgae.FF.kA, Gains.Arm.CoralAlgae.FF.kG,0)
             .withPIDConstants(Gains.Arm.Empty.PID.kP, Gains.Arm.Empty.PID.kI, Gains.Arm.Empty.PID.kD, 1)
-            .withFFConstants(Gains.Arm.Empty.FF.kS, Gains.Arm.Empty.FF.kV, Gains.Arm.Empty.FF.kA, 1)
+            .withFFConstants(Gains.Arm.Empty.FF.kS, Gains.Arm.Empty.FF.kV, Gains.Arm.Empty.FF.kA, Gains.Arm.Empty.FF.kG,1)
+            .withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
             .withMotionProfile(Settings.Arm.Constraints.MAX_VEL_TELEOP.getRotations(), Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getRotations());
     }
