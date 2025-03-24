@@ -46,6 +46,9 @@ public class ArmImpl extends Arm {
     private SettableNumber velLimitDegreesPerSecond;
     private SettableNumber accelLimitDegreesPerSecondSquared;
 
+    private SettableNumber kG;
+    private Controller swerveFeedForwardController;
+
     private Optional<Double> voltageOverride;
 
     public ArmImpl() {
@@ -61,6 +64,9 @@ public class ArmImpl extends Arm {
 
         velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
         accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
+
+        kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
+        swerveFeedForwardController = new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs);
 
         MotionProfile motionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
@@ -155,14 +161,18 @@ public class ArmImpl extends Arm {
                 }
                 else {
                     if (Shooter.getInstance().hasCoral() || Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
+                        this.kG.set(Gains.Arm.CoralAlgae.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0)
-                            .withUpdateFreqHz(50));
+                            .withUpdateFreqHz(50)
+                            .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                     else {
+                        this.kG.set(Gains.Arm.Empty.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(1)
-                            .withUpdateFreqHz(50));
+                            .withUpdateFreqHz(50)
+                            .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                 }
             }
