@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5713217599051337,
-        "y": 5.040517316545759
+        "x": 1.7600293840680803,
+        "y": 7.136230032784598
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.946191560311633,
-        "y": 6.964877104930464
+        "x": 2.1458244905185944,
+        "y": 6.886216338050174
       },
       "isLocked": false,
-      "linkedName": "Blue L"
+      "linkedName": "Red Top HP"
     },
     {
       "anchor": {
-        "x": 1.7667624337332588,
-        "y": 7.155919102260044
+        "x": 4.901519820601851,
+        "y": 5.345411964699074
       },
       "prevControl": {
-        "x": 2.7314904337260337,
-        "y": 6.056676094408564
+        "x": 4.064238182639034,
+        "y": 5.854950609016483
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Top HP"
+      "linkedName": "Red J"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Blue To HP",
+  "folder": "Red to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }
