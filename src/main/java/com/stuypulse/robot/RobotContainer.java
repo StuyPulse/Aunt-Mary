@@ -53,7 +53,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
-import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
+import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
@@ -165,7 +165,7 @@ public class RobotContainer {
 
     private void configureDriverButtonBindings() {
 
-        driver.getDPadUp().onTrue(new SwerveDriveSeedFieldRelative());
+        driver.getDPadUp().onTrue(new SwerveDriveResetRotation());
 
         // Manual Shoot
         driver.getDPadRight()
