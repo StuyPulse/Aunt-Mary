@@ -118,7 +118,7 @@ public class FourPieceFDCE extends SequentialCommandGroup {
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop())),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
                             new SwerveDrivePIDToBranchScore(CoralBranch.E, 4, true)
