@@ -121,10 +121,11 @@ public class FourPieceFDCE extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDrivePIDToBranchScore(CoralBranch.E, 4, true)
-                                .withTranslationalConstraints(4, 5.5)
-                                .withTimeout(5)
-                                .deadlineFor(new LEDApplyPattern(CoralBranch.E.isLeftPegFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                            new SwerveDriveCoralScoreAlignAuton(CoralBranch.E, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                            // new SwerveDrivePIDToBranchScore(CoralBranch.E, 4, true)
+                            //     .withTranslationalConstraints(4, 5.5)
+                            //     .withTimeout(5)
+                            //     .deadlineFor(new LEDApplyPattern(CoralBranch.E.isLeftPegFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
                                         new ElevatorToL4Front().alongWith(new ArmToL4Front())
