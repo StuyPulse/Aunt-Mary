@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7135101318359376,
-        "y": 7.165712629045759
+        "x": 1.7667624337332588,
+        "y": 7.155919102260044
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.745966101792101,
-        "y": 5.417616981334129
+        "x": 3.7203373184656137,
+        "y": 5.29393425753102
       },
       "isLocked": false,
       "linkedName": "Blue Top HP"
@@ -20,8 +20,8 @@
         "y": 5.176861572265625
       },
       "prevControl": {
-        "x": 2.0005647699539297,
-        "y": 6.755161955192514
+        "x": 2.0429769165499483,
+        "y": 6.879295853920363
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

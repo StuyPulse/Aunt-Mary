@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6036789986530402,
-        "y": 7.2428466900501896
+        "x": 1.7155239500490285,
+        "y": 7.197800784140535
       },
       "isLocked": false,
       "linkedName": "Blue K"
     },
     {
       "anchor": {
-        "x": 1.7135101318359376,
-        "y": 7.165712629045759
+        "x": 1.7667624337332588,
+        "y": 7.155919102260044
       },
       "prevControl": {
-        "x": 3.798956982805451,
-        "y": 5.227751575211072
+        "x": 3.81447739220651,
+        "y": 5.200929630595341
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

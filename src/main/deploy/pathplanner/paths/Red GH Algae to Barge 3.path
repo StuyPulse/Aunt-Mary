@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.797665841238838,
+        "y": 4.09498291015625
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.039892140821703,
+        "y": 4.245731788685146
+      },
+      "isLocked": false,
+      "linkedName": "Red GH Algae"
+    },
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 5.004760742187499
+      },
+      "prevControl": {
+        "x": 6.953837402777962,
+        "y": 4.791802757816577
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red Barge 3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Red To Barge",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

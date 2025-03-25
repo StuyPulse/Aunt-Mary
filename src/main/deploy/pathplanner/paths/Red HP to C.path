@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.726229508196721,
-        "y": 0.842264344262295
+        "x": 1.775178745814732,
+        "y": 0.8966823032924105
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.647640591232035,
-        "y": 2.7113520513746456
+        "x": 3.6227908362921006,
+        "y": 2.6795865764528672
       },
       "isLocked": false,
       "linkedName": "Red Bottom HP"
@@ -20,8 +20,8 @@
         "y": 2.8759438650948663
       },
       "prevControl": {
-        "x": 2.129071459409771,
-        "y": 1.2466696939984987
+        "x": 2.2146094057091044,
+        "y": 1.3288467759905613
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

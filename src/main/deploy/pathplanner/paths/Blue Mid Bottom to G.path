@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.631644556490951,
-        "y": 4.013309575815573
+        "x": 6.288509261805727,
+        "y": 4.027414460006102
       },
       "isLocked": false,
       "linkedName": "Blue Mid Bottom Start"
     },
     {
       "anchor": {
-        "x": 5.836278860909598,
+        "x": 6.383176359953703,
         "y": 4.018959416841206
       },
       "prevControl": {
-        "x": 6.340357983650529,
-        "y": 4.0255017057076445
+        "x": 7.319555199471158,
+        "y": 4.014739793958772
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
