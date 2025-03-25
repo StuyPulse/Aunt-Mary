@@ -1,12 +1,11 @@
+package com.stuypulse.robot.commands.swerve.driveAligned;
 
-/************************ PROJECT MARY *************************/
-/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
-/* Use of this source code is governed by an MIT-style license */
-/* that can be found in the repository LICENSE file.           */
-/***************************************************************/
-
-package com.stuypulse.robot.commands.swerve.driveAligned.barge118;
-
+import com.stuypulse.robot.constants.Field;
+import com.stuypulse.robot.constants.Gains;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
+import com.stuypulse.robot.constants.Settings.Driver.Drive;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
@@ -20,17 +19,9 @@ import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
-
-import com.stuypulse.robot.constants.Field;
-import com.stuypulse.robot.constants.Gains;
-import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
-import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Driver.Drive;
-import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDriveAlignedToBarge118ClearAllianceSide extends Command {
+public class SwerveDriveDriveAlignedToCatapult extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
@@ -39,7 +30,7 @@ public class SwerveDriveDriveAlignedToBarge118ClearAllianceSide extends Command 
     private final Controller xController;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAlignedToBarge118ClearAllianceSide(Gamepad driver) {
+    public SwerveDriveDriveAlignedToCatapult(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
@@ -61,14 +52,22 @@ public class SwerveDriveDriveAlignedToBarge118ClearAllianceSide extends Command 
 
     @Override
     public void execute() {
-        Vector2D targetVelocity = new Vector2D(xController.update(Field.LENGTH / 2 - Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118, swerve.getPose().getX()), driverYVelocity.get())
+        xController.update(swerve.getPose().getX() < Field.LENGTH / 2
+            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
+            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT,
+            swerve.getPose().getX());
+        
+        angleController.update(swerve.getPose().getX() < Field.LENGTH /2
+            ? Angle.k180deg
+            : Angle.kZero, 
+            Angle.fromRotation2d(swerve.getPose().getRotation()));
+
+        Vector2D targetVelocity = new Vector2D(xController.getOutput(), driverYVelocity.get())
             .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY));
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withVelocityX(targetVelocity.x)
             .withVelocityY(targetVelocity.y)
-            .withRotationalRate(angleController.update(
-                Angle.k180deg,
-                Angle.fromRotation2d(swerve.getPose().getRotation()))));
+            .withRotationalRate(angleController.getOutput()));
     }
 }

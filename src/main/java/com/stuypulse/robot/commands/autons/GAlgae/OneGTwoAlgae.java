@@ -17,7 +17,7 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveWithRobotRelativeSpeeds;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
@@ -70,7 +70,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             new ShooterHoldAlgae(),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                    .andThen(new SuperStructureBarge118()),
+                    .andThen(new SuperStructureCatapultReady()),
                 new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
                             .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_AUTON, 0, 0).withTimeout(0.5))
@@ -95,7 +95,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             new ShooterHoldAlgae(),
             new ParallelCommandGroup(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                    .andThen(new SuperStructureBarge118()),
+                    .andThen(new SuperStructureCatapultReady()),
                 new SwerveDrivePIDToBarge()
                         .andThen(new SuperStructureWaitUntilAtTarget())
                             .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_AUTON, 0, 0).withTimeout(0.5))

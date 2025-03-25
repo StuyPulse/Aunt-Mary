@@ -47,18 +47,15 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118AllianceSide;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToBarge118OppositeAllianceSide;
-import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilClearFromBarge118;
-import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ClearAllianceSide;
-import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ClearOppositeAllianceSide;
-import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreAllianceSide;
-import com.stuypulse.robot.commands.swerve.driveAligned.barge118.SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide;
+import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
@@ -281,27 +278,17 @@ public class RobotContainer {
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
         
-        // Barge 118 style score
+        // Catapult
         driver.getLeftButton()
-            .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
-                .until(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
-                .andThen(new LEDApplyPattern(Settings.LED.SCORE_COLOR)))
-            .whileTrue(new ConditionalCommand(
-                new SuperStructureBarge118()
-                    .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
-                        .deadlineFor(new SwerveDriveDriveAlignedToBarge118ClearAllianceSide(driver))
-                        .andThen(new SwerveDriveDriveAlignedToBarge118ScoreAllianceSide(driver)
-                            .alongWith(new SwerveDriveWaitUntilAlignedToBarge118AllianceSide()
-                                .andThen(new ShooterShootAlgae())))),
-                new SuperStructureBarge118()
-                    .andThen(new SwerveDriveWaitUntilClearFromBarge118().alongWith(new SuperStructureWaitUntilAtTarget())
-                        .deadlineFor(new SwerveDriveDriveAlignedToBarge118ClearOppositeAllianceSide(driver))
-                        .andThen(new SwerveDriveDriveAlignedToBarge118ScoreOppositeAllianceSide(driver)
-                            .alongWith(new SwerveDriveWaitUntilAlignedToBarge118OppositeAllianceSide()
-                                .andThen(new ShooterShootAlgae())))), 
-                () -> swerve.getPose().getX() <= Field.LENGTH / 2
-            ))
-            .onFalse(new SwerveDriveWaitUntilClearFromBarge118().andThen(new SuperStructureFeed()))
+            .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
+                .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
+                .alongWith(new SuperStructureCatapultReady()
+                    .andThen(new SuperStructureWaitUntilAtTarget()
+                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
+                    .andThen(new SuperStructureCatapultShoot()
+                        .andThen(new SuperStructureWaitUntilCanCatapult()
+                            .andThen(new ShooterShootAlgae())))))
+            .onFalse(new SuperStructureFeed())
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station

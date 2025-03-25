@@ -210,7 +210,7 @@ public interface ReefUtil {
             Pose2d targetPose = getL1ShooterTargetPose();
             return Math.abs(robotPose.getX() - targetPose.getX()) < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE
                 && Math.abs(robotPose.getY() - targetPose.getY()) < Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE
-                && Math.abs(robotPose.getRotation().minus(targetPose.getRotation()).getRadians()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE;
+                && Math.abs(robotPose.getRotation().minus(targetPose.getRotation()).getRadians()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getRadians();
         }
     }
 

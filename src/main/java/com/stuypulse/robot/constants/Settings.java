@@ -30,7 +30,7 @@ import com.pathplanner.lib.path.PathConstraints;
 public interface Settings {
 
     double DT = 0.020;
-    boolean DEBUG_MODE = false;
+    boolean DEBUG_MODE = true;
     String CANIVORE_NAME = "CANIVORE";
 
     public interface EnabledSubsystems {
@@ -86,7 +86,7 @@ public interface Settings {
             public interface Tolerances {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
-                double THETA_TOLERANCE = Units.degreesToRadians(5);
+                Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(5);
     
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
@@ -170,7 +170,7 @@ public interface Settings {
         double BACK_L4_HEIGHT_METERS = 1.7304;
 
         // Algae
-        double BARGE_188_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
+        double CATAPULT_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.205811;
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.622803;
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
@@ -213,7 +213,9 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(75);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-45);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-20);
+        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
