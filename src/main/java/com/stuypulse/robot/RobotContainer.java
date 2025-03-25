@@ -155,7 +155,6 @@ public class RobotContainer {
             .whileTrue(new LEDApplyPattern(LEDPattern.kOff).ignoringDisable(true));
 
         RobotModeTriggers.disabled()
-            .onTrue(new VisionSetMegaTag1())
             .onFalse(new VisionSetMegaTag2());
     }
 
