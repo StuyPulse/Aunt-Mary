@@ -16,7 +16,9 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,10 +60,9 @@ public class LimelightVision extends SubsystemBase{
         maxTagCount = 0;
 
         megaTagMode = MegaTagMode.MEGATAG1;
+        CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MT1_STDEVS);
 
         setIMUMode(1);
-
-        CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MIN_STDDEVS);
     }
 
     public void setMegaTagMode(MegaTagMode mode) {
@@ -118,9 +119,13 @@ public class LimelightVision extends SubsystemBase{
                 PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                     ? getMegaTag2PoseEstimate(camera.getName())
                     : getMegaTag1PoseEstimate(camera.getName());
+
+                Vector<N3> stdevs = (megaTagMode == MegaTagMode.MEGATAG2)
+                    ? Settings.Vision.MT2_STDEVS
+                    : Settings.Vision.MT1_STDEVS;
                 
                 if (poseEstimate != null && poseEstimate.tagCount > 0) {
-                    CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds, Settings.Vision.MIN_STDDEVS.times(1 + poseEstimate.avgTagDist));
+                    CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds, stdevs);
                     SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", true);
                     SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", poseEstimate.tagCount);
                     maxTagCount = Math.max(maxTagCount, poseEstimate.tagCount);

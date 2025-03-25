@@ -120,7 +120,8 @@ public interface Settings {
     }
 
     public interface Vision {
-        Vector<N3> MIN_STDDEVS = VecBuilder.fill(0.3, 0.3, 1.0);
+        Vector<N3> MT1_STDEVS = VecBuilder.fill(0.5, 0.5, 1.0);
+        Vector<N3> MT2_STDEVS = VecBuilder.fill(0.5, 0.5, 694694);
     }
 
     public interface Shooter {
