@@ -8,7 +8,7 @@
 package com.stuypulse.robot.subsystems.superStructure.elevator;
 
 import com.stuypulse.stuylib.math.SLMath;
-
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
@@ -26,20 +26,16 @@ public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
 
     private Optional<Double> voltageOverride;
-
-    private double velLimit;
-    private double accelLimit;
+    private MotionProfile motionProfile;
 
     protected ElevatorImpl() {
         super();
         motor = new TalonFX(Ports.Elevator.MOTOR, Settings.CANIVORE_NAME);
+        Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 
-        velLimit = Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP;
-        accelLimit = Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_AUTON;
-        Motors.Elevator.MOTOR_CONFIG.withMotionProfile(velLimit, accelLimit);
-
-        Motors.Elevator.MOTOR_CONFIG.configure(motor);
+        motionProfile = new MotionProfile(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
+        motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
         voltageOverride = Optional.empty();
     }
@@ -88,8 +84,6 @@ public class ElevatorImpl extends Elevator {
 
     @Override
     public void setMotionProfileConstraints(double velLimitMetersPerSecond, double accelLimitMetersPerSecondSquared) {
-        this.velLimit = velLimitMetersPerSecond;
-        this.accelLimit = accelLimitMetersPerSecondSquared;
         Motors.Elevator.MOTOR_CONFIG.withMotionProfile(velLimitMetersPerSecond, accelLimitMetersPerSecondSquared);
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
     }
@@ -111,12 +105,10 @@ public class ElevatorImpl extends Elevator {
         }
 
         if (Settings.DEBUG_MODE) {
+            SmartDashboard.putNumber("Elevator/Setpoint", motionProfile.get(getTargetHeight()));
             SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
             SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-    
-            SmartDashboard.putNumber("Elevator/Constraints/Current Max vel (m per s)", velLimit);
-            SmartDashboard.putNumber("Elevator/Constraints/Current Max accel (m per s per s)", accelLimit);
         }
     }
 }

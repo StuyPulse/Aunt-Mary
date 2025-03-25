@@ -125,8 +125,8 @@ public class SuperStructure extends SubsystemBase{
         if (armState == ArmState.FEED) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED);
         }
-        else if (armState == ArmState.CLIMB) {
-            arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CLIMB, Settings.Arm.Constraints.MAX_ACCEL_CLIMB);
+        else if (armState == ArmState.CATAPULT_SHOOT) {
+            arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CATAPULT, Settings.Arm.Constraints.MAX_ACCEL_CATAPULT);
         }
         else if (Robot.getMode() == RobotMode.AUTON) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_AUTON, Settings.Arm.Constraints.MAX_ACCEL_AUTON);

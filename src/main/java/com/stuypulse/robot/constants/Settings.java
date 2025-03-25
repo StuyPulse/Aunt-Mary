@@ -183,10 +183,10 @@ public interface Settings {
 
         public interface Constraints {
             double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 2;
-            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 5;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 6;
     
             double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
-            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 5;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 6;
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
@@ -233,9 +233,6 @@ public interface Settings {
     
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
-
-            Rotation2d MAX_VEL_CLIMB = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_CLIMB = Rotation2d.fromDegrees(600.0);
 
             Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
