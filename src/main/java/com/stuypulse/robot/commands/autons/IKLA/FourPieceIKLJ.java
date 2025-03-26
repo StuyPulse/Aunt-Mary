@@ -37,7 +37,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
                 new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
                     .withTranslationalConstraints(2.35, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
                     .withTimeout(1.75)
-                    .deadlineFor(new LEDApplyPattern(CoralBranch.F.isLeftBranchFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
@@ -47,7 +47,8 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
 
             // To HP, Score K
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new SuperStructureFeed()
@@ -76,7 +77,8 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
 
             // To HP, Score L
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1]),
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new SuperStructureFeed()
@@ -104,7 +106,8 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
 
            // To HP, Score J
            new ParallelCommandGroup(
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
+                .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
                     new SuperStructureFeed()
@@ -137,7 +140,8 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
             new ShooterStop(),
 
             new ParallelCommandGroup(
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3]),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
+                .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
                     new SuperStructureFeed()

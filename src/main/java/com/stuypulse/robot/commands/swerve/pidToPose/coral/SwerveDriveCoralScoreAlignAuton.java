@@ -30,7 +30,7 @@ public class SwerveDriveCoralScoreAlignAuton extends SequentialCommandGroup {
             new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .withTranslationalConstraints(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY_AUTON, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
                 .withTimeout(timeout)
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
+                .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR))
         );
     } 
 
