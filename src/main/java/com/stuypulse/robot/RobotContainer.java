@@ -11,6 +11,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.BuzzController;
+import com.stuypulse.robot.commands.ManualShoot;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
@@ -161,17 +162,8 @@ public class RobotContainer {
 
         // Manual Shoot
         driver.getDPadRight()
+            .onTrue(new ManualShoot())
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
-            .onTrue(new ConditionalCommand(
-                new ConditionalCommand(
-                    new FroggyRollerShootCoral(),
-                    new ShooterShootAlgae().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR)
-                        .alongWith(new FroggyRollerShootAlgae().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL)),
-                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE), 
-                new ShooterShootBasedOnSuperStructure(),
-                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE 
-                    || froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE
-                    || superStructure.getState() == SuperStructureState.PROCESSOR))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
             .onFalse(new ConditionalCommand(
                 new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR), 
