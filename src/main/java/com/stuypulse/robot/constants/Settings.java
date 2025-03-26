@@ -172,8 +172,8 @@ public interface Settings {
 
         // Algae
         double CATAPULT_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
-        double ALGAE_L2_HEIGHT_METERS_FRONT = 1.205811;
-        double ALGAE_L3_HEIGHT_METERS_FRONT = 1.622803;
+        double ALGAE_L2_HEIGHT_METERS_FRONT = 1.260986;
+        double ALGAE_L3_HEIGHT_METERS_FRONT = 1.469482;
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
         double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051;
 
@@ -206,8 +206,8 @@ public interface Settings {
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
-        Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-41.489999);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-41.489999);
+        Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-42.391385);
+        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.579658);
 
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(160.076257);
         Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
