@@ -86,7 +86,7 @@ public interface Settings {
             public interface Tolerances {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
-                Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(5);
+                Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(3);
     
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
@@ -98,7 +98,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
-                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(3);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
@@ -164,7 +164,7 @@ public interface Settings {
 
         double FRONT_L2_HEIGHT_METERS = 1.51086;
         double FRONT_L3_HEIGHT_METERS = 1.056621;
-        double FRONT_L4_HEIGHT_METERS = 1.706494;
+        double FRONT_L4_HEIGHT_METERS = 1.746094 + .05;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
         double BACK_L3_HEIGHT_METERS = 1.037109;
@@ -190,7 +190,7 @@ public interface Settings {
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
-        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.5;
+        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.35;
     }
 
     public interface Arm {
@@ -200,7 +200,7 @@ public interface Settings {
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
+        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(45.978516 + 8);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(182.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
