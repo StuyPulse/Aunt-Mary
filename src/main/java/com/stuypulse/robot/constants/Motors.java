@@ -83,7 +83,7 @@ public interface Motors {
     public interface Elevator {
         TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
 			.withCurrentLimitAmps(80)
-            .withSupplyCurrentLimitAmps(10)
+            .withSupplyCurrentLimitAmps(40)
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
