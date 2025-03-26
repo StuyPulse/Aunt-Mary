@@ -44,6 +44,8 @@ public class ArmImpl extends Arm {
     private DutyCycleEncoder absoluteEncoder;
     private boolean hasUsedAbsoluteEncoderToSetArm;
 
+    private MotionProfile debuggingMotionProfile;
+
     private SettableNumber velLimitDegreesPerSecond;
     private SettableNumber accelLimitDegreesPerSecondSquared;
 
@@ -69,8 +71,8 @@ public class ArmImpl extends Arm {
         kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
         swerveFeedForwardController = new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs);
 
-        MotionProfile motionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
-        motionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
+        debuggingMotionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
+        debuggingMotionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
 
         voltageOverride = Optional.empty();
     }
@@ -188,6 +190,8 @@ public class ArmImpl extends Arm {
         if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Arm/Constraints/Current Max vel (deg per s)", velLimitDegreesPerSecond.get());
             SmartDashboard.putNumber("Arm/Constraints/Current Max accel (deg per s per s)", accelLimitDegreesPerSecondSquared.get());
+
+            SmartDashboard.putNumber("Arm/Current Setpoint (deg)", debuggingMotionProfile.get(getTargetAngle().getDegrees()));
 
             SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
             SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());

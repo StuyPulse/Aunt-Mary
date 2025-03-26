@@ -26,7 +26,7 @@ public class ElevatorImpl extends Elevator {
     private final TalonFX motor;
 
     private Optional<Double> voltageOverride;
-    private MotionProfile motionProfile;
+    private MotionProfile debuggingMotionProfile;
 
     protected ElevatorImpl() {
         super();
@@ -34,8 +34,8 @@ public class ElevatorImpl extends Elevator {
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 
-        motionProfile = new MotionProfile(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
-        motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
+        debuggingMotionProfile = new MotionProfile(Settings.Elevator.Constraints.MAX_VELOCITY_METERS_PER_SECOND_TELEOP, Settings.Elevator.Constraints.MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP);
+        debuggingMotionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
         voltageOverride = Optional.empty();
     }
@@ -105,7 +105,7 @@ public class ElevatorImpl extends Elevator {
         }
 
         if (Settings.DEBUG_MODE) {
-            SmartDashboard.putNumber("Elevator/Setpoint", motionProfile.get(getTargetHeight()));
+            SmartDashboard.putNumber("Elevator/Setpoint", debuggingMotionProfile.get(getTargetHeight()));
             SmartDashboard.putNumber("Elevator/Voltage", motor.getMotorVoltage().getValueAsDouble());
             SmartDashboard.putNumber("Elevator/Stator Current", motor.getStatorCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Elevator/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
