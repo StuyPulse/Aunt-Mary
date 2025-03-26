@@ -1,4 +1,3 @@
-
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -7,7 +6,7 @@
 
 package com.stuypulse.robot;
 
-
+import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
 
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 
 public class Robot extends TimedRobot {
 
@@ -50,11 +48,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        
         robot = new RobotContainer();
         mode = RobotMode.DISABLED;
 
         DataLogManager.start();
+
         // Allows us to see the limelight feeds even while tethered through USB-B 
         for (int port = 5800; port <= 5809; port++){   
             PortForwarder.add(port, "10.6.94.11", port);
@@ -63,8 +61,6 @@ public class Robot extends TimedRobot {
        
         // Ignore barge tags, processor tags, and coral station tags
         new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
-
-        // if (isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
 
         // PathfindingCommand.warmupCommand().schedule();
     }
@@ -83,6 +79,10 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         mode = RobotMode.DISABLED;
+
+        if (!DriverStation.isFMSAttached()) {
+            new VisionSetMegaTag1().schedule();
+        }
     }
 
     @Override
@@ -96,6 +96,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         mode = RobotMode.AUTON;
         auto = robot.getAutonomousCommand();
+
+        new VisionSetMegaTag2().schedule();
         
         if (auto != null) {
             auto.schedule();
@@ -120,6 +122,7 @@ public class Robot extends TimedRobot {
         if (auto != null) {
             auto.cancel();
         }
+        new VisionSetMegaTag2().schedule();
 
         Shuffleboard.selectTab("Teleoperated");
     }

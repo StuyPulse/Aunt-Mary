@@ -7,6 +7,8 @@
 
 package com.stuypulse.robot.commands.leds;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.Robot.RobotMode;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
@@ -20,6 +22,7 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
 
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,30 +54,39 @@ public class LEDDefaultCommand extends Command{
 
     @Override
     public void execute() {
-        if (isScoring()) {
-            leds.applyPattern(Settings.LED.SCORE_COLOR);
-        }
-        else if (climb.getState() == ClimbState.OPEN) {
-            leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
-        }
-        else if (climb.getState() == ClimbState.SHIMMY) {
-            leds.applyPattern(Settings.LED.SHIMMY_COLOR);
-        }
-        else if (climb.getState() == ClimbState.CLIMBING) {
-            leds.applyPattern(Settings.LED.CLIMBING_COLOR);
-        }
-        else if (funnel.getState() == FunnelState.REVERSE) {
-            leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
-        }
-        else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE || superStructure.getState() == SuperStructureState.PROCESSOR) {
-            leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
-        }
-        else if (shooter.hasCoral() || funnel.hasCoral()) {
-            leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
+        if(Robot.getMode() == RobotMode.DISABLED) {
+            if (LimelightVision.getInstance().getMaxTagCount() >= Settings.LED.DESIRED_TAGS_WHEN_DISABLED) {
+                leds.applyPattern(Settings.LED.DISABLED_ALIGNED);
+            }
+            else {
+                leds.applyPattern(LEDPattern.kOff);
+            }
         }
         else {
-            leds.applyPattern(LEDPattern.kOff);
+            if (isScoring()) {
+                leds.applyPattern(Settings.LED.SCORE_COLOR);
+            }
+            else if (climb.getState() == ClimbState.OPEN) {
+                leds.applyPattern(Settings.LED.CLIMB_OPEN_COLOR);
+            }
+            else if (climb.getState() == ClimbState.SHIMMY) {
+                leds.applyPattern(Settings.LED.SHIMMY_COLOR);
+            }
+            else if (climb.getState() == ClimbState.CLIMBING) {
+                leds.applyPattern(Settings.LED.CLIMBING_COLOR);
+            }
+            else if (funnel.getState() == FunnelState.REVERSE) {
+                leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
+            }
+            else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE || superStructure.getState() == SuperStructureState.PROCESSOR) {
+                leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
+            }
+            else if (shooter.hasCoral() || funnel.hasCoral()) {
+                leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
+            }
+            else {
+                leds.applyPattern(LEDPattern.kOff);
+            }
         }
-    } 
-
+    }
 }

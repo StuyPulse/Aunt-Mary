@@ -125,7 +125,6 @@ public class RobotContainer {
         swerve.configureAutoBuilder();
 
         configureDefaultCommands();
-        configureAutomaticCommands();
         configureDriverButtonBindings();
         configureAutons();
         // configureSysids();
@@ -140,7 +139,7 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         funnel.setDefaultCommand(new FunnelDefaultCommand());
-        leds.setDefaultCommand(new LEDDefaultCommand());
+        leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
         shooter.setDefaultCommand(new ShooterAcquireCoral()
             .andThen(new BuzzController(driver))
             .onlyIf(() -> !shooter.hasCoral() 
@@ -150,18 +149,6 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.UNJAMB_CORAL_BACKWARDS
                 && !shooter.isShooting()
                 && climb.getState() == ClimbState.CLOSED));
-    }
-
-    private void configureAutomaticCommands() {
-        RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() >= Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
-            .whileTrue(new LEDApplyPattern(Settings.LED.DISABLED_ALIGNED).ignoringDisable(true));
-
-        RobotModeTriggers.disabled().and(() -> vision.getMaxTagCount() < Settings.LED.DESIRED_TAGS_WHEN_DISABLED)
-            .debounce(0.5)
-            .whileTrue(new LEDApplyPattern(LEDPattern.kOff).ignoringDisable(true));
-
-        RobotModeTriggers.disabled()
-            .onFalse(new VisionSetMegaTag2());
     }
 
     /***************/
