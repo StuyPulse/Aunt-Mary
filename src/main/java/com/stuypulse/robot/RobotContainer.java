@@ -207,12 +207,12 @@ public class RobotContainer {
         // L1
         driver.getRightBumper()
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
-            .whileTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureCoralL1())
-                .onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
-                .andThen(new FroggyPivotToL1())
-                .onlyIf(() -> !shooter.hasCoral()))
+            .whileTrue(new ConditionalCommand(
+                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                    .andThen(new SuperStructureCoralL1()),
+                new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
+                    .andThen(new FroggyPivotToL1()), 
+                () -> shooter.hasCoral()))
             .onFalse(new FroggyPivotToStow().alongWith(new FroggyRollerStop()).onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1));
         
