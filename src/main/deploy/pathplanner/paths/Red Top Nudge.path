@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.077608380998884,
+        "y": 4.993079921177455
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.321427579831497,
+        "y": 5.048326624976162
+      },
+      "isLocked": false,
+      "linkedName": "Red Top Nudge Start"
+    },
+    {
+      "anchor": {
+        "x": 7.184725080217634,
+        "y": 4.993079921177455
+      },
+      "prevControl": {
+        "x": 6.916619751793635,
+        "y": 4.931887332813667
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red Top Nudge End"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.5,
+    "maxAcceleration": 7.5,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Red Utilities",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

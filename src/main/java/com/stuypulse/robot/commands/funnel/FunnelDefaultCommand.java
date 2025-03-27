@@ -41,5 +41,6 @@ public class FunnelDefaultCommand extends Command{
         else {
             funnel.setState(FunnelState.FORWARD);
         }
+
     }
 }

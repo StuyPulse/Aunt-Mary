@@ -7,79 +7,55 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red Mid Top to H"
+            "pathName": "Red Top Nudge"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red H BackOut"
+            "pathName": "Red Nudge to I"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red H BackOut to GH"
+            "pathName": "Red I to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red GH BackOut"
+            "pathName": "Red HP to K"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red GH to Barge"
+            "pathName": "Red K to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red Barge to IJ (1)"
+            "pathName": "Red HP to L"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red Barge to IJ (2)"
+            "pathName": "Red L to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red IJ BackOut"
+            "pathName": "Red HP to J"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red IJ to Barge"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red Barge to EF (1)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red Barge to EF (2)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red EF BackOut"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red EF to Barge"
+            "pathName": "Red J BackOut"
           }
         }
       ]

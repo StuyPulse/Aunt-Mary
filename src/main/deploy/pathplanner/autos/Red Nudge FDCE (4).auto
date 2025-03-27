@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red Bottom to F"
+            "pathName": "Red Bottom Nudge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Bottom Nudge to F"
           }
         },
         {
@@ -32,6 +38,24 @@
           "type": "path",
           "data": {
             "pathName": "Red HP to C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red C to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red E BackOut"
           }
         }
       ]

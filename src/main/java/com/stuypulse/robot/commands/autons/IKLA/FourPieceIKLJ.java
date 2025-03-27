@@ -35,7 +35,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
             // Score Preload on I
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
-                    .withTranslationalConstraints(2.35, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
+                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
                     .withTimeout(1.75)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()

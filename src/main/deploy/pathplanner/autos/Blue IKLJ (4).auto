@@ -7,31 +7,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Mid Top to H"
+            "pathName": "Blue Top to I"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue H BackOut"
+            "pathName": "Blue I to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue H BackOut to GH"
+            "pathName": "Blue HP to K"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue GH BackOut"
+            "pathName": "Blue K to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue GH to Barge"
+            "pathName": "Blue HP to L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to J"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue J BackOut"
           }
         }
       ]

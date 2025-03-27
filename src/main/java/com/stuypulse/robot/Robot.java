@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
@@ -18,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Robot extends TimedRobot {
 
@@ -122,6 +125,7 @@ public class Robot extends TimedRobot {
         if (auto != null) {
             auto.cancel();
         }
+
         new VisionSetMegaTag2().schedule();
 
         Shuffleboard.selectTab("Teleoperated");

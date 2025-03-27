@@ -16,11 +16,13 @@ import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCE;
+import com.stuypulse.robot.commands.autons.FDCB.FourPieceNudgeFDCE;
 import com.stuypulse.robot.commands.autons.FDCB.PathfulFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLJ;
+import com.stuypulse.robot.commands.autons.IKLA.FourPieceNudgeIKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.PathfulFourPieceIKLA;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbClose;
@@ -351,6 +353,10 @@ public class RobotContainer {
        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
         FOUR_PIECE_IKLJ.registerBlue(autonChooser);
 
+        AutonConfig FOUR_PIECE_NUDGE_IKLJ = new AutonConfig("4 Piece Nudge IKLJ", FourPieceNudgeIKLJ::new,
+       "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
+        FOUR_PIECE_NUDGE_IKLJ.registerBlue(autonChooser);
+
         /** BOTTOM AUTONS **/
 
         // AutonConfig FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
@@ -360,6 +366,10 @@ public class RobotContainer {
         AutonConfig FOUR_PIECE_FDCE = new AutonConfig("4 Piece FDCE", FourPieceFDCE::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
         FOUR_PIECE_FDCE.registerBlue(autonChooser);
+
+        AutonConfig FOUR_PIECE_NUDGE_FDCE = new AutonConfig("4 Piece Nudge FDCE", FourPieceNudgeFDCE::new,
+        "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
+        FOUR_PIECE_NUDGE_FDCE.registerBlue(autonChooser);
 
         // AutonConfig CHEATER_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Cheater)", CheaterFourPieceFDCB::new,
         //  "Blue F to HP");

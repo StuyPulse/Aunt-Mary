@@ -7,43 +7,61 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Bottom to F"
+            "pathName": "Blue Top Nudge"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue F to HP"
+            "pathName": "Blue Nudge to I"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue HP to D"
+            "pathName": "Blue I to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue D to HP"
+            "pathName": "Blue HP to K"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue HP to C"
+            "pathName": "Blue K to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue C to HP"
+            "pathName": "Blue HP to L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to J"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue J BackOut"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Blue Bottom Autons",
+  "folder": "Blue Top Autons",
   "choreoAuto": false
 }

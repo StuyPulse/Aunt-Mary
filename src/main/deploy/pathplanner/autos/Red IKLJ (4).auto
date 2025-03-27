@@ -33,6 +33,24 @@
           "data": {
             "pathName": "Red HP to L"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to J"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red J BackOut"
+          }
         }
       ]
     }

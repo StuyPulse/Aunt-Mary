@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.184725080217634,
+        "y": 4.993079921177455
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.988482381427926,
+        "y": 5.2111637311677015
+      },
+      "isLocked": false,
+      "linkedName": "Blue Top Nudge End"
+    },
+    {
+      "anchor": {
+        "x": 5.213420758928571,
+        "y": 5.145287649972098
+      },
+      "prevControl": {
+        "x": 6.324529467455115,
+        "y": 5.007897527525042
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue I"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.5,
+    "maxAcceleration": 7.5,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Blue To Reef",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

@@ -39,6 +39,18 @@
           "data": {
             "pathName": "Red C to HP"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red E BackOut"
+          }
         }
       ]
     }
