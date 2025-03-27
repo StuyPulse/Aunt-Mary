@@ -29,7 +29,6 @@ import java.util.function.Supplier;
 
 public class ScoreRoutine extends SequentialCommandGroup {
     private final SuperStructure superStructure;
-    private final Shooter shooter;
 
     public ScoreRoutine(int level, boolean isFrontFacingReef) {
         this(level, isFrontFacingReef, ReefUtil::getClosestCoralBranch);
@@ -41,7 +40,6 @@ public class ScoreRoutine extends SequentialCommandGroup {
 
     public ScoreRoutine(int level, boolean isFrontFacingReef, Supplier<CoralBranch> targetBranch) {
         superStructure = SuperStructure.getInstance();
-        shooter = Shooter.getInstance();
 
         SuperStructureState correspondingSuperStructureState = SuperStructure.getCorrespondingCoralScoreState(level, isFrontFacingReef);
 

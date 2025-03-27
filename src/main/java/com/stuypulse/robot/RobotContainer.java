@@ -13,6 +13,7 @@ import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ManualShoot;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
+import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCE;
@@ -180,11 +181,9 @@ public class RobotContainer {
 
         // ground algae intake and reset
         driver.getLeftTriggerButton()
+            .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .onTrue(new FroggyRollerIntakeAlgae())
-            .onTrue(new SuperStructureFeed())
-            .onTrue(new ShooterStop()) // Exit algae hold state
-            .onTrue(new ClimbClose())
             .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
@@ -219,8 +218,7 @@ public class RobotContainer {
         
         driver.getRightBumper().debounce(0.25)
             .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
-                .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1)
-                .andThen(new LEDApplyPattern(Settings.LED.SCORE_COLOR)))
+                .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
                     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
