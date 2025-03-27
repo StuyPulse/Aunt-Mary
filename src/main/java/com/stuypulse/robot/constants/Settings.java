@@ -114,7 +114,7 @@ public interface Settings {
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.203; // From bumper, 8 inches (2 corals - 1 inch)
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.16;
             }
         }
     }
