@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
         mode = RobotMode.DISABLED;
 
         DataLogManager.start();
+        SignalLogger.start();
 
         // Allows us to see the limelight feeds even while tethered through USB-B 
         for (int port = 5800; port <= 5809; port++){   
