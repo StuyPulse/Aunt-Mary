@@ -74,6 +74,9 @@
           },
           "open": true
         },
+        "Arm": {
+          "open": true
+        },
         "Enabled Subsystems": {
           "open": true
         },

@@ -130,6 +130,7 @@ public interface Settings {
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
         double CORAL_SHOOT_SPEED_L3_FRONT = -0.4;
         double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
+        double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
 
@@ -165,6 +166,7 @@ public interface Settings {
         double FRONT_L2_HEIGHT_METERS = 1.51086;
         double FRONT_L3_HEIGHT_METERS = 1.056621;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
+        double FRONT_L4_AUTON_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
         double BACK_L3_HEIGHT_METERS = 1.037109;
@@ -196,6 +198,8 @@ public interface Settings {
     public interface Arm {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
+
+        Rotation2d AUTON_L4_ANGLE_FRONT = Rotation2d.fromRadians(55.361328); 
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
