@@ -50,7 +50,7 @@ public class FroggyImpl extends Froggy {
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
-        absoluteEncoder.setInverted(true);
+        absoluteEncoder.setInverted(false);
 
         pivotVoltageOverride = Optional.empty();
 
