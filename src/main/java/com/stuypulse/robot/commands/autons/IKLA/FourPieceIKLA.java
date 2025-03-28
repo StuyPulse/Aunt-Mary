@@ -14,6 +14,7 @@ import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4FrontAuton;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
@@ -139,7 +140,7 @@ public FourPieceIKLA(PathPlannerPath... paths) {
                         .deadlineFor(new LEDApplyPattern(CoralBranch.A.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
-                            new SuperStructureCoralL4Front()
+                            new SuperStructureCoralL4FrontAuton()
                                 .andThen(new SuperStructureWaitUntilAtTarget())
                         )
                 )
