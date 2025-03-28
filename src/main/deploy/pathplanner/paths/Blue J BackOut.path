@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.56405482288561,
-        "y": 5.577041098334091
+        "x": 5.086721843486653,
+        "y": 5.490074809562187
       },
       "isLocked": false,
       "linkedName": "Blue J"
     },
     {
       "anchor": {
-        "x": 1.7667624337332588,
-        "y": 7.155919102260044
+        "x": 5.497126988002232,
+        "y": 5.896124703543526
       },
       "prevControl": {
-        "x": 4.094573860489101,
-        "y": 5.825488005447573
+        "x": 5.2689153057033264,
+        "y": 5.684595357983193
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Top HP"
+      "linkedName": "Blue J BackOut"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "Blue To Reef",

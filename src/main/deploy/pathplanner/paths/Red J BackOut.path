@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3502658003579233,
-        "y": 6.3722805521701735
+        "x": 5.109185700435579,
+        "y": 5.505780510715887
       },
       "isLocked": false,
       "linkedName": "Red J"
     },
     {
       "anchor": {
-        "x": 1.7600293840680803,
-        "y": 7.136230032784598
+        "x": 5.497126988002232,
+        "y": 5.896124703543526
       },
       "prevControl": {
-        "x": 2.6483597669101324,
-        "y": 6.561143852329158
+        "x": 5.296136067498507,
+        "y": 5.723088377517779
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Top HP"
+      "linkedName": "Red J BackOut"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "Red to Reef",
