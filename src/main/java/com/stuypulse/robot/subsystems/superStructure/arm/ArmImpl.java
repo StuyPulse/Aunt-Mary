@@ -8,9 +8,6 @@
 package com.stuypulse.robot.subsystems.superStructure.arm;
 
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.ArmFeedforward;
-import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
@@ -199,6 +196,8 @@ public class ArmImpl extends Arm {
             SmartDashboard.putNumber("Arm/Voltage", motor.getMotorVoltage().getValueAsDouble());
             SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+
+            SmartDashboard.putNumber("Arm/Raw Encoder Value (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
         }
     }
 }

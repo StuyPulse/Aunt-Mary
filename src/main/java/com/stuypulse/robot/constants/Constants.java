@@ -38,13 +38,12 @@ public interface Constants {
             double VELOCITY_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP / 60;
         }
     }
-
     public interface Arm {
         double GEAR_RATIO = 30.0;
 
         double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(201.848576 + 90);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(201.848576 + 90 - (5 * 360.0 / 42.0));
 
         double ARM_LENGTH = Units.inchesToMeters(29);
         double MASS_KG = Units.lbsToKilograms(12.8);
