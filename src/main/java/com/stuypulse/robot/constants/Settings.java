@@ -96,7 +96,7 @@ public interface Settings {
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
-                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
 
@@ -162,7 +162,7 @@ public interface Settings {
         // Coral
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
-        double FRONT_L2_HEIGHT_METERS = 1.51086;
+        double FRONT_L2_HEIGHT_METERS = 1.53586;
         double FRONT_L3_HEIGHT_METERS = 1.056621;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
@@ -246,7 +246,7 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20 - 5);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(44);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(47);
         Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
@@ -259,8 +259,8 @@ public interface Settings {
         SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.3);
         SmartNumber HOLD_CORAL_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Coral Speed", -0.15);
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(200);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(400);
+        Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
+        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);
     }
 
     public interface Climb {
