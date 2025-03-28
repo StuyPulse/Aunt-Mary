@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.571764712754258,
-        "y": 1.817473600515384
+        "x": 5.38937800871002,
+        "y": 2.4974174117913273
       },
       "isLocked": false,
       "linkedName": "Red E"
     },
     {
       "anchor": {
-        "x": 1.775178745814732,
-        "y": 0.8966823032924105
+        "x": 5.554459926060267,
+        "y": 2.2909336635044646
       },
       "prevControl": {
-        "x": 3.268181929169207,
-        "y": 1.8630597092875112
+        "x": 5.399560801907432,
+        "y": 2.487163786922569
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red Bottom HP"
+      "linkedName": "Red E BackOut"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "Red to Reef",

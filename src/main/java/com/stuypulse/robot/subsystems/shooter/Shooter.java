@@ -47,6 +47,7 @@ public abstract class Shooter extends SubsystemBase {
         SHOOT_CORAL_L2_BACK(Settings.Shooter.CORAL_SHOOT_SPEED_L2_BACK),
         SHOOT_CORAL_L3_FRONT(Settings.Shooter.CORAL_SHOOT_SPEED_L3_FRONT),
         SHOOT_CORAL_L3_BACK(Settings.Shooter.CORAL_SHOOT_SPEED_L3_BACK),
+        SHOOT_CORAL_AUTON_L4_FRONT(Settings.Shooter.CORAL_AUTON_SHOOT_SPEED_L4_FRONT),
         SHOOT_CORAL_L4_FRONT(Settings.Shooter.CORAL_SHOOT_SPEED_L4_FRONT),
         SHOOT_CORAL_L4_BACK(Settings.Shooter.CORAL_SHOOT_SPEED_L4_BACK),
         SHOOT_ALGAE(Settings.Shooter.ALGAE_SHOOT_SPEED),

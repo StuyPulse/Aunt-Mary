@@ -35,6 +35,7 @@ public class SuperStructure extends SubsystemBase{
         L2_BACK(ElevatorState.L2_BACK, ArmState.L2_BACK),
         L3_FRONT(ElevatorState.L3_FRONT, ArmState.L3_FRONT),
         L3_BACK(ElevatorState.L3_BACK, ArmState.L3_BACK),
+        L4_AUTON_FRONT(ElevatorState.L4_FRONT_AUTON, ArmState.AUTON_L4_FRONT),
         L4_FRONT(ElevatorState.L4_FRONT, ArmState.L4_FRONT),
         L4_BACK(ElevatorState.L4_BACK, ArmState.L4_BACK),
         ALGAE_L2_FRONT(ElevatorState.ALGAE_L2_FRONT, ArmState.ALGAE_L2_FRONT),
