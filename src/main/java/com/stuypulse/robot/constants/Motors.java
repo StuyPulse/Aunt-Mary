@@ -70,7 +70,7 @@ public interface Motors {
 			.withCurrentLimitAmps(40)
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
-			.withInvertedValue(InvertedValue.Clockwise_Positive);
+			.withInvertedValue(InvertedValue.CounterClockwise_Positive);
 
         TalonFXConfig PIVOT_MOTOR_CONFIG = new TalonFXConfig()
 			.withCurrentLimitAmps(80)
