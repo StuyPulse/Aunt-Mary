@@ -476,7 +476,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
             SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
-            SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeYAccelGs());
+            SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel y (g)", getRobotRelativeYAccelGs());
 
             SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
             SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());
