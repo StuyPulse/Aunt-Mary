@@ -66,13 +66,13 @@ public abstract class Froggy extends SubsystemBase {
         HOLD_CORAL(Settings.Froggy.HOLD_CORAL_SPEED),
         STOP(0);
 
-        private Number speed;
+        private double speed;
 
-        private RollerState(Number speed) {
+        private RollerState(double speed) {
             this.speed = speed;
         }
 
-        public Number getTargetSpeed() {
+        public double getTargetSpeed() {
             return this.speed;
         }
     }

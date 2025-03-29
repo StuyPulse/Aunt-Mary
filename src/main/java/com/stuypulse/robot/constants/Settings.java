@@ -256,12 +256,12 @@ public interface Settings {
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
 
-        SmartNumber ALGAE_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Intake Speed", 1.0);
-        SmartNumber ALGAE_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Algae Outtake Speed", -0.5);
-        SmartNumber CORAL_INTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Intake Speed", -1.0);
-        SmartNumber CORAL_OUTTAKE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Coral Outtake Speed", 0.2);
-        SmartNumber HOLD_ALGAE_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Algae Speed", 0.3);
-        SmartNumber HOLD_CORAL_SPEED = new SmartNumber("Froggy/Roller/Target Speeds/Hold Coral Speed", -0.15);
+        double ALGAE_INTAKE_SPEED = 1.0;
+        double ALGAE_OUTTAKE_SPEED = -0.5;
+        double CORAL_INTAKE_SPEED = -1.0;
+        double CORAL_OUTTAKE_SPEED = 0.2;
+        double HOLD_ALGAE_SPEED = 0.3;
+        double HOLD_CORAL_SPEED = -0.15;
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);

@@ -107,7 +107,7 @@ public class FroggyImpl extends Froggy {
         super.periodic();
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {
-            rollerMotor.set(getRollerState().getTargetSpeed().doubleValue());
+            rollerMotor.set(getRollerState().getTargetSpeed());
             if (pivotVoltageOverride.isPresent()) {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
             } 
