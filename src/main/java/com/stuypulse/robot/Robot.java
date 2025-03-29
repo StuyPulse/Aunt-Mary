@@ -7,11 +7,8 @@
 package com.stuypulse.robot;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
-import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
-import com.stuypulse.robot.commands.vision.VisionSetWhiteList;
 
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -21,7 +18,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Robot extends TimedRobot {
 
@@ -63,9 +59,6 @@ public class Robot extends TimedRobot {
             PortForwarder.add(port, "10.6.94.11", port);
             PortForwarder.add(port+10, "10.6.94.12", port);
         }
-       
-        // Ignore barge tags, processor tags, and coral station tags
-        new VisionSetWhiteList(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22).schedule();
 
         // PathfindingCommand.warmupCommand().schedule();
     }
