@@ -43,7 +43,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.25),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             // To HP, Score K
@@ -73,7 +73,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             // To HP, Score L
@@ -102,7 +102,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
            // To HP, Score J
@@ -137,7 +137,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
             ),
 
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(0.15),
             new ShooterStop(),
 
             new ParallelCommandGroup(
