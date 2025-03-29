@@ -50,6 +50,9 @@ public interface Settings {
         double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4;
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(17.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
+
+        double CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FUNNEL_SIDE = Units.inchesToMeters(9);
+        double CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FROGGY_SIDE = Units.inchesToMeters(-9);
     }
 
     public interface Swerve {
@@ -86,7 +89,7 @@ public interface Settings {
             public interface Tolerances {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
-                Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(3);
+                Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
     
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
@@ -97,14 +100,14 @@ public interface Settings {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.02;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(5);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(1);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
@@ -128,7 +131,7 @@ public interface Settings {
         double CORAL_SHOOT_SPEED_L1 = 0.22;
         double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
-        double CORAL_SHOOT_SPEED_L3_FRONT = -0.4;
+        double CORAL_SHOOT_SPEED_L3_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
         double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
@@ -164,7 +167,7 @@ public interface Settings {
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         double FRONT_L2_HEIGHT_METERS = 1.53586;
-        double FRONT_L3_HEIGHT_METERS = 1.056621;
+        double FRONT_L3_HEIGHT_METERS = 1.123535;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         double FRONT_L4_AUTON_HEIGHT_METERS = 1.706494;
         
@@ -203,7 +206,7 @@ public interface Settings {
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.058181);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(55.458984);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(182.513809);

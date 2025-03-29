@@ -217,6 +217,13 @@ public interface Field {
                 : transformToOppositeAlliance(new Pose2d(blueOriginLineEnd, Rotation2d.kZero)).getTranslation();
         }
 
+        private boolean isCDCoralStation() {
+            return switch (this) {
+                case BLUE_CD_CORAL_STATION, RED_CD_CORAL_STATION -> true;
+                default -> false;
+            };
+        }
+
         // Kalimul said to add a comment that this is getting the closest point to a line
         public Pose2d getTargetPose() {
             Translation2d lineStart = getLineStart();
@@ -232,9 +239,10 @@ public interface Field {
             double t = dotProduct / lineLengthSquared; // Projection factor
             
             double coralStationLength = lineStart.getDistance(lineEnd);
-            double percentToIgnoreFromEachSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2 + Units.inchesToMeters(9)) / coralStationLength;
+            double percentToIgnoreFromDriverStationSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2 + (isCDCoralStation() ? Settings.Clearances.CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FUNNEL_SIDE : Settings.Clearances.CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FROGGY_SIDE)) / coralStationLength;
+            double percentToIgnoreFromSideWallSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2 + (isCDCoralStation() ? Settings.Clearances.CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FROGGY_SIDE : Settings.Clearances.CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FUNNEL_SIDE)) / coralStationLength;
             
-            t = Math.max(percentToIgnoreFromEachSide, Math.min(1 - percentToIgnoreFromEachSide, t));
+            t = Math.max(percentToIgnoreFromDriverStationSide, Math.min(1 - percentToIgnoreFromSideWallSide, t));
             
             Translation2d closestPointOnCoralStation = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
 
