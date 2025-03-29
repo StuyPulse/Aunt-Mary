@@ -168,14 +168,14 @@ public class ArmImpl extends Arm {
                     if (Shooter.getInstance().hasCoral() || Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
                         this.kG.set(Gains.Arm.CoralAlgae.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
-                            .withSlot(0)
-                            .withFeedForward(swerveFeedForwardController.getOutput()));
+                            .withSlot(0));
+                            // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                     else {
                         this.kG.set(Gains.Arm.Empty.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
-                            .withSlot(1)
-                            .withFeedForward(swerveFeedForwardController.getOutput()));
+                            .withSlot(1));
+                            // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                 }
             }

@@ -133,11 +133,11 @@ public interface Settings {
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
         double CORAL_SHOOT_SPEED_L3_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
-        double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -1.0;
+        double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
 
-        double CORAL_ACQUIRE_SPEED = 0.2;
+        double CORAL_ACQUIRE_SPEED = 0.17;
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 0.5;
@@ -167,9 +167,9 @@ public interface Settings {
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
         double FRONT_L2_HEIGHT_METERS = 1.53586;
-        double FRONT_L3_HEIGHT_METERS = 1.123535;
+        double FRONT_L3_HEIGHT_METERS = 1.037109;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
-        double FRONT_L4_AUTON_HEIGHT_METERS = 1.706494;
+        double FRONT_L4_AUTON_HEIGHT_METERS = 1.685791;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
         double BACK_L3_HEIGHT_METERS = 1.037109;
@@ -188,10 +188,10 @@ public interface Settings {
 
         public interface Constraints {
             double MAX_VELOCITY_METERS_PER_SECOND_TELEOP = 2;
-            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 6;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_TELEOP = 4;
     
             double MAX_VELOCITY_METERS_PER_SECOND_AUTON = 2;
-            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 6;
+            double MAX_ACCEL_METERS_PER_SECOND_PER_SECOND_AUTON = 4;
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
@@ -202,11 +202,11 @@ public interface Settings {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
 
-        Rotation2d AUTON_L4_ANGLE_FRONT = Rotation2d.fromRadians(55.361328); 
+        Rotation2d AUTON_L4_ANGLE_FRONT = Rotation2d.fromDegrees(86.044922); 
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(55.458984);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(56.513672);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(182.513809);
@@ -232,14 +232,14 @@ public interface Settings {
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
         public interface Constraints {
-            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(400.0);
-            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(800.0);
+            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0);
+            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0);
 
             Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
             Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
     
-            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(350.0);
-            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(700.0);
+            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(600.0);
+            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(1200.0);
 
             Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(350.0);
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
