@@ -15,16 +15,16 @@ import edu.wpi.first.math.util.Units;
 public class ArmDriveFeedForward extends Controller {
 
     private final Number kG;
-    private final IStream xAccelInGs;
+    private final IStream forwardAccelInGs;
 
-    public ArmDriveFeedForward(Number kG, IStream xAccelInGs) {
+    public ArmDriveFeedForward(Number kG, IStream forwardAccelInGs) {
         this.kG = kG;
-        this.xAccelInGs = xAccelInGs;
+        this.forwardAccelInGs = forwardAccelInGs;
     }
 
     @Override
     protected double calculate(double setpoint, double measurement) {
-        return -(kG.doubleValue() * Math.sin(Units.degreesToRadians(measurement)) * xAccelInGs.get());
+        return -(kG.doubleValue() * Math.sin(Units.degreesToRadians(measurement)) * forwardAccelInGs.get());
     }
 
 }

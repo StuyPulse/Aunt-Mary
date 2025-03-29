@@ -19,6 +19,8 @@ import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.ArmDriveFeedForward;
 import com.stuypulse.robot.util.SysId;
 
 import edu.wpi.first.math.geometry.*;
@@ -59,6 +61,7 @@ public class FroggyImpl extends Froggy {
         controller = new MotorFeedforward(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA).position()
             .add(new ArmFeedforward(Gains.Froggy.FF.kG))
             .add(new PIDController(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD))
+            .add(new ArmDriveFeedForward(Gains.Froggy.FF.kG, () -> -CommandSwerveDrivetrain.getInstance().getRobotRelativeYAccelGs()))
             .setSetpointFilter(motionProfile);
     }
 
