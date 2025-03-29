@@ -20,16 +20,16 @@ public interface Gains {
 
     public interface Elevator {
         public interface PID {
-            double kP = 17.185;
+            double kP = 25.669;
             double kI = 0.0;
-            double kD = 1.4344;
+            double kD = 2.2108;
         }
 
         public interface FF {
-            double kS = 0.28562;
-            double kV = 2.8012;
-            double kA = 0.16141;
-            double kG = 0.81505;
+            double kS = 0.27594;
+            double kV = 3.0438;
+            double kA = 0.10459;
+            double kG = 0.67941;
         }
     }
 
