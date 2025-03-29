@@ -232,7 +232,7 @@ public interface Field {
             double t = dotProduct / lineLengthSquared; // Projection factor
             
             double coralStationLength = lineStart.getDistance(lineEnd);
-            double percentToIgnoreFromEachSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2) / coralStationLength;
+            double percentToIgnoreFromEachSide = (Constants.WIDTH_WITH_BUMPERS_METERS / 2 + Units.inchesToMeters(9)) / coralStationLength;
             
             t = Math.max(percentToIgnoreFromEachSide, Math.min(1 - percentToIgnoreFromEachSide, t));
             
