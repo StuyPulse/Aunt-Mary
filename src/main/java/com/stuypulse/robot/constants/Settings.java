@@ -251,10 +251,10 @@ public interface Settings {
 
     public interface Froggy {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
-        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20 - 5);
+        Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(47);
-        Rotation2d PROCESSOR_SCORE_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 15);
+        Rotation2d PROCESSOR_SCORE_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
@@ -275,12 +275,12 @@ public interface Settings {
         double OPEN_VOLTAGE_LOW = 1; // Used when getting close to the open angle
         double CLIMB_VOLTAGE = 12; // Used when climbing
 
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(3.0);
+        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
         Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245);
         Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
-        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(8);
+        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);
     }
 
     public interface LED {
