@@ -55,6 +55,7 @@ public class LimelightVision extends SubsystemBase{
 
     private MegaTagMode megaTagMode;
     private WhitelistMode whitelistMode;
+    private int imuMode;
     private int maxTagCount;
 
     private LimelightVision() {
@@ -113,6 +114,7 @@ public class LimelightVision extends SubsystemBase{
     }
 
     public void setIMUMode(int mode) {
+        this.imuMode = mode;
         for (Camera camera : Cameras.LimelightCameras) {
             LimelightHelpers.SetIMUMode(camera.getName(), mode);
         }
@@ -188,5 +190,6 @@ public class LimelightVision extends SubsystemBase{
 
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
         SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistMode().toString());
+        SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }

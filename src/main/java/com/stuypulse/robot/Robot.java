@@ -7,6 +7,7 @@
 package com.stuypulse.robot;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 
@@ -79,7 +80,7 @@ public class Robot extends TimedRobot {
         mode = RobotMode.DISABLED;
 
         if (!DriverStation.isFMSAttached()) {
-            new VisionSetMegaTag1().schedule();
+            new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)).schedule();
         }
     }
 
@@ -95,7 +96,7 @@ public class Robot extends TimedRobot {
         mode = RobotMode.AUTON;
         auto = robot.getAutonomousCommand();
 
-        new VisionSetMegaTag2().schedule();
+        new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
         
         if (auto != null) {
             auto.schedule();
@@ -121,7 +122,7 @@ public class Robot extends TimedRobot {
             auto.cancel();
         }
 
-        new VisionSetMegaTag2().schedule();
+        new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
 
         Shuffleboard.selectTab("Teleoperated");
     }
