@@ -135,15 +135,6 @@ public class LimelightVision extends SubsystemBase{
     }
 
     private PoseEstimate getMegaTag2PoseEstimate(String limelightName) {
-        LimelightHelpers.SetRobotOrientation(
-            limelightName, 
-            (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180)) % 360, 
-            0, 
-            0, 
-            0, 
-            0, 
-            0
-        );
         return Robot.isBlue() 
             ? LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName)
             : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
@@ -170,6 +161,15 @@ public class LimelightVision extends SubsystemBase{
         updateWhitelistMode();
 
         for (Camera camera : Cameras.LimelightCameras) {
+            LimelightHelpers.SetRobotOrientation(
+                camera.getName(), 
+                (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180)) % 360, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0
+            );
             if (camera.isEnabled()) {
                 PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                     ? getMegaTag2PoseEstimate(camera.getName())
