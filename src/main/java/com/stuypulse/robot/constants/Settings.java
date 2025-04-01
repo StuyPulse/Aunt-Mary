@@ -218,7 +218,7 @@ public interface Settings {
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
         Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-42.391385);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.579658);
+        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-25.579658);
 
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(160.076257);
         Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
