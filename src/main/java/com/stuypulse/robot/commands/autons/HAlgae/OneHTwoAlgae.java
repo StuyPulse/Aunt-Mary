@@ -47,8 +47,8 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
             // Score Preload on H
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.H, 4, true)
-                    .withTranslationalConstraints(1.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
-                    .withTimeout(1.75)
+                    .withTranslationalConstraints(1, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
+                    .withTimeout(3)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
@@ -77,7 +77,6 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
                         .andThen(new SuperStructureWaitUntilAtTarget())
                             .andThen(new SuperStructureCatapultShoot()
                                 .andThen(new SuperStructureWaitUntilCanCatapult()
-                                    .andThen(new WaitCommand(0.5))
                                         .andThen(new ShooterShootAlgae()))),
                 new SwerveDrivePIDToBarge()
             ),
@@ -106,10 +105,10 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(new SuperStructureCatapultReady())
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                            .andThen(new SuperStructureCatapultShoot()
-                                .andThen(new SuperStructureWaitUntilCanCatapult()
-                                    .andThen(new WaitCommand(0.5))
-                                        .andThen(new ShooterShootAlgae()))),
+                            .andThen(new WaitCommand(1))
+                                .andThen(new SuperStructureCatapultShoot())
+                                    .andThen(new SuperStructureWaitUntilCanCatapult())
+                                        .andThen(new ShooterShootAlgae()),
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
                     .andThen(new SwerveDrivePIDToBarge())
             ),
