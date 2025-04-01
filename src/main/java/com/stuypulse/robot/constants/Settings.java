@@ -101,7 +101,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
@@ -260,7 +260,7 @@ public interface Settings {
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
 
         double ALGAE_INTAKE_SPEED = 1.0;
         double ALGAE_OUTTAKE_SPEED = -0.5;

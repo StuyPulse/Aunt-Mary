@@ -128,6 +128,7 @@ public class FroggyImpl extends Froggy {
 
         SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Froggy/Pivot/Angle Error (deg)", Math.abs(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees()));
 
         if (Settings.DEBUG_MODE) {
             // PIVOT
