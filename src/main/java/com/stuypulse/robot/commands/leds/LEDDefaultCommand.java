@@ -52,6 +52,11 @@ public class LEDDefaultCommand extends Command{
             || froggy.getRollerState() == RollerState.SHOOT_ALGAE;
     }
 
+    private boolean isIntakingAlgae() {
+        return shooter.getState() == ShooterState.ACQUIRE_ALGAE
+            || froggy.getRollerState() == RollerState.INTAKE_ALGAE;
+    }
+
     @Override
     public void execute() {
         if(Robot.getMode() == RobotMode.DISABLED) {
@@ -75,10 +80,16 @@ public class LEDDefaultCommand extends Command{
             else if (climb.getState() == ClimbState.CLIMBING) {
                 leds.applyPattern(Settings.LED.CLIMBING_COLOR);
             }
+            else if (isIntakingAlgae()) {
+                leds.applyPattern(Settings.LED.INTAKE_COLOR_ALGAE);
+            }
+            else if (froggy.getRollerState() == RollerState.INTAKE_CORAL) {
+                leds.applyPattern(Settings.LED.FROGGY_INTAKE_COLOR_CORAL);
+            }
             else if (funnel.getState() == FunnelState.REVERSE) {
                 leds.applyPattern(Settings.LED.FUNNEL_UNJAM_COLOR);
             }
-            else if (froggy.getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE || superStructure.getState() == SuperStructureState.PROCESSOR) {
+            else if (superStructure.getState() == SuperStructureState.PROCESSOR) {
                 leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
             }
             else if (shooter.hasCoral() || funnel.hasCoral()) {

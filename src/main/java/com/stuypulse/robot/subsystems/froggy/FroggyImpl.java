@@ -44,6 +44,7 @@ public class FroggyImpl extends Froggy {
 
         pivotMotor = new TalonFX(Ports.Froggy.PIVOT);
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
+        pivotMotor.setPosition(Constants.Froggy.MAXIMUM_ANGLE.getRotations());
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(false);

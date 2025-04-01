@@ -32,8 +32,8 @@ import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbShimmy;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToGolfTeeAlgaePickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilCanMoveWithoutColliding;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldAlgae;
@@ -184,20 +184,18 @@ public class RobotContainer {
             .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .onTrue(new FroggyRollerIntakeAlgae())
-            .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
-        // Processor
+        // Froggy golf tee algae pickup
         driver.getLeftBumper()
-            .onTrue(new FroggyPivotToProcessor()
-                .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL))
-            .onTrue(new SuperStructureProcessor()
-                .onlyIf(() -> !shooter.hasCoral()));
+            .onTrue(new FroggyPivotToGolfTeeAlgaePickup())
+            .onTrue(new FroggyRollerIntakeAlgae())
+            .onFalse(new FroggyPivotToStow())
+            .onFalse(new FroggyRollerHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
-            .whileTrue(new LEDApplyPattern(Settings.LED.FROGGY_INTAKE_COLOR_CORAL))
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
                 .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)

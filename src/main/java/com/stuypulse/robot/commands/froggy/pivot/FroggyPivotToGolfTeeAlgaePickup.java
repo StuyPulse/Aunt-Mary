@@ -1,4 +1,3 @@
-
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -9,9 +8,9 @@ package com.stuypulse.robot.commands.froggy.pivot;
 
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 
-public class FroggyPivotToProcessor extends FroggyPivotSetState {
+public class FroggyPivotToGolfTeeAlgaePickup extends FroggyPivotSetState {
 
-    public FroggyPivotToProcessor() {
-        super(PivotState.PROCESSOR_SCORE_ANGLE);
+    public FroggyPivotToGolfTeeAlgaePickup() {
+        super(PivotState.GOLF_TEE_ALGAE_PICKUP);
     }
 }
