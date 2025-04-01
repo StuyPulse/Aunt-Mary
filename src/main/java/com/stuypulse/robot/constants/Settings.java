@@ -143,7 +143,6 @@ public interface Settings {
         double ALGAE_SHOOT_SPEED = 0.5;
         double ALGAE_HOLD_SPEED = -0.25;
 
-        double SECONDS_BEFORE_REVERSING_TO_UNSTUCK_SHOOTER = 3.0;
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
         double HAS_CORAL_DEBOUNCE = 0.0;
@@ -155,8 +154,6 @@ public interface Settings {
 
         double STALL_CURRENT = 19;
         double STALL_DETECTION_TIME = 0.25;
-
-        double SECONDS_BEFORE_REVERSING_TO_UNSTUCK_SHOOTER = 3.0;
 
         double MIN_REVERSE_TIME = 1.0;
 
