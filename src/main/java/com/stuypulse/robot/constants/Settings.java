@@ -141,7 +141,7 @@ public interface Settings {
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 0.5;
-        double ALGAE_HOLD_SPEED = -0.25;
+        double ALGAE_HOLD_SPEED = -0.5;
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
@@ -224,9 +224,9 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-50);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-20);
-        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-55);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-50);
+        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
@@ -239,13 +239,13 @@ public interface Settings {
             Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0);
 
             Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+            Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(500.0);
     
-            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(600.0);
-            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(1200.0);
+            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
+            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
 
-            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(350.0);
-            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
+            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
+            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
         }
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);

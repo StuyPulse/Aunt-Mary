@@ -120,7 +120,7 @@ public class FourPieceFDCE extends SequentialCommandGroup {
                     .andThen(
                         new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                             .andThen(new ShooterStop())),
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
+                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
                             new SwerveDriveCoralScoreAlignAuton(CoralBranch.E, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
@@ -130,7 +130,7 @@ public class FourPieceFDCE extends SequentialCommandGroup {
                             //     .deadlineFor(new LEDApplyPattern(CoralBranch.E.isLeftPegFieldRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
-                                        new SuperStructureCoralL4FrontAuton())
+                                        new SuperStructureCoralL4Front())
                                             .andThen(new SuperStructureWaitUntilAtTarget())
                         )
                 )
