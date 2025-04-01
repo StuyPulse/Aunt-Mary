@@ -150,7 +150,7 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.ACQUIRE_ALGAE
                 && shooter.getState() != ShooterState.HOLD_ALGAE 
                 && shooter.getState() != ShooterState.SHOOT_ALGAE 
-                && shooter.getState() != ShooterState.UNJAMB_CORAL_BACKWARDS
+                && shooter.getState() != ShooterState.UNJAM_CORAL_BACKWARDS
                 && !shooter.isShooting()
                 && climb.getState() == ClimbState.CLOSED));
     }
