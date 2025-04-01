@@ -146,6 +146,8 @@ public interface Settings {
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
         double HAS_CORAL_DEBOUNCE = 0.0;
+
+        double CORAL_STATOR_CURRENT_THRESHOLD = 17.0;
     }
 
     public interface Funnel {
@@ -222,7 +224,7 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-40);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-50);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-20);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
 

@@ -81,6 +81,7 @@ public abstract class Shooter extends SubsystemBase {
     }
 
     public abstract boolean hasCoral();
+    public abstract boolean isAboveCoralCurrentThreshold();
 
     public boolean isShooting() {
         return switch (getState()) {

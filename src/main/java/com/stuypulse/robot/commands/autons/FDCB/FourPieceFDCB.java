@@ -131,7 +131,7 @@ public FourPieceFDCB(PathPlannerPath... paths) {
     new ParallelCommandGroup(
         new ShooterSetAcquireCoral() 
             .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
-        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
+        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || (Funnel.getInstance().hasCoral() && Shooter.getInstance().isAboveCoralCurrentThreshold()))
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
@@ -140,7 +140,7 @@ public FourPieceFDCB(PathPlannerPath... paths) {
                         .deadlineFor(new LEDApplyPattern(CoralBranch.B.isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
                     new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                         .andThen(
-                            new SuperStructureCoralL4FrontAuton()
+                            new SuperStructureCoralL4Front()
                                 .andThen(new SuperStructureWaitUntilAtTarget())
                         )
                 )
