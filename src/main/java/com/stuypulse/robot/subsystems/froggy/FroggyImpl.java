@@ -80,7 +80,7 @@ public class FroggyImpl extends Froggy {
     }
 
     @Override
-    public double getSonarDistanceInches() {
+    public double getSonarDistanceMeters() {
         return Units.inchesToMeters(sonar.getRangeInches());
     }
 

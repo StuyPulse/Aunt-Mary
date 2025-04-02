@@ -216,7 +216,7 @@ public interface ReefUtil {
         }
         
         public boolean isSonarAlignedToL1FroggyTarget() {
-            return Froggy.getInstance().getSonarDistanceInches() < Settings.Swerve.Alignment.Tolerances.SONAR_DISTANCE_TOLERANCE;
+            return Froggy.getInstance().getSonarDistanceMeters() < Settings.Swerve.Alignment.Tolerances.SONAR_DISTANCE_TOLERANCE;
         }
     }
 

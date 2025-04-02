@@ -119,7 +119,7 @@ public class FroggySim extends Froggy {
     }
 
     @Override
-    public double getSonarDistanceInches() {
+    public double getSonarDistanceMeters() {
         return 0;
     }
 
