@@ -93,11 +93,14 @@ public interface Settings {
 
                 double X_TOLERANCE_REEF_PICKUP = Units.inchesToMeters(2.0);
                 double Y_TOLERANCE_REEF_PICKUP = Units.inchesToMeters(2.0);
-                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(5.0);
+                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(2.0);
 
                 double X_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
                 double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE_FROGGY = Rotation2d.fromDegrees(5.0);
+
+                double X_TOLERANCE_BARGE = Units.inchesToMeters(4.0);
+                Rotation2d THETA_TOLERANCE_BARGE = Rotation2d.fromDegrees(10.0);
 
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 

@@ -29,15 +29,15 @@ public class SwerveDriveWaitUntilAlignedToCatapult extends Command{
     private boolean isAlignedAllianceSide() {
         Pose2d pose = CommandSwerveDrivetrain.getInstance().getPose();
         return Math.abs((Field.LENGTH / 2 - Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT) - pose.getX())
-            < Alignment.Tolerances.X_TOLERANCE
-            && Math.abs(pose.getRotation().minus(Rotation2d.k180deg).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getDegrees();
+            < Alignment.Tolerances.X_TOLERANCE_BARGE
+            && Math.abs(pose.getRotation().minus(Rotation2d.k180deg).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE_BARGE.getDegrees();
     }
 
     private boolean isAlignedOppositeAllianceSide() {
         Pose2d pose = CommandSwerveDrivetrain.getInstance().getPose();
         return Math.abs((Field.LENGTH / 2 + Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT) - pose.getX())
-            < Alignment.Tolerances.X_TOLERANCE
-            && Math.abs(pose.getRotation().minus(Rotation2d.kZero).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getDegrees();
+            < Alignment.Tolerances.X_TOLERANCE_BARGE
+            && Math.abs(pose.getRotation().minus(Rotation2d.kZero).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE_BARGE.getDegrees();
     }
 
     @Override
