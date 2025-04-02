@@ -91,7 +91,7 @@ public interface Settings {
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
 
-                double SONAR_DISTANCE_TOLERANCE = Units.inchesToMeters(10);
+                double SONAR_DISTANCE_TOLERANCE = Units.inchesToMeters(10); // inches
     
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 

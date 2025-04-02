@@ -15,18 +15,15 @@ import com.stuypulse.robot.commands.ManualShoot;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
 import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ScoreRoutine;
-import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCE;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceNudgeFDCE;
 import com.stuypulse.robot.commands.autons.FDCB.PathfulFourPieceFDCB;
 import com.stuypulse.robot.commands.autons.GAlgae.OneGTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.OneHTwoAlgae;
-import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLA;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceIKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.FourPieceNudgeIKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.PathfulFourPieceIKLA;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
-import com.stuypulse.robot.commands.climb.ClimbClose;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbShimmy;
@@ -40,7 +37,6 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerIntakeCoral;
-import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
@@ -49,7 +45,6 @@ import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
-import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
 import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
@@ -63,6 +58,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDriveUntilSonarDistance;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
@@ -71,8 +67,6 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistT
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
-import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
-import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -95,13 +89,11 @@ import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.robot.util.ReefUtil;
 
-import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -226,7 +218,9 @@ public class RobotContainer {
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
-                        .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isSonarAlignedToL1FroggyTarget()))
+                        .alongWith(
+                            new SwerveDriveDriveUntilSonarDistance()
+                                .until(() -> ReefUtil.getClosestReefFace().isSonarAlignedToL1FroggyTarget()))
                             .andThen(new FroggyRollerShootCoral())), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));

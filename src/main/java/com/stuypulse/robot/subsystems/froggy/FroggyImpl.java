@@ -81,7 +81,7 @@ public class FroggyImpl extends Froggy {
 
     @Override
     public double getSonarDistanceInches() {
-        return sonar.getRangeInches();
+        return Units.inchesToMeters(sonar.getRangeInches());
     }
 
     private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
