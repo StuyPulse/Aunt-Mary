@@ -138,10 +138,8 @@ public class FourPieceFDCE extends SequentialCommandGroup {
             new WaitCommand(0.125),
             new ShooterStop(),
 
-            new ParallelCommandGroup(
-            new ReefAlgaePickupRoutine()
-                .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-            )
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
+
 
         );
 

@@ -342,15 +342,15 @@ public class RobotContainer {
         //  CHEATER_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
         AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP");
+        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
         PATHFUL_FOUR_PIECE_IKLA.registerBlue(autonChooser);
 
         AutonConfig FOUR_PIECE_IKLJ = new AutonConfig("4 Piece IKLJ", FourPieceIKLJ::new,
-       "Blue I to HP", "Blue K to HP", "Blue L to HP");
+       "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
         FOUR_PIECE_IKLJ.registerBlue(autonChooser);
 
         AutonConfig FOUR_PIECE_NUDGE_IKLJ = new AutonConfig("4 Piece Nudge IKLJ", FourPieceNudgeIKLJ::new,
-       "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP");
+       "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
         FOUR_PIECE_NUDGE_IKLJ.registerBlue(autonChooser);
 
         /** BOTTOM AUTONS **/
@@ -360,11 +360,11 @@ public class RobotContainer {
         // FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         AutonConfig FOUR_PIECE_FDCE = new AutonConfig("4 Piece FDCE", FourPieceFDCE::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP");
+        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
         FOUR_PIECE_FDCE.registerBlue(autonChooser);
 
         AutonConfig FOUR_PIECE_NUDGE_FDCE = new AutonConfig("4 Piece Nudge FDCE", FourPieceNudgeFDCE::new,
-        "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP");
+        "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
         FOUR_PIECE_NUDGE_FDCE.registerBlue(autonChooser);
 
         // AutonConfig CHEATER_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Cheater)", CheaterFourPieceFDCB::new,
@@ -372,7 +372,7 @@ public class RobotContainer {
         //  CHEATER_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         AutonConfig PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP");
+        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         PATHFUL_FOUR_PIECE_FDCB.registerBlue(autonChooser);
 
         /**  TOP ALGAE AUTONS **/

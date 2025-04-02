@@ -126,7 +126,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDriveCoralScoreAlignAuton(CoralBranch.B, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                            new SwerveDriveCoralScoreAlignAuton(CoralBranch.E, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
                                         new SuperStructureCoralL4Front())
@@ -139,10 +139,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
             new WaitCommand(0.125),
             new ShooterStop(),
 
-            new ParallelCommandGroup(
-            new ReefAlgaePickupRoutine()
-                .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-            )
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4])
 
         );
 

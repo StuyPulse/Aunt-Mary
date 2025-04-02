@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.662843448489755,
-        "y": 2.3616766623790015
+        "x": 3.140245282212203,
+        "y": 4.028441686160852
       },
       "isLocked": false,
       "linkedName": "Blue B"
     },
     {
       "anchor": {
-        "x": 2.0139344262295085,
-        "y": 0.8063012295081955
+        "x": 3.1795806884765625,
+        "y": 3.9121194022042407
       },
       "prevControl": {
-        "x": 2.411289480545423,
-        "y": 1.7946277768103145
+        "x": 3.219344946334104,
+        "y": 3.5763292477961017
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Bottom HP"
+      "linkedName": "Blue AB Algae"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Blue To Reef",

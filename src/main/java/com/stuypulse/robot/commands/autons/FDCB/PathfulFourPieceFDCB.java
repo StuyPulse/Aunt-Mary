@@ -136,9 +136,8 @@ public class PathfulFourPieceFDCB extends SequentialCommandGroup {
             new ShooterShootL4Front(),
             new WaitCommand(0.125),
             new ShooterStop(),
-
-            new ReefAlgaePickupRoutine()
-                .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
+            
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
 
         );
 
