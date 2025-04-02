@@ -93,7 +93,7 @@ public class SwerveDrivePIDToPose extends Command {
         thetaTolerance = Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getRadians();
         maxVelocityWhenAligned = Settings.Swerve.Alignment.Tolerances.MAX_VELOCITY_WHEN_ALIGNED;
 
-        canEnd = () -> false;
+        canEnd = () -> true;
 
         addRequirements(swerve);
     }
