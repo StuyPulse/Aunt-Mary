@@ -48,7 +48,7 @@ public interface Settings {
 
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4;
-        double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(17.25); // From bumper
+        double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(19.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
 
         double CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FUNNEL_SIDE = Units.inchesToMeters(9);
@@ -206,7 +206,7 @@ public interface Settings {
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
-        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.35;
+        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.2;
     }
 
     public interface Arm {
