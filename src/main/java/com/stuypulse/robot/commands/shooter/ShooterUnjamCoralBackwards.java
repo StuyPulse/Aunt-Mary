@@ -11,6 +11,6 @@ import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
 public class ShooterUnjamCoralBackwards extends ShooterSetState {
     public ShooterUnjamCoralBackwards() {
-        super(ShooterState.UNJAMB_CORAL_BACKWARDS);
+        super(ShooterState.UNJAM_CORAL_BACKWARDS);
     }
 }

@@ -32,8 +32,8 @@ import com.stuypulse.robot.commands.climb.ClimbOpen;
 import com.stuypulse.robot.commands.climb.ClimbShimmy;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToAlgaeGroundPickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToCoralGroundPickup;
+import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToGolfTeeAlgaePickup;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToL1;
-import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToProcessor;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotToStow;
 import com.stuypulse.robot.commands.froggy.pivot.FroggyPivotWaitUntilCanMoveWithoutColliding;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerHoldAlgae;
@@ -150,7 +150,7 @@ public class RobotContainer {
                 && shooter.getState() != ShooterState.ACQUIRE_ALGAE
                 && shooter.getState() != ShooterState.HOLD_ALGAE 
                 && shooter.getState() != ShooterState.SHOOT_ALGAE 
-                && shooter.getState() != ShooterState.UNJAMB_CORAL_BACKWARDS
+                && shooter.getState() != ShooterState.UNJAM_CORAL_BACKWARDS
                 && !shooter.isShooting()
                 && climb.getState() == ClimbState.CLOSED));
     }
@@ -184,20 +184,18 @@ public class RobotContainer {
             .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .onTrue(new FroggyRollerIntakeAlgae())
-            .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
-        // Processor
+        // Froggy golf tee algae pickup
         driver.getLeftBumper()
-            .onTrue(new FroggyPivotToProcessor()
-                .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL))
-            .onTrue(new SuperStructureProcessor()
-                .onlyIf(() -> !shooter.hasCoral()));
+            .onTrue(new FroggyPivotToGolfTeeAlgaePickup())
+            .onTrue(new FroggyRollerIntakeAlgae())
+            .onFalse(new FroggyPivotToStow())
+            .onFalse(new FroggyRollerHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
-            .whileTrue(new LEDApplyPattern(Settings.LED.FROGGY_INTAKE_COLOR_CORAL))
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
                 .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
@@ -389,7 +387,7 @@ public class RobotContainer {
         // /** BOTTOM ALGAE AUTONS **/
 
         AutonConfig G_TWO_ALGAE = new AutonConfig("1 Piece G + 2 Algae", OneGTwoAlgae::new,
-        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+        "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
         // AutonConfig G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae (DONT USE)", OneGThreeAlgae::new,
         // "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
         G_TWO_ALGAE.registerBlue(autonChooser);

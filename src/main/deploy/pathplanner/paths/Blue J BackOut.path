@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.086721843486653,
-        "y": 5.490074809562187
+        "x": 5.128115625152026,
+        "y": 5.224387059683905
       },
       "isLocked": false,
       "linkedName": "Blue J"
     },
     {
       "anchor": {
-        "x": 5.497126988002232,
-        "y": 5.896124703543526
+        "x": 5.073712022569444,
+        "y": 5.211245298032407
       },
       "prevControl": {
-        "x": 5.2689153057033264,
-        "y": 5.684595357983193
+        "x": 4.835616621746099,
+        "y": 5.313347680958474
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue J BackOut"
+      "linkedName": "Blue IJ Algae"
     }
   ],
   "rotationTargets": [],

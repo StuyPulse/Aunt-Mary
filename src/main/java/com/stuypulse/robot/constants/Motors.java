@@ -77,6 +77,10 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.CounterClockwise_Positive)
+            .withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.kG, 0)
+            .withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD, 0)
+            .withGravityType(GravityTypeValue.Arm_Cosine)
+            .withMotionProfile(Settings.Froggy.MAX_VEL.getRotations(), Settings.Froggy.MAX_ACCEL.getRotations())
 			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO);
     }
 

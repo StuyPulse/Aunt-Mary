@@ -101,7 +101,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
-                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
@@ -141,11 +141,13 @@ public interface Settings {
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 0.5;
-        double ALGAE_HOLD_SPEED = -0.25;
+        double ALGAE_HOLD_SPEED = -0.5;
 
-        double UNJAMB_CORAL_BACKWARDS_SPEED = -0.3;
+        double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
         double HAS_CORAL_DEBOUNCE = 0.0;
+
+        double CORAL_STATOR_CURRENT_THRESHOLD = 17.0;
     }
 
     public interface Funnel {
@@ -154,6 +156,7 @@ public interface Settings {
 
         double STALL_CURRENT = 19;
         double STALL_DETECTION_TIME = 0.25;
+
         double MIN_REVERSE_TIME = 1.0;
 
         double HAS_CORAL_DEBOUNCE = 0.0;
@@ -214,16 +217,16 @@ public interface Settings {
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
         Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-42.391385);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.579658);
+        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-25.579658);
 
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(160.076257);
         Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-45);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-20);
-        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(80);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-55);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-50);
+        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
@@ -236,13 +239,13 @@ public interface Settings {
             Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0);
 
             Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+            Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(500.0);
     
-            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(600.0);
-            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(1200.0);
+            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
+            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
 
-            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(350.0);
-            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(700.0);
+            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
+            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
         }
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
@@ -254,10 +257,10 @@ public interface Settings {
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(47);
-        Rotation2d PROCESSOR_SCORE_ANGLE = STOW_ANGLE;
+        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
 
         double ALGAE_INTAKE_SPEED = 1.0;
         double ALGAE_OUTTAKE_SPEED = -0.5;

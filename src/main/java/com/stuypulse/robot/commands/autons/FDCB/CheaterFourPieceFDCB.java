@@ -131,7 +131,7 @@ public CheaterFourPieceFDCB(PathPlannerPath... paths) {
     new ParallelCommandGroup(
         new ShooterSetAcquireCoral() 
             .andThen(new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())).andThen(new ShooterStop()),
-        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral() || Funnel.getInstance().hasCoral())
+        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
             .andThen(
                 new ParallelCommandGroup(
                     new SwerveDrivePIDToBranchScore(CoralBranch.B, 2, true)

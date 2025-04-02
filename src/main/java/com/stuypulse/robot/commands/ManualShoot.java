@@ -22,7 +22,6 @@ public class ManualShoot extends ConditionalCommand{
                 () -> Froggy.getInstance().getPivotState() == PivotState.L1_SCORE_ANGLE), 
             new ShooterShootBasedOnSuperStructure(),
             () -> Froggy.getInstance().getPivotState() == PivotState.L1_SCORE_ANGLE 
-                || Froggy.getInstance().getPivotState() == PivotState.PROCESSOR_SCORE_ANGLE
                 || SuperStructure.getInstance().getState() == SuperStructureState.PROCESSOR
         );
     }

@@ -24,6 +24,11 @@ public class ShooterSim extends Shooter {
     }
 
     @Override
+    public boolean isAboveCoralCurrentThreshold() {
+        return false;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
     }

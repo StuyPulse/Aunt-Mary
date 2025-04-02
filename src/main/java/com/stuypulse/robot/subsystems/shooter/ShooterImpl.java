@@ -43,6 +43,11 @@ public class ShooterImpl extends Shooter {
     }
 
     @Override
+    public boolean isAboveCoralCurrentThreshold() {
+        return Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Shooter.CORAL_STATOR_CURRENT_THRESHOLD;
+    }
+
+    @Override
     public void periodic() {
         super.periodic();
 

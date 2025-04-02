@@ -162,7 +162,7 @@ public class ArmImpl extends Arm {
                     && Elevator.getInstance().getState() == ElevatorState.FEED
                     && Elevator.getInstance().atTargetHeight())
                 {
-                    motor.setVoltage(-0.8);
+                    motor.setVoltage(-0.9);
                 }
                 else {
                     if (Shooter.getInstance().hasCoral() || Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
