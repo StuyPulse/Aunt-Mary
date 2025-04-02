@@ -21,7 +21,6 @@ import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.util.ArmDriveFeedForward;
 import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 
@@ -47,7 +46,6 @@ public class ArmImpl extends Arm {
     private SettableNumber accelLimitDegreesPerSecondSquared;
 
     private SettableNumber kG;
-    private Controller swerveFeedForwardController;
 
     private Optional<Double> voltageOverride;
 
@@ -66,7 +64,6 @@ public class ArmImpl extends Arm {
         accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
 
         kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
-        swerveFeedForwardController = new ArmDriveFeedForward(kG, CommandSwerveDrivetrain.getInstance()::getRobotRelativeXAccelGs);
 
         debuggingMotionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         debuggingMotionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
@@ -169,19 +166,16 @@ public class ArmImpl extends Arm {
                         this.kG.set(Gains.Arm.Coral.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0));
-                            // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                     if (Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
                         this.kG.set(Gains.Arm.Algae.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(1));
-                            // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                     else {
                         this.kG.set(Gains.Arm.Empty.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(2));
-                            // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                 }
             }
