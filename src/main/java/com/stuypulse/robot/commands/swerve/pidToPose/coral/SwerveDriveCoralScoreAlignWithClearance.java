@@ -17,7 +17,6 @@ import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import java.util.function.Supplier;
@@ -45,8 +44,8 @@ public class SwerveDriveCoralScoreAlignWithClearance extends ParallelCommandGrou
         addCommands(
             new WaitUntilCommand(this::isClear).andThen(getSwitchToScoreCommand()),
             new SwerveDrivePIDToPose(this::getTargetPose)
-                .withCanEnd(() -> mode == Mode.SCORE),
-            new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)
+                .withCanEnd(this::canEnd)
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
         );
     }
 
@@ -61,8 +60,8 @@ public class SwerveDriveCoralScoreAlignWithClearance extends ParallelCommandGrou
             new WaitUntilCommand(this::isClear).andThen(getSwitchToScoreCommand()),
             new SwerveDrivePIDToPose(this::getTargetPose)
                 .withTranslationalConstraints(maxVel, maxAccel)
-                .withCanEnd(() -> mode == Mode.SCORE),
-            new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)
+                .withCanEnd(this::canEnd)
+                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
         );
     } 
 
