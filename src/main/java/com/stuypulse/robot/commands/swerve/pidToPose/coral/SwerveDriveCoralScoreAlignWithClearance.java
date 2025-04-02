@@ -45,7 +45,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
         this.isScoringFrontSide = isScoringFrontSide;
         this.level = level;
 
-        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.1));
+        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.5));
 
         addCommands(
             new InstantCommand(() -> this.mode = Mode.CLEAR),
@@ -63,7 +63,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
         this.isScoringFrontSide = isScoringFrontSide;
         this.level = level;
 
-        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.1));
+        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.5));
 
         addCommands(
             new InstantCommand(() -> this.mode = Mode.CLEAR),
