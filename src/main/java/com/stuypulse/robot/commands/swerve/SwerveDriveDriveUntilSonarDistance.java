@@ -31,12 +31,12 @@ public class SwerveDriveDriveUntilSonarDistance extends Command {
         if (sonarDistance - Settings.Swerve.Alignment.Tolerances.SONAR_DISTANCE_TOLERANCE > 0) {
             swerve.setControl(swerve.getRobotCentricSwerveRequest()
             .withVelocityX(0)
-            .withVelocityY(Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND)
+            .withVelocityY(Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_SONAR)
             .withRotationalRate(0));
         } else {
             swerve.setControl(swerve.getRobotCentricSwerveRequest()
             .withVelocityX(0)
-            .withVelocityY(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND)
+            .withVelocityY(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND_SONAR)
             .withRotationalRate(0));
         }
     }

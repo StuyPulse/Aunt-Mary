@@ -60,6 +60,7 @@ public interface Settings {
         double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
         double NUDGE_SPEED_METERS_PER_SECOND = 0.15;
         double NUDGE_SPEED_METERS_PER_SECOND_AUTON = 1.4;
+        double NUDGE_SPEED_METERS_PER_SECOND_SONAR = 0.8;
         
         public interface Constraints {    
             double MAX_VELOCITY_M_PER_S = 4.0;
@@ -91,7 +92,7 @@ public interface Settings {
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
 
-                double SONAR_DISTANCE_TOLERANCE = Units.inchesToMeters(10); // inches
+                double SONAR_DISTANCE_TOLERANCE = Units.inchesToMeters(20); // inches
     
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
