@@ -30,7 +30,7 @@ import com.pathplanner.lib.path.PathConstraints;
 public interface Settings {
 
     double DT = 0.020;
-    boolean DEBUG_MODE = true;
+    boolean DEBUG_MODE = false;
     String CANIVORE_NAME = "CANIVORE";
 
     public interface EnabledSubsystems {
@@ -238,11 +238,14 @@ public interface Settings {
             Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0);
             Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0);
 
-            Rotation2d MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(500.0);
-    
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
+
+            Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
+            Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(500.0);
+
+            Rotation2d MAX_VEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(20.0);
+            Rotation2d MAX_ACCEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(100.0);
 
             Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
