@@ -57,6 +57,8 @@ public class SwerveDrivePIDToPose extends Command {
 
     private VStream translationSetpoint;
 
+    private Supplier<Boolean> canEnd;
+
     public SwerveDrivePIDToPose(Pose2d targetPose) {
         this(() -> targetPose);
     }
@@ -91,6 +93,8 @@ public class SwerveDrivePIDToPose extends Command {
         thetaTolerance = Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getRadians();
         maxVelocityWhenAligned = Settings.Swerve.Alignment.Tolerances.MAX_VELOCITY_WHEN_ALIGNED;
 
+        canEnd = () -> false;
+
         addRequirements(swerve);
     }
 
@@ -109,6 +113,11 @@ public class SwerveDrivePIDToPose extends Command {
 
     public SwerveDrivePIDToPose withoutMotionProfile() {
         this.translationSetpoint = VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        return this;
+    }
+
+    public SwerveDrivePIDToPose withCanEnd(Supplier<Boolean> canEnd) {
+        this.canEnd = canEnd;
         return this;
     }
 
@@ -170,7 +179,7 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return isAligned.get();
+        return isAligned.get() && canEnd.get();
     }
 
     @Override
