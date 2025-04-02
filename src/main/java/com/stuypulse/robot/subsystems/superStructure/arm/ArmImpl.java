@@ -165,16 +165,22 @@ public class ArmImpl extends Arm {
                     motor.setVoltage(-0.9);
                 }
                 else {
-                    if (Shooter.getInstance().hasCoral() || Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
-                        this.kG.set(Gains.Arm.CoralAlgae.FF.kG);
+                    if (Shooter.getInstance().hasCoral()) {
+                        this.kG.set(Gains.Arm.Coral.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0));
+                            // .withFeedForward(swerveFeedForwardController.getOutput()));
+                    }
+                    if (Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
+                        this.kG.set(Gains.Arm.Algae.FF.kG);
+                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                            .withSlot(1));
                             // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                     else {
                         this.kG.set(Gains.Arm.Empty.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
-                            .withSlot(1));
+                            .withSlot(2));
                             // .withFeedForward(swerveFeedForwardController.getOutput()));
                     }
                 }
