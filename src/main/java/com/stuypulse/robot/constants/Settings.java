@@ -90,6 +90,8 @@ public interface Settings {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
+
+                double SONAR_DISTANCE_TOLERANCE = Units.inchesToMeters(10);
     
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 

@@ -19,6 +19,8 @@ public interface Ports {
         int PIVOT = 22;
         int ROLLER = 21;
         int ABSOLUTE_ENCODER = 4;
+        int PING_SONAR = 0;
+        int ECHO_SONAR = 0;
     }
 
     public interface Climb {

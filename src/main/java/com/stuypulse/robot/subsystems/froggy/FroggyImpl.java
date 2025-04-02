@@ -19,6 +19,7 @@ import com.stuypulse.robot.util.SysId;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -31,6 +32,8 @@ public class FroggyImpl extends Froggy {
     private TalonFX rollerMotor;
     private TalonFX pivotMotor;
     private DutyCycleEncoder absoluteEncoder;
+    private Ultrasonic sonar;
+
     private boolean hasUsedAbsoluteEncoderToSetPivot;
 
     private MotionProfile debuggingMotionProfile;
@@ -48,6 +51,7 @@ public class FroggyImpl extends Froggy {
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(false);
+        sonar = new Ultrasonic(Ports.Froggy.PING_SONAR, Ports.Froggy.ECHO_SONAR);
 
         hasUsedAbsoluteEncoderToSetPivot = false;
 
@@ -73,6 +77,11 @@ public class FroggyImpl extends Froggy {
     @Override
     public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(pivotMotor.getPosition().getValueAsDouble());
+    }
+
+    @Override
+    public double getSonarDistanceInches() {
+        return sonar.getRangeInches();
     }
 
     private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
@@ -129,6 +138,8 @@ public class FroggyImpl extends Froggy {
         SmartDashboard.putNumber("Froggy/Pivot/Current Angle (deg)", getCurrentAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Target Angle (deg)", getTargetAngle().getDegrees());
         SmartDashboard.putNumber("Froggy/Pivot/Angle Error (deg)", Math.abs(getTargetAngle().getDegrees() - getCurrentAngle().getDegrees()));
+
+        SmartDashboard.putNumber("Froggy/Sonar/Sonar Distance (inches)", sonar.getRangeInches());
 
         if (Settings.DEBUG_MODE) {
             // PIVOT

@@ -226,7 +226,8 @@ public class RobotContainer {
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
-                        .andThen(new FroggyRollerShootCoral())), 
+                        .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isSonarAlignedToL1FroggyTarget()))
+                            .andThen(new FroggyRollerShootCoral())), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));
 

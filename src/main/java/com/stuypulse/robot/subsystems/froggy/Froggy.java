@@ -105,6 +105,7 @@ public abstract class Froggy extends SubsystemBase {
     public abstract boolean isAtTargetAngle();
 
     public abstract Rotation2d getCurrentAngle();
+    public abstract double getSonarDistanceInches();
 
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
 

@@ -14,6 +14,7 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Field.NamedTags;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -212,6 +213,10 @@ public interface ReefUtil {
             return Math.abs(robotPose.getX() - targetPose.getX()) < Settings.Swerve.Alignment.Tolerances.X_TOLERANCE
                 && Math.abs(robotPose.getY() - targetPose.getY()) < Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE
                 && Math.abs(robotPose.getRotation().minus(targetPose.getRotation()).getRadians()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getRadians();
+        }
+        
+        public boolean isSonarAlignedToL1FroggyTarget() {
+            return Froggy.getInstance().getSonarDistanceInches() < Settings.Swerve.Alignment.Tolerances.SONAR_DISTANCE_TOLERANCE;
         }
     }
 

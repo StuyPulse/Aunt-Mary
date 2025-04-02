@@ -15,6 +15,7 @@ import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,6 +55,7 @@ public class Robot extends TimedRobot {
 
         DataLogManager.start();
         SignalLogger.start();
+        Ultrasonic.setAutomaticMode(true);
 
         // Allows us to see the limelight feeds even while tethered through USB-B 
         for (int port = 5800; port <= 5809; port++){   

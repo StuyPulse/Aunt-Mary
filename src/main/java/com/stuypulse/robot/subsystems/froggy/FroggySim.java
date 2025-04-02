@@ -119,6 +119,11 @@ public class FroggySim extends Froggy {
     }
 
     @Override
+    public double getSonarDistanceInches() {
+        return 0;
+    }
+
+    @Override
     public void setPivotVoltageOverride(Optional<Double> voltage) {
         this.pivotVoltageOverride = voltage;
     }
