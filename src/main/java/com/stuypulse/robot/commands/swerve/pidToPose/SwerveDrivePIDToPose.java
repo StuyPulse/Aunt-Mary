@@ -27,6 +27,7 @@ import com.stuypulse.robot.util.HolonomicController;
 import com.stuypulse.robot.util.TranslationMotionProfileIan;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -93,10 +94,10 @@ public class SwerveDrivePIDToPose extends Command {
         addRequirements(swerve);
     }
 
-    public SwerveDrivePIDToPose withTolerance(Number x, Number y, Number theta) {
+    public SwerveDrivePIDToPose withTolerance(double x, double y, Rotation2d theta) {
         xTolerance = x;
         yTolerance = y;
-        thetaTolerance = theta;
+        thetaTolerance = theta.getRadians();
         return this;
     }
 

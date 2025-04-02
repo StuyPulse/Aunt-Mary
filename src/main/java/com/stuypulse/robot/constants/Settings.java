@@ -90,7 +90,15 @@ public interface Settings {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
-    
+
+                double X_TOLERANCE_REEF_PICKUP = Units.inchesToMeters(2.0);
+                double Y_TOLERANCE_REEF_PICKUP = Units.inchesToMeters(2.0);
+                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(5.0);
+
+                double X_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
+                double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
+                Rotation2d THETA_TOLERANCE_FROGGY = Rotation2d.fromDegrees(5.0);
+
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
                 double ALIGNMENT_DEBOUNCE = 0.15;
