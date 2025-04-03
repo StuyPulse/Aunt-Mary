@@ -111,7 +111,7 @@ public interface Settings {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = 0.0;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.01;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
@@ -182,8 +182,8 @@ public interface Settings {
         // Coral
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
-        double FRONT_L2_HEIGHT_METERS = 1.53586;
-        double FRONT_L3_HEIGHT_METERS = 1.037109;
+        double FRONT_L2_HEIGHT_METERS = 1.55586;
+        double FRONT_L3_HEIGHT_METERS = 1.0566;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         double FRONT_L4_AUTON_HEIGHT_METERS = 1.685791;
         
@@ -222,7 +222,7 @@ public interface Settings {
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(56.513672);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.05);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(182.513809);
@@ -257,8 +257,8 @@ public interface Settings {
             Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
             Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(500.0);
 
-            Rotation2d MAX_VEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(20.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(100.0);
+            Rotation2d MAX_VEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
+            Rotation2d MAX_ACCEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
 
             Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);

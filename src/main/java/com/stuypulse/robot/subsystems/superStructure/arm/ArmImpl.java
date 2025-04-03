@@ -167,8 +167,8 @@ public class ArmImpl extends Arm {
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0));
                     }
-                    if (Shooter.getInstance().getState() == ShooterState.HOLD_ALGAE) {
-                        this.kG.set(Gains.Arm.Algae.FF.kG);
+                    if (getState() == ArmState.CATAPULT_SHOOT) {
+                        this.kG.set(Gains.Arm.AlgaeCatapult.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(1));
                     }

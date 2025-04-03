@@ -49,7 +49,7 @@ public interface Gains {
             }
         }
 
-        public interface Algae  {
+        public interface AlgaeCatapult  {
             public interface PID {
                 double kP = 0.095744 * 360;
                 double kI = 0.0 * 360;
