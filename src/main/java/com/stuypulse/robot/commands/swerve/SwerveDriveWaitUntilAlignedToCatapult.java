@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.commands.swerve;
 
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounceRC;
 
@@ -19,25 +20,31 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveWaitUntilAlignedToCatapult extends Command{
+    private final CommandSwerveDrivetrain swerve;
     private final BStream isAligned;
 
     public SwerveDriveWaitUntilAlignedToCatapult() {
-        isAligned = BStream.create(() -> isAlignedAllianceSide() || isAlignedOppositeAllianceSide())
+        swerve = CommandSwerveDrivetrain.getInstance();
+        isAligned = BStream.create(this::isAligned)
             .filtered(new BDebounceRC.Both(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE));
     }
 
-    private boolean isAlignedAllianceSide() {
-        Pose2d pose = CommandSwerveDrivetrain.getInstance().getPose();
-        return Math.abs((Field.LENGTH / 2 - Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT) - pose.getX())
-            < Alignment.Tolerances.X_TOLERANCE_BARGE
-            && Math.abs(pose.getRotation().minus(Rotation2d.k180deg).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE_BARGE.getDegrees();
+    private double getTargetX() {
+        return swerve.getPose().getX() < Field.LENGTH / 2
+            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
+            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT;
     }
 
-    private boolean isAlignedOppositeAllianceSide() {
-        Pose2d pose = CommandSwerveDrivetrain.getInstance().getPose();
-        return Math.abs((Field.LENGTH / 2 + Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT) - pose.getX())
-            < Alignment.Tolerances.X_TOLERANCE_BARGE
-            && Math.abs(pose.getRotation().minus(Rotation2d.kZero).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE_BARGE.getDegrees();
+    private Rotation2d getTargetAngle() {
+        return swerve.getPose().getX() < Field.LENGTH /2
+            ? Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
+            : Rotation2d.k180deg.minus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT);
+    }
+
+    private boolean isAligned() {
+        Pose2d pose = swerve.getPose();
+        return Math.abs(getTargetX() - pose.getX()) < Alignment.Tolerances.X_TOLERANCE_BARGE
+            && Math.abs(pose.getRotation().minus(getTargetAngle()).getDegrees()) < Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE_BARGE.getDegrees();
     }
 
     @Override

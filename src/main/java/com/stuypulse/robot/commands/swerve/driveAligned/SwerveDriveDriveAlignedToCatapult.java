@@ -50,17 +50,23 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
         addRequirements(swerve);
     }
 
+    private double getTargetX() {
+        return swerve.getPose().getX() < Field.LENGTH / 2
+            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
+            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT;
+    }
+
+    private Angle getTargetAngle() {
+        return swerve.getPose().getX() < Field.LENGTH /2
+            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT.getDegrees())
+            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT.getDegrees());
+    }
+
     @Override
     public void execute() {
-        xController.update(swerve.getPose().getX() < Field.LENGTH / 2
-            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
-            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT,
-            swerve.getPose().getX());
+        xController.update(getTargetX(), swerve.getPose().getX());
         
-        angleController.update(swerve.getPose().getX() < Field.LENGTH /2
-            ? Angle.k180deg
-            : Angle.kZero, 
-            Angle.fromRotation2d(swerve.getPose().getRotation()));
+        angleController.update(getTargetAngle(), Angle.fromRotation2d(swerve.getPose().getRotation()));
 
         Vector2D targetVelocity = new Vector2D(xController.getOutput(), driverYVelocity.get())
             .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY));
