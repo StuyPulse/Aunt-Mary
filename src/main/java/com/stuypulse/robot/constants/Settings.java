@@ -188,7 +188,7 @@ public interface Settings {
         double FRONT_L4_AUTON_HEIGHT_METERS = 1.685791;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
-        double BACK_L3_HEIGHT_METERS = 1.037109;
+        double BACK_L3_HEIGHT_METERS = 1.077109;
         double BACK_L4_HEIGHT_METERS = 1.7304;
 
         // Algae
@@ -225,7 +225,7 @@ public interface Settings {
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.05);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(182.513809);
+        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(177.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
@@ -254,11 +254,11 @@ public interface Settings {
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
 
-            Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(200.0);
-            Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(500.0);
+            Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(250.0);
+            Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
 
-            Rotation2d MAX_VEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
+            Rotation2d MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
+            Rotation2d MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
 
             Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
@@ -296,7 +296,7 @@ public interface Settings {
 
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245 - 3.5);
         Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
         Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);
