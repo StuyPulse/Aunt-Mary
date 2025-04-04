@@ -128,7 +128,7 @@ public class SuperStructure extends SubsystemBase{
         if (armState == ArmState.FEED || armState == ArmState.PROCESSOR) {
             ShooterState shooterState = Shooter.getInstance().getState();
             if (shooterState == ShooterState.HOLD_ALGAE || shooterState == ShooterState.ACQUIRE_ALGAE) {
-                arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED_WITH_ALGAE, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED_WITH_ALGAE);
+                arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE);
             }
             else {
                 arm.setMotionProfileConstraints(Settings.Arm.Constraints.DEFAULT_MAX_VEL_BACK_TO_FEED, Settings.Arm.Constraints.DEFAULT_MAX_ACCEL_BACK_TO_FEED);
