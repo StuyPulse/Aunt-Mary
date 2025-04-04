@@ -32,7 +32,7 @@ public interface Settings {
     double DT = 0.020;
     boolean DEBUG_MODE = false;
     String CANIVORE_NAME = "CANIVORE";
-
+    
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
@@ -128,7 +128,7 @@ public interface Settings {
 
                 double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.16;
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.13;
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_CATAPULT = Rotation2d.fromDegrees(30);
             }
