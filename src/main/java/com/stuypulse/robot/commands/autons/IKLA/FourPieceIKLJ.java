@@ -13,9 +13,11 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScore
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
+import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
@@ -124,7 +126,7 @@ public class FourPieceIKLJ extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDriveCoralScoreAlignAuton(CoralBranch.J, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                            new SwerveDriveCoralScoreAlignWithClearance(() -> CoralBranch.J, 4, true, SuperStructureState.L4_FRONT),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
                                         new SuperStructureCoralL4Front())
