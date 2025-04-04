@@ -126,7 +126,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDriveCoralScoreAlignAuton(CoralBranch.E, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
+                            new SwerveDriveCoralScoreAlignWithClearance(() -> CoralBranch.E, 4, true, SuperStructureState.L4_FRONT),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
                                         new SuperStructureCoralL4Front())
