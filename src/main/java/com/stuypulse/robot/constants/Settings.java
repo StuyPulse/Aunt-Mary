@@ -272,7 +272,7 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(47);
+        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(52);
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
