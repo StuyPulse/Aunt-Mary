@@ -7,7 +7,10 @@
 
 package com.stuypulse.robot.util;
 
+import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Vector2D;
+
+import java.util.function.Supplier;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
@@ -26,25 +29,31 @@ import edu.wpi.first.math.util.Units;
 public interface ReefUtil {
 
     public enum CoralBranch {
-        A(NamedTags.BLUE_AB, NamedTags.RED_AB),
-        B(NamedTags.BLUE_AB, NamedTags.RED_AB),
-        C(NamedTags.BLUE_CD, NamedTags.RED_CD),
-        D(NamedTags.BLUE_CD, NamedTags.RED_CD),
-        E(NamedTags.BLUE_EF, NamedTags.RED_EF),
-        F(NamedTags.BLUE_EF, NamedTags.RED_EF),
-        G(NamedTags.BLUE_GH, NamedTags.RED_GH),
-        H(NamedTags.BLUE_GH, NamedTags.RED_GH),
-        I(NamedTags.BLUE_IJ, NamedTags.RED_IJ),
-        J(NamedTags.BLUE_IJ, NamedTags.RED_IJ),
-        K(NamedTags.BLUE_KL, NamedTags.RED_KL),
-        L(NamedTags.BLUE_KL, NamedTags.RED_KL);
+        A(NamedTags.BLUE_AB, NamedTags.RED_AB, ReefFace.AB),
+        B(NamedTags.BLUE_AB, NamedTags.RED_AB, ReefFace.AB),
+        C(NamedTags.BLUE_CD, NamedTags.RED_CD, ReefFace.CD),
+        D(NamedTags.BLUE_CD, NamedTags.RED_CD, ReefFace.CD),
+        E(NamedTags.BLUE_EF, NamedTags.RED_EF, ReefFace.EF),
+        F(NamedTags.BLUE_EF, NamedTags.RED_EF, ReefFace.EF),
+        G(NamedTags.BLUE_GH, NamedTags.RED_GH, ReefFace.GH),
+        H(NamedTags.BLUE_GH, NamedTags.RED_GH, ReefFace.GH),
+        I(NamedTags.BLUE_IJ, NamedTags.RED_IJ, ReefFace.IJ),
+        J(NamedTags.BLUE_IJ, NamedTags.RED_IJ, ReefFace.IJ),
+        K(NamedTags.BLUE_KL, NamedTags.RED_KL, ReefFace.KL),
+        L(NamedTags.BLUE_KL, NamedTags.RED_KL, ReefFace.KL);
 
         private NamedTags correspondingBlueAprilTag;
         private NamedTags correspondingRedAprilTag;
+        private ReefFace correspondingReefFace;
 
-        private CoralBranch(NamedTags correspondingBlueAprilTag, NamedTags correspondingRedAprilTag) {
+        private CoralBranch(NamedTags correspondingBlueAprilTag, NamedTags correspondingRedAprilTag, ReefFace correspondingReefFace) {
             this.correspondingBlueAprilTag = correspondingBlueAprilTag;
             this.correspondingRedAprilTag = correspondingRedAprilTag;
+            this.correspondingReefFace = correspondingReefFace;
+        }
+
+        public ReefFace getCorrespondingReefFace() {
+            return this.correspondingReefFace;
         }
 
         public Pose2d getCorrespondingAprilTagPose() {
@@ -147,6 +156,15 @@ public interface ReefUtil {
 
         public CoralBranch getRightBranchFieldRelative() {
             return this.rightBranchFieldRelative;
+        }
+
+        public CoralBranch getClosestCoralBranch() {
+            Translation2d pose = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
+            double leftBranchDistance = getLeftBranchFieldRelative().getBranchPoseProjectedOntoReefFace().getTranslation().getDistance(pose);
+            double rightBranchDistance = getRightBranchFieldRelative().getBranchPoseProjectedOntoReefFace().getTranslation().getDistance(pose);
+            return (leftBranchDistance < rightBranchDistance)
+                ? getLeftBranchFieldRelative()
+                : getRightBranchFieldRelative();
         }
 
         public Pose2d getCorrespondingAprilTagPose() {
