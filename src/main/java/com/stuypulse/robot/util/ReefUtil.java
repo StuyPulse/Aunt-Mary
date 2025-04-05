@@ -136,6 +136,11 @@ public interface ReefUtil {
             this.rightBranchFieldRelative = rightBranchFieldRelative;
         }
 
+        public ReefFace rotateCCW(int faces) {
+            int index = (this.ordinal() + (faces % 6) + 6) % 6;
+            return ReefFace.values()[index];
+        }
+
         public CoralBranch getLeftBranchFieldRelative() {
             return this.leftBranchFieldRelative;
         }
