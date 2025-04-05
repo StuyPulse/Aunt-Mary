@@ -22,7 +22,9 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
+import com.stuypulse.robot.util.ReefUtil.ReefFace;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
@@ -30,6 +32,9 @@ import java.util.function.Supplier;
 
 public class ScoreRoutine extends SequentialCommandGroup {
     private final SuperStructure superStructure;
+    private Supplier<CoralBranch> targetBranch;
+    
+    private ReefFace targetReefFace; // Used for driver input
 
     public ScoreRoutine(int level, boolean isFrontFacingReef) {
         this(level, isFrontFacingReef, ReefUtil::getClosestCoralBranch);
@@ -41,6 +46,7 @@ public class ScoreRoutine extends SequentialCommandGroup {
 
     public ScoreRoutine(int level, boolean isFrontFacingReef, Supplier<CoralBranch> targetBranch) {
         superStructure = SuperStructure.getInstance();
+        this.targetBranch = targetBranch;
 
         SuperStructureState correspondingSuperStructureState = SuperStructure.getCorrespondingCoralScoreState(level, isFrontFacingReef);
 
@@ -61,19 +67,50 @@ public class ScoreRoutine extends SequentialCommandGroup {
     }
 
     public ScoreRoutine(Gamepad driver, int level, boolean isFrontFacingReef) {
-        this(level, isFrontFacingReef, getCoralBranchSupplierWithDriverInput(driver));
+        superStructure = SuperStructure.getInstance();
+        this.targetReefFace = ReefFace.AB; // Set default value to avoid null pointer exception
+        this.targetBranch = getCoralBranchSupplierWithDriverInput(driver);
+
+        SuperStructureState correspondingSuperStructureState = SuperStructure.getCorrespondingCoralScoreState(level, isFrontFacingReef);
+
+        addCommands(
+            resetReefFaceToClosestReefFace(),
+            new SwerveDriveCoralScoreAlignWithClearance(targetBranch, level, isFrontFacingReef, correspondingSuperStructureState)
+                .alongWith(
+                    new WaitUntilCommand(Clearances::isArmClearFromReef)
+                        .alongWith(new ShooterWaitUntilHasCoral())
+                        .andThen(new SuperStructureSetState(correspondingSuperStructureState))
+                        .onlyIf(() -> superStructure.getState() != correspondingSuperStructureState)
+                        .andThen(new SuperStructureWaitUntilAtTarget())
+                )
+                .alongWith(new ShooterAcquireCoral()),
+            new SuperStructureWaitUntilAtTarget(), // Re-check positioning
+            Shooter.getCorrespondingShootCommand(level, isFrontFacingReef),
+            new LEDApplyPattern(Settings.LED.SCORE_COLOR)
+        );
+
+        mapReefFaceOffsetToController(driver);
     }
 
-    private static Supplier<CoralBranch> getCoralBranchSupplierWithDriverInput(Gamepad driver) {
+    private InstantCommand resetReefFaceToClosestReefFace() {
+        return new InstantCommand(() -> this.targetReefFace = ReefUtil.getClosestReefFace());
+    }
+
+    private void mapReefFaceOffsetToController(Gamepad driver) {
+        driver.getLeftBumper().onTrue(new InstantCommand(() -> this.targetReefFace = this.targetReefFace.rotateCCW(-1)));
+        driver.getRightBumper().onTrue(new InstantCommand(() -> this.targetReefFace = this.targetReefFace.rotateCCW(1)));
+    }
+
+    private Supplier<CoralBranch> getCoralBranchSupplierWithDriverInput(Gamepad driver) {
         return () -> {
             if (driver.getLeftX() > Settings.Driver.BRANCH_OVERRIDE_DEADBAND) {
-                return ReefUtil.getClosestReefFace().getRightBranchFieldRelative();
+                return targetReefFace.getRightBranchFieldRelative();
             }
             else if (driver.getLeftX() < -Settings.Driver.BRANCH_OVERRIDE_DEADBAND) {
-                return ReefUtil.getClosestReefFace().getLeftBranchFieldRelative();
+                return targetReefFace.getLeftBranchFieldRelative();
             }
             else {
-                return ReefUtil.getClosestCoralBranch();
+                return targetReefFace.getClosestCoralBranch();
             }
         };
     }

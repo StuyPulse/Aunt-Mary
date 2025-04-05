@@ -12,15 +12,15 @@ import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
+import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import java.util.function.Supplier;
 
@@ -49,7 +49,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
         addCommands(
             new InstantCommand(() -> this.mode = Mode.CLEAR),
-            new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
+            updateMode().repeatedly()
                 .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
                     .withCanEnd(canEnd::get)
                     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
@@ -67,13 +67,21 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
         addCommands(
             new InstantCommand(() -> this.mode = Mode.CLEAR),
-            new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
+            updateMode().repeatedly()
                 .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
                     .withTranslationalConstraints(maxVel, maxAccel)
                     .withCanEnd(canEnd::get)
                     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
         );
     } 
+
+    private ConditionalCommand updateMode() {
+        return new ConditionalCommand(
+            new InstantCommand(() -> this.mode = Mode.SCORE),
+            new InstantCommand(() -> this.mode = Mode.CLEAR),
+            this::isClear
+        );
+    }
 
     private Pose2d getTargetPose() {
         if (mode == Mode.CLEAR) {
@@ -86,6 +94,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
     private boolean isClear() {
         return SuperStructure.getInstance().getState() == correspondingSuperStructureState
-            && SuperStructure.getInstance().canSkipClearance();
+            && SuperStructure.getInstance().canSkipClearance()
+            && ReefUtil.getClosestCoralBranch() == branch.get();
     }
 }
