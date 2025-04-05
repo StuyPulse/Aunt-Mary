@@ -12,6 +12,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
+import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
@@ -86,6 +87,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
     private boolean isClear() {
         return SuperStructure.getInstance().getState() == correspondingSuperStructureState
-            && SuperStructure.getInstance().canSkipClearance();
+            && SuperStructure.getInstance().canSkipClearance()
+            && branch.get() == ReefUtil.getClosestCoralBranch();
     }
 }
