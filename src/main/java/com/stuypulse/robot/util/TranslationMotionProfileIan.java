@@ -7,9 +7,17 @@
 
 package com.stuypulse.robot.util;
 
+import java.util.Vector;
+
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
 import com.stuypulse.stuylib.util.StopWatch;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Velocity;
 
 
 
@@ -97,13 +105,24 @@ public class TranslationMotionProfileIan implements VFilter {
                 mVelocity = mVelocity.clamp(mVelLimit.doubleValue());
             }
 
+            Vector2D error = target.sub(mOutput);
+            Vector2D unitError = error.normalize();
+
+            double parallelMag = mVelocity.dot(unitError);
+            Vector2D accelParallel = unitError.mul(parallelMag);
+
+            Vector2D accelPerpendicular = mVelocity.sub(accelParallel);
+
+            double damping = Math.pow(0.5, dt);
+            mVelocity = accelParallel.add(accelPerpendicular.mul(damping));
+
             // adjust output by calculated velocity
             mOutput = mOutput.add(mVelocity.mul(dt));
         }
 
-        // Field.FIELD2D.getObject("Translation Motion Profile Ian").setPose(!Robot.isBlue()
-        //     ? new Pose2d(mOutput.x, mOutput.y, new Rotation2d())
-        //     : Field.transformToOppositeAlliance(new Pose2d(mOutput.x, mOutput.y, new Rotation2d())));
+        Field.FIELD2D.getObject("Translation Motion Profile Ian").setPose(!Robot.isBlue()
+            ? new Pose2d(mOutput.x, mOutput.y, new Rotation2d())
+            : Field.transformToOppositeAlliance(new Pose2d(mOutput.x, mOutput.y, new Rotation2d())));
             
         return mOutput;
     }
