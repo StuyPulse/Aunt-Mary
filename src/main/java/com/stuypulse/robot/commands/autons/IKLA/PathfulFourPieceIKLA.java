@@ -44,7 +44,7 @@ public class PathfulFourPieceIKLA extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.25),
+            new WaitCommand(0.125),
             new ShooterStop(),
 
             // To HP, Score K
