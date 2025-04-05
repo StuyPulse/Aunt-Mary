@@ -182,7 +182,7 @@ public interface Settings {
         // Coral
         double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
 
-        double FRONT_L2_HEIGHT_METERS = 1.55586;
+        double FRONT_L2_HEIGHT_METERS = 1.57586;
         double FRONT_L3_HEIGHT_METERS = 1.0566;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         double FRONT_L4_AUTON_HEIGHT_METERS = 1.685791;
