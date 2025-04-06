@@ -137,7 +137,7 @@ public class PathfulFourPieceFDCB extends SequentialCommandGroup {
             new WaitCommand(0.125),
             new ShooterStop(),
             
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
 
         );
 
