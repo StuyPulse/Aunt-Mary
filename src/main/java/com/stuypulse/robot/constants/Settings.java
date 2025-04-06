@@ -91,9 +91,9 @@ public interface Settings {
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
 
-                double X_TOLERANCE_REEF_PICKUP = Units.inchesToMeters(2.0);
-                double Y_TOLERANCE_REEF_PICKUP = Units.inchesToMeters(2.0);
-                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(2.0);
+                double X_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(5.0);
+                double Y_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(5.0);
+                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(5.0);
 
                 double X_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
                 double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
