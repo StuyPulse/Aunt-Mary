@@ -30,7 +30,7 @@ import com.pathplanner.lib.path.PathConstraints;
 public interface Settings {
 
     double DT = 0.020;
-    boolean DEBUG_MODE = false;
+    boolean DEBUG_MODE = true;
     String CANIVORE_NAME = "CANIVORE";
     
     public interface EnabledSubsystems {
@@ -296,7 +296,7 @@ public interface Settings {
 
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245 - 3.5);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(230); // 245 - 3.5
         Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
         Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);

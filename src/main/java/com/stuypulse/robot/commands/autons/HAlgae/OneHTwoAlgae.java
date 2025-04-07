@@ -7,7 +7,7 @@
 
 package com.stuypulse.robot.commands.autons.HAlgae;
 
-import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
+import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
@@ -59,7 +59,7 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
             new ShooterStop(),
 
             // Acquire GH Algae, Score on Barge
-            new ReefAlgaePickupRoutine()
+            new ReefAlgaePickupRoutineFront()
                 .withTimeout(2.5)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
@@ -85,7 +85,7 @@ public class OneHTwoAlgae extends SequentialCommandGroup {
                 new SuperStructureAlgaeL3Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
-            new ReefAlgaePickupRoutine()
+            new ReefAlgaePickupRoutineFront()
                 .withTimeout(2)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),

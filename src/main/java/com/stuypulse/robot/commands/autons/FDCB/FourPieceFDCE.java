@@ -13,7 +13,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScore
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
+import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.shooter.Shooter;

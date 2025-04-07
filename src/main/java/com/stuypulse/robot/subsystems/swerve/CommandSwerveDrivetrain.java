@@ -465,6 +465,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Settings.DEBUG_MODE) {
             for (int i = 0; i < 4; i++) {
                 SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Stator Current", getModule(i).getDriveMotor().getStatorCurrent().getValueAsDouble());
+                SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Supply Current", getModule(i).getDriveMotor().getSupplyCurrent().getValueAsDouble());
             }
 
             SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);

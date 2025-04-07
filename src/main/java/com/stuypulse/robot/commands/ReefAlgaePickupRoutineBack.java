@@ -8,7 +8,9 @@
 package com.stuypulse.robot.commands;
 
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Back;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Back;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveWithRobotRelativeSpeeds;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToNearestReefAlgaePickup;
@@ -23,22 +25,22 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class ReefAlgaePickupRoutine extends SequentialCommandGroup{
-    public ReefAlgaePickupRoutine() {
+public class ReefAlgaePickupRoutineBack extends SequentialCommandGroup{
+    public ReefAlgaePickupRoutineBack() {
         addCommands(
             new ShooterAcquireAlgae(),
             new ConditionalCommand(
-                new SwerveDrivePIDToNearestReefAlgaeReady(true)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureAlgaeL3Front()))
-                    .alongWith(new WaitUntilCommand(() -> SuperStructure.getInstance().getState() == SuperStructureState.ALGAE_L3_FRONT && SuperStructure.getInstance().canSkipClearance()))
-                    .andThen(new SwerveDrivePIDToNearestReefAlgaePickup(true))
-                    .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND, 0, 0)),
-                new SwerveDrivePIDToNearestReefAlgaeReady(true)
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureAlgaeL2Front()))
-                    .alongWith(new WaitUntilCommand(() -> SuperStructure.getInstance().getState() == SuperStructureState.ALGAE_L2_FRONT && SuperStructure.getInstance().canSkipClearance()))
-                    .andThen(new SwerveDrivePIDToNearestReefAlgaePickup(true))
-                    .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND, 0, 0)), 
+                new SwerveDrivePIDToNearestReefAlgaeReady(false)
+                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureAlgaeL3Back()))
+                    .alongWith(new WaitUntilCommand(() -> SuperStructure.getInstance().getState() == SuperStructureState.ALGAE_L3_BACK && SuperStructure.getInstance().canSkipClearance()))
+                    .andThen(new SwerveDrivePIDToNearestReefAlgaePickup(false))
+                    .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND, 0, 0)),
+                new SwerveDrivePIDToNearestReefAlgaeReady(false)
+                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureAlgaeL2Back()))
+                    .alongWith(new WaitUntilCommand(() -> SuperStructure.getInstance().getState() == SuperStructureState.ALGAE_L2_BACK && SuperStructure.getInstance().canSkipClearance()))
+                    .andThen(new SwerveDrivePIDToNearestReefAlgaePickup(false))
+                    .andThen(new SwerveDriveDriveWithRobotRelativeSpeeds(-Settings.Swerve.NUDGE_SPEED_METERS_PER_SECOND, 0, 0)), 
                 () -> ReefUtil.getClosestAlgae().isHighAlgae())
-        );
+            );
     }
 }

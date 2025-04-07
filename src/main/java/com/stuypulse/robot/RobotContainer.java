@@ -12,7 +12,8 @@ import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.ManualShoot;
-import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
+import com.stuypulse.robot.commands.ReefAlgaePickupRoutineBack;
+import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
@@ -53,6 +54,7 @@ import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
 import com.stuypulse.robot.commands.shooter.ShooterShootL1;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
+import com.stuypulse.robot.commands.shooter.TempScoreRoutineL2;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
@@ -253,11 +255,11 @@ public class RobotContainer {
         // L2 Coral Score
         driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
+                new TempScoreRoutineL2(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
                 new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
                 () -> swerve.isFrontFacingAllianceReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureFeed()))
+            // .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            //     .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
         
         // Catapult
@@ -291,7 +293,10 @@ public class RobotContainer {
 
         // Acquire closest reef algae front only
         driver.getDPadLeft()
-            .whileTrue(new ReefAlgaePickupRoutine())
+            .whileTrue(new ConditionalCommand(
+                new ReefAlgaePickupRoutineFront(),
+                new ReefAlgaePickupRoutineBack(),
+                () -> swerve.isFrontFacingAllianceReef()))
             .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))
