@@ -10,6 +10,7 @@ package com.stuypulse.robot.commands;
 import com.stuypulse.stuylib.input.Gamepad;
 
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
+import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureSetState;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -51,7 +52,8 @@ public class ScoreRoutine extends SequentialCommandGroup {
                         .andThen(new SuperStructureSetState(correspondingSuperStructureState))
                         .onlyIf(() -> superStructure.getState() != correspondingSuperStructureState)
                         .andThen(new SuperStructureWaitUntilAtTarget())
-                ),
+                )
+                .alongWith(new ShooterAcquireCoral()),
             new SuperStructureWaitUntilAtTarget(), // Re-check positioning
             Shooter.getCorrespondingShootCommand(level, isFrontFacingReef),
             new LEDApplyPattern(Settings.LED.SCORE_COLOR)

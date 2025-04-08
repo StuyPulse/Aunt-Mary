@@ -56,10 +56,12 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.Clockwise_Positive)
-            .withPIDConstants(Gains.Arm.CoralAlgae.PID.kP, Gains.Arm.CoralAlgae.PID.kI, Gains.Arm.CoralAlgae.PID.kD, 0)
-            .withFFConstants(Gains.Arm.CoralAlgae.FF.kS, Gains.Arm.CoralAlgae.FF.kV, Gains.Arm.CoralAlgae.FF.kA, Gains.Arm.CoralAlgae.FF.kG,0)
-            .withPIDConstants(Gains.Arm.Empty.PID.kP, Gains.Arm.Empty.PID.kI, Gains.Arm.Empty.PID.kD, 1)
-            .withFFConstants(Gains.Arm.Empty.FF.kS, Gains.Arm.Empty.FF.kV, Gains.Arm.Empty.FF.kA, Gains.Arm.Empty.FF.kG,1)
+            .withPIDConstants(Gains.Arm.Coral.PID.kP, Gains.Arm.Coral.PID.kI, Gains.Arm.Coral.PID.kD, 0)
+            .withFFConstants(Gains.Arm.Coral.FF.kS, Gains.Arm.Coral.FF.kV, Gains.Arm.Coral.FF.kA, Gains.Arm.Coral.FF.kG,0)
+            .withPIDConstants(Gains.Arm.Coral.PID.kP, Gains.Arm.Coral.PID.kI, Gains.Arm.Coral.PID.kD, 1)
+            .withFFConstants(Gains.Arm.Coral.FF.kS, Gains.Arm.Coral.FF.kV, Gains.Arm.Coral.FF.kA, Gains.Arm.Coral.FF.kG,1)
+            .withPIDConstants(Gains.Arm.Empty.PID.kP, Gains.Arm.Empty.PID.kI, Gains.Arm.Empty.PID.kD, 2)
+            .withFFConstants(Gains.Arm.Empty.FF.kS, Gains.Arm.Empty.FF.kV, Gains.Arm.Empty.FF.kA, Gains.Arm.Empty.FF.kG,2)
             .withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
             .withMotionProfile(Settings.Arm.Constraints.MAX_VEL_TELEOP.getRotations(), Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getRotations());
@@ -77,6 +79,10 @@ public interface Motors {
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.CounterClockwise_Positive)
+            .withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.kG, 0)
+            .withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD, 0)
+            .withGravityType(GravityTypeValue.Arm_Cosine)
+            .withMotionProfile(Settings.Froggy.MAX_VEL.getRotations(), Settings.Froggy.MAX_ACCEL.getRotations())
 			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO);
     }
 

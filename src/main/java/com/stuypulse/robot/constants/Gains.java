@@ -20,23 +20,38 @@ public interface Gains {
 
     public interface Elevator {
         public interface PID {
-            double kP = 17.185;
+            double kP = 25.669;
             double kI = 0.0;
-            double kD = 1.4344;
+            double kD = 2.2108;
         }
 
         public interface FF {
-            double kS = 0.28562;
-            double kV = 2.8012;
-            double kA = 0.16141;
-            double kG = 0.81505;
+            double kS = 0.27594;
+            double kV = 3.0438;
+            double kA = 0.10459;
+            double kG = 0.67941;
         }
     }
 
     public interface Arm {
-        public interface CoralAlgae  {
+        public interface Coral  {
             public interface PID {
-                double kP = 0.085744 * 360;
+                double kP = 0.15744 * 360;
+                double kI = 0.0 * 360;
+                double kD = 0.015 * 360;
+            }
+
+            public interface FF {
+                double kS = 0.2272; 
+                double kV = 0.0095901 * 360;
+                double kA = 0.0015361 * 360;
+                double kG = 0.69269;
+            }
+        }
+
+        public interface AlgaeCatapult  {
+            public interface PID {
+                double kP = 0.095744 * 360;
                 double kI = 0.0 * 360;
                 double kD = 0.015 * 360;
             }
@@ -67,15 +82,15 @@ public interface Gains {
 
     public interface Froggy {
         public interface PID {
-            double kP = 0.055824;
-            double kI = 0.0;
-            double kD = 0.002771;
+            double kP = 0.055824 * 360;
+            double kI = 0.0 * 360;
+            double kD = 0.002771 * 360;
         }
 
         public interface FF {
             double kS = 0.17874; 
-            double kV = 0.013683;
-            double kA = 0.00092838;
+            double kV = 0.013683 * 360;
+            double kA = 0.00092838 * 360;
             double kG = 0.1976;
         }
     }

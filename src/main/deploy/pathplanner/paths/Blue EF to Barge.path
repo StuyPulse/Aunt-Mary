@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.474184308733259,
-        "y": 2.921851021902902
+        "x": 6.983665364583333,
+        "y": 2.6758213975694436
       },
       "isLocked": false,
       "linkedName": "Blue EF Algae (1)"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,

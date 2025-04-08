@@ -341,7 +341,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public double getRobotRelativeXAccelGs() {
-        return getPigeon2().getAccelerationX().getValueAsDouble() * getPose().getRotation().getCos();
+        return getPigeon2().getAccelerationY().getValueAsDouble();
+    }
+
+    public double getRobotRelativeYAccelGs() {
+        return -getPigeon2().getAccelerationX().getValueAsDouble();
     }
 
     public void configureAutoBuilder() {
@@ -471,9 +475,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     
             SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
-            SmartDashboard.putNumber("Swerve/Gyro/Accel x (g)", getPigeon2().getAccelerationX().getValueAsDouble());
-            SmartDashboard.putNumber("Swerve/Gyro/Accel y (g)", getPigeon2().getAccelerationY().getValueAsDouble());
             SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
+            SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel y (g)", getRobotRelativeYAccelGs());
 
             SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
             SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());

@@ -27,6 +27,7 @@ import com.stuypulse.robot.util.HolonomicController;
 import com.stuypulse.robot.util.TranslationMotionProfileIan;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,6 +56,8 @@ public class SwerveDrivePIDToPose extends Command {
     private Number maxVelocityWhenAligned;
 
     private VStream translationSetpoint;
+
+    private Supplier<Boolean> canEnd;
 
     public SwerveDrivePIDToPose(Pose2d targetPose) {
         this(() -> targetPose);
@@ -90,13 +93,15 @@ public class SwerveDrivePIDToPose extends Command {
         thetaTolerance = Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE.getRadians();
         maxVelocityWhenAligned = Settings.Swerve.Alignment.Tolerances.MAX_VELOCITY_WHEN_ALIGNED;
 
+        canEnd = () -> true;
+
         addRequirements(swerve);
     }
 
-    public SwerveDrivePIDToPose withTolerance(Number x, Number y, Number theta) {
+    public SwerveDrivePIDToPose withTolerance(double x, double y, Rotation2d theta) {
         xTolerance = x;
         yTolerance = y;
-        thetaTolerance = theta;
+        thetaTolerance = theta.getRadians();
         return this;
     }
 
@@ -108,6 +113,11 @@ public class SwerveDrivePIDToPose extends Command {
 
     public SwerveDrivePIDToPose withoutMotionProfile() {
         this.translationSetpoint = VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        return this;
+    }
+
+    public SwerveDrivePIDToPose withCanEnd(Supplier<Boolean> canEnd) {
+        this.canEnd = canEnd;
         return this;
     }
 
@@ -169,7 +179,7 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return isAligned.get();
+        return isAligned.get() && canEnd.get();
     }
 
     @Override

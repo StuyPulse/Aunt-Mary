@@ -42,7 +42,7 @@ public abstract class Froggy extends SubsystemBase {
         ALGAE_GROUND_PICKUP(Settings.Froggy.ALGAE_GROUND_PICKUP_ANGLE),
         CORAL_GROUND_PICKUP(Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE),
         L1_SCORE_ANGLE(Settings.Froggy.L1_SCORING_ANGLE),
-        PROCESSOR_SCORE_ANGLE(Settings.Froggy.PROCESSOR_SCORE_ANGLE),
+        GOLF_TEE_ALGAE_PICKUP(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE),
         CLIMB(Settings.Froggy.CLIMB_ANGLE);
 
         private Rotation2d targetAngle;
@@ -66,13 +66,13 @@ public abstract class Froggy extends SubsystemBase {
         HOLD_CORAL(Settings.Froggy.HOLD_CORAL_SPEED),
         STOP(0);
 
-        private Number speed;
+        private double speed;
 
-        private RollerState(Number speed) {
+        private RollerState(double speed) {
             this.speed = speed;
         }
 
-        public Number getTargetSpeed() {
+        public double getTargetSpeed() {
             return this.speed;
         }
     }

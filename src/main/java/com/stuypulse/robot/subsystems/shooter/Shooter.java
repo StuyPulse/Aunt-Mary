@@ -52,7 +52,7 @@ public abstract class Shooter extends SubsystemBase {
         SHOOT_CORAL_L4_BACK(Settings.Shooter.CORAL_SHOOT_SPEED_L4_BACK),
         SHOOT_ALGAE(Settings.Shooter.ALGAE_SHOOT_SPEED),
         HOLD_ALGAE(Settings.Shooter.ALGAE_HOLD_SPEED),
-        UNJAMB_CORAL_BACKWARDS(Settings.Shooter.UNJAMB_CORAL_BACKWARDS_SPEED),
+        UNJAM_CORAL_BACKWARDS(Settings.Shooter.UNJAM_CORAL_BACKWARDS_SPEED),
         STOP(0);
 
         private double speed;
@@ -81,10 +81,11 @@ public abstract class Shooter extends SubsystemBase {
     }
 
     public abstract boolean hasCoral();
+    public abstract boolean isAboveCoralCurrentThreshold();
 
     public boolean isShooting() {
         return switch (getState()) {
-            case SHOOT_ALGAE, SHOOT_CORAL_L1, SHOOT_CORAL_L2_FRONT, SHOOT_CORAL_L2_BACK, SHOOT_CORAL_L3_FRONT, SHOOT_CORAL_L3_BACK, SHOOT_CORAL_L4_FRONT, SHOOT_CORAL_L4_BACK -> true;
+            case SHOOT_ALGAE, SHOOT_CORAL_L1, SHOOT_CORAL_L2_FRONT, SHOOT_CORAL_L2_BACK, SHOOT_CORAL_L3_FRONT, SHOOT_CORAL_L3_BACK, SHOOT_CORAL_AUTON_L4_FRONT, SHOOT_CORAL_L4_FRONT, SHOOT_CORAL_L4_BACK -> true;
             default -> false;
         };
     }

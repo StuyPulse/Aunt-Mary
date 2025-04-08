@@ -44,7 +44,7 @@ public class ElevatorImpl extends Elevator {
     public SysIdRoutine getSysIdRoutine() {
         return SysId.getRoutine(
             2, 
-            7, 
+            5, 
             "Elevator", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentHeight(), 

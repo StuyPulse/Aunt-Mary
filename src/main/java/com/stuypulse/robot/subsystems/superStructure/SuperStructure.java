@@ -10,6 +10,8 @@ package com.stuypulse.robot.subsystems.superStructure;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
+import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
@@ -123,8 +125,14 @@ public class SuperStructure extends SubsystemBase{
 
     private void updateArmMotionProfileConstraints() {
         ArmState armState = getState().getArmState();
-        if (armState == ArmState.FEED) {
-            arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED);
+        if (armState == ArmState.FEED || armState == ArmState.PROCESSOR) {
+            ShooterState shooterState = Shooter.getInstance().getState();
+            if (shooterState == ShooterState.HOLD_ALGAE || shooterState == ShooterState.ACQUIRE_ALGAE) {
+                arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE, Settings.Arm.Constraints.MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE);
+            }
+            else {
+                arm.setMotionProfileConstraints(Settings.Arm.Constraints.DEFAULT_MAX_VEL_BACK_TO_FEED, Settings.Arm.Constraints.DEFAULT_MAX_ACCEL_BACK_TO_FEED);
+            }
         }
         else if (armState == ArmState.CATAPULT_SHOOT) {
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CATAPULT, Settings.Arm.Constraints.MAX_ACCEL_CATAPULT);

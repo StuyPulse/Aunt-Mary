@@ -30,10 +30,9 @@ public interface Constants {
         double DRUM_RADIUS_METERS = ((MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / (Encoders.NUM_ROTATIONS_TO_REACH_TOP / Encoders.GEAR_RATIO)) / 2 / Math.PI;
 
         public interface Encoders {
-            double GEAR_RATIO = 50.0 / 14.0;
+            double GEAR_RATIO = 52.0 / 12.0;
 
-            double NUM_ROTATIONS_TO_REACH_TOP = 16.4427978257; // Number of rotations that the motor has to spin, NOT the gear
-
+            double NUM_ROTATIONS_TO_REACH_TOP = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / (0.480 / 13); // Number of rotations that the motor has to spin, NOT the gear
             double POSITION_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP;
             double VELOCITY_CONVERSION_FACTOR = (MAX_HEIGHT_METERS - MIN_HEIGHT_METERS) / NUM_ROTATIONS_TO_REACH_TOP / 60;
         }
@@ -69,7 +68,7 @@ public interface Constants {
 
     public interface Climb {
         double GEAR_RATIO = 75.0;
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(259 - 60);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(259 - 60 - 3);
 
         Rotation2d MIN_ANGLE = Rotation2d.kZero;
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(265);

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8468959263392855,
-        "y": 0.9474352155412942
+        "x": 1.7745,
+        "y": 0.8367499999999995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.361475094121964,
-        "y": 1.2884858134635793
+        "x": 2.3889029842009606,
+        "y": 1.3297319770055291
       },
       "isLocked": false,
-      "linkedName": "Blue Bottom HP"
+      "linkedName": "Blue Bottom HP Last"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 2.833760288783482
       },
       "prevControl": {
-        "x": 3.9905972678421806,
-        "y": 2.150398425002367
+        "x": 4.358253809729078,
+        "y": 2.2389562444958075
       },
       "nextControl": null,
       "isLocked": false,

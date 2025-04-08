@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.386913170083801,
-        "y": 2.49577535686917
+        "x": 5.376437897693348,
+        "y": 2.5426454030326626
       },
       "isLocked": false,
       "linkedName": "Blue E"
     },
     {
       "anchor": {
-        "x": 5.554459926060267,
-        "y": 2.2909336635044646
+        "x": 5.526331967213115,
+        "y": 2.4006659836065567
       },
       "prevControl": {
-        "x": 5.395562764447221,
-        "y": 2.483940637552859
+        "x": 5.334802620387847,
+        "y": 2.6377172348577163
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue E BackOut"
+      "linkedName": "Blue EF Algae"
     }
   ],
   "rotationTargets": [],

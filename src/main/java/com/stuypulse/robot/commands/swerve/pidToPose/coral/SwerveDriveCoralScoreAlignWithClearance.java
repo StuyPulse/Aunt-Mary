@@ -8,55 +8,86 @@
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
+import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
+import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
+import com.stuypulse.stuylib.streams.booleans.BStream;
+import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import java.util.function.Supplier;
 
 public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGroup {
-    private final SuperStructureState correspondingSuperStructureState;
+
+    private enum Mode {
+        CLEAR,
+        SCORE
+    }
+
+    private Mode mode;
+    private BStream canEnd;
+    private SuperStructureState correspondingSuperStructureState;
+    private Supplier<CoralBranch> branch;
+    private boolean isScoringFrontSide;
+    private int level;
 
     public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState) {
+        this.mode = Mode.CLEAR;
         this.correspondingSuperStructureState = correspondingSuperStructureState;
+        this.branch = branch;
+        this.isScoringFrontSide = isScoringFrontSide;
+        this.level = level;
+
+        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.5));
 
         addCommands(
-            new WaitUntilCommand(this::isClear)
-                .deadlineFor(new SwerveDrivePIDToBranchClear(branch, isScoringFrontSide))
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
-            new SwerveDrivePIDToBranchScore(branch, level, isScoringFrontSide)
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
+            new InstantCommand(() -> this.mode = Mode.CLEAR),
+            new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
+                .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
+                    .withCanEnd(canEnd::get)
+                    .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
         );
     }
 
     public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState, double maxVel, double maxAccel) {
+        this.mode = Mode.CLEAR;
         this.correspondingSuperStructureState = correspondingSuperStructureState;
+        this.branch = branch;
+        this.isScoringFrontSide = isScoringFrontSide;
+        this.level = level;
+
+        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.5));
 
         addCommands(
-            new WaitUntilCommand(this::isClear)
-                .deadlineFor(new SwerveDrivePIDToBranchClear(branch, isScoringFrontSide)
-                    .withTranslationalConstraints(maxVel, maxAccel))
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)),
-            new SwerveDrivePIDToBranchScore(branch, level, isScoringFrontSide)
-                .withTranslationalConstraints(maxVel, maxAccel)
-                .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR))
+            new InstantCommand(() -> this.mode = Mode.CLEAR),
+            new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
+                .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
+                    .withTranslationalConstraints(maxVel, maxAccel)
+                    .withCanEnd(canEnd::get)
+                    .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
         );
     } 
 
-    public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, SuperStructureState correspondingSuperStructureState) {
-        this(() -> branch, level, isFrontFacingReef, correspondingSuperStructureState);
-    }
-
-    public SwerveDriveCoralScoreAlignWithClearance(CoralBranch branch, int level, boolean isFrontFacingReef, SuperStructureState correspondingSuperStructureState, double maxVel, double maxAccel) {
-        this(() -> branch, level, isFrontFacingReef, correspondingSuperStructureState, maxVel, maxAccel);
+    private Pose2d getTargetPose() {
+        if (mode == Mode.CLEAR) {
+            return branch.get().getClearancePose(isScoringFrontSide);
+        }
+        else {
+            return branch.get().getScorePose(level, isScoringFrontSide);
+        }
     }
 
     private boolean isClear() {
         return SuperStructure.getInstance().getState() == correspondingSuperStructureState
-            && SuperStructure.getInstance().canSkipClearance();
+            && SuperStructure.getInstance().canSkipClearance()
+            && branch.get() == ReefUtil.getClosestCoralBranch();
     }
 }
