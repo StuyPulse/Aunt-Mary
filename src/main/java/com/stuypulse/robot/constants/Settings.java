@@ -62,7 +62,7 @@ public interface Settings {
         double NUDGE_SPEED_METERS_PER_SECOND_AUTON = 1.4;
         
         public interface Constraints {    
-            double MAX_VELOCITY_M_PER_S = 4.0;
+            double MAX_VELOCITY_M_PER_S = 4.3;
             double MAX_ACCEL_M_PER_S_SQUARED = 15.0;
             double MAX_ANGULAR_VEL_RAD_PER_S = Units.degreesToRadians(400);
             double MAX_ANGULAR_ACCEL_RAD_PER_S = Units.degreesToRadians(900);
@@ -77,7 +77,7 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
-                double DEFAULT_MAX_VELOCITY = 4.0;
+                double DEFAULT_MAX_VELOCITY = 4.3;
                 double DEFAULT_MAX_ACCELERATION = 15.0;
                 double DEFUALT_MAX_ANGULAR_VELOCITY = Units.degreesToRadians(400);
                 double DEFAULT_MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(900);
