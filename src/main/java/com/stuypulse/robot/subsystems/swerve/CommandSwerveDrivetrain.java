@@ -112,7 +112,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             /* This is in meters per second², but SysId only supports "volts per second" */
             Volts.of(1).per(Second),
             /* This is in meters per second, but SysId only supports "volts" */
-            Volts.of(4),
+            Volts.of(Settings.Swerve.Constraints.MAX_VELOCITY_M_PER_S),
             null, // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdChassisTranslation_State", state.toString())
