@@ -32,6 +32,7 @@ public class SuperStructure extends SubsystemBase{
 
     public enum SuperStructureState {
         FEED(ElevatorState.FEED, ArmState.FEED),
+        GOLF_TEE_ALGAE_PICKUP(ElevatorState.GOLF_TEE_ALGAE_PICKUP, ArmState.GOLF_TEE_ALGAE_PICKUP),
         L1(ElevatorState.L1, ArmState.L1),
         L2_FRONT(ElevatorState.L2_FRONT, ArmState.L2_FRONT),
         L2_BACK(ElevatorState.L2_BACK, ArmState.L2_BACK),

@@ -56,6 +56,7 @@ public abstract class Arm extends SubsystemBase {
         CATAPULT_READY(Settings.Arm.CATAPULT_READY_ANGLE),
         CATAPULT_SHOOT(Settings.Arm.CATAPULT_FINAL_ANGLE),
         BARGE_118(Settings.Arm.BARGE_118_ANGLE),
+        GOLF_TEE_ALGAE_PICKUP(Settings.Arm.GOLF_TEE_ALGAE_PICKUP_ANGLE),
         CLIMB(Settings.Arm.CLIMB_ANGLE),
         UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE);
 
