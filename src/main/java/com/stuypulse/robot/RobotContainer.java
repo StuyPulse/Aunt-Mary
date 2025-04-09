@@ -67,6 +67,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
@@ -277,20 +278,20 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
-        // driver.getRightStickButton()
-        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
-        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-        //         .onlyIf(() -> !shooter.hasCoral()));
-
-        // Align to closest Coral Station without path finding
         driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+            .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+                .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+                .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
+
+        // Align to closest Coral Station without path finding
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire closest reef algae
         driver.getDPadLeft()

@@ -7,6 +7,7 @@
 package com.stuypulse.robot;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
             PortForwarder.add(port+10, "10.6.94.12", port);
         }
 
-        // PathfindingCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     @Override
