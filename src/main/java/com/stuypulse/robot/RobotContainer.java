@@ -48,6 +48,7 @@ import com.stuypulse.robot.commands.froggy.roller.FroggyRollerStop;
 import com.stuypulse.robot.commands.funnel.FunnelDefaultCommand;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
+import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
@@ -62,6 +63,7 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGolfTeeAlgaePickup;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
@@ -194,12 +196,12 @@ public class RobotContainer {
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
-        // Froggy golf tee algae pickup
+        // Loki golf tee algae pickup
         driver.getLeftBumper().and(() -> !driverIsClickingCoralBranchScoreButton())
-            .onTrue(new FroggyPivotToGolfTeeAlgaePickup())
-            .onTrue(new FroggyRollerIntakeAlgae())
-            .onFalse(new FroggyPivotToStow())
-            .onFalse(new FroggyRollerHoldAlgae());
+            .onTrue(new SuperStructureGolfTeeAlgaePickup())
+            .onTrue(new ShooterAcquireAlgae())
+            .onFalse(new SuperStructureProcessor())
+            .onFalse(new ShooterHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton().and(() -> !driverIsClickingCoralBranchScoreButton()) // so that driver doesnt accidently fat finger trigger when trying to switch reef face
