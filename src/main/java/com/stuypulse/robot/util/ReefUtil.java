@@ -149,6 +149,15 @@ public interface ReefUtil {
             return this.rightBranchFieldRelative;
         }
 
+        public CoralBranch getClosestCoralBranch() {
+            Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
+            double leftBranchDistance = getLeftBranchFieldRelative().getBranchPoseProjectedOntoReefFace().getTranslation().getDistance(robot);
+            double rightBranchDistance = getRightBranchFieldRelative().getBranchPoseProjectedOntoReefFace().getTranslation().getDistance(robot);
+            return leftBranchDistance < rightBranchDistance
+                ? getLeftBranchFieldRelative()
+                : getRightBranchFieldRelative();
+        }
+
         public Pose2d getCorrespondingAprilTagPose() {
             return Robot.isBlue() ? this.correspondingBlueAprilTag.getLocation().toPose2d() : this.correspondingRedAprilTag.getLocation().toPose2d();
         }
