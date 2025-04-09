@@ -87,7 +87,7 @@ public abstract class Shooter extends SubsystemBase {
         return isShootingCoral() || getState() == ShooterState.SHOOT_ALGAE;
     }
 
-    protected boolean isShootingCoral() {
+    public boolean isShootingCoral() {
         return switch (getState()) {
             case SHOOT_CORAL_L1, SHOOT_CORAL_L2_FRONT, SHOOT_CORAL_L2_BACK, SHOOT_CORAL_L3_FRONT, SHOOT_CORAL_L3_BACK, SHOOT_CORAL_AUTON_L4_FRONT, SHOOT_CORAL_L4_FRONT, SHOOT_CORAL_L4_BACK -> true;
             default -> false;

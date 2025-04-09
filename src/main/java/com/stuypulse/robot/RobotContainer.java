@@ -61,6 +61,7 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGolfTeeAlgaePickup;
@@ -180,9 +181,9 @@ public class RobotContainer {
             .onTrue(new ManualShoot())
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed())
-                .onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.isScoringCoral()))
+                .onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_118 || superStructure.isScoringCoral()))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
@@ -255,23 +256,28 @@ public class RobotContainer {
             .onTrue(new ResetTargetReefFaceToClosestReefFace())
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
+                new SuperStructureBarge118(),
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
-                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                    new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false))
-                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
-                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                    new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false))
-                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                () -> swerve.isFrontFacingAllianceReef()))
+                    new ConditionalCommand(
+                        new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
+                            .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                        new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false))
+                            .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                        () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
+                    new ConditionalCommand(
+                        new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
+                            .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                        new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false))
+                            .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                        () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
+                    () -> swerve.isFrontFacingAllianceReef()),
+                () -> shooter.getState() == ShooterState.HOLD_ALGAE
+            ))
             .onFalse(SwerveDriveDynamicObstacles.reset())
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop());
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
+                .andThen(new SuperStructureFeed())
+                .onlyIf(() -> superStructure.getState() != SuperStructureState.BARGE_118))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score
         driver.getRightButton()
@@ -294,7 +300,7 @@ public class RobotContainer {
             .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop());
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score
         driver.getBottomButton()
@@ -317,7 +323,7 @@ public class RobotContainer {
             .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop());
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // Catapult
         driver.getLeftButton()
