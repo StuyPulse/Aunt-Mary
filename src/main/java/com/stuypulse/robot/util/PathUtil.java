@@ -45,23 +45,13 @@ public class PathUtil {
             }
         }
         
-        public AutonConfig registerBlue(SendableChooser<Command> chooser) {
-            chooser.addOption("Blue " + name, auton.apply(loadPaths(paths)));
-            return this;
-        }
-
-        public AutonConfig registerRed(SendableChooser<Command> chooser) {
-            chooser.addOption("Red " + name, auton.apply(loadPaths(paths)));
+        public AutonConfig register(SendableChooser<Command> chooser) {
+            chooser.addOption(name, auton.apply(loadPaths(paths)));
             return this;
         }
                 
-        public AutonConfig registerDefaultBlue(SendableChooser<Command> chooser) {
+        public AutonConfig registerDefault(SendableChooser<Command> chooser) {
             chooser.setDefaultOption("Blue " + name, auton.apply(loadPaths(paths)));
-            return this;
-        }
-
-        public AutonConfig registerDefaultRed(SendableChooser<Command> chooser) {
-            chooser.setDefaultOption("Red " + name, auton.apply(loadPaths(paths)));
             return this;
         }
     }

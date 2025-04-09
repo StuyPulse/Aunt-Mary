@@ -340,45 +340,45 @@ public class RobotContainer {
 
         // AutonConfig FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA", FourPieceIKLA::new,
         // "Blue I to HP");
-        // FOUR_PIECE_IKLA.registerDefaultBlue(autonChooser);
+        // FOUR_PIECE_IKLA.registerDefault(autonChooser);
 
         // AutonConfig CHEATER_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Cheater)", CheaterFourPieceIKLA::new,
         //  "Blue I to HP");
-        //  CHEATER_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        //  CHEATER_FOUR_PIECE_IKLA.register(autonChooser);
 
         AutonConfig PATHFUL_FOUR_PIECE_IKLA = new AutonConfig("4 Piece IKLA (Pathful)", PathfulFourPieceIKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        PATHFUL_FOUR_PIECE_IKLA.registerBlue(autonChooser);
+        PATHFUL_FOUR_PIECE_IKLA.register(autonChooser);
 
         AutonConfig FOUR_PIECE_IKLJ = new AutonConfig("4 Piece IKLJ", FourPieceIKLJ::new,
        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        FOUR_PIECE_IKLJ.registerBlue(autonChooser);
+        FOUR_PIECE_IKLJ.register(autonChooser);
 
         AutonConfig FOUR_PIECE_NUDGE_IKLJ = new AutonConfig("4 Piece Nudge IKLJ", FourPieceNudgeIKLJ::new,
        "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        FOUR_PIECE_NUDGE_IKLJ.registerBlue(autonChooser);
+        FOUR_PIECE_NUDGE_IKLJ.register(autonChooser);
 
         /** BOTTOM AUTONS **/
 
         // AutonConfig FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB", FourPieceFDCB::new,
         // "Blue F to HP");
-        // FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        // FOUR_PIECE_FDCB.register(autonChooser);
 
         AutonConfig FOUR_PIECE_FDCE = new AutonConfig("4 Piece FDCE", FourPieceFDCE::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        FOUR_PIECE_FDCE.registerBlue(autonChooser);
+        FOUR_PIECE_FDCE.register(autonChooser);
 
         AutonConfig FOUR_PIECE_NUDGE_FDCE = new AutonConfig("4 Piece Nudge FDCE", FourPieceNudgeFDCE::new,
         "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        FOUR_PIECE_NUDGE_FDCE.registerBlue(autonChooser);
+        FOUR_PIECE_NUDGE_FDCE.register(autonChooser);
 
         // AutonConfig CHEATER_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Cheater)", CheaterFourPieceFDCB::new,
         //  "Blue F to HP");
-        //  CHEATER_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        //  CHEATER_FOUR_PIECE_FDCB.register(autonChooser);
 
         AutonConfig PATHFUL_FOUR_PIECE_FDCB = new AutonConfig("4 Piece FDCB (Pathful)", PathfulFourPieceFDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        PATHFUL_FOUR_PIECE_FDCB.registerBlue(autonChooser);
+        PATHFUL_FOUR_PIECE_FDCB.register(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 
@@ -386,8 +386,8 @@ public class RobotContainer {
         "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
         // AutonConfig H_THREE_ALGAE = new AutonConfig("1 Piece H + 3 Algae (DONT USE)", OneHThreeAlgae::new,
         // "Blue H BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE.registerBlue(autonChooser);
-        // H_THREE_ALGAE.registerBlue(autonChooser);
+        H_TWO_ALGAE.register(autonChooser);
+        // H_THREE_ALGAE.register(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/
 
@@ -395,8 +395,8 @@ public class RobotContainer {
         "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
         // AutonConfig G_THREE_ALGAE = new AutonConfig("1 Piece G + 3 Algae (DONT USE)", OneGThreeAlgae::new,
         // "Blue G BackOut", "Blue Barge to IJ (1)", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE.registerBlue(autonChooser);
-        // G_THREE_ALGAE.registerBlue(autonChooser);
+        G_TWO_ALGAE.register(autonChooser);
+        // G_THREE_ALGAE.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
