@@ -257,11 +257,11 @@ public class RobotContainer {
         // L2 Coral Score
         driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
-                new TempScoreRoutineL2(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
+                new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
                 new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
                 () -> swerve.isFrontFacingAllianceReef()))
-            // .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-            //     .andThen(new SuperStructureFeed()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
         
         // Catapult
