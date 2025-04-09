@@ -30,7 +30,7 @@ import com.pathplanner.lib.path.PathConstraints;
 public interface Settings {
 
     double DT = 0.020;
-    boolean DEBUG_MODE = true;
+    boolean DEBUG_MODE = false;
     String CANIVORE_NAME = "CANIVORE";
     
     public interface EnabledSubsystems {
