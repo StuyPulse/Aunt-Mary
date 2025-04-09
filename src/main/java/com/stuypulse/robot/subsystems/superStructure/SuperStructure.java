@@ -108,6 +108,10 @@ public class SuperStructure extends SubsystemBase{
         return Arm.getInstance().atCanSkipClearanceAngle() && Elevator.getInstance().atCanSkipClearanceHeight();
     }
 
+    public boolean canSkipClearanceL2() {
+        return Arm.getInstance().atCanSkipClearanceAngleL2() && Elevator.getInstance().atCanSkipClearanceHeightL2();
+    }
+
     public static SuperStructureState getCorrespondingCoralScoreState(int level, boolean isFrontFacingReef) {
         switch (level) {
             case 1:

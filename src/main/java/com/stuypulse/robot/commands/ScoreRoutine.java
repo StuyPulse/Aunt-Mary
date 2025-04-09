@@ -43,7 +43,7 @@ public class ScoreRoutine extends SequentialCommandGroup {
         superStructure = SuperStructure.getInstance();
 
         SuperStructureState correspondingSuperStructureState = SuperStructure.getCorrespondingCoralScoreState(level, isFrontFacingReef);
-
+        
         addCommands(
             new SwerveDriveCoralScoreAlignWithClearance(targetBranch, level, isFrontFacingReef, correspondingSuperStructureState)
                 .alongWith(

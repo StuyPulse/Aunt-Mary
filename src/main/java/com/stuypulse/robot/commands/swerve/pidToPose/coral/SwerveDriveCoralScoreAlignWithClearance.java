@@ -47,7 +47,15 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
         this.level = level;
 
         canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.5));
-
+        if (level == 2) {
+            addCommands(
+            new InstantCommand(() -> this.mode = Mode.CLEAR),
+            new WaitUntilCommand(this::isClearL2).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
+                .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
+                    .withCanEnd(canEnd::get)
+                    .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
+            );
+        } else {
         addCommands(
             new InstantCommand(() -> this.mode = Mode.CLEAR),
             new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
@@ -55,6 +63,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
                     .withCanEnd(canEnd::get)
                     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
         );
+        }
     }
 
     public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState, double maxVel, double maxAccel) {
@@ -88,6 +97,12 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
     private boolean isClear() {
         return SuperStructure.getInstance().getState() == correspondingSuperStructureState
             && SuperStructure.getInstance().canSkipClearance()
+            && branch.get() == ReefUtil.getClosestCoralBranch();
+    }
+
+    private boolean isClearL2() {
+        return SuperStructure.getInstance().getState() == correspondingSuperStructureState
+            && SuperStructure.getInstance().canSkipClearanceL2()
             && branch.get() == ReefUtil.getClosestCoralBranch();
     }
 }

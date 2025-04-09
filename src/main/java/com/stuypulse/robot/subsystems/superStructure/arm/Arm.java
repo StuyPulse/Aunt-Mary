@@ -87,6 +87,7 @@ public abstract class Arm extends SubsystemBase {
     public abstract Rotation2d getCurrentAngle();
     public abstract boolean atTargetAngle();
     public abstract boolean atCanSkipClearanceAngle();
+    public abstract boolean atCanSkipClearanceAngleL2();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
     public abstract double getVoltageOverride();

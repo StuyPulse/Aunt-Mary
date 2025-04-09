@@ -212,6 +212,7 @@ public interface Settings {
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
         double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.2;
+        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE_L2 = 1000;
     }
 
     public interface Arm {
@@ -266,6 +267,7 @@ public interface Settings {
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
         Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(15.0);
+        Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE_L2 = Rotation2d.fromDegrees(10000);
     }
 
     public interface Froggy {

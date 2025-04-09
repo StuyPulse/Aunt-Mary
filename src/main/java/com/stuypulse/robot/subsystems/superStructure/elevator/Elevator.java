@@ -105,6 +105,7 @@ public abstract class Elevator extends SubsystemBase {
     public abstract double getCurrentHeight();
     public abstract boolean atTargetHeight();
     public abstract boolean atCanSkipClearanceHeight();
+    public abstract boolean atCanSkipClearanceHeightL2();
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
 

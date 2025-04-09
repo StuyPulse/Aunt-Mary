@@ -99,6 +99,11 @@ public class ArmImpl extends Arm {
         return isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE_TO_SKIP_CLEARANCE);
     }
 
+    @Override
+    public boolean atCanSkipClearanceAngleL2() {
+        return isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE_TO_SKIP_CLEARANCE_L2);
+    }
+
     private Rotation2d getTargetAngle() {
        return Rotation2d.fromDegrees(
         SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));

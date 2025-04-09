@@ -78,6 +78,11 @@ public class ElevatorImpl extends Elevator {
     }
 
     @Override
+    public boolean atCanSkipClearanceHeightL2() {
+        return isWithinTolerance(Settings.Elevator.HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE_L2);
+    }
+
+    @Override
     public void setVoltageOverride(Optional<Double> voltage) {
         this.voltageOverride = voltage;
     }
