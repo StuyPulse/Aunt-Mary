@@ -39,9 +39,6 @@ public interface Gains {
                 double kP = 0.4 * 360;
                 double kI = 0.0 * 360;
                 double kD = 0.032 * 360;
-                // double kP = 0.15744 * 360;
-                // double kI = 0.0 * 360;
-                // double kD = 0.015 * 360;
             }
 
             public interface FF {
@@ -54,7 +51,7 @@ public interface Gains {
 
         public interface AlgaeCatapult  {
             public interface PID {
-                double kP = 0.095744 * 360;
+                double kP = 0.15744 * 360;
                 double kI = 0.0 * 360;
                 double kD = 0.015 * 360;
             }
