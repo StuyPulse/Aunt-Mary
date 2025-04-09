@@ -334,11 +334,13 @@ public class RobotContainer {
         // Align to closest Coral Station
         driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
                 .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
                 .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-                .onlyIf(() -> !shooter.hasCoral()));
+                .onlyIf(() -> !shooter.hasCoral()))
+            .onFalse(SwerveDriveDynamicObstacles.reset());
 
         // Align to closest Coral Station without path finding
         // driver.getRightStickButton()
