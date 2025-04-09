@@ -291,12 +291,12 @@ public class RobotContainer {
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
 
-        // Acquire closest reef algae front only
+        // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(
                 new ReefAlgaePickupRoutineFront(),
                 new ReefAlgaePickupRoutineBack(),
-                () -> swerve.isFrontFacingAllianceReef()))
+                () -> ((swerve.isOnAllianceSide() && swerve.isFrontFacingAllianceReef()) || (!swerve.isOnAllianceSide() && swerve.isFrontFacingOppositeAllianceReef()))))
             .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))

@@ -340,14 +340,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
-    public double getRobotRelativeXAccelGs() {
-        return getPigeon2().getAccelerationY().getValueAsDouble();
-    }
-
-    public double getRobotRelativeYAccelGs() {
-        return -getPigeon2().getAccelerationX().getValueAsDouble();
-    }
-
     public void configureAutoBuilder() {
         try{
             AutoBuilder.configure(
@@ -405,6 +397,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
         setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vxMetersPerSecond).withVelocityY(robotSpeeds.vyMetersPerSecond).withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
+    }
+
+    public boolean isOnAllianceSide() {
+        return getPose().getX() <= Field.LENGTH / 2;
     }
 
     public boolean isFrontFacingAllianceReef() {
@@ -475,9 +471,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
     
             SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
-
-            SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel x (g)", getRobotRelativeXAccelGs());
-            SmartDashboard.putNumber("Swerve/Gyro/Robot Relative Accel y (g)", getRobotRelativeYAccelGs());
 
             SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
             SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());
