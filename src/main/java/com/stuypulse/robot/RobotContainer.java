@@ -239,7 +239,8 @@ public class RobotContainer {
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
                         .andThen(new FroggyRollerShootCoral())), 
                 () -> shooter.hasCoral()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1))
+            .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
         // Reef face switching CW
         driver.getLeftBumper().and(() -> driverIsClickingCoralBranchScoreButton())
