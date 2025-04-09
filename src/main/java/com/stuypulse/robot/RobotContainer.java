@@ -273,7 +273,7 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         // L3 Coral Score
-        driver.getTopButton()
+        driver.getRightButton()
             .onTrue(new ResetTargetReefFaceToClosestReefFace())
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
@@ -296,7 +296,7 @@ public class RobotContainer {
             .onFalse(new ShooterStop());
 
         // L2 Coral Score
-        driver.getTopButton()
+        driver.getBottomButton()
             .onTrue(new ResetTargetReefFaceToClosestReefFace())
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
