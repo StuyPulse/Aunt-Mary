@@ -50,6 +50,7 @@ import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
+import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
 import com.stuypulse.robot.commands.shooter.ShooterShootL1;
@@ -177,12 +178,9 @@ public class RobotContainer {
             .onTrue(new ManualShoot())
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
-            .onFalse(new ConditionalCommand(
-                new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR), 
-                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                    .andThen(new SuperStructureFeed())
-                    .onlyIf(() -> superStructure.isScoringCoral()), 
-                () -> superStructure.getState() == SuperStructureState.PROCESSOR))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed())
+                .onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.isScoringCoral()))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
@@ -336,6 +334,7 @@ public class RobotContainer {
         driver.getRightStickButton()
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
+            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
             .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
                 .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
                 .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
@@ -345,6 +344,7 @@ public class RobotContainer {
 
         // Align to closest Coral Station without path finding
         // driver.getRightStickButton()
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
         //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
         //     .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
         //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
