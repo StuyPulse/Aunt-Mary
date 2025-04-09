@@ -178,7 +178,7 @@ public class RobotContainer {
                 () -> superStructure.getState() == SuperStructureState.PROCESSOR))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
-            .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
+            .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow()));
 
         // ground algae intake and reset
@@ -213,7 +213,9 @@ public class RobotContainer {
                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
                     .andThen(new FroggyPivotToL1()), 
                 () -> shooter.hasCoral()))
-            .onFalse(new FroggyPivotToStow().alongWith(new FroggyRollerStop()).onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+                .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
+                .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1));
         
         driver.getRightBumper().debounce(0.25)
