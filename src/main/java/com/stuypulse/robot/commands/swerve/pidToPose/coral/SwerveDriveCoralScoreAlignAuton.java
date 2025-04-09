@@ -19,13 +19,7 @@ import java.util.function.Supplier;
 
 public class SwerveDriveCoralScoreAlignAuton extends SequentialCommandGroup {
 
-    private final ElevatorState correspondingElevatorState;
-    private final ArmState correspondingArmState;
-
     public SwerveDriveCoralScoreAlignAuton(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, ElevatorState correspondingElevatorState, ArmState correspondingArmState, double timeout) {
-        this.correspondingElevatorState = correspondingElevatorState;
-        this.correspondingArmState = correspondingArmState;
-
         addCommands(
             new SwerveDrivePIDToBranchScore(branch::get, level, isScoringFrontSide)
                 .withTranslationalConstraints(Settings.Swerve.Alignment.Constraints.MAX_VELOCITY_AUTON, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
