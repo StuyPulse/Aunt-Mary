@@ -255,14 +255,14 @@ public class RobotContainer {
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.k180deg)))
-                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace() || driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
+                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                     new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false))
                         .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
                     () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero)))
-                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace() || driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
+                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                     new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false))
                         .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
                     () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
@@ -278,14 +278,14 @@ public class RobotContainer {
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.k180deg)))
-                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace() || driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
+                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                     new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false))
                         .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
                     () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero)))
-                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace() || driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
+                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                     new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false))
                         .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
                     () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
@@ -301,14 +301,14 @@ public class RobotContainer {
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.k180deg)))
-                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace() || driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
+                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                     new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false))
                         .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
                     () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
                 new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero)))
-                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace() || driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
+                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
+                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                     new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false))
                         .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
                     () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
