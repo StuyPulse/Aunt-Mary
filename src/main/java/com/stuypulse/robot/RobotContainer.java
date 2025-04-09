@@ -15,6 +15,7 @@ import com.stuypulse.robot.commands.ManualShoot;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineBack;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.Reset;
+import com.stuypulse.robot.commands.ResetTargetReefFaceToClosestReefFace;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCE;
@@ -67,6 +68,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDriveDynamicObstacles;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
@@ -75,6 +77,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClose
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
+import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -96,12 +99,16 @@ import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.robot.util.TargetReefFaceManager;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -182,7 +189,7 @@ public class RobotContainer {
                 .andThen(new FroggyPivotToStow()));
 
         // ground algae intake and reset
-        driver.getLeftTriggerButton()
+        driver.getLeftTriggerButton().and(() -> !driverIsClickingCoralBranchScoreButton()) // so that driver doesnt accidently fat finger trigger when trying to switch reef face
             .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .onTrue(new FroggyRollerIntakeAlgae())
@@ -190,14 +197,14 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Froggy golf tee algae pickup
-        driver.getLeftBumper()
+        driver.getLeftBumper().and(() -> !driverIsClickingCoralBranchScoreButton())
             .onTrue(new FroggyPivotToGolfTeeAlgaePickup())
             .onTrue(new FroggyRollerIntakeAlgae())
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
-        driver.getRightTriggerButton()
+        driver.getRightTriggerButton().and(() -> !driverIsClickingCoralBranchScoreButton()) // so that driver doesnt accidently fat finger trigger when trying to switch reef face
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
                 .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
@@ -205,7 +212,7 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldCoral()); 
 
         // L1
-        driver.getRightBumper()
+        driver.getRightBumper().and(() -> !driverIsClickingCoralBranchScoreButton())
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
@@ -218,7 +225,7 @@ public class RobotContainer {
                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1));
         
-        driver.getRightBumper().debounce(0.25)
+        driver.getRightBumper().and(() -> !driverIsClickingCoralBranchScoreButton()).debounce(0.25)
             .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
                 .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1))
             .whileTrue(new ConditionalCommand(
@@ -234,32 +241,79 @@ public class RobotContainer {
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1));
 
+        // Reef face switching CW
+        driver.getLeftBumper().and(() -> driverIsClickingCoralBranchScoreButton())
+            .onTrue(new InstantCommand(() -> TargetReefFaceManager.rotateTargetReefFaceCCWBy(-1)));
+
+        // Reef face switching CCW
+        driver.getRightBumper().and(() -> driverIsClickingCoralBranchScoreButton())
+            .onTrue(new InstantCommand(() -> TargetReefFaceManager.rotateTargetReefFaceCCWBy(1)));
+
         // L4 Coral Score
         driver.getTopButton()
+            .onTrue(new ResetTargetReefFaceToClosestReefFace())
+            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false)),
-                new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false)),
+                new ConditionalCommand(
+                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.k180deg)))
+                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace()), 
+                    new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false))
+                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
+                new ConditionalCommand(
+                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero)))
+                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace()), 
+                    new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false))
+                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
                 () -> swerve.isFrontFacingAllianceReef()))
+            .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
 
         // L3 Coral Score
-        driver.getRightButton()
+        driver.getTopButton()
+            .onTrue(new ResetTargetReefFaceToClosestReefFace())
+            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false)),
-                new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false)),
+                new ConditionalCommand(
+                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.k180deg)))
+                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace()), 
+                    new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false))
+                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
+                new ConditionalCommand(
+                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero)))
+                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace()), 
+                    new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false))
+                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
                 () -> swerve.isFrontFacingAllianceReef()))
+            .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
 
         // L2 Coral Score
-        driver.getBottomButton()
+        driver.getTopButton()
+            .onTrue(new ResetTargetReefFaceToClosestReefFace())
+            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false)),
-                new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false)), 
+                new ConditionalCommand(
+                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.k180deg)))
+                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace()), 
+                    new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false))
+                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
+                new ConditionalCommand(
+                    new SwerveDrivePathFindToPose(() -> TargetReefFaceManager.getTargetReefFace().getCorrespondingAprilTagPose().transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero)))
+                        .until(() -> ReefUtil.getClosestReefFace() == TargetReefFaceManager.getTargetReefFace()), 
+                    new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false))
+                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
+                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
                 () -> swerve.isFrontFacingAllianceReef()))
+            .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop());
@@ -330,6 +384,10 @@ public class RobotContainer {
             .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
+    }
+
+    private boolean driverIsClickingCoralBranchScoreButton() {
+        return driver.getTopButton().getAsBoolean() || driver.getRightButton().getAsBoolean() || driver.getBottomButton().getAsBoolean();
     }
 
     /**************/
