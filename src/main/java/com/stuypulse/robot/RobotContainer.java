@@ -307,24 +307,24 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
-        driver.getRightStickButton()
-            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
-            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-            .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-                .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
-                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-                .onlyIf(() -> !shooter.hasCoral()))
-            .onFalse(SwerveDriveDynamicObstacles.reset());
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .onTrue(SwerveDriveDynamicObstacles.reefClearance())
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()))
+        //     .onFalse(SwerveDriveDynamicObstacles.reset());
 
         // Align to closest Coral Station without path finding
-        // driver.getRightStickButton()
-        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-        //     .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
-        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-        //         .onlyIf(() -> !shooter.hasCoral()));
+        driver.getRightStickButton()
+            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+                .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire closest reef algae
         driver.getDPadLeft()
