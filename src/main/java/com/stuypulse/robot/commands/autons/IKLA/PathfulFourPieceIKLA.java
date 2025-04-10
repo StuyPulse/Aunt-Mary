@@ -44,7 +44,7 @@ public class PathfulFourPieceIKLA extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score K
@@ -74,7 +74,7 @@ public class PathfulFourPieceIKLA extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score L
@@ -103,7 +103,7 @@ public class PathfulFourPieceIKLA extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
            // To HP, Score A
@@ -134,7 +134,7 @@ public class PathfulFourPieceIKLA extends SequentialCommandGroup {
             ),
 
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])

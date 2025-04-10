@@ -44,7 +44,7 @@ public class PathfulFourPieceFDCB extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score D
@@ -74,7 +74,7 @@ public class PathfulFourPieceFDCB extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score C
@@ -103,7 +103,7 @@ public class PathfulFourPieceFDCB extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
            // To HP, Score B
@@ -134,7 +134,7 @@ public class PathfulFourPieceFDCB extends SequentialCommandGroup {
             ),
 
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
             
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])

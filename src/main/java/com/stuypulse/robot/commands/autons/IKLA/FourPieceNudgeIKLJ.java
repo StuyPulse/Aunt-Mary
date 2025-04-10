@@ -47,7 +47,7 @@ public class FourPieceNudgeIKLJ extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score K
@@ -77,7 +77,7 @@ public class FourPieceNudgeIKLJ extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score L
@@ -106,7 +106,7 @@ public class FourPieceNudgeIKLJ extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
            // To HP, Score J
@@ -137,7 +137,7 @@ public class FourPieceNudgeIKLJ extends SequentialCommandGroup {
             ),
 
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4])

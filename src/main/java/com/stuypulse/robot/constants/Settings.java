@@ -149,6 +149,8 @@ public interface Settings {
         double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
+        
+        double CORAL_SHOOT_TIME_AUTON = 0.15;
 
         double CORAL_ACQUIRE_SPEED = 0.17;
         double ALGAE_ACQUIRE_SPEED = -1.0;

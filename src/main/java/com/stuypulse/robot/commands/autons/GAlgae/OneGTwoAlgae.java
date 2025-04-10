@@ -55,7 +55,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.15),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // Acquire GH Algae, Score on Barge
