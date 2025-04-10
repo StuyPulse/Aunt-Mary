@@ -16,6 +16,7 @@ import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,14 +31,14 @@ public class Robot extends TimedRobot {
         TEST
     }
 
+    private static Alliance alliance;
     private static RobotMode mode;
 
     private RobotContainer robot;
     private Command auto;
 
     public static boolean isBlue() {
-        return DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+        return alliance == Alliance.Blue;
     }
 
     public static RobotMode getMode() {
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         robot = new RobotContainer();
         mode = RobotMode.DISABLED;
+        alliance = Alliance.Blue; //DEFAULT VALUE
 
         DataLogManager.start();
         SignalLogger.start();
@@ -68,6 +70,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        if (DriverStation.getAlliance().isPresent()) {
+            alliance = DriverStation.getAlliance().get();
+        }
 
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     }
