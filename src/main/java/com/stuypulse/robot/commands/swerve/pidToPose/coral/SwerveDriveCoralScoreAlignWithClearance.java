@@ -56,7 +56,8 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
             new InstantCommand(() -> this.mode = Mode.CLEAR),
             new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
                 .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
-                    .withTranslationalConstraints(maxVel, maxAccel)
+                    .withoutMotionProfile()
+                    // .withTranslationalConstraints(maxVel, maxAccel)
                     .withCanEnd(canEnd::get)
                     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
         );
