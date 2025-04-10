@@ -18,6 +18,7 @@ import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ResetTargetReefFaceToClosestReefFace;
 import com.stuypulse.robot.commands.ScoreRoutine;
+import com.stuypulse.robot.commands.ScoreRoutineWithReefFaceSwitching;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceFDCE;
 import com.stuypulse.robot.commands.autons.FDCB.FourPieceNudgeFDCE;
@@ -264,20 +265,7 @@ public class RobotContainer {
                     .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
                         .andThen(new SuperStructureBarge118())),
-                new ConditionalCommand(
-                    new ConditionalCommand(
-                        new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
-                            .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                        new ScoreRoutine(driver, 4, true).alongWith(new WaitUntilCommand(() -> false))
-                            .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                        () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                    new ConditionalCommand(
-                        new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
-                            .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                        new ScoreRoutine(driver, 4, false).alongWith(new WaitUntilCommand(() -> false))
-                            .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                        () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                    () -> swerve.isFrontFacingAllianceReef()),
+                new ScoreRoutineWithReefFaceSwitching(driver, 4),
                 () -> shooter.getState() == ShooterState.HOLD_ALGAE
             ))
             .onFalse(SwerveDriveDynamicObstacles.reset())
@@ -289,20 +277,7 @@ public class RobotContainer {
         driver.getRightButton()
             .onTrue(new ResetTargetReefFaceToClosestReefFace())
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
-            .whileTrue(new ConditionalCommand(
-                new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
-                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                    new ScoreRoutine(driver, 3, true).alongWith(new WaitUntilCommand(() -> false))
-                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
-                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                    new ScoreRoutine(driver, 3, false).alongWith(new WaitUntilCommand(() -> false))
-                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                () -> swerve.isFrontFacingAllianceReef()))
+            .whileTrue(new ScoreRoutineWithReefFaceSwitching(driver, 3))
             .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
@@ -312,20 +287,7 @@ public class RobotContainer {
         driver.getBottomButton()
             .onTrue(new ResetTargetReefFaceToClosestReefFace())
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
-            .whileTrue(new ConditionalCommand(
-                new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
-                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                    new ScoreRoutine(driver, 2, true).alongWith(new WaitUntilCommand(() -> false))
-                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                new ConditionalCommand(
-                    new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, false))
-                        .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
-                    new ScoreRoutine(driver, 2, false).alongWith(new WaitUntilCommand(() -> false))
-                        .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
-                    () -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()).repeatedly(),
-                () -> swerve.isFrontFacingAllianceReef()))
+            .whileTrue(new ScoreRoutineWithReefFaceSwitching(driver, 2))
             .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))

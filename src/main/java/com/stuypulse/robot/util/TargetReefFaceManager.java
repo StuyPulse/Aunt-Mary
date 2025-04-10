@@ -10,39 +10,29 @@ import edu.wpi.first.math.geometry.Pose2d;
 
 public class TargetReefFaceManager {
     private static ReefFace startingTargetReefFace;
-    private static Offset offset; // Field relative
-
-    enum Offset {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
+    private static int offset;
 
     static {
         // Default values
         startingTargetReefFace = ReefFace.AB;
-        offset = Offset.CENTER;
+        offset = 0;
     }
 
     public static void reset(ReefFace startingTargetReefFace) {
         TargetReefFaceManager.startingTargetReefFace = startingTargetReefFace;
-        offset = Offset.CENTER;
+        offset = 0;
     }
 
     public static void offsetLeft() {
-        int index = offset.ordinal() - 1;
-        index = index < 0 ? 0 : index;
-        offset = Offset.values()[index];
+        offset--;
     }
 
     public static void offsetRight() {
-        int index = offset.ordinal() + 1;
-        index = index > 2 ? 2 : index;
-        offset = Offset.values()[index];
+        offset++;
     }
 
     public static ReefFace getTargetReefFace() {
-        int ccwRotation = offset.ordinal() - 1;
+        int ccwRotation = offset;
         if (!startingTargetReefFace.isOnDriverStationSide()) {
             ccwRotation *= -1;
         }
