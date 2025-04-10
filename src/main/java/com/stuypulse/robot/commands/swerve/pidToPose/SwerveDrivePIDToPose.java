@@ -45,6 +45,8 @@ public class SwerveDrivePIDToPose extends Command {
     private double maxVelocity;
     private double maxAcceleration;
 
+    private boolean isMotionProfiled;
+
     private final BStream isAligned;
     private final IStream velocityError;
 
@@ -75,6 +77,7 @@ public class SwerveDrivePIDToPose extends Command {
         maxVelocity = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY;
         maxAcceleration = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION;
 
+        isMotionProfiled = true;
         translationSetpoint = getNewTranslationSetpointGenerator();
 
         this.targetPose = targetPose;
@@ -112,7 +115,7 @@ public class SwerveDrivePIDToPose extends Command {
     }
 
     public SwerveDrivePIDToPose withoutMotionProfile() {
-        this.translationSetpoint = VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        this.isMotionProfiled = false;
         return this;
     }
 
@@ -123,12 +126,17 @@ public class SwerveDrivePIDToPose extends Command {
 
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
     private VStream getNewTranslationSetpointGenerator() {
-        return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
-            .filtered(new TranslationMotionProfileIan(
-                this.maxVelocity, 
-                this.maxAcceleration,
-                new Vector2D(swerve.getPose().getTranslation()),
-                Vector2D.kOrigin));
+        if (!isMotionProfiled) {
+            return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        }
+        else {
+            return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
+                .filtered(new TranslationMotionProfileIan(
+                    this.maxVelocity, 
+                    this.maxAcceleration,
+                    new Vector2D(swerve.getPose().getTranslation()),
+                    Vector2D.kOrigin));
+        }
     }
 
     @Override
