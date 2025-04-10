@@ -9,6 +9,13 @@ package com.stuypulse.robot.subsystems.superStructure;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Back;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Back;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Front;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Back;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
@@ -17,6 +24,7 @@ import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SuperStructure extends SubsystemBase{
@@ -122,6 +130,21 @@ public class SuperStructure extends SubsystemBase{
                 return isFrontFacingReef ? SuperStructureState.L4_FRONT : SuperStructureState.L4_BACK;
             default:
                 return SuperStructureState.L1;
+        }
+    }
+
+    public static Command getCorrespondingCoralScoreStateCommand(int level, boolean isFrontFacingReef) {
+        switch (level) {
+            case 1:
+                return new SuperStructureCoralL1();
+            case 2:
+                return isFrontFacingReef ? new SuperStructureCoralL2Front() : new SuperStructureCoralL2Back();
+            case 3:
+                return isFrontFacingReef ? new SuperStructureCoralL3Front() : new SuperStructureCoralL3Back();
+            case 4:
+                return isFrontFacingReef ? new SuperStructureCoralL4Front() : new SuperStructureCoralL4Back();
+            default:
+                return new SuperStructureCoralL1();
         }
     }
 

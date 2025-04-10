@@ -39,7 +39,7 @@ public class TargetReefFaceManager {
         return startingTargetReefFace.rotateCCW(ccwRotation);
     }
 
-    public static Supplier<Pose2d> getPoseSupplierWithDriverInput(Gamepad driver, boolean isScoringFrontSide) {
+    public static Supplier<Pose2d> getClearancePoseSupplierWithDriverInput(Gamepad driver, boolean isScoringFrontSide) {
         return () -> {
             if (driver.getLeftX() > Settings.Driver.BRANCH_OVERRIDE_DEADBAND) {
                 return getTargetReefFace().getRightBranchFieldRelative().getClearancePose(isScoringFrontSide);
