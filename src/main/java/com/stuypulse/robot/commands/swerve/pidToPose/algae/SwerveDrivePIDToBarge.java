@@ -13,6 +13,6 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class SwerveDrivePIDToBarge extends SwerveDrivePIDToPose {
     public SwerveDrivePIDToBarge() {
-        super(() -> Field.getCatapultTargetPose(CommandSwerveDrivetrain.getInstance().getPose()));
+        super(() -> Field.getCatapultTargetPoseA(CommandSwerveDrivetrain.getInstance().getPose()));
     }
 }
