@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
             PortForwarder.add(port+10, "10.6.94.12", port);
         }
 
-        PathfindingCommand.warmupCommand().schedule();
+        // PathfindingCommand.warmupCommand().schedule();
     }
 
     @Override
