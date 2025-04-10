@@ -39,7 +39,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
             // Score Preload on F
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
-                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
+                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
                     .withTimeout(2)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()

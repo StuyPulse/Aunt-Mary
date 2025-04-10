@@ -42,7 +42,6 @@ public abstract class Elevator extends SubsystemBase {
         L2_FRONT(Settings.Elevator.FRONT_L2_HEIGHT_METERS),
         L3_FRONT(Settings.Elevator.FRONT_L3_HEIGHT_METERS),
         L4_FRONT(Settings.Elevator.FRONT_L4_HEIGHT_METERS),
-        L4_FRONT_AUTON(Settings.Elevator.FRONT_L4_AUTON_HEIGHT_METERS),
         L2_BACK(Settings.Elevator.BACK_L2_HEIGHT_METERS),
         L3_BACK(Settings.Elevator.BACK_L3_HEIGHT_METERS),
         L4_BACK(Settings.Elevator.BACK_L4_HEIGHT_METERS),

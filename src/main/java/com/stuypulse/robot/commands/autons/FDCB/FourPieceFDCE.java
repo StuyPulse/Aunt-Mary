@@ -8,7 +8,6 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
-import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4FrontAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
@@ -38,7 +37,7 @@ public class FourPieceFDCE extends SequentialCommandGroup {
             // Score Preload on F
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
-                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
+                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
                     .withTimeout(1.75)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()

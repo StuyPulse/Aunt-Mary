@@ -81,9 +81,6 @@ public interface Settings {
                 double DEFAULT_MAX_ACCELERATION = 15.0;
                 double DEFUALT_MAX_ANGULAR_VELOCITY = Units.degreesToRadians(400);
                 double DEFAULT_MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(900);
-
-                double MAX_VELOCITY_AUTON = 5.85;
-                double MAX_ACCELERATION_AUTON = 17;
             }
 
             public interface Tolerances {
@@ -187,7 +184,6 @@ public interface Settings {
         double FRONT_L2_HEIGHT_METERS = 1.57586;
         double FRONT_L3_HEIGHT_METERS = 1.0566;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
-        double FRONT_L4_AUTON_HEIGHT_METERS = 1.685791;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
         double BACK_L3_HEIGHT_METERS = 1.077109;
@@ -223,8 +219,6 @@ public interface Settings {
     public interface Arm {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
-
-        Rotation2d AUTON_L4_ANGLE_FRONT = Rotation2d.fromDegrees(86.044922); 
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);

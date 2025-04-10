@@ -48,7 +48,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
             // Score Preload on G
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.G, 4, true)
-                    .withTranslationalConstraints(2, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
+                    .withTranslationalConstraints(2, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
                     .withTimeout(3)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
