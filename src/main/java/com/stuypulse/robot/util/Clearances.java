@@ -27,7 +27,7 @@ public interface Clearances {
     }
 
     public static boolean isArmClearFromBarge() {
-        return Math.abs(Field.LENGTH / 2 - CommandSwerveDrivetrain.getInstance().getPose().getX()) >= Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118;
+        return Math.abs(Field.LENGTH / 2 - CommandSwerveDrivetrain.getInstance().getPose().getX()) >= (Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 - Settings.Swerve.Alignment.Tolerances.X_TOLERANCE_BARGE);
     }
 
     private static boolean isArmClearFromOppositeAllianceReef() {
