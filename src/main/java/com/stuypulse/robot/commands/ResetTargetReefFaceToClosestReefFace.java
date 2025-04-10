@@ -7,6 +7,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ResetTargetReefFaceToClosestReefFace extends InstantCommand {
     public ResetTargetReefFaceToClosestReefFace() {
-        super(() -> TargetReefFaceManager.setTargetReefFace(ReefUtil.getClosestReefFace()));
+        super(() -> TargetReefFaceManager.reset(ReefUtil.getClosestReefFace()));
     }
 }

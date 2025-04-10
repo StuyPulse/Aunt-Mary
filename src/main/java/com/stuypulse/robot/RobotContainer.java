@@ -248,11 +248,11 @@ public class RobotContainer {
 
         // Reef face switching CW
         driver.getLeftBumper().and(() -> driverIsClickingCoralBranchScoreButton())
-            .onTrue(new InstantCommand(() -> TargetReefFaceManager.rotateTargetReefFaceCCWBy(-1)));
+            .onTrue(new InstantCommand(() -> TargetReefFaceManager.offsetLeft()));
 
         // Reef face switching CCW
         driver.getRightBumper().and(() -> driverIsClickingCoralBranchScoreButton())
-            .onTrue(new InstantCommand(() -> TargetReefFaceManager.rotateTargetReefFaceCCWBy(1)));
+            .onTrue(new InstantCommand(() -> TargetReefFaceManager.offsetRight()));
 
         // L4 Coral Score
         driver.getTopButton()
