@@ -11,6 +11,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import com.stuypulse.robot.commands.BuzzController;
+import com.stuypulse.robot.commands.DoNothingCommand;
 import com.stuypulse.robot.commands.ManualShoot;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineBack;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
@@ -411,6 +412,8 @@ public class RobotContainer {
     /**************/
 
     public void configureAutons() {
+
+        autonChooser.addOption("Do Nothing", new DoNothingCommand());
 
         /** TOP AUTONS **/
 
