@@ -175,7 +175,6 @@ public interface Field {
     }
 
     public static Pose2d getCatapultTargetPoseA(Pose2d robot) {
-        Rotation2d offsetRotation = Rotation2d.fromDegrees(30); // change this to any angle you want
     
         if (Robot.isBlue()) {
             Rotation2d baseRotation = NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d();
@@ -183,7 +182,7 @@ public interface Field {
                 new Translation2d(
                     Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                     Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO),
-                baseRotation.plus(offsetRotation)
+                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
             );
         } else {
             Rotation2d baseRotation = NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d();
@@ -191,7 +190,7 @@ public interface Field {
                 new Translation2d(
                     Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                     Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO),
-                baseRotation.plus(offsetRotation)
+                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
             );
         }
     }
