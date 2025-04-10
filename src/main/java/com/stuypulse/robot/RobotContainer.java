@@ -219,7 +219,8 @@ public class RobotContainer {
                 //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
                 //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
                 //             .andThen(new ShooterShootL1()))),
-                new ScoreRoutine(1, false),
+                new ScoreRoutine(1, false)
+                    .andThen(new WaitUntilCommand(() -> !shooter.hasCoral())),
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()

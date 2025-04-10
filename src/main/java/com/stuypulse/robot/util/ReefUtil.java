@@ -74,7 +74,7 @@ public interface ReefUtil {
                     throw new IllegalArgumentException("Branch level provided to CoralBranch.getScorePose() was invalid. Should be in range [2,4]");
             }
 
-            return (level == 1) ? 
+            return (level != 1) ? 
                 getCorrespondingAprilTagPose().transformBy(
                     new Transform2d(
                         Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 

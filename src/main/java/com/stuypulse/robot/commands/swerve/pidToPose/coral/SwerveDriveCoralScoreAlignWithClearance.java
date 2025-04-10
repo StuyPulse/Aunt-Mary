@@ -64,7 +64,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
     private Pose2d getTargetPose() {
         if (mode == Mode.CLEAR) {
-            return branch.get().getClearancePose(isScoringFrontSide);
+            return (level != 1) ? branch.get().getClearancePose(isScoringFrontSide) : branch.get().getL1ClearancePose();
         }
         else {
             return branch.get().getScorePose(level, isScoringFrontSide);
