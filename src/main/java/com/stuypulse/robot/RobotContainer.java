@@ -71,6 +71,8 @@ import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
+import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDriveDynamicObstacles;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
@@ -256,7 +258,11 @@ public class RobotContainer {
             .onTrue(new ResetTargetReefFaceToClosestReefFace())
             .onTrue(SwerveDriveDynamicObstacles.reefClearance())
             .whileTrue(new ConditionalCommand(
-                new SuperStructureBarge118(),
+                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
+                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
+                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+                        .andThen(new SuperStructureBarge118())),
                 new ConditionalCommand(
                     new ConditionalCommand(
                         new SwerveDrivePathFindToPose(TargetReefFaceManager.getPoseSupplierWithDriverInput(driver, true))
@@ -275,8 +281,7 @@ public class RobotContainer {
             ))
             .onFalse(SwerveDriveDynamicObstacles.reset())
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
-                .andThen(new SuperStructureFeed())
-                .onlyIf(() -> superStructure.getState() != SuperStructureState.BARGE_118))
+                .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score
