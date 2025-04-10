@@ -106,7 +106,7 @@ public interface Settings {
 
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
-                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
+                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = Units.inchesToMeters(4);
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.01;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);

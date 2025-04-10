@@ -156,7 +156,7 @@ public interface Field {
     Translation2d ALLIANCE_REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + (93.5 - 14.0 * 2) / 2), Field.WIDTH / 2);
     Translation2d OPPOSITE_ALLIANCE_REEF_CENTER = transformToOppositeAlliance(ALLIANCE_REEF_CENTER);
     double LENGTH_OF_REEF_FACE = Units.inchesToMeters(37.04);
-    double CENTER_OF_REEF_TO_L1_CORNER = Units.inchesToMeters(37.04/2);
+    double CENTER_OF_REEF_TO_L1_CORNER = LENGTH_OF_REEF_FACE / 2 - Units.inchesToMeters(5);
     double CENTER_OF_REEF_TO_REEF_FACE = Units.inchesToMeters(32.75);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 

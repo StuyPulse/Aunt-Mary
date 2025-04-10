@@ -212,15 +212,14 @@ public class RobotContainer {
         
         driver.getRightBumper().debounce(0.25)
             .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
-                .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1))
+                .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1 || froggy.getRollerState() == RollerState.SHOOT_CORAL))
             .whileTrue(new ConditionalCommand(
                 // new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
                 //     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
                 //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
                 //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
                 //             .andThen(new ShooterShootL1()))),
-                new ScoreRoutine(1, false)
-                    .andThen(new WaitUntilCommand(() -> !shooter.hasCoral())),
+                new ScoreRoutine(driver, 1, false).until(() -> false),
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
@@ -238,8 +237,8 @@ public class RobotContainer {
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
                         .andThen(new SuperStructureBarge118())),
                 new ConditionalCommand(
-                    new ScoreRoutine(driver, 4, true),
-                    new ScoreRoutine(driver, 4, false), 
+                    new ScoreRoutine(driver, 4, true).until(() -> false),
+                    new ScoreRoutine(driver, 4, false).until(() -> false), 
                     () -> swerve.isFrontFacingAllianceReef()),
                 () -> shooter.getState() == ShooterState.HOLD_ALGAE
             ))
@@ -250,8 +249,8 @@ public class RobotContainer {
         // L3 Coral Score
         driver.getRightButton()
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 3, true),
-                new ScoreRoutine(driver, 3, false), 
+                new ScoreRoutine(driver, 3, true).until(() -> false),
+                new ScoreRoutine(driver, 3, false).until(() -> false), 
                 () -> swerve.isFrontFacingAllianceReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
@@ -260,8 +259,8 @@ public class RobotContainer {
         // L2 Coral Score
         driver.getBottomButton()
             .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 2, true),
-                new ScoreRoutine(driver, 2, false), 
+                new ScoreRoutine(driver, 2, true).until(() -> false),
+                new ScoreRoutine(driver, 2, false).until(() -> false), 
                 () -> swerve.isFrontFacingAllianceReef()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureFeed()))
