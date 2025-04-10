@@ -214,11 +214,13 @@ public class RobotContainer {
             .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
                 .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1))
             .whileTrue(new ConditionalCommand(
-                new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
-                    .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
-                    .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
-                        .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
-                            .andThen(new ShooterShootL1()))),
+                // new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
+                //     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
+                //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
+                //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
+                //             .andThen(new ShooterShootL1()))),
+                new ScoreRoutine(1, false)
+                    .andThen(new WaitUntilCommand(() -> !shooter.hasCoral())),
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore()
