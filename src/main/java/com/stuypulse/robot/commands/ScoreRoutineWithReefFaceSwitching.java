@@ -1,7 +1,9 @@
 package com.stuypulse.robot.commands;
 
+import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.superStructure.SuperStructure;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.Clearances;
@@ -17,11 +19,12 @@ public class ScoreRoutineWithReefFaceSwitching extends ConditionalCommand{
         super(new ConditionalCommand(
                 new SwerveDrivePathFindToPose(TargetReefFaceManager.getClearancePoseSupplierWithDriverInput(driver, true))
                     .deadlineFor(new ConditionalCommand(
-                        SuperStructure.getCorrespondingCoralScoreStateCommand(level, true), 
+                        SuperStructure.getCorrespondingCoralScoreStateCommand(level, true).onlyIf(() -> Shooter.getInstance().hasCoral()), 
                         new SuperStructureFeed(), 
                         () -> TargetReefFaceManager.getTargetReefFace() == ReefUtil.getClosestReefFace())
                         .onlyIf(() -> Clearances.isArmClearFromReef())
                         .repeatedly())
+                    .alongWith(new ShooterAcquireCoral())
                     .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                 new ScoreRoutine(driver, level, true).alongWith(new WaitUntilCommand(() -> false))
                     .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
@@ -29,11 +32,12 @@ public class ScoreRoutineWithReefFaceSwitching extends ConditionalCommand{
             new ConditionalCommand(
                 new SwerveDrivePathFindToPose(TargetReefFaceManager.getClearancePoseSupplierWithDriverInput(driver, false))
                     .deadlineFor(new ConditionalCommand(
-                        SuperStructure.getCorrespondingCoralScoreStateCommand(level, true), 
+                        SuperStructure.getCorrespondingCoralScoreStateCommand(level, true).onlyIf(() -> Shooter.getInstance().hasCoral()), 
                         new SuperStructureFeed(), 
                         () -> TargetReefFaceManager.getTargetReefFace() == ReefUtil.getClosestReefFace())
                         .onlyIf(() -> Clearances.isArmClearFromReef())
                         .repeatedly())
+                    .alongWith(new ShooterAcquireCoral())
                     .until(() -> driver.getLeftBumper().getAsBoolean() || driver.getRightBumper().getAsBoolean()), 
                 new ScoreRoutine(driver, level, false).alongWith(new WaitUntilCommand(() -> false))
                     .until(() -> ReefUtil.getClosestReefFace() != TargetReefFaceManager.getTargetReefFace()), 
