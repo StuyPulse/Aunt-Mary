@@ -70,7 +70,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                             .andThen(new SuperStructureCatapultShoot()
                                 .andThen(new SuperStructureWaitUntilCanCatapult()
                                         .andThen(new ShooterShootAlgae()))),
-                new SwerveDrivePIDToBarge()
+                new SwerveDrivePIDToBarge(true)
             ),
 
             new SuperStructureCatapultShoot()
@@ -98,7 +98,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                                     .andThen(new SuperStructureWaitUntilCanCatapult())
                                         .andThen(new ShooterShootAlgae()),
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
-                    .andThen(new SwerveDrivePIDToBarge())
+                    .andThen(new SwerveDrivePIDToBarge(false))
             ),
 
             new SuperStructureCatapultShoot()

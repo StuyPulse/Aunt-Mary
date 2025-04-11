@@ -175,24 +175,44 @@ public interface Field {
         }
     }
 
-    public static Pose2d getCatapultTargetPoseA(Pose2d robot) {
+    public static Pose2d getCatapultTargetPoseA(Pose2d robot, boolean in) {
     
         if (Robot.isBlue()) {
-            Rotation2d baseRotation = NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d();
+            if (in) {
+                Rotation2d baseRotation = NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d();
+            return new Pose2d(
+                new Translation2d(
+                    Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
+                    Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
+                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
+                );
+            } else {
+                Rotation2d baseRotation = NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d();
             return new Pose2d(
                 new Translation2d(
                     Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                     Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO),
                     baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
             );
+            }
         } else {
-            Rotation2d baseRotation = NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d();
+            if (in) {
+                Rotation2d baseRotation = NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d();
+            return new Pose2d(
+                new Translation2d(
+                    Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
+                    Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
+                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
+            );
+            } else {
+                Rotation2d baseRotation = NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d();
             return new Pose2d(
                 new Translation2d(
                     Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                     Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO),
                     baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
             );
+            }
         }
     }
     
