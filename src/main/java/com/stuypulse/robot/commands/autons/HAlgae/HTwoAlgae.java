@@ -109,7 +109,7 @@ public class HTwoAlgae extends SequentialCommandGroup {
             new WaitCommand(0.1),
 
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
-                .alongWith(new SuperStructureFeed())
+                .alongWith(new SuperStructureFeed().alongWith(new ShooterStop()))
                     .andThen(new SuperStructureWaitUntilAtTarget())
 
         );
