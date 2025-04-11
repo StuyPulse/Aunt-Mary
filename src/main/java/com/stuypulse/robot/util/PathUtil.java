@@ -51,7 +51,7 @@ public class PathUtil {
         }
                 
         public AutonConfig registerDefault(SendableChooser<Command> chooser) {
-            chooser.setDefaultOption("Blue " + name, auton.apply(loadPaths(paths)));
+            chooser.setDefaultOption(name, auton.apply(loadPaths(paths)));
             return this;
         }
     }
