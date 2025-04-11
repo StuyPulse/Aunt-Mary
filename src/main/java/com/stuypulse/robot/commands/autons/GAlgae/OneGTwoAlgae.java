@@ -24,7 +24,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntil
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveWithRobotRelativeSpeeds;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
-import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge;
+import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToCatapult;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
@@ -70,7 +70,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                             .andThen(new SuperStructureCatapultShoot()
                                 .andThen(new SuperStructureWaitUntilCanCatapult()
                                         .andThen(new ShooterShootAlgae()))),
-                new SwerveDrivePIDToBarge(true)
+                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG)
             ),
 
             new SuperStructureCatapultShoot()
@@ -98,7 +98,7 @@ public class OneGTwoAlgae extends SequentialCommandGroup {
                                     .andThen(new SuperStructureWaitUntilCanCatapult())
                                         .andThen(new ShooterShootAlgae()),
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
-                    .andThen(new SwerveDrivePIDToBarge(false))
+                    .andThen(new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT))
             ),
 
             new SuperStructureCatapultShoot()

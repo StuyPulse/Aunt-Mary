@@ -161,61 +161,14 @@ public interface Field {
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
     /*** BARGE POSITIONS ***/
-    public static Pose2d getCatapultTargetPose(Pose2d robot) {
-        if (Robot.isBlue()) {
-            return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
-                Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
-                NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d());
-        } else {
-            return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
-                Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO), 
-                NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d());
-        }
-    }
 
-    public static Pose2d getCatapultTargetPoseA(Pose2d robot, boolean in) {
-    
-        if (Robot.isBlue()) {
-            if (in) {
-                Rotation2d baseRotation = NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d();
-            return new Pose2d(
-                new Translation2d(
-                    Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
-                    Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
-                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
-                );
-            } else {
-                Rotation2d baseRotation = NamedTags.BLUE_BARGE_BLUE_SIDE.getLocation().getRotation().toRotation2d();
-            return new Pose2d(
-                new Translation2d(
-                    Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
-                    Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO),
-                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
-            );
-            }
-        } else {
-            if (in) {
-                Rotation2d baseRotation = NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d();
-            return new Pose2d(
-                new Translation2d(
-                    Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
-                    Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
-                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
-            );
-            } else {
-                Rotation2d baseRotation = NamedTags.RED_BARGE_RED_SIDE.getLocation().getRotation().toRotation2d();
-            return new Pose2d(
-                new Translation2d(
-                    Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
-                    Field.WIDTH / 2 + Settings.Swerve.Alignment.Targets.HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO),
-                    baseRotation.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
-            );
-            }
-        }
+    // Works only for alliance side rn
+    public static Pose2d getCatapultTargetPose(double yDistanceFromCenterline) {
+        return new Pose2d(new Translation2d(
+                Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
+                Field.WIDTH / 2 + yDistanceFromCenterline), 
+                Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT));
     }
-    
 
     /*** PROCESSOR ***/
     public static Pose2d getTargetPoseForProcessorShooter() {
