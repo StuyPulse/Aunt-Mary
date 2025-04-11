@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.autons.FDCB;
+package com.stuypulse.robot.commands.autons.IKLA;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
@@ -27,20 +27,20 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FourPieceNudgeFDCE extends SequentialCommandGroup {
+public class IKLJNudge extends SequentialCommandGroup {
     
-    public FourPieceNudgeFDCE(PathPlannerPath... paths) {
+    public IKLJNudge(PathPlannerPath... paths) {
 
         addCommands(
 
             // Nudge
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
 
-            // Score Preload on F
+            // Score Preload on I
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
+                new SwerveDrivePIDToBranchScore(CoralBranch.I, 4, true)
                     .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
-                    .withTimeout(2)
+                    .withTimeout(1.75)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
@@ -49,7 +49,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
             new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
-            // To HP, Score D
+            // To HP, Score K
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
@@ -68,7 +68,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -79,7 +79,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
             new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
-            // To HP, Score C
+            // To HP, Score L
             new ParallelCommandGroup(
                 CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
@@ -97,7 +97,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
+                new SwerveDriveCoralScoreAlignAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -108,7 +108,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
             new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
-           // To HP, Score E
+           // To HP, Score J
            new ParallelCommandGroup(
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
                 .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
@@ -126,7 +126,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDriveCoralScoreAlignWithClearance(() -> CoralBranch.E, 4, true, SuperStructureState.L4_FRONT),
+                            new SwerveDriveCoralScoreAlignWithClearance(() -> CoralBranch.J, 4, true, SuperStructureState.L4_FRONT),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
                                         new SuperStructureCoralL4Front())
@@ -140,6 +140,7 @@ public class FourPieceNudgeFDCE extends SequentialCommandGroup {
             new ShooterStop(),
 
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4])
+
 
         );
 

@@ -39,9 +39,9 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 
-public class OneGTwoAlgae extends SequentialCommandGroup {
+public class GTwoAlgae extends SequentialCommandGroup {
     
-    public OneGTwoAlgae(PathPlannerPath... paths) {
+    public GTwoAlgae(PathPlannerPath... paths) {
 
         addCommands(
 

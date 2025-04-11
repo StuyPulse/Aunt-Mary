@@ -27,9 +27,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class PathfulFourPieceIKLA extends SequentialCommandGroup {
+public class IKLA extends SequentialCommandGroup {
     
-    public PathfulFourPieceIKLA(PathPlannerPath... paths) {
+    public IKLA(PathPlannerPath... paths) {
 
         addCommands(
 
