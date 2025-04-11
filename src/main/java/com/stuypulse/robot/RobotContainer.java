@@ -372,7 +372,7 @@ public class RobotContainer {
 
         AutonConfig FDCB = new AutonConfig("FDCB", FDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        FDCB.register(autonChooser);
+        FDCB.registerDefault(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 
