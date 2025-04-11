@@ -123,7 +123,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74;
 
-                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 0.9;
+                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.13;
