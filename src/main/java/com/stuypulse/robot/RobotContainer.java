@@ -348,43 +348,43 @@ public class RobotContainer {
 
         /** TOP AUTONS **/
 
-        AutonConfig IKLA = new AutonConfig("IKLA", IKLA::new,
+        AutonConfig IKLA_AUTON = new AutonConfig("IKLA", IKLA::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        IKLA.register(autonChooser);
+        IKLA_AUTON.register(autonChooser);
 
-        AutonConfig IKLJ = new AutonConfig("IKLJ", IKLJ::new,
+        AutonConfig IKLJ_AUTON = new AutonConfig("IKLJ", IKLJ::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        IKLJ.register(autonChooser);
+        IKLJ_AUTON.register(autonChooser);
 
-        AutonConfig IKLJ_NUDGE = new AutonConfig("IKLJ Nudge", IKLJNudge::new,
+        AutonConfig IKLJ_NUDGE_AUTON = new AutonConfig("IKLJ Nudge", IKLJNudge::new,
         "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        IKLJ_NUDGE.register(autonChooser);
+        IKLJ_NUDGE_AUTON.register(autonChooser);
 
         /** BOTTOM AUTONS **/
 
-        AutonConfig FDCE = new AutonConfig("FDCE", FDCE::new,
+        AutonConfig FDCE_AUTON = new AutonConfig("FDCE", FDCE::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        FDCE.register(autonChooser);
+        FDCE_AUTON.register(autonChooser);
 
-        AutonConfig FDCE_NUDGE = new AutonConfig("FDCE Nudge", FDCENudge::new,
+        AutonConfig FDCE_NUDGE_AUTON = new AutonConfig("FDCE Nudge", FDCENudge::new,
         "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        FDCE_NUDGE.register(autonChooser);
+        FDCE_NUDGE_AUTON.register(autonChooser);
 
-        AutonConfig FDCB = new AutonConfig("FDCB", FDCB::new,
+        AutonConfig FDCB_AUTON = new AutonConfig("FDCB", FDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        FDCB.registerDefault(autonChooser);
+        FDCB_AUTON.registerDefault(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 
-        AutonConfig H_TWO_ALGAE = new AutonConfig("H + 2 Algae", HTwoAlgae::new,
+        AutonConfig H_TWO_ALGAE_AUTON = new AutonConfig("H + 2 Algae", HTwoAlgae::new,
         "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE.register(autonChooser);
+        H_TWO_ALGAE_AUTON.register(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig G_TWO_ALGAE = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
+        AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
         "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE.register(autonChooser);
+        G_TWO_ALGAE_AUTON.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
