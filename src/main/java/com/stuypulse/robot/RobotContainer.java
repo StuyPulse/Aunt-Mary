@@ -207,7 +207,7 @@ public class RobotContainer {
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
-                .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && froggy.getRollerState() == RollerState.SHOOT_CORAL))
+                .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE && (froggy.getRollerState() == RollerState.SHOOT_CORAL || froggy.getRollerState() == RollerState.STOP)))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1));
         
         driver.getRightBumper().debounce(0.25)
