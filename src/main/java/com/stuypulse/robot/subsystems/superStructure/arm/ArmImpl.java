@@ -45,8 +45,6 @@ public class ArmImpl extends Arm {
     private SettableNumber velLimitDegreesPerSecond;
     private SettableNumber accelLimitDegreesPerSecondSquared;
 
-    private SettableNumber kG;
-
     private Optional<Double> voltageOverride;
 
     public ArmImpl() {
@@ -62,8 +60,6 @@ public class ArmImpl extends Arm {
 
         velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
         accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
-
-        kG = new SettableNumber(Gains.Arm.Empty.FF.kG);
 
         debuggingMotionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         debuggingMotionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
@@ -163,17 +159,14 @@ public class ArmImpl extends Arm {
                 }
                 else {
                     if (Shooter.getInstance().hasCoral()) {
-                        this.kG.set(Gains.Arm.Coral.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0));
                     }
                     if (getState() == ArmState.CATAPULT_SHOOT) {
-                        this.kG.set(Gains.Arm.AlgaeCatapult.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(1));
                     }
                     else {
-                        this.kG.set(Gains.Arm.Empty.FF.kG);
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(2));
                     }

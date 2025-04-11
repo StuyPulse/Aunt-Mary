@@ -42,7 +42,6 @@ public abstract class Elevator extends SubsystemBase {
         L2_FRONT(Settings.Elevator.FRONT_L2_HEIGHT_METERS),
         L3_FRONT(Settings.Elevator.FRONT_L3_HEIGHT_METERS),
         L4_FRONT(Settings.Elevator.FRONT_L4_HEIGHT_METERS),
-        L4_FRONT_AUTON(Settings.Elevator.FRONT_L4_AUTON_HEIGHT_METERS),
         L2_BACK(Settings.Elevator.BACK_L2_HEIGHT_METERS),
         L3_BACK(Settings.Elevator.BACK_L3_HEIGHT_METERS),
         L4_BACK(Settings.Elevator.BACK_L4_HEIGHT_METERS),
@@ -51,7 +50,9 @@ public abstract class Elevator extends SubsystemBase {
         ALGAE_L2_BACK(Settings.Elevator.ALGAE_L2_HEIGHT_METERS_BACK),
         ALGAE_L3_BACK(Settings.Elevator.ALGAE_L3_HEIGHT_METERS_BACK),
         CATAPULT(Settings.Elevator.CATAPULT_HEIGHT_METERS),
+        BARGE_118(Settings.Elevator.BARGE_118_HEIGHT_METERS),
         PROCESSOR(Settings.Elevator.PROCESSOR_HEIGHT_METERS),
+        GOLF_TEE_ALGAE_PICKUP(Settings.Elevator.GOLF_TEE_ALGAE_PICKUP_HEIGHT),
         CLIMB(Settings.Elevator.CLIMB_HEIGHT_METERS),
         UNSTUCK_CORAL(Settings.Elevator.UNSTUCK_CORAL_HEIGHT_METERS);
 

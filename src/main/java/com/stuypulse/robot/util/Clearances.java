@@ -26,6 +26,10 @@ public interface Clearances {
         return isArmClearFromAllianceReef() && isArmClearFromOppositeAllianceReef();
     }
 
+    public static boolean isArmClearFromBarge() {
+        return Math.abs(Field.LENGTH / 2 - CommandSwerveDrivetrain.getInstance().getPose().getX()) >= (Settings.Clearances.CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 - Settings.Swerve.Alignment.Tolerances.X_TOLERANCE_BARGE);
+    }
+
     private static boolean isArmClearFromOppositeAllianceReef() {
         return Field.OPPOSITE_ALLIANCE_REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM 

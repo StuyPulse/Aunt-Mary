@@ -6,14 +6,12 @@ import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
-import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4FrontAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignAuton;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.commands.ReefAlgaePickupRoutine;
+import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
@@ -29,28 +27,31 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FourPieceFDCE extends SequentialCommandGroup {
+public class FDCENudge extends SequentialCommandGroup {
     
-    public FourPieceFDCE(PathPlannerPath... paths) {
+    public FDCENudge(PathPlannerPath... paths) {
 
         addCommands(
+
+            // Nudge
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
 
             // Score Preload on F
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
-                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.MAX_ACCELERATION_AUTON)
-                    .withTimeout(1.75)
+                    .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
+                    .withTimeout(2)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score D
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
@@ -75,12 +76,12 @@ public class FourPieceFDCE extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
             // To HP, Score C
             new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
@@ -104,12 +105,12 @@ public class FourPieceFDCE extends SequentialCommandGroup {
                     )
             ),
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
            // To HP, Score E
            new ParallelCommandGroup(
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
                 .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
             new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(
@@ -135,11 +136,10 @@ public class FourPieceFDCE extends SequentialCommandGroup {
             ),
 
             new ShooterShootL4Front(),
-            new WaitCommand(0.125),
+            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
-
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4])
 
         );
 

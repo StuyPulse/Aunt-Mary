@@ -56,6 +56,10 @@ public interface ReefUtil {
         }
 
         public Pose2d getScorePose(int level, boolean isScoringFrontSide) {
+            if (level == 1) {
+                return getL1ScorePose();
+            }
+
             double targetDistanceFromReef;
 
             switch (level) {
@@ -73,17 +77,37 @@ public interface ReefUtil {
             }
 
             return getCorrespondingAprilTagPose().transformBy(
-                new Transform2d(
-                    Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 
-                    Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? -Units.inchesToMeters(0.5) : 0.055), 
-                    isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
+                    new Transform2d(
+                        Constants.LENGTH_WITH_BUMPERS_METERS/2 + targetDistanceFromReef, 
+                        Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? -Units.inchesToMeters(0.5) : 0.055), 
+                        isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
         }
 
-        public Pose2d getClearancePose(boolean isScoringFrontSide) {
+        public Pose2d getClearancePose(int level, boolean isScoringFrontSide) {
+            if (level == 1) {
+                return getL1ClearancePose();
+            }
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM,
                 Field.CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET * (isScoringFrontSide ? 1 : -1) + (isScoringFrontSide ? -Units.inchesToMeters(0.5) : 0.055), 
                 isScoringFrontSide ? Rotation2d.k180deg : Rotation2d.kZero));
+        }
+
+        private Pose2d getL1ScorePose() {
+            return getCorrespondingAprilTagPose().transformBy(
+                new Transform2d(
+                    Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER,
+                    Field.CENTER_OF_REEF_TO_L1_CORNER * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET,
+                    Rotation2d.k180deg
+                ));
+        }
+
+        private Pose2d getL1ClearancePose() {
+            return getCorrespondingAprilTagPose().transformBy(new Transform2d(
+                Constants.LENGTH_WITH_BUMPERS_METERS/2 + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM,
+                Field.CENTER_OF_REEF_TO_L1_CORNER * (this.isLeftBranchRobotRelative() ? -1 : 1) + Constants.SHOOTER_Y_OFFSET,
+                Rotation2d.k180deg
+            ));
         }
 
         public boolean isLeftBranchRobotRelative() {
@@ -136,12 +160,26 @@ public interface ReefUtil {
             this.rightBranchFieldRelative = rightBranchFieldRelative;
         }
 
+        public ReefFace rotateCCW(int faces) {
+            int index = (this.ordinal() + (faces % 6) + 6) % 6;
+            return ReefFace.values()[index];
+        }
+
         public CoralBranch getLeftBranchFieldRelative() {
             return this.leftBranchFieldRelative;
         }
 
         public CoralBranch getRightBranchFieldRelative() {
             return this.rightBranchFieldRelative;
+        }
+
+        public CoralBranch getClosestCoralBranch() {
+            Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
+            double leftBranchDistance = getLeftBranchFieldRelative().getBranchPoseProjectedOntoReefFace().getTranslation().getDistance(robot);
+            double rightBranchDistance = getRightBranchFieldRelative().getBranchPoseProjectedOntoReefFace().getTranslation().getDistance(robot);
+            return leftBranchDistance < rightBranchDistance
+                ? getLeftBranchFieldRelative()
+                : getRightBranchFieldRelative();
         }
 
         public Pose2d getCorrespondingAprilTagPose() {
@@ -265,14 +303,14 @@ public interface ReefUtil {
         public Pose2d getTargetPose(boolean isFrontFacingReef) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + (isHighAlgae() ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L3 : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_ALGAE_L2), 
-                isFrontFacingReef ? Constants.SHOOTER_Y_OFFSET : -Constants.SHOOTER_Y_OFFSET, 
+                isFrontFacingReef ? Constants.SHOOTER_Y_OFFSET : -Constants.SHOOTER_Y_OFFSET + 0.04, 
                 isFrontFacingReef ? Rotation2d.k180deg :  Rotation2d.kZero));
         }
 
         public Pose2d getReadyPose(boolean isFrontFacingReef) {
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 
-                isFrontFacingReef ? Constants.SHOOTER_Y_OFFSET : -Constants.SHOOTER_Y_OFFSET, 
+                isFrontFacingReef ? Constants.SHOOTER_Y_OFFSET : -Constants.SHOOTER_Y_OFFSET + 0.04, 
                 isFrontFacingReef ? Rotation2d.k180deg :  Rotation2d.kZero));
         }
     }

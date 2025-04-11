@@ -9,7 +9,6 @@ package com.stuypulse.robot.commands.swerve.pidToPose;
 
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.booleans.BStream;
@@ -45,6 +44,8 @@ public class SwerveDrivePIDToPose extends Command {
     private double maxVelocity;
     private double maxAcceleration;
 
+    private boolean isMotionProfiled;
+
     private final BStream isAligned;
     private final IStream velocityError;
 
@@ -67,14 +68,15 @@ public class SwerveDrivePIDToPose extends Command {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         controller = new HolonomicController(
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0, 0).position()),
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0, 0).position()),
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD),
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD),
             new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION)));
 
         maxVelocity = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY;
         maxAcceleration = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION;
 
+        isMotionProfiled = true;
         translationSetpoint = getNewTranslationSetpointGenerator();
 
         this.targetPose = targetPose;
@@ -112,7 +114,7 @@ public class SwerveDrivePIDToPose extends Command {
     }
 
     public SwerveDrivePIDToPose withoutMotionProfile() {
-        this.translationSetpoint = VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        this.isMotionProfiled = false;
         return this;
     }
 
@@ -123,12 +125,17 @@ public class SwerveDrivePIDToPose extends Command {
 
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
     private VStream getNewTranslationSetpointGenerator() {
-        return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
-            .filtered(new TranslationMotionProfileIan(
-                this.maxVelocity, 
-                this.maxAcceleration,
-                new Vector2D(swerve.getPose().getTranslation()),
-                Vector2D.kOrigin));
+        if (!isMotionProfiled) {
+            return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+        }
+        else {
+            return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
+                .filtered(new TranslationMotionProfileIan(
+                    this.maxVelocity, 
+                    this.maxAcceleration,
+                    new Vector2D(swerve.getPose().getTranslation()),
+                    Vector2D.kOrigin));
+        }
     }
 
     @Override

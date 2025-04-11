@@ -40,21 +40,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
     private int level;
 
     public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState) {
-        this.mode = Mode.CLEAR;
-        this.correspondingSuperStructureState = correspondingSuperStructureState;
-        this.branch = branch;
-        this.isScoringFrontSide = isScoringFrontSide;
-        this.level = level;
-
-        canEnd = BStream.create(() -> this.mode == Mode.SCORE).filtered(new BDebounce.Rising(0.5));
-
-        addCommands(
-            new InstantCommand(() -> this.mode = Mode.CLEAR),
-            new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
-                .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
-                    .withCanEnd(canEnd::get)
-                    .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
-        );
+        this(branch, level, isScoringFrontSide, correspondingSuperStructureState, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION);
     }
 
     public SwerveDriveCoralScoreAlignWithClearance(Supplier<CoralBranch> branch, int level, boolean isScoringFrontSide, SuperStructureState correspondingSuperStructureState, double maxVel, double maxAccel) {
@@ -70,7 +56,8 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
             new InstantCommand(() -> this.mode = Mode.CLEAR),
             new WaitUntilCommand(this::isClear).andThen(new InstantCommand(() -> this.mode = Mode.SCORE))
                 .alongWith(new SwerveDrivePIDToPose(this::getTargetPose)
-                    .withTranslationalConstraints(maxVel, maxAccel)
+                    .withoutMotionProfile()
+                    // .withTranslationalConstraints(maxVel, maxAccel)
                     .withCanEnd(canEnd::get)
                     .deadlineFor(new LEDApplyPattern(() -> branch.get().isLeftBranchRobotRelative() ? Settings.LED.DEFAULT_ALIGN_COLOR : Settings.LED.ALIGN_RIGHT_COLOR)))
         );
@@ -78,7 +65,7 @@ public class SwerveDriveCoralScoreAlignWithClearance extends SequentialCommandGr
 
     private Pose2d getTargetPose() {
         if (mode == Mode.CLEAR) {
-            return branch.get().getClearancePose(isScoringFrontSide);
+            return branch.get().getClearancePose(level, isScoringFrontSide);
         }
         else {
             return branch.get().getScorePose(level, isScoringFrontSide);

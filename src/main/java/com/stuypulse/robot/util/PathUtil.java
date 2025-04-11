@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+// import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -44,23 +45,13 @@ public class PathUtil {
             }
         }
         
-        public AutonConfig registerBlue(SendableChooser<Command> chooser) {
-            chooser.addOption("Blue " + name, auton.apply(loadPaths(paths)));
-            return this;
-        }
-
-        public AutonConfig registerRed(SendableChooser<Command> chooser) {
-            chooser.addOption("Red " + name, auton.apply(loadPaths(paths)));
+        public AutonConfig register(SendableChooser<Command> chooser) {
+            chooser.addOption(name, auton.apply(loadPaths(paths)));
             return this;
         }
                 
-        public AutonConfig registerDefaultBlue(SendableChooser<Command> chooser) {
-            chooser.setDefaultOption("Blue " + name, auton.apply(loadPaths(paths)));
-            return this;
-        }
-
-        public AutonConfig registerDefaultRed(SendableChooser<Command> chooser) {
-            chooser.setDefaultOption("Red " + name, auton.apply(loadPaths(paths)));
+        public AutonConfig registerDefault(SendableChooser<Command> chooser) {
+            chooser.setDefaultOption(name, auton.apply(loadPaths(paths)));
             return this;
         }
     }

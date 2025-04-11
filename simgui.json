@@ -68,6 +68,9 @@
         "open": true
       },
       "SmartDashboard": {
+        "Alerts": {
+          "open": true
+        },
         "Alignment": {
           "Constraints": {
             "open": true

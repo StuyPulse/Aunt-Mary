@@ -40,7 +40,6 @@ public abstract class Arm extends SubsystemBase {
 
     public enum ArmState {
         FEED(Settings.Arm.FEED_ANGLE),
-        AUTON_L4_FRONT(Settings.Arm.AUTON_L4_ANGLE_FRONT),
         L1(Settings.Arm.L1_ANGLE_FRONT),
         L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
         L2_BACK(Settings.Arm.L2_ANGLE_BACK),
@@ -55,6 +54,8 @@ public abstract class Arm extends SubsystemBase {
         PROCESSOR(Settings.Arm.PROCESSOR_ANGLE),
         CATAPULT_READY(Settings.Arm.CATAPULT_READY_ANGLE),
         CATAPULT_SHOOT(Settings.Arm.CATAPULT_FINAL_ANGLE),
+        BARGE_118(Settings.Arm.BARGE_118_ANGLE),
+        GOLF_TEE_ALGAE_PICKUP(Settings.Arm.GOLF_TEE_ALGAE_PICKUP_ANGLE),
         CLIMB(Settings.Arm.CLIMB_ANGLE),
         UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE);
 

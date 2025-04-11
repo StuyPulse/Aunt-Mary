@@ -12,6 +12,7 @@ import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -19,9 +20,10 @@ import java.util.function.Supplier;
 
 public class SwerveDrivePathFindToPose extends Command{
     private Supplier<Pose2d> targetPose;
+    private Pose2d initialTargetPose;
     private Command pathFindCommand;
 
-    public SwerveDrivePathFindToPose(Supplier<Pose2d> targetPose) {
+    public  SwerveDrivePathFindToPose(Supplier<Pose2d> targetPose) {
         this.targetPose = targetPose;
     }
 
@@ -35,13 +37,22 @@ public class SwerveDrivePathFindToPose extends Command{
 
     @Override
     public void initialize() {
-        pathFindCommand = AutoBuilder.pathfindToPose(targetPose.get(), Settings.Swerve.Constraints.DEFAULT_CONSTRAINTS);
+        initialTargetPose = targetPose.get();
+        pathFindCommand = AutoBuilder.pathfindToPose(initialTargetPose, Settings.Swerve.Constraints.DEFAULT_CONSTRAINTS);
         pathFindCommand.initialize();
     }
 
     @Override
     public void execute() {
-        pathFindCommand.execute();
+        if (initialTargetPose.getTranslation().minus(targetPose.get().getTranslation()).getDistance(Translation2d.kZero) > 0.01
+            || initialTargetPose.getRotation().minus(targetPose.get().getRotation()).getDegrees() > 1) {
+            initialTargetPose = targetPose.get();
+            pathFindCommand = AutoBuilder.pathfindToPose(initialTargetPose, Settings.Swerve.Constraints.DEFAULT_CONSTRAINTS);
+            pathFindCommand.initialize();
+        }
+        else {
+            pathFindCommand.execute();
+        }
     }
 
     @Override

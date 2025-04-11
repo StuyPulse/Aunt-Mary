@@ -97,6 +97,17 @@ public class TranslationMotionProfileIan implements VFilter {
                 mVelocity = mVelocity.clamp(mVelLimit.doubleValue());
             }
 
+            Vector2D error = target.sub(mOutput);
+            Vector2D unitError = error.normalize();
+
+            double parallelMag = mVelocity.dot(unitError);
+            Vector2D accelParallel = unitError.mul(parallelMag);
+
+            Vector2D accelPerpendicular = mVelocity.sub(accelParallel);
+
+            double damping = Math.pow(0.5, dt);
+            mVelocity = accelParallel.add(accelPerpendicular.mul(damping));
+
             // adjust output by calculated velocity
             mOutput = mOutput.add(mVelocity.mul(dt));
         }

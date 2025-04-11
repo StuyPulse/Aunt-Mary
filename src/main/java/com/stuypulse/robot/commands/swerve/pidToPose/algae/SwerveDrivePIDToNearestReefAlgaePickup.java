@@ -18,6 +18,6 @@ public class SwerveDrivePIDToNearestReefAlgaePickup extends SwerveDrivePIDToPose
             Settings.Swerve.Alignment.Tolerances.X_TOLERANCE, 
             Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE,
             Settings.Swerve.Alignment.Tolerances.THETA_TOLERANCE_REEF_PICKUP);
-        withoutMotionProfile();
+        super.withoutMotionProfile();
     }
 }

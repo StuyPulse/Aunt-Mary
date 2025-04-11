@@ -17,12 +17,13 @@ public class ManualShoot extends ConditionalCommand{
         super(
             new ConditionalCommand(
                 new FroggyRollerShootCoral(),
-                new ShooterShootAlgae().onlyIf(() -> SuperStructure.getInstance().getState() == SuperStructureState.PROCESSOR)
+                new ShooterShootAlgae().onlyIf(() -> SuperStructure.getInstance().getState() == SuperStructureState.PROCESSOR || SuperStructure.getInstance().getState() == SuperStructureState.BARGE_118)
                     .alongWith(new FroggyRollerShootAlgae().onlyIf(() -> Froggy.getInstance().getRollerState() != RollerState.HOLD_CORAL)),
                 () -> Froggy.getInstance().getPivotState() == PivotState.L1_SCORE_ANGLE), 
             new ShooterShootBasedOnSuperStructure(),
             () -> Froggy.getInstance().getPivotState() == PivotState.L1_SCORE_ANGLE 
                 || SuperStructure.getInstance().getState() == SuperStructureState.PROCESSOR
+                || SuperStructure.getInstance().getState() == SuperStructureState.BARGE_118
         );
     }
 }

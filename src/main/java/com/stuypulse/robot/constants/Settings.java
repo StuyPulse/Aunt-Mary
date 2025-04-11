@@ -62,7 +62,7 @@ public interface Settings {
         double NUDGE_SPEED_METERS_PER_SECOND_AUTON = 1.4;
         
         public interface Constraints {    
-            double MAX_VELOCITY_M_PER_S = 4.0;
+            double MAX_VELOCITY_M_PER_S = 4.3;
             double MAX_ACCEL_M_PER_S_SQUARED = 15.0;
             double MAX_ANGULAR_VEL_RAD_PER_S = Units.degreesToRadians(400);
             double MAX_ANGULAR_ACCEL_RAD_PER_S = Units.degreesToRadians(900);
@@ -77,13 +77,10 @@ public interface Settings {
 
         public interface Alignment {
             public interface Constraints {
-                double DEFAULT_MAX_VELOCITY = 4.0;
+                double DEFAULT_MAX_VELOCITY = 4.3;
                 double DEFAULT_MAX_ACCELERATION = 15.0;
                 double DEFUALT_MAX_ANGULAR_VELOCITY = Units.degreesToRadians(400);
                 double DEFAULT_MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(900);
-
-                double MAX_VELOCITY_AUTON = 5.85;
-                double MAX_ACCELERATION_AUTON = 17;
             }
 
             public interface Tolerances {
@@ -91,9 +88,9 @@ public interface Settings {
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
 
-                double X_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(5.0);
-                double Y_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(5.0);
-                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(5.0);
+                double X_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
+                double Y_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
+                Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(4.0);
 
                 double X_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
                 double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
@@ -109,7 +106,7 @@ public interface Settings {
 
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
-                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = 0.2;
+                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = Units.inchesToMeters(4);
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.01;
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
@@ -124,9 +121,10 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.43;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74;
 
-                double HORIZONTAL_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO = 0.9;
+                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
+                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.13;
 
@@ -149,6 +147,8 @@ public interface Settings {
         double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
         double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
+        
+        double CORAL_SHOOT_TIME_AUTON = 0.15;
 
         double CORAL_ACQUIRE_SPEED = 0.17;
         double ALGAE_ACQUIRE_SPEED = -1.0;
@@ -180,12 +180,11 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.047119;
 
         // Coral
-        double L1_HEIGHT_METERS = 1.13 - Units.inchesToMeters(2.25);
+        double L1_HEIGHT_METERS = 1.16;
 
         double FRONT_L2_HEIGHT_METERS = 1.57586;
         double FRONT_L3_HEIGHT_METERS = 1.0566;
         double FRONT_L4_HEIGHT_METERS = 1.706494;
-        double FRONT_L4_AUTON_HEIGHT_METERS = 1.685791;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
         double BACK_L3_HEIGHT_METERS = 1.077109;
@@ -193,10 +192,14 @@ public interface Settings {
 
         // Algae
         double CATAPULT_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
+        double BARGE_118_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
+        
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.260986;
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.469482;
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
         double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051;
+
+        double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
 
         double PROCESSOR_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
@@ -211,14 +214,12 @@ public interface Settings {
         }
 
         double HEIGHT_TOLERANCE_METERS = 0.04;
-        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.2;
+        double HEIGHT_TOLERANCE_TO_SKIP_CLEARANCE = 0.35;
     }
 
     public interface Arm {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
         Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
-
-        Rotation2d AUTON_L4_ANGLE_FRONT = Rotation2d.fromDegrees(86.044922); 
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
@@ -237,9 +238,13 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
 
+        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-73.300781);
+
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-55);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-50);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
+
+        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
@@ -265,7 +270,7 @@ public interface Settings {
         }
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
-        Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(15.0);
+        Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(20.0);
     }
 
     public interface Froggy {
@@ -296,7 +301,7 @@ public interface Settings {
 
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(245 - 3.5);
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(230); // 245 - 3.5
         Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
         Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);
