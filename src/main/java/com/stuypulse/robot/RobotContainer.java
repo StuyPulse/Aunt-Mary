@@ -20,11 +20,13 @@ import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FDCE;
 import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.FDCB.FDCB;
+import com.stuypulse.robot.commands.autons.FDCB.FDCBNudge;
 import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgae;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
+import com.stuypulse.robot.commands.autons.IKLA.IKLANudge;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
@@ -360,6 +362,10 @@ public class RobotContainer {
         "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
         IKLJ_NUDGE_AUTON.register(autonChooser);
 
+        AutonConfig IKLA_NUDGE_AUTON = new AutonConfig("IKLA Nudge", IKLANudge::new,
+        "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+        IKLA_NUDGE_AUTON.register(autonChooser);
+
         /** BOTTOM AUTONS **/
 
         AutonConfig FDCE_AUTON = new AutonConfig("FDCE", FDCE::new,
@@ -373,6 +379,10 @@ public class RobotContainer {
         AutonConfig FDCB_AUTON = new AutonConfig("FDCB", FDCB::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         FDCB_AUTON.registerDefault(autonChooser);
+
+        AutonConfig FDCB_NUDGE_AUTON = new AutonConfig("FDCE Nudge", FDCBNudge::new,
+        "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+        FDCB_NUDGE_AUTON.register(autonChooser);
 
         /**  TOP ALGAE AUTONS **/
 
