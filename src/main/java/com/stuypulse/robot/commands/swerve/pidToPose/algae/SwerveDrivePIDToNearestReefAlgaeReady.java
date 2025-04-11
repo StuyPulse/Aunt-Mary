@@ -14,6 +14,7 @@ import com.stuypulse.robot.util.ReefUtil;
 public class SwerveDrivePIDToNearestReefAlgaeReady extends SwerveDrivePIDToPose{
     public SwerveDrivePIDToNearestReefAlgaeReady(boolean isFrontFacingReef) {
         super(() -> ReefUtil.getClosestAlgae().getReadyPose(isFrontFacingReef));
+        super.withoutMotionProfile();
         super.withTolerance(
             Settings.Swerve.Alignment.Tolerances.X_TOLERANCE_REEF_ALGAE_PICKUP_READY, 
             Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE_REEF_ALGAE_PICKUP_READY,
