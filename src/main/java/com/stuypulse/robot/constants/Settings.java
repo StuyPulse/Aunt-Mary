@@ -240,8 +240,8 @@ public interface Settings {
 
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-73.300781);
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-55);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-50);
+        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-60);
+        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-55);
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
 
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
@@ -319,7 +319,7 @@ public interface Settings {
 
         LEDPattern PROCESSOR_SCORE_ANGLE = LEDPattern.solid(Color.kPurple);
         LEDPattern INTAKE_COLOR_ALGAE = LEDPattern.solid(Color.kGreen);
-        LEDPattern FROGGY_INTAKE_COLOR_CORAL = LEDPattern.solid(Color.kWhite);
+        LEDPattern FROGGY_INTAKE_COLOR_CORAL = LEDPattern.solid(Color.kRed);
         
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);
 
