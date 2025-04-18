@@ -126,7 +126,11 @@ public class FDCBNudge extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDriveCoralScoreAlignWithClearance(() -> CoralBranch.B, 4, true, SuperStructureState.L4_FRONT),
+                            new SwerveDrivePIDToBranchScore(CoralBranch.B, 4, true)
+                            .withTranslationalConstraints(5.85, 16.75)
+                                .withTimeout(5)
+                                .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
+                            // new SwerveDriveCoralScoreAlignAuton(CoralBranch.A, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
                                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                                     .andThen(
                                         new SuperStructureCoralL4Front())
