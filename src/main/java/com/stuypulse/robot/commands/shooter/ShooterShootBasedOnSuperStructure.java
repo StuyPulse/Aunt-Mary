@@ -23,7 +23,8 @@ public class ShooterShootBasedOnSuperStructure extends InstantCommand{
 
     private ShooterState getTargetState() {
         return switch (SuperStructure.getInstance().getState()) {
-            case L1 -> ShooterState.SHOOT_CORAL_L1;
+            case L1_FRONT -> ShooterState.SHOOT_CORAL_L1_FRONT;
+            case L1_BACK -> ShooterState.SHOOT_CORAL_L1_BACK;
             case L2_FRONT -> ShooterState.SHOOT_CORAL_L2_FRONT;
             case L2_BACK -> ShooterState.SHOOT_CORAL_L2_BACK;
             case L3_FRONT -> ShooterState.SHOOT_CORAL_L3_FRONT;
@@ -31,7 +32,7 @@ public class ShooterShootBasedOnSuperStructure extends InstantCommand{
             case L4_FRONT -> ShooterState.SHOOT_CORAL_L4_FRONT;
             case L4_BACK -> ShooterState.SHOOT_CORAL_L4_BACK;
             case PROCESSOR, CATAPULT_READY, CATAPULT_SHOOT -> ShooterState.SHOOT_ALGAE;
-            default -> ShooterState.SHOOT_CORAL_L1;
+            default -> ShooterState.SHOOT_CORAL_L1_FRONT;
         };
     }
 

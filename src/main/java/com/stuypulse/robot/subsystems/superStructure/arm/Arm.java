@@ -40,7 +40,8 @@ public abstract class Arm extends SubsystemBase {
 
     public enum ArmState {
         FEED(Settings.Arm.FEED_ANGLE),
-        L1(Settings.Arm.L1_ANGLE_FRONT),
+        L1_FRONT(Settings.Arm.L1_ANGLE_FRONT),
+        L1_BACK(Settings.Arm.L1_ANGLE_BACK),
         L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
         L2_BACK(Settings.Arm.L2_ANGLE_BACK),
         L3_FRONT(Settings.Arm.L3_ANGLE_FRONT),

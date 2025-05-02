@@ -8,7 +8,8 @@
 package com.stuypulse.robot.subsystems.shooter;
 
 import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.commands.shooter.ShooterShootL1;
+import com.stuypulse.robot.commands.shooter.ShooterShootL1Back;
+import com.stuypulse.robot.commands.shooter.ShooterShootL1Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootL2Back;
 import com.stuypulse.robot.commands.shooter.ShooterShootL2Front;
 import com.stuypulse.robot.commands.shooter.ShooterShootL3Back;
@@ -42,7 +43,8 @@ public abstract class Shooter extends SubsystemBase {
     public enum ShooterState {
         ACQUIRE_CORAL(Settings.Shooter.CORAL_ACQUIRE_SPEED),
         ACQUIRE_ALGAE(Settings.Shooter.ALGAE_ACQUIRE_SPEED),
-        SHOOT_CORAL_L1(Settings.Shooter.CORAL_SHOOT_SPEED_L1),
+        SHOOT_CORAL_L1_FRONT(Settings.Shooter.CORAL_SHOOT_SPEED_L1_FRONT),
+        SHOOT_CORAL_L1_BACK(Settings.Shooter.CORAL_SHOOT_SPEED_L1_BACK),
         SHOOT_CORAL_L2_FRONT(Settings.Shooter.CORAL_SHOOT_SPEED_L2_FRONT),
         SHOOT_CORAL_L2_BACK(Settings.Shooter.CORAL_SHOOT_SPEED_L2_BACK),
         SHOOT_CORAL_L3_FRONT(Settings.Shooter.CORAL_SHOOT_SPEED_L3_FRONT),
@@ -89,7 +91,7 @@ public abstract class Shooter extends SubsystemBase {
 
     public boolean isShootingCoral() {
         return switch (getState()) {
-            case SHOOT_CORAL_L1, SHOOT_CORAL_L2_FRONT, SHOOT_CORAL_L2_BACK, SHOOT_CORAL_L3_FRONT, SHOOT_CORAL_L3_BACK, SHOOT_CORAL_AUTON_L4_FRONT, SHOOT_CORAL_L4_FRONT, SHOOT_CORAL_L4_BACK -> true;
+            case SHOOT_CORAL_L1_FRONT, SHOOT_CORAL_L1_BACK, SHOOT_CORAL_L2_FRONT, SHOOT_CORAL_L2_BACK, SHOOT_CORAL_L3_FRONT, SHOOT_CORAL_L3_BACK, SHOOT_CORAL_AUTON_L4_FRONT, SHOOT_CORAL_L4_FRONT, SHOOT_CORAL_L4_BACK -> true;
             default -> false;
         };
     }
@@ -97,7 +99,7 @@ public abstract class Shooter extends SubsystemBase {
     public static Command getCorrespondingShootCommand(int level, boolean isScoringFrontSide) {
         switch (level) {
             case 1:
-                return new ShooterShootL1();
+                return isScoringFrontSide ? new ShooterShootL1Front() : new ShooterShootL1Back();  
             case 2:
                 return isScoringFrontSide ? new ShooterShootL2Front() : new ShooterShootL2Back();  
             case 3:
@@ -105,7 +107,7 @@ public abstract class Shooter extends SubsystemBase {
             case 4:
                 return isScoringFrontSide ? new ShooterShootL4Front() : new ShooterShootL4Back(); 
             default:
-                return new ShooterShootL1();
+                return new ShooterShootL1Front();
         }
     }
 

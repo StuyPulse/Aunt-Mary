@@ -139,7 +139,8 @@ public interface Settings {
     }
 
     public interface Shooter {
-        double CORAL_SHOOT_SPEED_L1 = 0.22;
+        double CORAL_SHOOT_SPEED_L1_FRONT = 0.22;
+        double CORAL_SHOOT_SPEED_L1_BACK = 0.22;
         double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
         double CORAL_SHOOT_SPEED_L3_FRONT = -0.5;
@@ -180,7 +181,8 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.047119;
 
         // Coral
-        double L1_HEIGHT_METERS = 1.16;
+        double FRONT_L1_HEIGHT_METERS = 1.16;
+        double BACK_L1_HEIGHT_METERS = 1.5;
 
         double FRONT_L2_HEIGHT_METERS = 1.57586;
         double FRONT_L3_HEIGHT_METERS = 1.0566;
@@ -226,6 +228,7 @@ public interface Settings {
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.05);
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
+        Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599); // made up number
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(177.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);

@@ -38,10 +38,11 @@ public abstract class Elevator extends SubsystemBase {
 
     public enum ElevatorState {
         FEED(Settings.Elevator.FEED_HEIGHT_METERS),
-        L1(Settings.Elevator.L1_HEIGHT_METERS),
+        L1_FRONT(Settings.Elevator.FRONT_L1_HEIGHT_METERS),
         L2_FRONT(Settings.Elevator.FRONT_L2_HEIGHT_METERS),
         L3_FRONT(Settings.Elevator.FRONT_L3_HEIGHT_METERS),
         L4_FRONT(Settings.Elevator.FRONT_L4_HEIGHT_METERS),
+        L1_BACK(Settings.Elevator.BACK_L1_HEIGHT_METERS),
         L2_BACK(Settings.Elevator.BACK_L2_HEIGHT_METERS),
         L3_BACK(Settings.Elevator.BACK_L3_HEIGHT_METERS),
         L4_BACK(Settings.Elevator.BACK_L4_HEIGHT_METERS),
@@ -84,7 +85,9 @@ public abstract class Elevator extends SubsystemBase {
 
     public static ElevatorState getState(int level, boolean isFrontFacingReef) {
         if (isFrontFacingReef) {
-            if (level == 2) {
+            if (level == 1) {
+                return ElevatorState.L1_FRONT;
+            } else if (level == 2) {
                 return ElevatorState.L2_FRONT;
             } else if (level == 3) {
                 return ElevatorState.L3_FRONT;
@@ -92,7 +95,9 @@ public abstract class Elevator extends SubsystemBase {
                 return ElevatorState.L4_FRONT;
             }
         } else {
-            if (level == 2) {
+            if (level == 1) {
+                return ElevatorState.L1_BACK;
+            } else if (level == 2) {
                 return ElevatorState.L2_BACK;
             } else if (level == 3) {
                 return ElevatorState.L3_BACK;
@@ -100,7 +105,7 @@ public abstract class Elevator extends SubsystemBase {
                 return ElevatorState.L4_BACK;
             }
         }
-        return ElevatorState.L1;
+        return ElevatorState.L1_FRONT;
     }
 
     public abstract double getCurrentHeight();
