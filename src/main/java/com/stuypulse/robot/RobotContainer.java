@@ -74,6 +74,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistT
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -307,7 +308,7 @@ public class RobotContainer {
         driver.getRightStickButton()
             .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new SwerveDrivePIDAssistToClosestCoralStation(driver)
+            .whileTrue(new SwerveDrivePIDToCoralStation(driver)
                 .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
 

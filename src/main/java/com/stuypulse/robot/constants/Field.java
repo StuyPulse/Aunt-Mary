@@ -184,7 +184,6 @@ public interface Field {
     }
 
     /*** CORAL STATIONS ***/
-
     public enum CoralStation {
         BLUE_CD_CORAL_STATION(NamedTags.BLUE_CD_CORAL_STATION, new Translation2d(0, Field.WIDTH / 2 - Units.inchesToMeters(109.13)), new Translation2d(Units.inchesToMeters(65.84), 0)),
         BLUE_KL_CORAL_STATION(NamedTags.BLUE_KL_CORAL_STATION, new Translation2d(0, Field.WIDTH / 2 + Units.inchesToMeters(109.13)), new Translation2d(Units.inchesToMeters(65.84), Field.WIDTH)),
@@ -245,6 +244,15 @@ public interface Field {
             return new Pose2d(closestPointOnCoralStation, correspondingAprilTag.getLocation().toPose2d().getRotation()).transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION, 
                 0, Rotation2d.kZero));
+        }
+
+        public Pose2d getTargetPose(boolean isLeftSideOfStation) {
+            int direction = (isLeftSideOfStation ? 1 : -1);
+            return correspondingAprilTag.getLocation().toPose2d().transformBy(
+                new Transform2d(
+                    Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION,
+                    direction * Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT,
+                    Rotation2d.kZero));
         }
 
         public Vector2D getHeadingAsVector() {
