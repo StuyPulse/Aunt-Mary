@@ -228,8 +228,8 @@ public class RobotContainer {
                 //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
                 //             .andThen(new ShooterShootL1()))),
                 new ConditionalCommand(
-                    new ScoreRoutine(driver, 1, false).until(() -> false),
                     new ScoreRoutine(driver, 1, true).until(() -> false),
+                    new ScoreRoutine(driver, 1, false).until(() -> false),
                     () -> swerve.isFrontFacingAllianceReef()
                 ),
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE.getTargetAngle().getDegrees() - 10)
