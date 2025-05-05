@@ -7,6 +7,7 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
@@ -29,14 +30,18 @@ public class SwerveDrivePIDToCoralStation extends SwerveDrivePIDToPose {
     }
 
     private static Supplier<Pose2d> getCoralStationPoseWithDriverInput(Gamepad driver) {
+        Optional<Pose2d>[] lastPose = new Optional[]{Optional.empty()};
+        
         return () -> { 
             if (driver.getLeftX() < Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-                return Field.CoralStation.getClosestCoralStation().getTargetPose(true);
+                lastPose[0] = Optional.of(Field.CoralStation.getClosestCoralStation().getTargetPose(true));
             } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-                return Field.CoralStation.getClosestCoralStation().getTargetPose(false);
+                lastPose[0] = Optional.of(Field.CoralStation.getClosestCoralStation().getTargetPose(false));
             } else {
-                return Field.CoralStation.getClosestCoralStation().getTargetPose();
+                return lastPose[0].orElseGet(() -> Field.CoralStation.getClosestCoralStation().getTargetPose());
             }
+
+            return lastPose[0].get();
         };
     }
 }
