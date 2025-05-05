@@ -43,7 +43,7 @@ public class SuperStructure extends SubsystemBase{
         FEED(ElevatorState.FEED, ArmState.FEED),
         GOLF_TEE_ALGAE_PICKUP(ElevatorState.GOLF_TEE_ALGAE_PICKUP, ArmState.GOLF_TEE_ALGAE_PICKUP),
         L1_FRONT(ElevatorState.L1_FRONT, ArmState.L1_FRONT),
-        L1_BACK(ElevatorState.L1_BACK, ArmState.L1_BACK),
+        L1_BACK(ElevatorState.FEED, ArmState.FEED),
         L2_FRONT(ElevatorState.L2_FRONT, ArmState.L2_FRONT),
         L2_BACK(ElevatorState.L2_BACK, ArmState.L2_BACK),
         L3_FRONT(ElevatorState.L3_FRONT, ArmState.L3_FRONT),
