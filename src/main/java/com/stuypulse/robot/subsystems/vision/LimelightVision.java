@@ -174,17 +174,17 @@ public class LimelightVision extends SubsystemBase{
                 0
             );
           
+            if (camera.getName().equals("limelight-funnel")) {
+                funnelCam.setPose((Robot.isBlue() ? getMegaTag2PoseEstimate(camera.getName()).pose : Field.transformToOppositeAlliance(getMegaTag2PoseEstimate(camera.getName()).pose)));
+            }
+            else if (camera.getName().equals("limelight-shooter")) {
+                shooterCam.setPose((Robot.isBlue() ? getMegaTag2PoseEstimate(camera.getName()).pose : Field.transformToOppositeAlliance(getMegaTag2PoseEstimate(camera.getName()).pose)));
+            }
+
             if (camera.isEnabled()) {
                 PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                     ? getMegaTag2PoseEstimate(camera.getName())
                     : getMegaTag1PoseEstimate(camera.getName());
-                    //Add logging for the two different camera poses
-                if (camera.getName().equals("limelight-funnel")) {
-                    funnelCam.setPose(poseEstimate.pose);
-                }
-                else if (camera.getName().equals("limelight-shooter")) {
-                    shooterCam.setPose(poseEstimate.pose);
-                }
                 
                 if (poseEstimate != null && poseEstimate.tagCount > 0) {
                     CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
