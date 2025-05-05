@@ -18,12 +18,15 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightVision extends SubsystemBase{
 
     private static final LimelightVision instance;
+    private static final FieldObject2d shooterCam = Field.FIELD2D.getObject("Vision/Shooter Cam");
+    private static final FieldObject2d funnelCam = Field.FIELD2D.getObject("Vision/Funnel Cam");
 
     static {
         instance = new LimelightVision();
@@ -170,10 +173,18 @@ public class LimelightVision extends SubsystemBase{
                 0, 
                 0
             );
+          
             if (camera.isEnabled()) {
                 PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                     ? getMegaTag2PoseEstimate(camera.getName())
                     : getMegaTag1PoseEstimate(camera.getName());
+                    //Add logging for the two different camera poses
+                if (camera.getName().equals("limelight-funnel")) {
+                    funnelCam.setPose(poseEstimate.pose);
+                }
+                else if (camera.getName().equals("limelight-shooter")) {
+                    shooterCam.setPose(poseEstimate.pose);
+                }
                 
                 if (poseEstimate != null && poseEstimate.tagCount > 0) {
                     CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
@@ -185,8 +196,10 @@ public class LimelightVision extends SubsystemBase{
                     SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", false);
                     SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", 0);
                 }
+                
+                }
             }
-        }
+            
 
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
         SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistMode().toString());
