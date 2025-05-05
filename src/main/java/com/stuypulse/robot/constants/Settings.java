@@ -128,7 +128,7 @@ public interface Settings {
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.13;
-                double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(15);
+                double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(10);
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_CATAPULT = Rotation2d.fromDegrees(30);
             }
@@ -346,7 +346,7 @@ public interface Settings {
         double BUZZ_INTENSITY = 1.0;
 
         double BRANCH_OVERRIDE_DEADBAND = 0.15;
-        double CORAL_STATION_OVERRIDE_DEADBAND = 0.2;
+        double CORAL_STATION_OVERRIDE_DEADBAND = 0.15; // 0.2
 
         public interface Drive {
             double DEADBAND = 0.08;
