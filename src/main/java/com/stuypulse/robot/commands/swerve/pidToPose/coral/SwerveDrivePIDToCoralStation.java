@@ -7,36 +7,37 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Field;
-import com.stuypulse.robot.constants.Field.CoralStation;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.input.Gamepad;
 
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class SwerveDrivePIDToCoralStation extends SwerveDrivePIDToPose {
+    private static Boolean isLeft = null;
+
     public SwerveDrivePIDToCoralStation(boolean isCD) {
         super(() -> Field.CoralStation.getCoralStation(isCD).getTargetPose());
     }
 
     public SwerveDrivePIDToCoralStation(Gamepad driver) {
-        super(getCoralStationPoseWithDriverInput(driver));
+        super(() -> getCoralStationPoseWithDriverInput(driver));
     }
         
-    private static Supplier<Pose2d> getCoralStationPoseWithDriverInput(Gamepad driver) {
-        return () -> { 
-            if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-                return Field.CoralStation.getClosestCoralStation().getTargetPose(true);
-            } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-                return Field.CoralStation.getClosestCoralStation().getTargetPose(false);
-            } else {
-                return Field.CoralStation.getClosestCoralStation().getTargetPose();
-            }
-        };
+    private static Pose2d getCoralStationPoseWithDriverInput(Gamepad driver) {
+        if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
+            isLeft = true;
+            return Field.CoralStation.getClosestCoralStation().getTargetPose(true);
+        } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
+            isLeft = false;
+            return Field.CoralStation.getClosestCoralStation().getTargetPose(false);
+        } else {
+            return (isLeft != null && isLeft ? 
+                Field.CoralStation.getClosestCoralStation().getTargetPose(true) : 
+                Field.CoralStation.getClosestCoralStation().getTargetPose(false));
+        }
     }
 }
