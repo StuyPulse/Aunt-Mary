@@ -20,7 +20,6 @@ import com.stuypulse.stuylib.input.Gamepad;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class SwerveDrivePIDToCoralStation extends SwerveDrivePIDToPose {
-
     public SwerveDrivePIDToCoralStation(boolean isCD) {
         super(() -> Field.CoralStation.getCoralStation(isCD).getTargetPose());
     }
@@ -28,20 +27,16 @@ public class SwerveDrivePIDToCoralStation extends SwerveDrivePIDToPose {
     public SwerveDrivePIDToCoralStation(Gamepad driver) {
         super(getCoralStationPoseWithDriverInput(driver));
     }
-
-    private static Supplier<Pose2d> getCoralStationPoseWithDriverInput(Gamepad driver) {
-        Optional<Pose2d>[] lastPose = new Optional[]{Optional.empty()};
         
+    private static Supplier<Pose2d> getCoralStationPoseWithDriverInput(Gamepad driver) {
         return () -> { 
-            if (driver.getLeftX() < Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-                lastPose[0] = Optional.of(Field.CoralStation.getClosestCoralStation().getTargetPose(true));
+            if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
+                return Field.CoralStation.getClosestCoralStation().getTargetPose(true);
             } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-                lastPose[0] = Optional.of(Field.CoralStation.getClosestCoralStation().getTargetPose(false));
+                return Field.CoralStation.getClosestCoralStation().getTargetPose(false);
             } else {
-                return lastPose[0].orElseGet(() -> Field.CoralStation.getClosestCoralStation().getTargetPose());
+                return Field.CoralStation.getClosestCoralStation().getTargetPose();
             }
-
-            return lastPose[0].get();
         };
     }
 }
