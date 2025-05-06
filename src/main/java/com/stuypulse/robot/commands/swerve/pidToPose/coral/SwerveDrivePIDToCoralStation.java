@@ -6,10 +6,13 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
+import java.util.Arrays;
+
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.stuylib.input.Gamepad;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,18 +38,21 @@ public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
     }
         
     private static Pose2d getCoralStationPoseWithDriverInput(Gamepad driver) {
+        Pose2d[] sides = new Pose2d[] {
+            Field.CoralStation.getClosestCoralStation().getTargetPose(true),
+            Field.CoralStation.getClosestCoralStation().getTargetPose(false)
+        };
+
         if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
             isLeftSideOfStation = true;
             led = Settings.LED.CORAL_STATION_ALIGN_COLOR_LEFT;
-            return Field.CoralStation.getClosestCoralStation().getTargetPose(true);
+            return sides[0];
         } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
             isLeftSideOfStation = false;
             led = Settings.LED.CORAL_STATION_ALIGN_COLOR_RIGHT;
-            return Field.CoralStation.getClosestCoralStation().getTargetPose(false);
+            return sides[1];
         } else {
-            return (isLeftSideOfStation != null && isLeftSideOfStation ? 
-                Field.CoralStation.getClosestCoralStation().getTargetPose(true) : 
-                Field.CoralStation.getClosestCoralStation().getTargetPose(false));
+            return (CommandSwerveDrivetrain.getInstance().getPose().nearest(Arrays.asList(sides)));
         }
     }
 }
