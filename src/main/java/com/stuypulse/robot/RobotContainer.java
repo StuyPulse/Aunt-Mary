@@ -309,7 +309,6 @@ public class RobotContainer {
             .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
             .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
             .whileTrue(new SwerveDrivePIDToCoralStation(driver)
-                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
                 .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire closest reef algae

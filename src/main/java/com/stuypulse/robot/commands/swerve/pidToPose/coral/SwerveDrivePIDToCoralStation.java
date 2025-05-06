@@ -1,4 +1,3 @@
-
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -7,35 +6,45 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
-import java.util.function.Supplier;
-
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.input.Gamepad;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
-public class SwerveDrivePIDToCoralStation extends SwerveDrivePIDToPose {
-    private static Boolean isLeft = null;
+public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
+    private static Boolean isLeftSideOfStation = null;
+    private static LEDPattern led = null;
 
     public SwerveDrivePIDToCoralStation(boolean isCD) {
-        super(() -> Field.CoralStation.getCoralStation(isCD).getTargetPose());
+        addCommands(
+            new SwerveDrivePIDToPose(() -> Field.CoralStation.getCoralStation(isCD).getTargetPose())
+        );
     }
 
     public SwerveDrivePIDToCoralStation(Gamepad driver) {
-        super(() -> getCoralStationPoseWithDriverInput(driver));
+        addCommands(
+            new SwerveDrivePIDToPose(() -> getCoralStationPoseWithDriverInput(driver)),
+            new LEDApplyPattern(() -> led).onlyIf(() -> led != null)
+        );
+
     }
         
     private static Pose2d getCoralStationPoseWithDriverInput(Gamepad driver) {
         if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-            isLeft = true;
+            isLeftSideOfStation = true;
+            led = Settings.LED.CORAL_STATION_ALIGN_COLOR_LEFT;
             return Field.CoralStation.getClosestCoralStation().getTargetPose(true);
         } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-            isLeft = false;
+            isLeftSideOfStation = false;
+            led = Settings.LED.CORAL_STATION_ALIGN_COLOR_RIGHT;
             return Field.CoralStation.getClosestCoralStation().getTargetPose(false);
         } else {
-            return (isLeft != null && isLeft ? 
+            return (isLeftSideOfStation != null && isLeftSideOfStation ? 
                 Field.CoralStation.getClosestCoralStation().getTargetPose(true) : 
                 Field.CoralStation.getClosestCoralStation().getTargetPose(false));
         }

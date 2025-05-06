@@ -315,6 +315,8 @@ public interface Settings {
     public interface LED {
         LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kBlue);
         LEDPattern CORAL_STATION_ALIGN_COLOR = LEDPattern.solid(Color.kRed);
+        LEDPattern CORAL_STATION_ALIGN_COLOR_LEFT = LEDPattern.solid(Color.kPurple);
+        LEDPattern CORAL_STATION_ALIGN_COLOR_RIGHT = LEDPattern.solid(Color.kHotPink);
 
         LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kWhite);
 
