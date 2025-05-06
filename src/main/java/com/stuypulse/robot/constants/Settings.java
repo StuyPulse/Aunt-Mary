@@ -107,9 +107,9 @@ public interface Settings {
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_FRONT = Units.inchesToMeters(4);
-                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_BACK = Units.inchesToMeters(4);
+                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_BACK = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.01;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = Units.inchesToMeters(7); // -0.01
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
@@ -142,10 +142,10 @@ public interface Settings {
 
     public interface Shooter {
         double CORAL_SHOOT_SPEED_L1_FRONT = 0.22;
-        double CORAL_SHOOT_SPEED_L1_BACK = 0.22;
+        double CORAL_SHOOT_SPEED_L1_BACK = -0.75;
         double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
-        double CORAL_SHOOT_SPEED_L3_FRONT = -0.5;
+        double CORAL_SHOOT_SPEED_L3_FRONT = 0.5;
         double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
         double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
@@ -187,7 +187,7 @@ public interface Settings {
         double BACK_L1_HEIGHT_METERS = 1.5;
 
         double FRONT_L2_HEIGHT_METERS = 1.57586;
-        double FRONT_L3_HEIGHT_METERS = 1.0566;
+        double FRONT_L3_HEIGHT_METERS = 1.760498; // 1.0566
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
@@ -227,7 +227,7 @@ public interface Settings {
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.05);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(-38.330078); //53.05
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599); // made up number
