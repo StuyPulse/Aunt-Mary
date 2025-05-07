@@ -31,7 +31,7 @@ public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
 
     public SwerveDrivePIDToCoralStation(Gamepad driver) {
         addCommands(
-            new SwerveDrivePIDToPose(() -> getCoralStationPoseWithDriverInput(driver)),
+            new SwerveDrivePIDToPose(() -> getCoralStationPoseWithDriverInput(driver)).withCanEnd(() -> false),
             new LEDApplyPattern(() -> led).onlyIf(() -> led != null)
         );
 
