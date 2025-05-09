@@ -24,6 +24,7 @@ import com.stuypulse.robot.commands.autons.FDCB.FDCBNudge;
 import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgae;
 import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgae;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
+import com.stuypulse.robot.commands.autons.tests.StraightLineTest;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
 import com.stuypulse.robot.commands.autons.IKLA.IKLANudge;
@@ -103,6 +104,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import com.stuypulse.robot.commands.autons.tests.DriveToTest;
+import com.stuypulse.robot.commands.autons.tests.DriveTest;
+
 
 public class RobotContainer {
 
@@ -130,7 +134,7 @@ public class RobotContainer {
         configureDefaultCommands();
         configureDriverButtonBindings();
         configureAutons();
-        // configureSysids();
+        configureSysids();
 
         SmartDashboard.putData("Field", Field.FIELD2D);
     }
@@ -231,32 +235,36 @@ public class RobotContainer {
             .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
         // L4 Coral Score
+        // driver.getTopButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+        //             .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
+        //             .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
+        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+        //                 .andThen(new SuperStructureBarge118())),
+        //         new ConditionalCommand(
+        //             new ScoreRoutine(driver, 4, true).until(() -> false),
+        //             new ScoreRoutine(driver, 4, false).until(() -> false), 
+        //             () -> swerve.isFrontFacingAllianceReef()),
+        //         () -> shooter.getState() == ShooterState.HOLD_ALGAE
+        //     ))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
+        //         .andThen(new SuperStructureFeed()))
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         driver.getTopButton()
-            .whileTrue(new ConditionalCommand(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
-                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
-                        .andThen(new SuperStructureBarge118())),
-                new ConditionalCommand(
-                    new ScoreRoutine(driver, 4, true).until(() -> false),
-                    new ScoreRoutine(driver, 4, false).until(() -> false), 
-                    () -> swerve.isFrontFacingAllianceReef()),
-                () -> shooter.getState() == ShooterState.HOLD_ALGAE
-            ))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
-
-        // L3 Coral Score
+            .onTrue(new DriveToTest());
+        
         driver.getRightButton()
-            .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 3, true).until(() -> false),
-                new ScoreRoutine(driver, 3, false).until(() -> false), 
-                () -> swerve.isFrontFacingAllianceReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+            .onTrue(new DriveTest());
+        // L3 Coral Score
+        // driver.getRightButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new ScoreRoutine(driver, 3, true).until(() -> false),
+        //         new ScoreRoutine(driver, 3, false).until(() -> false), 
+        //         () -> swerve.isFrontFacingAllianceReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new SuperStructureFeed()))
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score
         driver.getBottomButton()
@@ -395,6 +403,10 @@ public class RobotContainer {
         AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
         "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
         G_TWO_ALGAE_AUTON.register(autonChooser);
+
+        AutonConfig STRAIGHT_LINE_TEST = new AutonConfig("Straight Line Test", StraightLineTest::new, "Straight Line");
+        STRAIGHT_LINE_TEST.register(autonChooser);
+
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

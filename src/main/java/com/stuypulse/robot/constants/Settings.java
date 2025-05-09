@@ -84,7 +84,7 @@ public interface Settings {
             }
 
             public interface Tolerances {
-                double X_TOLERANCE = Units.inchesToMeters(2.0); 
+                double X_TOLERANCE = Units.inchesToMeters(0.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
 

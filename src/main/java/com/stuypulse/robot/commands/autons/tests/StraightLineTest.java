@@ -18,7 +18,6 @@ public class StraightLineTest extends SequentialCommandGroup {
     public StraightLineTest(PathPlannerPath... paths) {
         
         addCommands(
-
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
         );
 

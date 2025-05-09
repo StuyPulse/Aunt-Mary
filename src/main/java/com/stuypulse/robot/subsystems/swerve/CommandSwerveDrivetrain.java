@@ -93,7 +93,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* SysId routine for characterizing module translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineModuleTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
+            Volts.of(1).per(Second),        // Use default ramp rate (1 V/s)
             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
             null,        // Use default timeout (10 s)
             // Log state with SignalLogger class
@@ -177,7 +177,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineChassisTranslation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineModuleTranslation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
