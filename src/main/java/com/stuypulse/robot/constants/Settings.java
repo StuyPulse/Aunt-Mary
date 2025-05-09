@@ -127,8 +127,8 @@ public interface Settings {
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.13;
-                double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(13);
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
+                double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(21);
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_CATAPULT = Rotation2d.fromDegrees(30);
             }
@@ -315,8 +315,8 @@ public interface Settings {
     public interface LED {
         LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kBlue);
         LEDPattern CORAL_STATION_ALIGN_COLOR = LEDPattern.solid(Color.kRed);
-        LEDPattern CORAL_STATION_ALIGN_COLOR_LEFT = LEDPattern.solid(Color.kPurple);
-        LEDPattern CORAL_STATION_ALIGN_COLOR_RIGHT = LEDPattern.solid(Color.kHotPink);
+        LEDPattern CORAL_STATION_ALIGN_COLOR_LEFT = LEDPattern.solid(Color.kYellow);
+        LEDPattern CORAL_STATION_ALIGN_COLOR_RIGHT = LEDPattern.solid(Color.kRed);
 
         LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kWhite);
 
