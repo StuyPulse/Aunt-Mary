@@ -9,7 +9,8 @@ package com.stuypulse.robot.subsystems.superStructure;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
-import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Back;
@@ -41,7 +42,8 @@ public class SuperStructure extends SubsystemBase{
     public enum SuperStructureState {
         FEED(ElevatorState.FEED, ArmState.FEED),
         GOLF_TEE_ALGAE_PICKUP(ElevatorState.GOLF_TEE_ALGAE_PICKUP, ArmState.GOLF_TEE_ALGAE_PICKUP),
-        L1(ElevatorState.L1, ArmState.L1),
+        L1_FRONT(ElevatorState.L1_FRONT, ArmState.L1_FRONT),
+        L1_BACK(ElevatorState.FEED, ArmState.FEED),
         L2_FRONT(ElevatorState.L2_FRONT, ArmState.L2_FRONT),
         L2_BACK(ElevatorState.L2_BACK, ArmState.L2_BACK),
         L3_FRONT(ElevatorState.L3_FRONT, ArmState.L3_FRONT),
@@ -106,7 +108,8 @@ public class SuperStructure extends SubsystemBase{
             || state == SuperStructureState.L3_BACK
             || state == SuperStructureState.L2_FRONT
             || state == SuperStructureState.L2_BACK
-            || state == SuperStructureState.L1;
+            || state == SuperStructureState.L1_FRONT
+            || state == SuperStructureState.L1_BACK;
     }
 
     public boolean atTarget() {
@@ -120,7 +123,7 @@ public class SuperStructure extends SubsystemBase{
     public static SuperStructureState getCorrespondingCoralScoreState(int level, boolean isFrontFacingReef) {
         switch (level) {
             case 1:
-                return SuperStructureState.L1;
+                return isFrontFacingReef ? SuperStructureState.L1_FRONT : SuperStructureState.L1_BACK;
             case 2:
                 return isFrontFacingReef ? SuperStructureState.L2_FRONT : SuperStructureState.L2_BACK;
             case 3:
@@ -128,14 +131,14 @@ public class SuperStructure extends SubsystemBase{
             case 4:
                 return isFrontFacingReef ? SuperStructureState.L4_FRONT : SuperStructureState.L4_BACK;
             default:
-                return SuperStructureState.L1;
+                return SuperStructureState.L1_FRONT;
         }
     }
 
     public static Command getCorrespondingCoralScoreStateCommand(int level, boolean isFrontFacingReef) {
         switch (level) {
             case 1:
-                return new SuperStructureCoralL1();
+                return isFrontFacingReef ? new SuperStructureCoralL1Front() : new SuperStructureCoralL1Back();
             case 2:
                 return isFrontFacingReef ? new SuperStructureCoralL2Front() : new SuperStructureCoralL2Back();
             case 3:
@@ -143,7 +146,7 @@ public class SuperStructure extends SubsystemBase{
             case 4:
                 return isFrontFacingReef ? new SuperStructureCoralL4Front() : new SuperStructureCoralL4Back();
             default:
-                return new SuperStructureCoralL1();
+                return new SuperStructureCoralL1Front();
         }
     }
 

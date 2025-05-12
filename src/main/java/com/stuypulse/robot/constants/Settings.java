@@ -106,9 +106,10 @@ public interface Settings {
 
             public interface Targets {
                 // DISTANCE FROM REEF TO BUMPER
-                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER = Units.inchesToMeters(4);
+                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_FRONT = Units.inchesToMeters(4);
+                double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_BACK = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = -0.01;
+                double TARGET_DISTANCE_FROM_REEF_L3_FRONT = Units.inchesToMeters(7); // -0.01
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
@@ -126,7 +127,8 @@ public interface Settings {
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
 
-                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.13;
+                double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
+                double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(21);
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_CATAPULT = Rotation2d.fromDegrees(30);
             }
@@ -139,10 +141,11 @@ public interface Settings {
     }
 
     public interface Shooter {
-        double CORAL_SHOOT_SPEED_L1 = 0.22;
+        double CORAL_SHOOT_SPEED_L1_FRONT = 0.22;
+        double CORAL_SHOOT_SPEED_L1_BACK = -0.75;
         double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
         double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
-        double CORAL_SHOOT_SPEED_L3_FRONT = -0.5;
+        double CORAL_SHOOT_SPEED_L3_FRONT = 0.5;
         double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
         double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -0.5;
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
@@ -180,10 +183,11 @@ public interface Settings {
         double FEED_HEIGHT_METERS = 1.047119;
 
         // Coral
-        double L1_HEIGHT_METERS = 1.16;
+        double FRONT_L1_HEIGHT_METERS = 1.16;
+        double BACK_L1_HEIGHT_METERS = 1.5;
 
         double FRONT_L2_HEIGHT_METERS = 1.57586;
-        double FRONT_L3_HEIGHT_METERS = 1.0566;
+        double FRONT_L3_HEIGHT_METERS = 1.760498; // 1.0566
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109;
@@ -223,9 +227,10 @@ public interface Settings {
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(53.05);
+        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(-38.330078); //53.05
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
+        Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599); // made up number
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(177.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
@@ -310,6 +315,8 @@ public interface Settings {
     public interface LED {
         LEDPattern HAS_CORAL_COLOR = LEDPattern.solid(Color.kBlue);
         LEDPattern CORAL_STATION_ALIGN_COLOR = LEDPattern.solid(Color.kRed);
+        LEDPattern CORAL_STATION_ALIGN_COLOR_LEFT = LEDPattern.solid(Color.kYellow);
+        LEDPattern CORAL_STATION_ALIGN_COLOR_RIGHT = LEDPattern.solid(Color.kRed);
 
         LEDPattern MANUAL_SHOOT_COLOR = LEDPattern.solid(Color.kWhite);
 
@@ -341,6 +348,7 @@ public interface Settings {
         double BUZZ_INTENSITY = 1.0;
 
         double BRANCH_OVERRIDE_DEADBAND = 0.15;
+        double CORAL_STATION_OVERRIDE_DEADBAND = 0.15; // 0.2
 
         public interface Drive {
             double DEADBAND = 0.08;

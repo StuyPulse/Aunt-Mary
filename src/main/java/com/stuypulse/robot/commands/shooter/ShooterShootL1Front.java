@@ -9,8 +9,8 @@ package com.stuypulse.robot.commands.shooter;
 
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
-public class ShooterShootL1 extends ShooterSetState {
-    public ShooterShootL1() {
-        super(ShooterState.SHOOT_CORAL_L1);
+public class ShooterShootL1Front extends ShooterSetState {
+    public ShooterShootL1Front() {
+        super(ShooterState.SHOOT_CORAL_L1_FRONT);
     }
 }
