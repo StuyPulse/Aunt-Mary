@@ -105,6 +105,8 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import com.stuypulse.robot.commands.autons.tests.DriveToTest;
+import com.stuypulse.robot.commands.autons.tests.DriveBackwardTest;
+import com.stuypulse.robot.commands.autons.tests.DriveForwardTest;
 import com.stuypulse.robot.commands.autons.tests.DriveTest;
 
 
@@ -252,10 +254,17 @@ public class RobotContainer {
         //         .andThen(new SuperStructureFeed()))
         //     .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         driver.getTopButton()
-            .onTrue(new DriveToTest());
+            .whileTrue(new DriveToTest());
         
-        driver.getRightButton()
-            .onTrue(new DriveTest());
+        // driver.getBottomButton()
+        //     .whileTrue(new DriveTest());
+
+        driver.getBottomButton()
+            .whileTrue(new InstantCommand(() -> new DriveForwardTest().schedule()));
+
+        driver.getTopButton()
+            .whileTrue(new InstantCommand(() -> new DriveBackwardTest().schedule()));
+
         // L3 Coral Score
         // driver.getRightButton()
         //     .whileTrue(new ConditionalCommand(
@@ -267,14 +276,14 @@ public class RobotContainer {
         //     .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score
-        driver.getBottomButton()
-            .whileTrue(new ConditionalCommand(
-                new ScoreRoutine(driver, 2, true).until(() -> false),
-                new ScoreRoutine(driver, 2, false).until(() -> false), 
-                () -> swerve.isFrontFacingAllianceReef()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+        // driver.getBottomButton()
+        //     .whileTrue(new ConditionalCommand(
+        //         new ScoreRoutine(driver, 2, true).until(() -> false),
+        //         new ScoreRoutine(driver, 2, false).until(() -> false), 
+        //         () -> swerve.isFrontFacingAllianceReef()))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //         .andThen(new SuperStructureFeed()))
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // Catapult
         driver.getLeftButton()

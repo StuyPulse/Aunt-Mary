@@ -186,7 +186,7 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return isAligned.get() && canEnd.get();
+        return isAligned() && canEnd.get();
     }
 
     @Override
