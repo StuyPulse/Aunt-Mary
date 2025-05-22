@@ -66,6 +66,7 @@ import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Fr
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.SwerveDriveXMode;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
@@ -244,11 +245,14 @@ public class RobotContainer {
         // L4 Coral Score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
-                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
-                        .andThen(new SuperStructureBarge118())),
+                new SwerveDriveXMode()
+                    .alongWith(
+                        new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
+                            .alongWith(new SuperStructureCatapultReady()
+                                .andThen(new SuperStructureWaitUntilAtTarget())
+                                    .andThen(new SuperStructureCatapultShoot()
+                                        .andThen(new SuperStructureWaitUntilCanCatapult()
+                                         .andThen(new ShooterShootAlgae()))))),
                 new ConditionalCommand(
                     new ScoreRoutine(driver, 4, true).until(() -> false),
                     new ScoreRoutine(driver, 4, false).until(() -> false), 
