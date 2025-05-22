@@ -281,11 +281,9 @@ public class RobotContainer {
         
         // Catapult
         driver.getLeftButton()
-            .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
+            .whileTrue(new SuperStructureCatapultReady()
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-                .alongWith(new SuperStructureCatapultReady()
                     .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
                     .andThen(new SuperStructureCatapultShoot()
                         .andThen(new SuperStructureWaitUntilCanCatapult()
                             .andThen(new ShooterShootAlgae())))))
