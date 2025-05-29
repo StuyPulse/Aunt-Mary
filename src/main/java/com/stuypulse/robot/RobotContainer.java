@@ -318,7 +318,7 @@ public class RobotContainer {
                 new ReefAlgaePickupRoutineBack(),
                 () -> ((swerve.isOnAllianceSide() && swerve.isFrontFacingAllianceReef()) || (!swerve.isOnAllianceSide() && swerve.isFrontFacingOppositeAllianceReef()))))
             .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromAlgaeReef())
                 .andThen(new SuperStructureProcessor()))
             .onFalse(new ShooterHoldAlgae());
 

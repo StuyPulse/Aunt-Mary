@@ -50,6 +50,7 @@ public interface Settings {
         double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4;
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(19.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
+        double CLEARANCE_DISTANCE_FROM_REEF_ARM_ALGAE = Units.inchesToMeters(0);
 
         double CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FUNNEL_SIDE = Units.inchesToMeters(9);
         double CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FROGGY_SIDE = Units.inchesToMeters(-9);
@@ -119,7 +120,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(1);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
-                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(0);
+                double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74;
@@ -153,11 +154,11 @@ public interface Settings {
         
         double CORAL_SHOOT_TIME_AUTON = 0.2;
 
-        double CORAL_ACQUIRE_SPEED = 0.17;
+        double CORAL_ACQUIRE_SPEED = 1; // 0.25
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 0.5;
-        double ALGAE_HOLD_SPEED = -0.5;
+        double ALGAE_HOLD_SPEED = -1.0; // -0.5
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
@@ -198,8 +199,8 @@ public interface Settings {
         double CATAPULT_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         double BARGE_118_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
         
-        double ALGAE_L2_HEIGHT_METERS_FRONT = 1.260986;
-        double ALGAE_L3_HEIGHT_METERS_FRONT = 1.469482;
+        double ALGAE_L2_HEIGHT_METERS_FRONT = 1.479980 + Units.inchesToMeters(2);
+        double ALGAE_L3_HEIGHT_METERS_FRONT = 1.726074 + Units.inchesToMeters(2);
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
         double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051;
 
@@ -235,13 +236,13 @@ public interface Settings {
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
-        Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-42.391385);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-25.579658);
+        Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-47.724609);
+        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); //4
 
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(160.076257);
         Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
 
-        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees());
+        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-51.591797);
 
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-73.300781);
 
