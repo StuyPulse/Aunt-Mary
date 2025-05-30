@@ -123,7 +123,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74;
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(2);
 
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
@@ -142,23 +142,23 @@ public interface Settings {
     }
 
     public interface Shooter {
-        double CORAL_SHOOT_SPEED_L1_FRONT = 0.22;
-        double CORAL_SHOOT_SPEED_L1_BACK = -0.75;
-        double CORAL_SHOOT_SPEED_L2_FRONT = 0.4;
-        double CORAL_SHOOT_SPEED_L2_BACK = 0.4;
-        double CORAL_SHOOT_SPEED_L3_FRONT = 0.5;
-        double CORAL_SHOOT_SPEED_L3_BACK = 0.4;
-        double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -0.5;
+        double CORAL_SHOOT_SPEED_L1_FRONT = 1.0; // 0.22
+        double CORAL_SHOOT_SPEED_L1_BACK = -1.0; // -0.75
+        double CORAL_SHOOT_SPEED_L2_FRONT = 1.0; // 0.4
+        double CORAL_SHOOT_SPEED_L2_BACK = 1.0; // 0.4
+        double CORAL_SHOOT_SPEED_L3_FRONT = 1.0; // 0.5
+        double CORAL_SHOOT_SPEED_L3_BACK = 1.0; // 0.4
+        double CORAL_AUTON_SHOOT_SPEED_L4_FRONT = -1.0; // -0.5
         double CORAL_SHOOT_SPEED_L4_FRONT = -1.0;
-        double CORAL_SHOOT_SPEED_L4_BACK = 0.7;
+        double CORAL_SHOOT_SPEED_L4_BACK = 1.0; // 0.7
         
         double CORAL_SHOOT_TIME_AUTON = 0.2;
 
-        double CORAL_ACQUIRE_SPEED = 0.35; // 0.25
+        double CORAL_ACQUIRE_SPEED = 0.5; // 0.35
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 0.5;
-        double ALGAE_HOLD_SPEED = -0.5; // -0.5
+        double ALGAE_HOLD_SPEED = -0.05; // -0.5
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
@@ -191,9 +191,9 @@ public interface Settings {
         double FRONT_L3_HEIGHT_METERS = 1.760498; // 1.0566
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
-        double BACK_L2_HEIGHT_METERS = 1.037109;
-        double BACK_L3_HEIGHT_METERS = 1.077109;
-        double BACK_L4_HEIGHT_METERS = 1.7304;
+        double BACK_L2_HEIGHT_METERS = 1.037109 + Units.inchesToMeters(1);
+        double BACK_L3_HEIGHT_METERS = 1.077109 + Units.inchesToMeters(1);
+        double BACK_L4_HEIGHT_METERS = 1.7304 + Units.inchesToMeters(2);
 
         // Algae
         double CATAPULT_HEIGHT_METERS = Constants.Elevator.MAX_HEIGHT_METERS;
@@ -202,7 +202,7 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.479980 + Units.inchesToMeters(2);
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.726074 + Units.inchesToMeters(2);
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
-        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051;
+        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(2);
 
         double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
 
@@ -242,9 +242,9 @@ public interface Settings {
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(166.552734); // 160.076257 new setting 5/30/25
         Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
 
-        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-76.464844);
+        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
 
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-73.300781);
+        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // -42.636719
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-60);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-55);
