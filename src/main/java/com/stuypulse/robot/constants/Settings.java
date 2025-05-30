@@ -154,11 +154,11 @@ public interface Settings {
         
         double CORAL_SHOOT_TIME_AUTON = 0.2;
 
-        double CORAL_ACQUIRE_SPEED = 1; // 0.25
+        double CORAL_ACQUIRE_SPEED = 0.35; // 0.25
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 0.5;
-        double ALGAE_HOLD_SPEED = -1.0; // -0.5
+        double ALGAE_HOLD_SPEED = -0.5; // -0.5
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
@@ -206,7 +206,7 @@ public interface Settings {
 
         double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
 
-        double PROCESSOR_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS;
+        double PROCESSOR_HEIGHT_METERS = 1.250732;
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
         double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
 
@@ -237,12 +237,12 @@ public interface Settings {
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
         Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-47.724609);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); //4
+        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); 
 
-        Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(160.076257);
+        Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(166.552734); // 160.076257 new setting 5/30/25
         Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
 
-        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-51.591797);
+        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-76.464844);
 
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-73.300781);
 
