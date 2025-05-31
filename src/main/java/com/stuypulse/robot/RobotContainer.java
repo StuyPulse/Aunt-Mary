@@ -60,6 +60,7 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGolfTeeAlgaePickup;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlgaePickup;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
@@ -312,9 +313,11 @@ public class RobotContainer {
         driver.getDPadDown()
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
-                new SuperStructureUnstuckCoral(),
+                new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
                 () -> climb.getState() != ClimbState.CLOSED
-            ));
+            ))
+            .onFalse(new SuperStructureProcessor())
+            .onFalse(new ShooterHoldAlgae());
 
         // Get ready for climb
         driver.getLeftMenuButton()
