@@ -53,6 +53,7 @@ import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
+import com.stuypulse.robot.commands.superStructure.SuperStructureSetState;
 import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
@@ -244,9 +245,9 @@ public class RobotContainer {
         // L4 Coral Score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+                new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
                     .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
+                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
                         .andThen(new SuperStructureBarge118())),
                 new ConditionalCommand(
@@ -279,30 +280,15 @@ public class RobotContainer {
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
-        // Catapult
+        // Angled Barge 118
         driver.getLeftButton()
-            .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
-                .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-                .alongWith(new SuperStructureCatapultReady()
-                    .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
-                    .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
-                            .andThen(new ShooterShootAlgae())))))
-            .onFalse(new SuperStructureFeed())
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
-        
-        // Align to closest Coral Station
-        // driver.getRightStickButton()
-        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-        //     .onTrue(SwerveDriveDynamicObstacles.reefClearance())
-        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
-        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-        //         .onlyIf(() -> !shooter.hasCoral()))
-        //     .onFalse(SwerveDriveDynamicObstacles.reset());
+            .whileTrue(new SwerveDriveDriveAlignedToBarge118Clearance(driver, true)
+                .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
+                .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, true))
+                .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+                        .andThen(new SuperStructureBarge118())))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
+                .andThen(new SuperStructureFeed()));
 
         // Align to closest Coral Station without path finding
         driver.getRightStickButton()
@@ -318,7 +304,7 @@ public class RobotContainer {
                 new ReefAlgaePickupRoutineBack(),
                 () -> ((swerve.isOnAllianceSide() && swerve.isFrontFacingAllianceReef()) || (!swerve.isOnAllianceSide() && swerve.isFrontFacingOppositeAllianceReef()))))
             .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromAlgaeReef())
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))
             .onFalse(new ShooterHoldAlgae());
 
@@ -348,6 +334,31 @@ public class RobotContainer {
             .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
+
+        // (UNUSED) Catapult
+        // driver.getLeftButton()
+        //     .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
+        //         .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
+        //         .alongWith(new SuperStructureCatapultReady()
+        //             .andThen(new SuperStructureWaitUntilAtTarget()
+        //                 .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
+        //             .andThen(new SuperStructureCatapultShoot()
+        //                 .andThen(new SuperStructureWaitUntilCanCatapult()
+        //                     .andThen(new ShooterShootAlgae())))))
+        //     .onFalse(new SuperStructureFeed())
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+        
+        // Align to closest Coral Station
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .onTrue(SwerveDriveDynamicObstacles.reefClearance())
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()))
+        //     .onFalse(SwerveDriveDynamicObstacles.reset());
     }
 
     /**************/

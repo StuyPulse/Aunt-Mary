@@ -167,3 +167,4 @@ bin/
 
 ctre_sim/
 logs/sim*
+simgui.json
