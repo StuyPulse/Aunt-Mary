@@ -30,7 +30,7 @@ import com.pathplanner.lib.path.PathConstraints;
 public interface Settings {
 
     double DT = 0.020;
-    boolean DEBUG_MODE = false;
+    boolean DEBUG_MODE = true;
     String CANIVORE_NAME = "CANIVORE";
     
     public interface EnabledSubsystems {
@@ -97,7 +97,7 @@ public interface Settings {
                 double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE_FROGGY = Rotation2d.fromDegrees(5.0);
 
-                double X_TOLERANCE_BARGE = Units.inchesToMeters(4.0);
+                double X_TOLERANCE_BARGE = Units.inchesToMeters(2);
                 Rotation2d THETA_TOLERANCE_BARGE = Rotation2d.fromDegrees(10.0);
 
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
@@ -123,7 +123,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(2);
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(8);
 
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
@@ -131,7 +131,8 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
                 double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(21);
 
-                Rotation2d ANGLE_FROM_HORIZONTAL_FOR_CATAPULT = Rotation2d.fromDegrees(30);
+                Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118 = Rotation2d.fromDegrees(0);
+                Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED = Rotation2d.fromDegrees(30);
             }
         }
     }
@@ -202,11 +203,11 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.479980 + Units.inchesToMeters(2);
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.726074 + Units.inchesToMeters(2);
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
-        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(2);
+        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(4);
 
         double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
 
-        double PROCESSOR_HEIGHT_METERS = 1.250732;
+        double PROCESSOR_HEIGHT_METERS = 1.250732 + Units.inchesToMeters(2);
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
         double UNSTUCK_CORAL_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + Units.inchesToMeters(12.0);
 
@@ -339,6 +340,9 @@ public interface Settings {
 
         LEDPattern AUTON_TO_REEF_COLOR = LEDPattern.solid(Color.kPurple);
         LEDPattern AUTON_TO_HP_COLOR = LEDPattern.solid(Color.kRed);
+
+        LEDPattern BARGE_ALIGNING = LEDPattern.solid(Color.kYellow);
+        LEDPattern BARGE_ALIGNMENT_DONE = LEDPattern.solid(Color.kRed);
 
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled

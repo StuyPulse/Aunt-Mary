@@ -1,5 +1,6 @@
 package com.stuypulse.robot.commands.swerve.driveAligned;
 
+import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Settings;
@@ -19,9 +20,12 @@ import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDriveAlignedToCatapult extends Command {
+public class SwerveDriveDriveAlignedToBarge118ScoreAngled extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
@@ -30,7 +34,7 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
     private final Controller xController;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAlignedToCatapult(Gamepad driver) {
+    public SwerveDriveDriveAlignedToBarge118ScoreAngled(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
@@ -50,30 +54,29 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
         addRequirements(swerve);
     }
 
+
     private double getTargetX() {
-        return swerve.getPose().getX() < Field.LENGTH / 2
-            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
-            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT;
+        return CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
+            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118
+            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118;
     }
 
     private Angle getTargetAngle() {
         return swerve.getPose().getX() < Field.LENGTH /2
-            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees())
-            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees());
+            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED.getDegrees())
+            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED.getDegrees());
     }
 
     @Override
     public void execute() {
-        xController.update(getTargetX(), swerve.getPose().getX());
-        
-        angleController.update(getTargetAngle(), Angle.fromRotation2d(swerve.getPose().getRotation()));
-
-        Vector2D targetVelocity = new Vector2D(xController.getOutput(), driverYVelocity.get())
+        Vector2D targetVelocity = new Vector2D(xController.update(getTargetX(), swerve.getPose().getX()), driverYVelocity.get())
             .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY));
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withVelocityX(targetVelocity.x)
             .withVelocityY(targetVelocity.y)
-            .withRotationalRate(angleController.getOutput()));
+            .withRotationalRate(angleController.update(
+                getTargetAngle(),
+                Angle.fromRotation2d(swerve.getPose().getRotation()))));
     }
 }

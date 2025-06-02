@@ -66,6 +66,7 @@ import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Fr
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Angled;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
@@ -131,7 +132,7 @@ public class RobotContainer {
         configureDefaultCommands();
         configureDriverButtonBindings();
         configureAutons();
-        // configureSysids();
+        configureSysids();
 
         SmartDashboard.putData("Field", Field.FIELD2D);
     }
@@ -245,6 +246,7 @@ public class RobotContainer {
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
                 new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
                     .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
                     .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
@@ -279,17 +281,18 @@ public class RobotContainer {
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
-        // Catapult
+        // 118
         driver.getLeftButton()
-            .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
-                .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-                .alongWith(new SuperStructureCatapultReady()
-                    .andThen(new SuperStructureWaitUntilAtTarget()
-                        .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
-                    .andThen(new SuperStructureCatapultShoot()
-                        .andThen(new SuperStructureWaitUntilCanCatapult()
-                            .andThen(new ShooterShootAlgae())))))
-            .onFalse(new SuperStructureFeed())
+            .whileTrue(
+                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
+                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
+                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
+                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+                        .andThen(new SuperStructureBarge118()))
+            )
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
+                .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
