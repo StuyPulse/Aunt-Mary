@@ -34,7 +34,9 @@ public class SwerveDriveDriveAlignedToBarge118Score extends Command {
     private final Controller xController;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAlignedToBarge118Score(Gamepad driver) {
+    private boolean isAngled;
+
+    public SwerveDriveDriveAlignedToBarge118Score(Gamepad driver, boolean isAngled) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
@@ -50,7 +52,8 @@ public class SwerveDriveDriveAlignedToBarge118Score extends Command {
 
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
             .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
-                
+               
+        this.isAngled = isAngled;
         addRequirements(swerve);
     }
 
@@ -62,9 +65,14 @@ public class SwerveDriveDriveAlignedToBarge118Score extends Command {
     }
 
     private Angle getTargetAngle() {
-        return CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
+        return (isAngled ? 
+            CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
+            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees())
+            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees())
+        :
+            CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
             ? Angle.k180deg
-            : Angle.kZero;
+            : Angle.kZero);
     }
 
     @Override

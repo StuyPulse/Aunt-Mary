@@ -2,8 +2,8 @@ package com.stuypulse.robot.commands;
 
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
-import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;

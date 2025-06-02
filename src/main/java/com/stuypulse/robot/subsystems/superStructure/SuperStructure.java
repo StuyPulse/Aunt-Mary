@@ -41,7 +41,6 @@ public class SuperStructure extends SubsystemBase{
 
     public enum SuperStructureState {
         FEED(ElevatorState.FEED, ArmState.FEED),
-        GOLF_TEE_ALGAE_PICKUP(ElevatorState.GOLF_TEE_ALGAE_PICKUP, ArmState.GOLF_TEE_ALGAE_PICKUP),
         L1_FRONT(ElevatorState.L1_FRONT, ArmState.L1_FRONT),
         L1_BACK(ElevatorState.FEED, ArmState.FEED),
         L2_FRONT(ElevatorState.L2_FRONT, ArmState.L2_FRONT),
@@ -54,6 +53,8 @@ public class SuperStructure extends SubsystemBase{
         ALGAE_L3_FRONT(ElevatorState.ALGAE_L3_FRONT, ArmState.ALGAE_L3_FRONT),
         ALGAE_L2_BACK(ElevatorState.ALGAE_L2_BACK, ArmState.ALGAE_L2_BACK),
         ALGAE_L3_BACK(ElevatorState.ALGAE_L3_BACK, ArmState.ALGAE_L3_BACK),
+        GOLF_TEE_ALGAE_PICKUP(ElevatorState.GOLF_TEE_ALGAE_PICKUP, ArmState.GOLF_TEE_ALGAE_PICKUP),
+        GROUND_ALGAE_PICKUP(ElevatorState.GROUND_ALGAE_PICKUP, ArmState.GROUND_ALGAE_PICKUP),
         CATAPULT_READY(ElevatorState.CATAPULT, ArmState.CATAPULT_READY),
         CATAPULT_SHOOT(ElevatorState.CATAPULT, ArmState.CATAPULT_SHOOT),
         BARGE_118(ElevatorState.BARGE_118, ArmState.BARGE_118),

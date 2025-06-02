@@ -54,6 +54,7 @@ public abstract class Elevator extends SubsystemBase {
         BARGE_118(Settings.Elevator.BARGE_118_HEIGHT_METERS),
         PROCESSOR(Settings.Elevator.PROCESSOR_HEIGHT_METERS),
         GOLF_TEE_ALGAE_PICKUP(Settings.Elevator.GOLF_TEE_ALGAE_PICKUP_HEIGHT),
+        GROUND_ALGAE_PICKUP(Settings.Elevator.GROUND_ALGAE_PICKUP_HEIGHT),
         CLIMB(Settings.Elevator.CLIMB_HEIGHT_METERS),
         UNSTUCK_CORAL(Settings.Elevator.UNSTUCK_CORAL_HEIGHT_METERS);
 

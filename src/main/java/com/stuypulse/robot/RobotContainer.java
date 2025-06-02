@@ -48,19 +48,14 @@ import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
-import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
-import com.stuypulse.robot.commands.superStructure.SuperStructureUnstuckCoral;
-import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGolfTeeAlgaePickup;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlgaePickup;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
-import com.stuypulse.robot.commands.superStructure.algae.SuperStructureWaitUntilCanCatapult;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
@@ -69,10 +64,6 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Angled;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
-import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
@@ -96,12 +87,10 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
-import com.stuypulse.robot.util.ReefUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -248,7 +237,7 @@ public class RobotContainer {
                 new SwerveDriveDriveAlignedToBarge118Clearance(driver)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
                     .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
+                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
                         .andThen(new SuperStructureBarge118())),
                 new ConditionalCommand(
@@ -321,7 +310,7 @@ public class RobotContainer {
                 new ReefAlgaePickupRoutineBack(),
                 () -> ((swerve.isOnAllianceSide() && swerve.isFrontFacingAllianceReef()) || (!swerve.isOnAllianceSide() && swerve.isFrontFacingOppositeAllianceReef()))))
             .whileTrue(new LEDApplyPattern(Settings.LED.INTAKE_COLOR_ALGAE))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromAlgaeReef())
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                 .andThen(new SuperStructureProcessor()))
             .onFalse(new ShooterHoldAlgae());
 
@@ -329,9 +318,11 @@ public class RobotContainer {
         driver.getDPadDown()
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
-                new SuperStructureUnstuckCoral(),
+                new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
                 () -> climb.getState() != ClimbState.CLOSED
-            ));
+            ))
+            .onFalse(new SuperStructureProcessor())
+            .onFalse(new ShooterHoldAlgae());
 
         // Get ready for climb
         driver.getLeftMenuButton()
@@ -351,6 +342,31 @@ public class RobotContainer {
             .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
+
+        // (UNUSED) Catapult
+        // driver.getLeftButton()
+        //     .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
+        //         .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
+        //         .alongWith(new SuperStructureCatapultReady()
+        //             .andThen(new SuperStructureWaitUntilAtTarget()
+        //                 .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
+        //             .andThen(new SuperStructureCatapultShoot()
+        //                 .andThen(new SuperStructureWaitUntilCanCatapult()
+        //                     .andThen(new ShooterShootAlgae())))))
+        //     .onFalse(new SuperStructureFeed())
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+        
+        // Align to closest Coral Station
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .onTrue(SwerveDriveDynamicObstacles.reefClearance())
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()))
+        //     .onFalse(SwerveDriveDynamicObstacles.reset());
     }
 
     /**************/

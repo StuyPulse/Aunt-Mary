@@ -5,12 +5,13 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands.shooter;
+package com.stuypulse.robot.commands.shooter.scoring;
 
+import com.stuypulse.robot.commands.shooter.ShooterSetState;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
-public class ShooterShootL1Front extends ShooterSetState {
-    public ShooterShootL1Front() {
-        super(ShooterState.SHOOT_CORAL_L1_FRONT);
+public class ShooterShootL2Back extends ShooterSetState {
+    public ShooterShootL2Back() {
+        super(ShooterState.SHOOT_CORAL_L2_BACK);
     }
 }

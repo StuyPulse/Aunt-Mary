@@ -206,6 +206,7 @@ public interface Settings {
         double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(4);
 
         double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
+        double GROUND_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
 
         double PROCESSOR_HEIGHT_METERS = 1.250732 + Units.inchesToMeters(2);
         double CLIMB_HEIGHT_METERS = Constants.Elevator.MIN_HEIGHT_METERS + 0.1;
@@ -232,7 +233,7 @@ public interface Settings {
         Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(-38.330078); //53.05
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
-        Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599); // made up number
+        Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599);
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(177.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
@@ -246,6 +247,7 @@ public interface Settings {
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
 
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // -42.636719
+        Rotation2d GROUND_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56); // MADE UP, FIND THIS
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-60);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-55);

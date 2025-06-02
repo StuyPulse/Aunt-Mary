@@ -1,5 +1,6 @@
-package com.stuypulse.robot.commands.shooter;
+package com.stuypulse.robot.commands.shooter.scoring;
 
+import com.stuypulse.robot.commands.shooter.ShooterSetState;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 
 public class ShooterShootAutonL4Front extends ShooterSetState {
