@@ -66,16 +66,16 @@ public interface Gains {
 
         public interface Empty  {
             public interface PID {
-                double kP = 0.080945 * 360;
+                double kP = 0.080945 * 360; //57.424
                 double kI = 0.0 * 360;
-                double kD = 0.00078716 * 360;
+                double kD = 0.00078716 * 360; //6.7423
             }
 
             public interface FF {
-                double kS = 0.078337; 
-                double kV = 0.010338 * 360;
-                double kA = 0.001046 * 360;
-                double kG = 0.3;
+                double kS = 0.078337; // 0.14148
+                double kV = 0.010338 * 360; // 3.5003
+                double kA = 0.001046 * 360; // 0.41248
+                double kG = 0.3; // 0.42645
             }
         }
     }

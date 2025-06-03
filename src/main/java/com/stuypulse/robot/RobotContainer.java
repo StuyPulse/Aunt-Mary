@@ -50,18 +50,20 @@ import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
+import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGolfTeeAlgaePickup;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlgaePickup;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Front;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
-import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Angled;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
@@ -231,10 +233,10 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1_FRONT || superStructure.getState() == SuperStructureState.L1_BACK))
             .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
-        // L4 Coral Score
+        // L4 Coral Score + 118 Manual Score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+                new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
                     .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
                     .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
@@ -270,15 +272,17 @@ public class RobotContainer {
                 .andThen(new SuperStructureFeed()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
-        // 118
+        // 118 Auto Score
         driver.getLeftButton()
             .whileTrue(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver)
+                new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
                     .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver))
+                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
-                        .andThen(new SuperStructureBarge118()))
+                        .andThen(new SuperStructureBarge118()
+                            .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToCatapult())))
+                                .andThen(new ManualShoot()))
             )
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed()))

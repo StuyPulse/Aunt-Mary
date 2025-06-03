@@ -47,7 +47,7 @@ public interface Settings {
     }
 
     public interface Clearances {
-        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4;
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4 - Units.feetToMeters(1);
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(19.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
         double CLEARANCE_DISTANCE_FROM_REEF_ARM_ALGAE = Units.inchesToMeters(0);
@@ -109,12 +109,12 @@ public interface Settings {
                 // DISTANCE FROM REEF TO BUMPER
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_FRONT = Units.inchesToMeters(4);
                 double TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_BACK = Units.inchesToMeters(0);
-                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(3.5);
+                double TARGET_DISTANCE_FROM_REEF_L2_FRONT = Units.inchesToMeters(2.5);
                 double TARGET_DISTANCE_FROM_REEF_L3_FRONT = Units.inchesToMeters(7); // -0.01
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(5.5);
+                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(1);
@@ -193,7 +193,7 @@ public interface Settings {
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109 + Units.inchesToMeters(1);
-        double BACK_L3_HEIGHT_METERS = 1.077109 + Units.inchesToMeters(1);
+        double BACK_L3_HEIGHT_METERS = 1.077109 + Units.inchesToMeters(6);
         double BACK_L4_HEIGHT_METERS = 1.7304 + Units.inchesToMeters(2);
 
         // Algae
@@ -203,7 +203,7 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.479980 + Units.inchesToMeters(2);
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.726074 + Units.inchesToMeters(2);
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
-        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(4);
+        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(1);
 
         double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
         double GROUND_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
@@ -235,19 +235,19 @@ public interface Settings {
 
         Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599);
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(177.513809);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(150.446319);
+        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(156.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
         Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-47.724609);
         Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); 
 
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(166.552734); // 160.076257 new setting 5/30/25
-        Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(149.102399);
+        Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(152.102399);
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
 
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // -42.636719
-        Rotation2d GROUND_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56); // MADE UP, FIND THIS
+        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(197.337891);  // -42.636719 + 6
+        Rotation2d GROUND_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // MADE UP, FIND THIS
 
         Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-60);
         Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-55);
@@ -262,8 +262,8 @@ public interface Settings {
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
         public interface Constraints {
-            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0);
-            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0);
+            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); // 600
+            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(600.0); // 1200
 
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
