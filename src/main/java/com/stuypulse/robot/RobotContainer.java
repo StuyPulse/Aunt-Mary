@@ -60,10 +60,12 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlg
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Front;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
+import com.stuypulse.robot.commands.swerve.SwerveDriveXMode;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
@@ -93,6 +95,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -122,6 +125,7 @@ public class RobotContainer {
 
         configureDefaultCommands();
         configureDriverButtonBindings();
+        // testingButtonBindings();
         configureAutons();
         configureSysids();
 
@@ -150,6 +154,11 @@ public class RobotContainer {
     /***************/
     /*** BUTTON ***/
     /***************/
+
+    // private void testingButtonBindings(){
+    //     driver.getTopButton().onTrue(new SuperStructureCoralL4Back()).onFalse(new SuperStructureFeed());
+    //     driver.getLeftButton().onTrue(new SuperStructureCoralL4Front()).onFalse(new SuperStructureFeed());
+    // }
 
     private void configureDriverButtonBindings() {
 
@@ -282,7 +291,8 @@ public class RobotContainer {
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
                         .andThen(new SuperStructureBarge118()
                             .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToCatapult())))
-                                .andThen(new ManualShoot()))
+                                .andThen(new WaitCommand(0.3)
+                                    .andThen(new ManualShoot())))
             )
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed()))

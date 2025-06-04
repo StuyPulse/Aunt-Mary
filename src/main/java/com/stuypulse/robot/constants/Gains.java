@@ -38,6 +38,7 @@ public interface Gains {
             public interface PID {
                 double kP = 95.308; //0.4 * 360;
                 double kI = 0.0 * 360;
+
                 double kD = 10.912;// 0.032 * 360;
             }
 

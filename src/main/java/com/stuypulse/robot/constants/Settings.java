@@ -203,7 +203,7 @@ public interface Settings {
         double ALGAE_L2_HEIGHT_METERS_FRONT = 1.479980 + Units.inchesToMeters(2);
         double ALGAE_L3_HEIGHT_METERS_FRONT = 1.726074 + Units.inchesToMeters(2);
         double ALGAE_L2_HEIGHT_METERS_BACK = Constants.Elevator.MIN_HEIGHT_METERS;
-        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(1);
+        double ALGAE_L3_HEIGHT_METERS_BACK = 1.352051 - Units.inchesToMeters(2);
 
         double GOLF_TEE_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
         double GROUND_ALGAE_PICKUP_HEIGHT = Constants.Elevator.MIN_HEIGHT_METERS;
@@ -242,7 +242,7 @@ public interface Settings {
         Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); 
 
         Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(166.552734); // 160.076257 new setting 5/30/25
-        Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(152.102399);
+        Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(155.102399);
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
 
@@ -265,8 +265,8 @@ public interface Settings {
             Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
             Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
 
-            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); 
-            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); 
+            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(550.0); // 600
+            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(550.0); // 600
 
 
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
@@ -282,7 +282,7 @@ public interface Settings {
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
         }
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
+        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(7.0);
         Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(20.0);
     }
 
