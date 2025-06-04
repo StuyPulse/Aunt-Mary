@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
             new VisionSetMegaTag1().schedule();
         }
 
-        new ShooterSetConfigMode(NeutralModeValue.Coast);
+        new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
 
         // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
         new VisionSetMegaTag2().schedule();
-        new ShooterSetConfigMode(NeutralModeValue.Brake);
+        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
         
         if (auto != null) {
             auto.schedule();
@@ -138,6 +138,7 @@ public class Robot extends TimedRobot {
 
         // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
         new VisionSetMegaTag2().schedule();
+        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
 
         Shuffleboard.selectTab("Teleoperated");
     }
