@@ -87,6 +87,10 @@ public abstract class Arm extends SubsystemBase {
         setVoltageOverride(Optional.empty());
     }
 
+    public boolean isFunnelSide(ArmState state) {
+        return state.getTargetAngle().getDegrees() > 90;
+    }
+
     public abstract Rotation2d getCurrentAngle();
     public abstract boolean atTargetAngle();
     public abstract boolean atCanSkipClearanceAngle();

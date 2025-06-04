@@ -262,8 +262,12 @@ public interface Settings {
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
         public interface Constraints {
-            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); // 600
-            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(600.0); // 1200
+            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
+            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
+
+            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); 
+            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); 
+
 
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
