@@ -189,7 +189,7 @@ public class RobotContainer {
         driver.getLeftBumper()
             .onTrue(new SuperStructureGolfTeeAlgaePickup())
             .onTrue(new ShooterAcquireAlgae())
-            .onFalse(new SuperStructureProcessor())
+            .onFalse(new SuperStructureProcessor())                                
             .onFalse(new ShooterHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
@@ -328,15 +328,18 @@ public class RobotContainer {
                 .andThen(new SuperStructureProcessor()))
             .onFalse(new ShooterHoldAlgae());
 
-        // Unstuck Coral and Climb Shimmy
+        // Golf tee and Climb Shimmy
         driver.getDPadDown()
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
                 new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
                 () -> climb.getState() != ClimbState.CLOSED
             ))
-            .onFalse(new SuperStructureProcessor())
-            .onFalse(new ShooterHoldAlgae());
+            .onFalse(
+                new ConditionalCommand(
+                    new SuperStructureClimb(), 
+                    new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
+                () -> climb.getState() != ClimbState.CLOSED));
 
         // Get ready for climb
         driver.getLeftMenuButton()
