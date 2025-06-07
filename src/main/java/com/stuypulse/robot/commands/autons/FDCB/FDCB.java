@@ -65,7 +65,11 @@ public class FDCB extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
+                new SwerveDrivePIDToBranchScore(CoralBranch.D, 4, true)
+                .withTranslationalConstraints(5.5, 16)
+                    .withTimeout(2.5)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
+                // new SwerveDriveCoralScoreAlignAuton(CoralBranch.D, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -94,7 +98,11 @@ public class FDCB extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
+                new SwerveDrivePIDToBranchScore(CoralBranch.C, 4, true)
+                            .withTranslationalConstraints(5.5, 16)
+                                .withTimeout(2.5)
+                                .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
+                // new SwerveDriveCoralScoreAlignAuton(CoralBranch.C, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
