@@ -234,7 +234,7 @@ public interface Settings {
         Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
 
         Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599);
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(177.513809);
+        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(174.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(156.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
 
@@ -265,8 +265,8 @@ public interface Settings {
             Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
             Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
 
-            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(550.0); // 600
-            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(550.0); // 600
+            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
 
 
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
