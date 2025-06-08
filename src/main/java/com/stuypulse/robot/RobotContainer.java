@@ -246,10 +246,14 @@ public class RobotContainer {
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
                 new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
                     .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
                     .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
                     .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+                    .deadlineFor(
+                        new ConditionalCommand(
+                            new LEDApplyPattern(Settings.LED.BARGE_ALIGNING),
+                            new LEDApplyPattern(Settings.LED.BARGE_ALIGNING),
+                            () -> vision.getMaxTagCount() > 0))
                         .andThen(new SuperStructureBarge118())),
                 new ConditionalCommand(
                     new ScoreRoutine(driver, 4, true).until(() -> false),
