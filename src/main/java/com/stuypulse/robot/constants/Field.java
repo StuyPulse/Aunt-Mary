@@ -246,12 +246,27 @@ public interface Field {
                 0, Rotation2d.kZero));
         }
 
-        public Pose2d getTargetPose(boolean isLeftSideOfStation) {
-            int direction = (isLeftSideOfStation ? 1 : -1);
+        public Pose2d getTargetPose(boolean isLeftSideOfStation, boolean isCD) {
+            // double distance_y = (isLeftSideOfStation ? Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_LEFT : Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_RIGHT);
+            // double in_out = (isCD ? distance_y )
+            double distance_y;
+            if (isCD) {
+                if (isLeftSideOfStation) {
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN;
+                } else {
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT;
+                }
+            } else {
+                if (!isLeftSideOfStation) {
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN;
+                } else {
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT;
+                }
+            }
             return correspondingAprilTag.getLocation().toPose2d().transformBy(
                 new Transform2d(
                     Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION,
-                    direction * Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT,
+                    distance_y,
                     Rotation2d.kZero));
         }
 

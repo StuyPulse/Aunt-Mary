@@ -22,8 +22,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
     private static Boolean isLeftSideOfStation = null;
     private static LEDPattern led = null;
+    private static boolean isCD;
 
     public SwerveDrivePIDToCoralStation(boolean isCD) {
+        SwerveDrivePIDToCoralStation.isCD = isCD;
+
         addCommands(
             new SwerveDrivePIDToPose(() -> Field.CoralStation.getCoralStation(isCD).getTargetPose())
         );
@@ -39,8 +42,8 @@ public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
         
     private static Pose2d getCoralStationPoseWithDriverInput(Gamepad driver) {
         Pose2d[] sides = new Pose2d[] {
-            Field.CoralStation.getClosestCoralStation().getTargetPose(true),
-            Field.CoralStation.getClosestCoralStation().getTargetPose(false)
+            Field.CoralStation.getClosestCoralStation().getTargetPose(true, isCD),
+            Field.CoralStation.getClosestCoralStation().getTargetPose(false, isCD)
         };
 
         if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
