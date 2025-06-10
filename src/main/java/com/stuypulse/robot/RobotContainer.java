@@ -65,15 +65,16 @@ import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Fr
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
-import com.stuypulse.robot.commands.swerve.SwerveDriveXMode;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
+import com.stuypulse.robot.commands.vision.VisionSetTagWhitelist;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Vision;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
@@ -89,6 +90,7 @@ import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
+import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -245,16 +247,17 @@ public class RobotContainer {
         // L4 Coral Score + 118 Manual Score
         driver.getTopButton()
             .whileTrue(new ConditionalCommand(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
-                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
-                    .deadlineFor(
-                        new ConditionalCommand(
-                            new LEDApplyPattern(Settings.LED.BARGE_ALIGNING),
-                            new LEDApplyPattern(Settings.LED.BARGE_ALIGNING),
-                            () -> vision.getMaxTagCount() > 0))
-                        .andThen(new SuperStructureBarge118())),
+                new ConditionalCommand(
+                    new VisionSetTagWhitelist(WhitelistMode.REEF_TAGS_BLUE_CS),
+                    new VisionSetTagWhitelist(WhitelistMode.REEF_TAGS_RED_CS),
+                    () -> Robot.isBlue())
+                    .andThen(
+                        new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
+                            .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
+                            .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
+                            .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
+                            .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+                                .andThen(new SuperStructureBarge118()))),
                 new ConditionalCommand(
                     new ScoreRoutine(driver, 4, true).until(() -> false),
                     new ScoreRoutine(driver, 4, false).until(() -> false), 

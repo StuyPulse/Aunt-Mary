@@ -40,7 +40,9 @@ public class LimelightVision extends SubsystemBase{
 
     public enum WhitelistMode {
         BLUE_REEF_TAGS(Field.BLUE_REEF_TAG_IDS),
-        RED_REEF_TAGS(Field.RED_REEF_TAG_IDS);
+        RED_REEF_TAGS(Field.RED_REEF_TAG_IDS),
+        REEF_TAGS_BLUE_CS(Field.REEF_TAGS_BLUE_CS),
+        REEF_TAGS_RED_CS(Field.REEF_TAGS_RED_CS);
 
         private int[] ids;
 
@@ -100,6 +102,12 @@ public class LimelightVision extends SubsystemBase{
             case RED_REEF_TAGS:
                 setTagWhitelist(Field.RED_REEF_TAG_IDS);
                 break;
+            case REEF_TAGS_BLUE_CS:
+                setTagWhitelist(Field.REEF_TAGS_BLUE_CS);
+                break;
+            case REEF_TAGS_RED_CS:    
+                setTagWhitelist(Field.REEF_TAGS_RED_CS);
+                break;
         }
     }
 
@@ -111,7 +119,7 @@ public class LimelightVision extends SubsystemBase{
         for (Camera camera : Cameras.LimelightCameras) {
             LimelightHelpers.SetFiducialIDFiltersOverride(camera.getName(), ids);
         }
-    }
+    } 
 
     public void setIMUMode(int mode) {
         this.imuMode = mode;
@@ -151,6 +159,12 @@ public class LimelightVision extends SubsystemBase{
         }
         if (!robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.BLUE_REEF_TAGS) {
             setWhitelistMode(WhitelistMode.RED_REEF_TAGS);
+        }
+        if (robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.REEF_TAGS_BLUE_CS) {
+            setWhitelistMode(WhitelistMode.REEF_TAGS_BLUE_CS);
+        }
+        if (robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.REEF_TAGS_RED_CS) {
+            setWhitelistMode(WhitelistMode.REEF_TAGS_RED_CS);
         }
     }
 
