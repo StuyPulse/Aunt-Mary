@@ -7,7 +7,9 @@
 package com.stuypulse.robot;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.stuypulse.robot.commands.shooter.ShooterSetConfigMode;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
@@ -90,6 +92,8 @@ public class Robot extends TimedRobot {
             // new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)).schedule();
             new VisionSetMegaTag1().schedule();
         }
+
+        new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
     }
 
     @Override
@@ -106,6 +110,7 @@ public class Robot extends TimedRobot {
 
         // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
         new VisionSetMegaTag2().schedule();
+        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
         
         if (auto != null) {
             auto.schedule();
@@ -133,6 +138,7 @@ public class Robot extends TimedRobot {
 
         // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
         new VisionSetMegaTag2().schedule();
+        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
 
         Shuffleboard.selectTab("Teleoperated");
     }

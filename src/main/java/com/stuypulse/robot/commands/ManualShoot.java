@@ -2,8 +2,8 @@ package com.stuypulse.robot.commands;
 
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootAlgae;
 import com.stuypulse.robot.commands.froggy.roller.FroggyRollerShootCoral;
-import com.stuypulse.robot.commands.shooter.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterShootBasedOnSuperStructure;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
@@ -17,8 +17,7 @@ public class ManualShoot extends ConditionalCommand{
         super(
             new ConditionalCommand(
                 new FroggyRollerShootCoral(),
-                new ShooterShootAlgae().onlyIf(() -> SuperStructure.getInstance().getState() == SuperStructureState.PROCESSOR || SuperStructure.getInstance().getState() == SuperStructureState.BARGE_118)
-                    .alongWith(new FroggyRollerShootAlgae().onlyIf(() -> Froggy.getInstance().getRollerState() != RollerState.HOLD_CORAL)),
+                new ShooterShootAlgae().onlyIf(() -> SuperStructure.getInstance().getState() == SuperStructureState.PROCESSOR || SuperStructure.getInstance().getState() == SuperStructureState.BARGE_118),
                 () -> Froggy.getInstance().getPivotState() == PivotState.L1_SCORE_ANGLE), 
             new ShooterShootBasedOnSuperStructure(),
             () -> Froggy.getInstance().getPivotState() == PivotState.L1_SCORE_ANGLE 

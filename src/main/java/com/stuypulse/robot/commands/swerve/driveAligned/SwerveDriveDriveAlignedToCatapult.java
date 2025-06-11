@@ -58,8 +58,8 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
 
     private Angle getTargetAngle() {
         return swerve.getPose().getX() < Field.LENGTH /2
-            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT.getDegrees())
-            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT.getDegrees());
+            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees())
+            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees());
     }
 
     @Override

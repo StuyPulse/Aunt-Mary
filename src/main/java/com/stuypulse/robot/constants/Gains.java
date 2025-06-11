@@ -36,16 +36,17 @@ public interface Gains {
     public interface Arm {
         public interface Coral  {
             public interface PID {
-                double kP = 0.4 * 360;
+                double kP = 95.308; //0.4 * 360;
                 double kI = 0.0 * 360;
-                double kD = 0.032 * 360;
+
+                double kD = 10.912;// 0.032 * 360;
             }
 
             public interface FF {
-                double kS = 0.2272; 
-                double kV = 0.0095901 * 360;
-                double kA = 0.0015361 * 360;
-                double kG = 0.69269;
+                double kS = 0.050592; // .2272
+                double kV = 3.4737; // 0.0095901 * 360;
+                double kA = 0.38111; // 0.0015361 * 360;
+                double kG = 0.80784;// 0.69269;
             }
         }
 
@@ -66,16 +67,16 @@ public interface Gains {
 
         public interface Empty  {
             public interface PID {
-                double kP = 0.080945 * 360;
+                double kP = 0.080945 * 360; //57.424
                 double kI = 0.0 * 360;
-                double kD = 0.00078716 * 360;
+                double kD = 0.00078716 * 360; //6.7423
             }
 
             public interface FF {
-                double kS = 0.078337; 
-                double kV = 0.010338 * 360;
-                double kA = 0.001046 * 360;
-                double kG = 0.3;
+                double kS = 0.078337; // 0.14148
+                double kV = 0.010338 * 360; // 3.5003
+                double kA = 0.001046 * 360; // 0.41248
+                double kG = 0.3; // 0.42645
             }
         }
     }

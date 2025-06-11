@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ShooterImpl extends Shooter {
 
@@ -45,6 +46,10 @@ public class ShooterImpl extends Shooter {
     @Override
     public boolean isAboveCoralCurrentThreshold() {
         return Math.abs(motor.getStatorCurrent().getValueAsDouble()) > Settings.Shooter.CORAL_STATOR_CURRENT_THRESHOLD;
+    }
+
+    public void setMotorConfig(NeutralModeValue mode) {
+        motor.setNeutralMode(mode);
     }
 
     @Override

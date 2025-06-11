@@ -7,6 +7,7 @@
 
 package com.stuypulse.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.stuylib.network.SmartBoolean;
@@ -36,6 +37,9 @@ public class ShooterSim extends Shooter {
     public boolean isAboveCoralCurrentThreshold() {
         return false;
     }
+    
+    @Override
+    public void setMotorConfig(NeutralModeValue mode) {}
 
     @Override
     public void periodic() {

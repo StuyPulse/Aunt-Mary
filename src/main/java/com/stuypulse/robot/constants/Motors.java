@@ -36,7 +36,7 @@ public interface Motors {
 
     public interface Shooter {
 		TalonFXConfig MOTOR_CONFIG = new TalonFXConfig()
-			.withCurrentLimitAmps(40)
+			.withCurrentLimitAmps(80) //40
 			.withRampRate(0.25)
 			.withNeutralMode(NeutralModeValue.Brake)
 			.withInvertedValue(InvertedValue.CounterClockwise_Positive);

@@ -37,8 +37,8 @@ public class SwerveDriveWaitUntilAlignedToCatapult extends Command{
 
     private Rotation2d getTargetAngle() {
         return swerve.getPose().getX() < Field.LENGTH /2
-            ? Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT)
-            : Rotation2d.kZero.minus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT);
+            ? Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118)
+            : Rotation2d.kZero.minus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118);
     }
 
     private boolean isAligned() {

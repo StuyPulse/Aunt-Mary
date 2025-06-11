@@ -167,7 +167,7 @@ public interface Field {
         return new Pose2d(new Translation2d(
                 Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT, 
                 Field.WIDTH / 2 + yDistanceFromCenterline), 
-                Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_CATAPULT));
+                Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED));
     }
 
     /*** PROCESSOR ***/

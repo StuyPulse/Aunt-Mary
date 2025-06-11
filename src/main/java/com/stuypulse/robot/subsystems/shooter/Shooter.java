@@ -7,15 +7,16 @@
 
 package com.stuypulse.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.commands.shooter.ShooterShootL1Back;
-import com.stuypulse.robot.commands.shooter.ShooterShootL1Front;
-import com.stuypulse.robot.commands.shooter.ShooterShootL2Back;
-import com.stuypulse.robot.commands.shooter.ShooterShootL2Front;
-import com.stuypulse.robot.commands.shooter.ShooterShootL3Back;
-import com.stuypulse.robot.commands.shooter.ShooterShootL3Front;
-import com.stuypulse.robot.commands.shooter.ShooterShootL4Back;
-import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL1Back;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL1Front;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL2Back;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL2Front;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL3Back;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL3Front;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL4Back;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL4Front;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.RobotVisualizer;
 
@@ -84,6 +85,7 @@ public abstract class Shooter extends SubsystemBase {
 
     public abstract boolean hasCoral();
     public abstract boolean isAboveCoralCurrentThreshold();
+    public abstract void setMotorConfig(NeutralModeValue mode);
 
     public boolean isShooting() {
         return isShootingCoral() || getState() == ShooterState.SHOOT_ALGAE;

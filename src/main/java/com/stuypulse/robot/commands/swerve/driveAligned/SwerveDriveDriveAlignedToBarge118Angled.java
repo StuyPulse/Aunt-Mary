@@ -25,7 +25,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDriveAlignedToBarge118Clearance extends Command {
+public class SwerveDriveDriveAlignedToBarge118Angled extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
@@ -34,9 +34,7 @@ public class SwerveDriveDriveAlignedToBarge118Clearance extends Command {
     private final Controller xController;
     private final AngleController angleController;
 
-    private boolean isAngled;
-
-    public SwerveDriveDriveAlignedToBarge118Clearance(Gamepad driver, boolean isAngled) {
+    public SwerveDriveDriveAlignedToBarge118Angled(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())
@@ -52,8 +50,6 @@ public class SwerveDriveDriveAlignedToBarge118Clearance extends Command {
 
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
             .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
-
-        this.isAngled = isAngled;
                 
         addRequirements(swerve);
     }
@@ -66,14 +62,9 @@ public class SwerveDriveDriveAlignedToBarge118Clearance extends Command {
     }
 
     private Angle getTargetAngle() {
-        return (isAngled ? 
-            CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
-            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees())
-            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118.getDegrees())
-        :
-            CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
-            ? Angle.k180deg
-            : Angle.kZero);
+        return swerve.getPose().getX() < Field.LENGTH /2
+            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED.getDegrees())
+            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED.getDegrees());
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.stuypulse.robot.commands.autons.IKLA;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
-import com.stuypulse.robot.commands.shooter.ShooterShootL4Front;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -67,7 +67,11 @@ public class IKLJ extends SequentialCommandGroup {
                     )
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
+                new SwerveDrivePIDToBranchScore(CoralBranch.K, 4, true)
+                .withTranslationalConstraints(5.5, 16)
+                    .withTimeout(2.5)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
+                // new SwerveDriveCoralScoreAlignAuton(CoralBranch.K, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
@@ -96,7 +100,11 @@ public class IKLJ extends SequentialCommandGroup {
                             .andThen(new ShooterStop()))
             ),
             new ParallelCommandGroup(
-                new SwerveDriveCoralScoreAlignAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
+                new SwerveDrivePIDToBranchScore(CoralBranch.L, 4, true)
+                .withTranslationalConstraints(5.5, 16)
+                    .withTimeout(2.5)
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
+                // new SwerveDriveCoralScoreAlignAuton(CoralBranch.L, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 2.5),
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new SuperStructureCoralL4Front()
