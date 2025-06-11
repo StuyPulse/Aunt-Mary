@@ -132,7 +132,7 @@ public class IKLA extends SequentialCommandGroup {
                     .andThen(
                         new ParallelCommandGroup(
                             new SwerveDrivePIDToBranchScore(CoralBranch.A, 4, true)
-                            .withTranslationalConstraints(5.85, 16.75)
+                            .withTranslationalConstraints(5.5, 16.5)
                                 .withTimeout(5)
                                 .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                             // new SwerveDriveCoralScoreAlignAuton(CoralBranch.A, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),

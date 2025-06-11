@@ -179,7 +179,7 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow()));
 
-        // ground algae intake and reset
+        // ground froggy algae intake and reset
         driver.getLeftTriggerButton()
             .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
