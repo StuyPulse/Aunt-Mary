@@ -346,6 +346,7 @@ public interface Settings {
 
         LEDPattern AUTON_TO_REEF_COLOR = LEDPattern.solid(Color.kPurple);
         LEDPattern AUTON_TO_HP_COLOR = LEDPattern.solid(Color.kRed);
+        LEDPattern AUTON_TIMEOUT_COLOR = LEDPattern.solid(Color.kWhite);
 
         LEDPattern BARGE_ALIGNING = LEDPattern.solid(Color.kYellow);
         LEDPattern BARGE_ALIGNMENT_DONE = LEDPattern.solid(Color.kRed);
