@@ -7,16 +7,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class VisionSetTagWhitelist extends InstantCommand{
     private final LimelightVision vision;
-    private final WhitelistMode mode;
+    private final WhitelistMode[] modes;
 
-    public VisionSetTagWhitelist(WhitelistMode mode) {
+    public VisionSetTagWhitelist(WhitelistMode... modes) {
         this.vision = LimelightVision.getInstance();
-        this.mode = mode;
+        this.modes = modes;
         addRequirements(vision);
     }
 
     @Override
     public void initialize() {
-        vision.setWhitelistMode(mode);
+        vision.setWhitelistMode(modes);
     }
 }

@@ -41,8 +41,14 @@ public class LimelightVision extends SubsystemBase{
     public enum WhitelistMode {
         BLUE_REEF_TAGS(Field.BLUE_REEF_TAG_IDS),
         RED_REEF_TAGS(Field.RED_REEF_TAG_IDS),
-        REEF_TAGS_BLUE_CS(Field.REEF_TAGS_BLUE_CS),
-        REEF_TAGS_RED_CS(Field.REEF_TAGS_RED_CS);
+        BLUE_CS_TAGS(Field.BLUE_CS_TAGS),
+        RED_CS_TAGS(Field.RED_CS_TAGS),
+        BLUE_PROCESSOR_TAG(Field.BLUE_PROCESSOR),
+        RED_PROCESSOR_TAG(Field.RED_PROCESSOR),
+        BLUE_BARGE_TAGS(Field.BLUE_SIDE_BARGE_TAGS),
+        RED_BARGE_TAGS(Field.RED_SIDE_BARGE_TAGS);
+        // ALL_REEF_TAGS_AND_BLUE_CS(Field.ALL_REEF_TAGS_AND_BLUE_CS),
+        // ALL_REEF_TAGS_AND_RED_CS(Field.ALL_REEF_TAGS_AND_RED_CS);
 
         private int[] ids;
 
@@ -56,7 +62,7 @@ public class LimelightVision extends SubsystemBase{
     }
 
     private MegaTagMode megaTagMode;
-    private WhitelistMode whitelistMode;
+    private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
 
@@ -93,26 +99,46 @@ public class LimelightVision extends SubsystemBase{
         }
     }
 
-    public void setWhitelistMode(WhitelistMode mode) {
-        this.whitelistMode = mode;
-        switch (mode) {
-            case BLUE_REEF_TAGS:
-                setTagWhitelist(Field.BLUE_REEF_TAG_IDS);
-                break;
-            case RED_REEF_TAGS:
-                setTagWhitelist(Field.RED_REEF_TAG_IDS);
-                break;
-            case REEF_TAGS_BLUE_CS:
-                setTagWhitelist(Field.REEF_TAGS_BLUE_CS);
-                break;
-            case REEF_TAGS_RED_CS:    
-                setTagWhitelist(Field.REEF_TAGS_RED_CS);
-                break;
+    public void setWhitelistMode(WhitelistMode... modes) {
+        int totalLength = 0;
+        for (WhitelistMode mode : modes) {
+            totalLength += mode.getIds().length;
         }
+    
+        int[] combined = new int[totalLength];
+        int index = 0;
+        for (WhitelistMode mode : modes) {
+            for (int id : mode.getIds()) {
+                combined[index++] = id;
+            }
+        }
+
+        setTagWhitelist(combined);
     }
 
-    public WhitelistMode getWhitelistMode() {
-        return this.whitelistMode;
+    public WhitelistMode[] getWhitelistModes() {
+        return this.whitelistModes;
+    }
+
+    public boolean isWhitelistMode(WhitelistMode mode) {
+        for (WhitelistMode m : this.whitelistModes) {
+            if (m.equals(mode)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isWhitelistMode(WhitelistMode... modes) {
+        int count = 0;
+        for (WhitelistMode mode : modes) {
+            for (WhitelistMode m : this.whitelistModes) {
+                if (m.equals(mode)) {
+                    count++;
+                }
+            }
+        }
+        return count == modes.length;
     }
 
     private void setTagWhitelist(int... ids) {
@@ -154,17 +180,17 @@ public class LimelightVision extends SubsystemBase{
     }
 
     private void updateWhitelistMode() {
-        if (robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.RED_REEF_TAGS) {
+        if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.RED_REEF_TAGS)) {
             setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
         }
-        if (!robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.BLUE_REEF_TAGS) {
+        if (!robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS)) {
             setWhitelistMode(WhitelistMode.RED_REEF_TAGS);
         }
-        if (robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.REEF_TAGS_BLUE_CS) {
-            setWhitelistMode(WhitelistMode.REEF_TAGS_BLUE_CS);
+        if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS)) {
+            setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS);
         }
-        if (robotIsOnBlueSide() && getWhitelistMode() == WhitelistMode.REEF_TAGS_RED_CS) {
-            setWhitelistMode(WhitelistMode.REEF_TAGS_RED_CS);
+        if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS)) {
+            setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS);
         }
     }
 
@@ -203,7 +229,7 @@ public class LimelightVision extends SubsystemBase{
         }
 
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-        SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistMode().toString());
+        SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
         SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }
