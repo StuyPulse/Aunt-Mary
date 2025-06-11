@@ -121,24 +121,30 @@ public class LimelightVision extends SubsystemBase{
     }
 
     public boolean isWhitelistMode(WhitelistMode mode) {
-        for (WhitelistMode m : this.whitelistModes) {
-            if (m.equals(mode)) {
-                return true;
+        if (whitelistModes != null) {
+            for (WhitelistMode m : this.whitelistModes) {
+                if (m.equals(mode)) {
+                    return true;
+                }
             }
+            return false;
         }
         return false;
     }
 
     public boolean isWhitelistMode(WhitelistMode... modes) {
-        int count = 0;
-        for (WhitelistMode mode : modes) {
-            for (WhitelistMode m : this.whitelistModes) {
-                if (m.equals(mode)) {
-                    count++;
+        if (whitelistModes != null) {
+            int count = 0;
+            for (WhitelistMode mode : modes) {
+                for (WhitelistMode m : this.whitelistModes) {
+                    if (m.equals(mode)) {
+                        count++;
+                    }
                 }
             }
+            return count == modes.length;
         }
-        return count == modes.length;
+        return false;
     }
 
     private void setTagWhitelist(int... ids) {
@@ -229,7 +235,7 @@ public class LimelightVision extends SubsystemBase{
         }
 
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-        SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
+        // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
         SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }

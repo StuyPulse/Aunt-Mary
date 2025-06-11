@@ -206,19 +206,19 @@ public class RobotContainer {
         driver.getRightBumper()
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
-                new ConditionalCommand(
-                    new VisionSetTagWhitelist(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS), 
-                    new VisionSetTagWhitelist(WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS), 
-                    () -> Robot.isBlue())
-                .andThen(
                     new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                         .andThen(
                             new ConditionalCommand(
                                 new SuperStructureCoralL1Front(),
                                 new SuperStructureCoralL1Back(),
-                                () -> swerve.isFrontFacingAllianceReef()))),
+                                () -> swerve.isFrontFacingAllianceReef())),
+                new ConditionalCommand(
+                    new VisionSetTagWhitelist(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS),
+                    new VisionSetTagWhitelist(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS),
+                    () -> Robot.isBlue())
+                .andThen(
                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE)
-                    .andThen(new FroggyPivotToL1()), 
+                    .andThen(new FroggyPivotToL1())),
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
