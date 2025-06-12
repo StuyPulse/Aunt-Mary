@@ -130,8 +130,8 @@ public interface Settings {
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
                 // double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(21);
-                double TARGET_DISTANCE_FROM_CORAL_STATION_IN = Units.inchesToMeters(2);
-                double TARGET_DISTANCE_FROM_CORAL_STATION_OUT = Units.inchesToMeters(21);
+                double TARGET_DISTANCE_FROM_CORAL_STATION_OUT = Units.inchesToMeters(-18);
+                double TARGET_DISTANCE_FROM_CORAL_STATION_IN = Units.inchesToMeters(21);
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118 = Rotation2d.fromDegrees(0);
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED = Rotation2d.fromDegrees(30);
