@@ -52,7 +52,7 @@ public class HTwoAlgae extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.H, 4, true)
                     .withTranslationalConstraints(2, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
-                    .withTimeout(3)
+                    .withTimeout(2)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
@@ -66,19 +66,23 @@ public class HTwoAlgae extends SequentialCommandGroup {
                 .withTimeout(2)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
+                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT)
+                    .withTranslationalConstraints(2.5, 5),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
                         )
                     ),
 
+            new WaitCommand(0.3),
+
             new ShooterShootAlgae(),
 
             new WaitCommand(0.3),
 
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
                 .alongWith(new SuperStructureAlgaeL3Front()),
 
             // Acquire IJ Algae, Score on Barge
@@ -86,13 +90,17 @@ public class HTwoAlgae extends SequentialCommandGroup {
                 .withTimeout(2)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
+                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG)
+                    .withTranslationalConstraints(3, 5),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
                         )
                     ),
+                
+            new WaitCommand(0.3),
 
             new ShooterShootAlgae(),
 

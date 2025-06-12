@@ -17,6 +17,8 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveWaitUntilAlignedToCatapult extends Command{
@@ -31,8 +33,8 @@ public class SwerveDriveWaitUntilAlignedToCatapult extends Command{
 
     private double getTargetX() {
         return swerve.getPose().getX() < Field.LENGTH / 2
-            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
-            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT;
+            ? Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 - Units.inchesToMeters(1))
+            : Field.LENGTH / 2 + (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 - Units.inchesToMeters(1));
     }
 
     private Rotation2d getTargetAngle() {

@@ -166,7 +166,11 @@ public class SuperStructure extends SubsystemBase{
             arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_CATAPULT, Settings.Arm.Constraints.MAX_ACCEL_CATAPULT);
         }
         else if (Robot.getMode() == RobotMode.AUTON) {
-            arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_AUTON, Settings.Arm.Constraints.MAX_ACCEL_AUTON);
+            if (armState == ArmState.ALGAE_L2_FRONT || armState == ArmState.ALGAE_L3_FRONT) {
+                arm.setMotionProfileConstraints(Settings.Arm.Constraints.ALGAE_VEL_AUTON, Settings.Arm.Constraints.ALGAE_ACCEL_AUTON);
+            } else {
+                arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_AUTON, Settings.Arm.Constraints.MAX_ACCEL_AUTON);
+            }
         }
         else {
             if (arm.isFunnelSide(armState)) {

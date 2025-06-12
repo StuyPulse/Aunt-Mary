@@ -63,8 +63,8 @@ public class SwerveDriveDriveAlignedToBarge118Angled extends Command {
 
     private Angle getTargetAngle() {
         return swerve.getPose().getX() < Field.LENGTH /2
-            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED.getDegrees())
-            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED.getDegrees());
+            ? Angle.k180deg.addDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_AUTON.getDegrees())
+            : Angle.kZero.subDegrees(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_AUTON.getDegrees());
     }
 
     @Override

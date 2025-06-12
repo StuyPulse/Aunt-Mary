@@ -125,14 +125,14 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(8);
 
-                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 1.1;
-                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.5;
+                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 0.75;
+                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.0;
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
                 double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(21);
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118 = Rotation2d.fromDegrees(0);
-                Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118_ANGLED = Rotation2d.fromDegrees(30);
+                Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118_AUTON = Rotation2d.fromDegrees(0);
             }
         }
     }
@@ -271,6 +271,9 @@ public interface Settings {
 
             Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
             Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
+
+            Rotation2d ALGAE_VEL_AUTON = Rotation2d.fromDegrees(600.0);
+            Rotation2d ALGAE_ACCEL_AUTON = Rotation2d.fromDegrees(800.0);
 
             Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(250.0);
             Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
