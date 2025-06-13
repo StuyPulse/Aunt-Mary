@@ -6,7 +6,9 @@
 
 package com.stuypulse.robot.subsystems.vision;
 
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
 import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.Robot.RobotMode;
 import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Cameras.Camera;
@@ -186,17 +188,25 @@ public class LimelightVision extends SubsystemBase{
     }
 
     private void updateWhitelistMode() {
-        if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.RED_REEF_TAGS)) {
-            setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
-        }
-        if (!robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS)) {
-            setWhitelistMode(WhitelistMode.RED_REEF_TAGS);
-        }
-        if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS)) {
-            setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS);
-        }
-        if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS)) {
-            setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS);
+        if (Robot.getMode() == RobotMode.DISABLED) { // whitelist alliance tags during disabled loop
+            if (Robot.isBlue()) {
+                setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
+            } else {
+                setWhitelistMode(WhitelistMode.RED_REEF_TAGS);
+            }
+        } else {
+            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.RED_REEF_TAGS)) {
+                setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
+            }
+            if (!robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS)) {
+                setWhitelistMode(WhitelistMode.RED_REEF_TAGS);
+            }
+            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS)) {
+                setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS);
+            }
+            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS)) {
+                setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS);
+            }
         }
     }
 
