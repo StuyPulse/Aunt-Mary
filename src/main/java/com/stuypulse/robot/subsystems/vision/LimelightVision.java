@@ -23,7 +23,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LimelightVision extends SubsystemBase{
+public class LimelightVision extends SubsystemBase {
 
     private static final LimelightVision instance;
 
@@ -101,8 +101,13 @@ public class LimelightVision extends SubsystemBase{
         }
     }
 
+    public void setPipelineMode(int pipeline, String limelightName) {
+        LimelightHelpers.setPipelineIndex(limelightName, pipeline);
+    }
+
     public void setWhitelistMode(WhitelistMode... modes) {
         int totalLength = 0;
+
         for (WhitelistMode mode : modes) {
             totalLength += mode.getIds().length;
         }
@@ -115,7 +120,7 @@ public class LimelightVision extends SubsystemBase{
             }
         }
 
-        setTagWhitelist(combined);
+        setTagWhitelist(combined); 
     }
 
     public WhitelistMode[] getWhitelistModes() {
