@@ -33,8 +33,8 @@ public class SwerveDriveWaitUntilAlignedToCatapult extends Command{
 
     private double getTargetX() {
         return swerve.getPose().getX() < Field.LENGTH / 2
-            ? Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 - Units.inchesToMeters(1))
-            : Field.LENGTH / 2 + (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 - Units.inchesToMeters(1));
+            ? Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118)
+            : Field.LENGTH / 2 + (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118);
     }
 
     private Rotation2d getTargetAngle() {

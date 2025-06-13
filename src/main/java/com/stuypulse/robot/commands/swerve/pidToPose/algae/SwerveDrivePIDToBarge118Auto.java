@@ -12,12 +12,12 @@ import java.util.function.Supplier;
 import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Field;
 
-public class SwerveDrivePIDToCatapult extends SwerveDrivePIDToPose {
-    public SwerveDrivePIDToCatapult(Supplier<Double> targetYDistanceFromCenter) {
-        super(() -> Field.getCatapultTargetPose(targetYDistanceFromCenter.get()));
+public class SwerveDrivePIDToBarge118Auto extends SwerveDrivePIDToPose {
+    public SwerveDrivePIDToBarge118Auto(Supplier<Double> targetYDistanceFromCenter) {
+        super(() -> Field.getCatapultTargetPoseAuton(targetYDistanceFromCenter.get()));
     }
 
-    public SwerveDrivePIDToCatapult(double targetYDistanceFromCenter) {
+    public SwerveDrivePIDToBarge118Auto(double targetYDistanceFromCenter) {
         this(() -> targetYDistanceFromCenter);
     }
 }

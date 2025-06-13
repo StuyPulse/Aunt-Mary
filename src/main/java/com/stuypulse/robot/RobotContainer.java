@@ -433,7 +433,7 @@ public class RobotContainer {
         /**  TOP ALGAE AUTONS **/
 
         AutonConfig H_TWO_ALGAE_AUTON = new AutonConfig("H + 2 Algae", HTwoAlgae::new,
-        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut");
         H_TWO_ALGAE_AUTON.register(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/

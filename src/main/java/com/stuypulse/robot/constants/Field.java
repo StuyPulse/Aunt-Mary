@@ -165,7 +165,14 @@ public interface Field {
     // Works only for alliance side rn
     public static Pose2d getCatapultTargetPose(double yDistanceFromCenterline) {
         return new Pose2d(new Translation2d(
-                Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 - Units.inchesToMeters(1)), 
+                Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118), 
+                Field.WIDTH / 2 + yDistanceFromCenterline), 
+                Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_AUTON));
+    }
+
+    public static Pose2d getCatapultTargetPoseAuton(double yDistanceFromCenterline) {
+        return new Pose2d(new Translation2d(
+                Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 + Units.inchesToMeters(5)), 
                 Field.WIDTH / 2 + yDistanceFromCenterline), 
                 Rotation2d.k180deg.plus(Settings.Swerve.Alignment.Targets.ANGLE_FROM_HORIZONTAL_FOR_118_AUTON));
     }

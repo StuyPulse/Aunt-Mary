@@ -125,7 +125,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(8);
 
-                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 0.75;
+                double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 0.85;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.0;
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
