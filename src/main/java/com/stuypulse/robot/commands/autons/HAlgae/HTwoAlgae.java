@@ -69,14 +69,14 @@ public class HTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT)
-                    .withTranslationalConstraints(2.5, 5),
+                    .withTranslationalConstraints(2.5, 3),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
                         )
                     ),
 
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
 
             new ShooterShootAlgae(),
 
@@ -87,20 +87,20 @@ public class HTwoAlgae extends SequentialCommandGroup {
 
             // Acquire IJ Algae, Score on Barge
             new ReefAlgaePickupRoutineFront()
-                .withTimeout(2)
+                .withTimeout(3)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG)
-                    .withTranslationalConstraints(3, 5),
+                    .withTranslationalConstraints(2.5, 3),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
                         )
                     ),
                 
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
 
             new ShooterShootAlgae(),
 
