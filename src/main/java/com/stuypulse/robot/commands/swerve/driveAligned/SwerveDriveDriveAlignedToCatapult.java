@@ -19,6 +19,8 @@ import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveDriveAlignedToCatapult extends Command {
@@ -52,8 +54,8 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
 
     private double getTargetX() {
         return swerve.getPose().getX() < Field.LENGTH / 2
-            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT
-            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT;
+            ? Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118)
+            : Field.LENGTH / 2 + (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118);
     }
 
     private Angle getTargetAngle() {

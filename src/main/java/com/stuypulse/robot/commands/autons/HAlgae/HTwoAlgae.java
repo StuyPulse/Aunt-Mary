@@ -27,7 +27,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveDriveWithRobotRelativeSpee
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToCatapult;
-import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToCatapult;
+import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePIDToBarge118Auto;
 import com.stuypulse.robot.commands.swerve.pidToPose.algae.SwerveDrivePidToNearestReefAlgae;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
@@ -52,7 +52,7 @@ public class HTwoAlgae extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.H, 4, true)
                     .withTranslationalConstraints(2, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
-                    .withTimeout(3)
+                    .withTimeout(1.5)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                 new SuperStructureCoralL4Front()
                     .andThen(new SuperStructureWaitUntilAtTarget())
@@ -66,8 +66,10 @@ public class HTwoAlgae extends SequentialCommandGroup {
                 .withTimeout(2)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
+                new SwerveDrivePIDToBarge118Auto(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT)
+                    .withTranslationalConstraints(5, 8),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
@@ -76,18 +78,20 @@ public class HTwoAlgae extends SequentialCommandGroup {
 
             new ShooterShootAlgae(),
 
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
 
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2])
-                .alongWith(new SuperStructureAlgaeL3Front()),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
+                .alongWith(new SuperStructureFeed()),
 
             // Acquire IJ Algae, Score on Barge
             new ReefAlgaePickupRoutineFront()
-                .withTimeout(2)
+                .withTimeout(1.5)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
             new ParallelCommandGroup(
-                new SwerveDrivePIDToCatapult(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG),
+                new SwerveDrivePIDToBarge118Auto(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG)
+                    .withTranslationalConstraints(5, 8),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
@@ -96,11 +100,9 @@ public class HTwoAlgae extends SequentialCommandGroup {
 
             new ShooterShootAlgae(),
 
-            new WaitCommand(0.3),
+            new WaitCommand(0.2),
 
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
-                .alongWith(new SuperStructureFeed().alongWith(new ShooterStop()))
-                    .andThen(new SuperStructureWaitUntilAtTarget())
+            new SuperStructureFeed()
 
         );
 

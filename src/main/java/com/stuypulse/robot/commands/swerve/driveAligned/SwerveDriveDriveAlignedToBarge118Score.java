@@ -60,8 +60,8 @@ public class SwerveDriveDriveAlignedToBarge118Score extends Command {
 
     private double getTargetX() {
         return CommandSwerveDrivetrain.getInstance().isOnAllianceSide()
-            ? Field.LENGTH / 2 - Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118
-            : Field.LENGTH / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118;
+            ? Field.LENGTH / 2 - (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118)
+            : Field.LENGTH / 2 + (Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118);
     }
 
     private Angle getTargetAngle() {

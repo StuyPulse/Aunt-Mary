@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.21836142510256,
-        "y": 5.701737081287396
+        "x": 6.202802865742511,
+        "y": 5.582748614343793
       },
       "isLocked": false,
       "linkedName": "Blue Barge 3"
     },
     {
       "anchor": {
-        "x": 5.328341674804688,
-        "y": 5.648430088588169
+        "x": 5.394467213114754,
+        "y": 5.565420081967212
       },
       "prevControl": {
-        "x": 6.410410900846145,
-        "y": 5.48271078996294
+        "x": 6.3280313416642056,
+        "y": 5.3713466697330245
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 6.75,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 7.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 900.0,
     "nominalVoltage": 12.0,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
