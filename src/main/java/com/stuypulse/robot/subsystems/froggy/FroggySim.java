@@ -102,7 +102,7 @@ public class FroggySim extends Froggy {
 
     @Override
     public boolean isAtTargetAngle() {
-        return Math.abs(getCurrentAngle().getRadians() - getTargetAngle().getRadians()) < Settings.Arm.ANGLE_TOLERANCE.getRadians();
+        return Math.abs(getCurrentAngle().getRadians() - getTargetAngle().getRadians()) < Settings.Arm.ANGLE_TOLERANCE_FRONT.getRadians();
     }
 
     private Rotation2d getTargetAngle() {

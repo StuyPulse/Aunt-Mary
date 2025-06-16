@@ -87,7 +87,7 @@ public class ArmImpl extends Arm {
 
     @Override
     public boolean atTargetAngle() {
-        return isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE);
+        return (!isFunnelSide(getState()) ? isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE_FRONT) : isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE_BACK));
     }
 
     @Override

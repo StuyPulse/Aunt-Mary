@@ -287,7 +287,8 @@ public interface Settings {
             Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
         }
 
-        Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(7.0);
+        Rotation2d ANGLE_TOLERANCE_FRONT = Rotation2d.fromDegrees(7.0);
+        Rotation2d ANGLE_TOLERANCE_BACK = Rotation2d.fromDegrees(7.0);
         Rotation2d ANGLE_TOLERANCE_TO_SKIP_CLEARANCE = Rotation2d.fromDegrees(25.0);
     }
 
