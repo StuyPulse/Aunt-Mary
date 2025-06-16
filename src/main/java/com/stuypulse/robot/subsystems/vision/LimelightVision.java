@@ -235,6 +235,8 @@ public class LimelightVision extends SubsystemBase {
                 PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                     ? getMegaTag2PoseEstimate(camera.getName())
                     : getMegaTag1PoseEstimate(camera.getName());
+
+                    
                 
                 if (poseEstimate != null && poseEstimate.tagCount > 0) {
                     CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);

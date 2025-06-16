@@ -44,6 +44,7 @@ public interface Settings {
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
         SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
         SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", true);
+        SmartBoolean FROGGY_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Froggy Limelight", true);
     }
 
     public interface Clearances {

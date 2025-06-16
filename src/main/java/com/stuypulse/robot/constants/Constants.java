@@ -60,7 +60,7 @@ public interface Constants {
         Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-40.760301);
         Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(105.958171);
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-111.291762 - 90);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-111.291762 - 90 + 120);
 
         double LENGTH = 0.5; // FOR SIM ONLY
         double MOI = 1; // FOR SIM ONLY
