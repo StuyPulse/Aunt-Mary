@@ -5,13 +5,12 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands.froggy.pivot;
+package com.stuypulse.robot.commands.froggy.roller;
 
-import com.stuypulse.robot.subsystems.froggy.Froggy.PivotState;
+import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 
-public class FroggyPivotToL1 extends FroggyPivotSetState {
-
-    public FroggyPivotToL1() {
-        super(PivotState.L1_SCORE_ANGLE);
+public class FroggyRollerShootCoralOne extends FroggyRollerSetState {
+    public FroggyRollerShootCoralOne() {
+        super(RollerState.SHOOT_CORAL_ONE);
     }
 }

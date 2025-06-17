@@ -41,7 +41,10 @@ public abstract class Froggy extends SubsystemBase {
         STOW(Settings.Froggy.STOW_ANGLE),
         ALGAE_GROUND_PICKUP(Settings.Froggy.ALGAE_GROUND_PICKUP_ANGLE),
         CORAL_GROUND_PICKUP(Settings.Froggy.CORAL_GROUND_PICKUP_ANGLE),
-        L1_SCORE_ANGLE(Settings.Froggy.L1_SCORING_ANGLE),
+        L1_SCORE_ANGLE_VERSATILE(Settings.Froggy.L1_SCORING_ANGLE_VERSATILE),
+        L1_SCORE_ANGLE_ONE(Settings.Froggy.L1_SCORING_ANGLE_ONE),
+        L1_SCORE_ANGLE_TWO(Settings.Froggy.L1_SCORING_ANGLE_TWO),
+        L1_SCORE_ANGLE_THREE(Settings.Froggy.L1_SCORING_ANGLE_THREE),
         GOLF_TEE_ALGAE_PICKUP(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE),
         CLIMB(Settings.Froggy.CLIMB_ANGLE);
 
@@ -60,7 +63,10 @@ public abstract class Froggy extends SubsystemBase {
     public enum RollerState {
         INTAKE_CORAL(Settings.Froggy.CORAL_INTAKE_SPEED),
         INTAKE_ALGAE(Settings.Froggy.ALGAE_INTAKE_SPEED),
-        SHOOT_CORAL(Settings.Froggy.CORAL_OUTTAKE_SPEED),
+        SHOOT_CORAL_VERSATILE(Settings.Froggy.CORAL_OUTTAKE_SPEED),
+        SHOOT_CORAL_ONE(Settings.Froggy.CORAL_OUTTAKE_SPEED_ONE),
+        SHOOT_CORAL_TWO(Settings.Froggy.CORAL_OUTTAKE_SPEED_TWO),
+        SHOOT_CORAL_THREE(Settings.Froggy.CORAL_OUTTAKE_SPEED_THREE),
         SHOOT_ALGAE(Settings.Froggy.ALGAE_OUTTAKE_SPEED),
         HOLD_ALGAE(Settings.Froggy.HOLD_ALGAE_SPEED),
         HOLD_CORAL(Settings.Froggy.HOLD_CORAL_SPEED),

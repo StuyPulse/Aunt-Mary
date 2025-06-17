@@ -48,7 +48,7 @@ public class LEDDefaultCommand extends Command{
     private boolean isScoring() {
         return shooter.isShooting()
             || shooter.getState() == ShooterState.SHOOT_ALGAE
-            || froggy.getRollerState() == RollerState.SHOOT_CORAL 
+            || froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE 
             || froggy.getRollerState() == RollerState.SHOOT_ALGAE;
     }
 

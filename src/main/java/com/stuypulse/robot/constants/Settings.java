@@ -297,7 +297,10 @@ public interface Settings {
         Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(Constants.Froggy.MAXIMUM_ANGLE.getDegrees() - 9);
         Rotation2d ALGAE_GROUND_PICKUP_ANGLE = Rotation2d.fromDegrees(20);
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
-        Rotation2d L1_SCORING_ANGLE = Rotation2d.fromDegrees(52);
+        Rotation2d L1_SCORING_ANGLE_VERSATILE = Rotation2d.fromDegrees(52);
+        Rotation2d L1_SCORING_ANGLE_ONE = Rotation2d.fromDegrees(52);
+        Rotation2d L1_SCORING_ANGLE_TWO = Rotation2d.fromDegrees(52);
+        Rotation2d L1_SCORING_ANGLE_THREE = Rotation2d.fromDegrees(52);
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
@@ -305,6 +308,10 @@ public interface Settings {
 
         double ALGAE_INTAKE_SPEED = 1.0;
         double ALGAE_OUTTAKE_SPEED = -0.5;
+        double ALGAE_OUTTAKE_SPEED_VERSATILE = -0.5;
+        double CORAL_OUTTAKE_SPEED_ONE = 0.5;
+        double CORAL_OUTTAKE_SPEED_TWO = 0.5;
+        double CORAL_OUTTAKE_SPEED_THREE = 0.5;
         double CORAL_INTAKE_SPEED = -1.0;
         double CORAL_OUTTAKE_SPEED = 0.2;
         double HOLD_ALGAE_SPEED = 0.3;

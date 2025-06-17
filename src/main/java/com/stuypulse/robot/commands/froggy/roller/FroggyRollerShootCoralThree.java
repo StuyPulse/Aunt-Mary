@@ -9,8 +9,8 @@ package com.stuypulse.robot.commands.froggy.roller;
 
 import com.stuypulse.robot.subsystems.froggy.Froggy.RollerState;
 
-public class FroggyRollerShootCoral extends FroggyRollerSetState {
-    public FroggyRollerShootCoral() {
-        super(RollerState.SHOOT_CORAL);
+public class FroggyRollerShootCoralThree extends FroggyRollerSetState {
+    public FroggyRollerShootCoralThree() {
+        super(RollerState.SHOOT_CORAL_THREE);
     }
 }
