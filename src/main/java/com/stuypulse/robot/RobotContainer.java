@@ -278,7 +278,7 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score
-        driver.getBottomButton()
+        driver.getRightButton()
         .whileTrue(
             new ConditionalCommand(
                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_TWO)
