@@ -245,9 +245,20 @@ public interface ReefUtil {
                 Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_FRONT - Settings.Clearances.CLEARANCE_DISTANCE_FROM_REEF_ARM, 0, Rotation2d.kZero));
         }
 
-        public Pose2d getL1FroggyScorePose() {
+        public Pose2d getL1FroggyScorePose(int level) {
+            double distance = 0;
+            switch (level) {
+                case 0:
+                    distance = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY_VERSATILE;
+                case 1:
+                    distance = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY_ONE;
+                case 2:
+                    distance = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY_TWO;
+                case 3:
+                    distance = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY_THREE;
+            }
             return getCorrespondingAprilTagPose().transformBy(new Transform2d(
-                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_FROGGY, 
+                Constants.LENGTH_WITH_BUMPERS_METERS / 2 + distance, 
                 0, 
                 Rotation2d.kCW_90deg));
         }

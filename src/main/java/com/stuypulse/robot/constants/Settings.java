@@ -118,7 +118,10 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY = Units.inchesToMeters(1);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_VERSATILE = Units.inchesToMeters(1);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_ONE = Units.inchesToMeters(7);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_TWO = Units.inchesToMeters(3);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_THREE = Units.inchesToMeters(2);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
@@ -299,8 +302,8 @@ public interface Settings {
         Rotation2d CORAL_GROUND_PICKUP_ANGLE = Constants.Froggy.MINIMUM_ANGLE;
         Rotation2d L1_SCORING_ANGLE_VERSATILE = Rotation2d.fromDegrees(52);
         Rotation2d L1_SCORING_ANGLE_ONE = Rotation2d.fromDegrees(52);
-        Rotation2d L1_SCORING_ANGLE_TWO = Rotation2d.fromDegrees(52);
-        Rotation2d L1_SCORING_ANGLE_THREE = Rotation2d.fromDegrees(52);
+        Rotation2d L1_SCORING_ANGLE_TWO = Rotation2d.fromDegrees(54.667969);
+        Rotation2d L1_SCORING_ANGLE_THREE = Rotation2d.fromDegrees(54.667969);
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
 
@@ -309,9 +312,9 @@ public interface Settings {
         double ALGAE_INTAKE_SPEED = 1.0;
         double ALGAE_OUTTAKE_SPEED = -0.5;
         double ALGAE_OUTTAKE_SPEED_VERSATILE = -0.5;
-        double CORAL_OUTTAKE_SPEED_ONE = 0.5;
-        double CORAL_OUTTAKE_SPEED_TWO = 0.5;
-        double CORAL_OUTTAKE_SPEED_THREE = 0.5;
+        double CORAL_OUTTAKE_SPEED_ONE = 0.2;
+        double CORAL_OUTTAKE_SPEED_TWO = 0.3;
+        double CORAL_OUTTAKE_SPEED_THREE = 0.2;
         double CORAL_INTAKE_SPEED = -1.0;
         double CORAL_OUTTAKE_SPEED = 0.2;
         double HOLD_ALGAE_SPEED = 0.3;

@@ -13,7 +13,8 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
 public class ManualShoot extends ConditionalCommand {
-    public ManualShoot() {
+    public 
+    ManualShoot() {
         super(
             new ConditionalCommand(
                 new FroggyRollerShootCoralVersatile(),
