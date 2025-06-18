@@ -20,6 +20,8 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -67,6 +69,7 @@ public class LimelightVision extends SubsystemBase {
     private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
+    private FieldObject2d gamePiece;
 
     private LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -87,6 +90,8 @@ public class LimelightVision extends SubsystemBase {
         setMegaTagMode(MegaTagMode.MEGATAG1);
         setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
         setIMUMode(1);
+
+        gamePiece = Field.FIELD2D.getObject("Gamepiece Pose");
     }
 
     public void setMegaTagMode(MegaTagMode mode) {
@@ -236,8 +241,6 @@ public class LimelightVision extends SubsystemBase {
                     ? getMegaTag2PoseEstimate(camera.getName())
                     : getMegaTag1PoseEstimate(camera.getName());
 
-                    
-                
                 if (poseEstimate != null && poseEstimate.tagCount > 0) {
                     CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
                     SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", true);
