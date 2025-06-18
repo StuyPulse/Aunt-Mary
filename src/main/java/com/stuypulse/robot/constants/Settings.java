@@ -42,8 +42,8 @@ public interface Settings {
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
-        SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
-        SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", true);
+        SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", false);
+        SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", false);
         SmartBoolean FROGGY_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Froggy Limelight", true);
     }
 
@@ -119,9 +119,9 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_VERSATILE = Units.inchesToMeters(1);
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_ONE = Units.inchesToMeters(7);
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_TWO = Units.inchesToMeters(3);
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_THREE = Units.inchesToMeters(2);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_ONE = Units.inchesToMeters(8);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_TWO = Units.inchesToMeters(8);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_THREE = Units.inchesToMeters(6);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
