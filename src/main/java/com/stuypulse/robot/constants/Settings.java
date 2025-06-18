@@ -121,7 +121,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_VERSATILE = Units.inchesToMeters(1);
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_ONE = Units.inchesToMeters(8);
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_TWO = Units.inchesToMeters(8);
-                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_THREE = Units.inchesToMeters(6);
+                double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_THREE = Units.inchesToMeters(4);
 
                 double TARGET_DISTANCE_FROM_ALGAE_L2 = Units.inchesToMeters(0);
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
@@ -243,6 +243,8 @@ public interface Settings {
         Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(174.513809);
         Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(156.446319);
         Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
+
+        Rotation2d AUTON_END = Rotation2d.fromDegrees(94.570312);
 
         Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-47.724609);
         Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); 

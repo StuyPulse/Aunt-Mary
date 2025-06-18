@@ -289,7 +289,9 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE && (froggy.getRollerState() == RollerState.SHOOT_CORAL_THREE || froggy.getRollerState() == RollerState.STOP)))
-                .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
+                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)));
 
         driver.getTopButton().debounce(0.25)
             .whileTrue(
@@ -313,9 +315,9 @@ public class RobotContainer {
         ), 
         () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
             )
-    .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge() && Clearances.isFroggyClearFromAllObstables())
-        .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
-    .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
+            .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score
         driver.getRightButton()
@@ -336,7 +338,9 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO && (froggy.getRollerState() == RollerState.SHOOT_CORAL_TWO || froggy.getRollerState() == RollerState.STOP)))
-                .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
+                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)));
         
 
         driver.getRightButton().debounce(0.25)
@@ -353,7 +357,7 @@ public class RobotContainer {
             () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
         )
         .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-                .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
+                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score
@@ -375,7 +379,9 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE && (froggy.getRollerState() == RollerState.SHOOT_CORAL_ONE || froggy.getRollerState() == RollerState.STOP)))
-                .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
+                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)));
 
         driver.getBottomButton().debounce(0.25)
         .whileTrue(
@@ -391,7 +397,7 @@ public class RobotContainer {
             () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
         )
         .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-                .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
+                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // 118 Auto Score
@@ -539,7 +545,7 @@ public class RobotContainer {
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         FDCB_AUTON.registerDefault(autonChooser);
 
-        AutonConfig FDCB_NUDGE_AUTON = new AutonConfig("FDCE Nudge", FDCBNudge::new,
+        AutonConfig FDCB_NUDGE_AUTON = new AutonConfig("FDCB Nudge", FDCBNudge::new,
         "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         FDCB_NUDGE_AUTON.register(autonChooser);
 
@@ -551,9 +557,9 @@ public class RobotContainer {
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
-        "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE_AUTON.register(autonChooser);
+        // AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
+        // "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
+        // G_TWO_ALGAE_AUTON.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

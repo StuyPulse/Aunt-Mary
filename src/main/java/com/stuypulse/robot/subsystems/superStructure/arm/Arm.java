@@ -48,6 +48,7 @@ public abstract class Arm extends SubsystemBase {
         L3_BACK(Settings.Arm.L3_ANGLE_BACK),
         L4_FRONT(Settings.Arm.L4_ANGLE_FRONT),
         L4_BACK(Settings.Arm.L4_ANGLE_BACK),
+        AUTON_END(Settings.Arm.AUTON_END),
         ALGAE_L2_FRONT(Settings.Arm.ALGAE_L2_ANGLE_FRONT),
         ALGAE_L3_FRONT(Settings.Arm.ALGAE_L3_ANGLE_FRONT),
         ALGAE_L2_BACK(Settings.Arm.ALGAE_L2_ANGLE_BACK),

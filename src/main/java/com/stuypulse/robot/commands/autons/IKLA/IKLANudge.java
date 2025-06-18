@@ -6,6 +6,7 @@ import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL4Front;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.coral.SuperStructureAutonEnd;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
@@ -150,7 +151,12 @@ public class IKLANudge extends SequentialCommandGroup {
             new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
             new ShooterStop(),
 
-            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4])
+            new ParallelCommandGroup(
+
+                new SuperStructureAutonEnd(),
+                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[4])
+
+            )
 
 
         );
