@@ -277,7 +277,7 @@ public class RobotContainer {
             new ConditionalCommand(
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_THREE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(3)
+                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(3).alongWith(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_THREE))
                     .andThen(new FroggyRollerShootCoralThree())), 
             new ConditionalCommand(
                 new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
@@ -322,7 +322,7 @@ public class RobotContainer {
             new ConditionalCommand(
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_TWO.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(2)
+                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(2).alongWith(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_TWO))
                         .andThen(new FroggyRollerShootCoralTwo())),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 3, true).until(() -> false),
@@ -357,7 +357,7 @@ public class RobotContainer {
             new ConditionalCommand(
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_ONE.getTargetAngle().getDegrees() - 10)
                     .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(1)
+                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(1).alongWith(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_ONE))
                         .andThen(new FroggyRollerShootCoralOne())),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 2, true).until(() -> false),

@@ -352,6 +352,10 @@ public interface Settings {
         LEDPattern PROCESSOR_SCORE_ANGLE = LEDPattern.solid(Color.kPurple);
         LEDPattern INTAKE_COLOR_ALGAE = LEDPattern.solid(Color.kGreen);
         LEDPattern FROGGY_INTAKE_COLOR_CORAL = LEDPattern.solid(Color.kRed);
+
+        LEDPattern FROGGY_SCORE_ONE = LEDPattern.solid(Color.kBlue);
+        LEDPattern FROGGY_SCORE_TWO = LEDPattern.solid(Color.kOrange);
+        LEDPattern FROGGY_SCORE_THREE = LEDPattern.solid(Color.kPurple);
         
         LEDPattern FUNNEL_UNJAM_COLOR = LEDPattern.solid(Color.kBlue);
 
