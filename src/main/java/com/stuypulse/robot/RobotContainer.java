@@ -178,7 +178,23 @@ public class RobotContainer {
 
         // Manual Shoot
         driver.getDPadRight()
-            .onTrue(new ManualShoot())
+            .onTrue(
+                new ConditionalCommand(
+                    new ConditionalCommand(
+                        new FroggyRollerShootCoralVersatile(), 
+                        new ConditionalCommand(
+                            new FroggyRollerShootCoralOne(), 
+                            new ConditionalCommand(
+                                new FroggyRollerShootCoralTwo(),
+                                new FroggyRollerShootCoralThree(),
+                                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO
+                            ), 
+                            () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE), 
+                        () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE),
+                    new ManualShoot(),
+                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
+                    )
+                )
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
@@ -265,7 +281,7 @@ public class RobotContainer {
                             new SuperStructureCoralL4Back(),
                             () -> swerve.isFrontFacingAllianceReef())),
                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_THREE)
-                    .andThen(new FroggyPivotToL1Versatile()), 
+                    .andThen(new FroggyPivotToL1Three()), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
@@ -309,7 +325,7 @@ public class RobotContainer {
                             new SuperStructureCoralL3Back(),
                             () -> swerve.isFrontFacingAllianceReef())),
                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_TWO)
-                    .andThen(new FroggyPivotToL1Versatile()), 
+                    .andThen(new FroggyPivotToL1Two()), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
@@ -345,7 +361,7 @@ public class RobotContainer {
                             new SuperStructureCoralL2Back(),
                             () -> swerve.isFrontFacingAllianceReef())),
                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_ONE)
-                    .andThen(new FroggyPivotToL1Versatile()), 
+                    .andThen(new FroggyPivotToL1One()), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
