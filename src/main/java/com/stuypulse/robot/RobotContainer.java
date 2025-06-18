@@ -311,7 +311,7 @@ public class RobotContainer {
         () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
             )
     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge() && Clearances.isFroggyClearFromAllObstables())
-        .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).alongWith(new FroggyRollerStop()))
+        .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
     .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score
@@ -347,7 +347,7 @@ public class RobotContainer {
             () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
         )
         .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-                .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).alongWith(new FroggyRollerStop()))
+                .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score
@@ -382,7 +382,7 @@ public class RobotContainer {
             () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
         )
         .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-                .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).alongWith(new FroggyRollerStop()))
+                .andThen(new SuperStructureFeed()).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // 118 Auto Score
