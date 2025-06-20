@@ -6,6 +6,7 @@
 
 package com.stuypulse.robot.subsystems.vision;
 
+import com.ctre.phoenix.time.StopWatch;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
@@ -19,6 +20,7 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
@@ -69,7 +71,7 @@ public class LimelightVision extends SubsystemBase {
     private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
-    private FieldObject2d gamePiece;
+    private StopWatch stopWatch;
 
     private LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -90,8 +92,7 @@ public class LimelightVision extends SubsystemBase {
         setMegaTagMode(MegaTagMode.MEGATAG1);
         setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
         setIMUMode(1);
-
-        gamePiece = Field.FIELD2D.getObject("Gamepiece Pose");
+        stopWatch = new StopWatch();
     }
 
     public void setMegaTagMode(MegaTagMode mode) {
@@ -106,6 +107,20 @@ public class LimelightVision extends SubsystemBase {
         }
     }
 
+    public Translation2d calculateTransformToCoral(double tx, double ty) {
+        Pose3d froggyCameraPose3d = Cameras.LimelightCameras[2].getLocation();
+
+        double robotAngleY = Units.radiansToDegrees(froggyCameraPose3d.getRotation().getY());
+        double totalAngleY = robotAngleY + ty;
+        double xDistance = (froggyCameraPose3d.getZ() - Units.inchesToMeters(4.5)) / Math.tan(totalAngleY);
+        //4.5 inches is the coral radius
+        double hypotenuseToGround = Math.hypot(xDistance, (froggyCameraPose3d.getZ() - Units.inchesToMeters(4.5)));
+
+        double yDistance = hypotenuseToGround * Math.tan(tx + froggyCameraPose3d.getY());
+
+        return new Translation2d(xDistance, yDistance);
+
+    }
     public void setPipelineMode(int pipeline, String limelightName) {
         LimelightHelpers.setPipelineIndex(limelightName, pipeline);
     }
