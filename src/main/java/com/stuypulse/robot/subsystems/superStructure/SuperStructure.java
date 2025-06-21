@@ -61,7 +61,8 @@ public class SuperStructure extends SubsystemBase{
         BARGE_118(ElevatorState.BARGE_118, ArmState.BARGE_118),
         PROCESSOR(ElevatorState.PROCESSOR, ArmState.PROCESSOR),
         CLIMB(ElevatorState.CLIMB, ArmState.CLIMB),
-        UNSTUCK_CORAL(ElevatorState.UNSTUCK_CORAL, ArmState.UNSTUCK_CORAL);
+        UNSTUCK_CORAL(ElevatorState.UNSTUCK_CORAL, ArmState.UNSTUCK_CORAL),
+        BARGE_SAFE(ElevatorState.BARGE_118, ArmState.BARGE_SAFE_118);
 
         private ElevatorState elevatorState;
         private ArmState armstate;

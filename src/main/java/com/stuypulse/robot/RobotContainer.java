@@ -60,6 +60,7 @@ import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeSafe118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGolfTeeAlgaePickup;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlgaePickup;
@@ -411,7 +412,10 @@ public class RobotContainer {
                         .andThen(new SuperStructureBarge118()
                             .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToCatapult())))
                                 .andThen(new WaitCommand(0.3)
-                                    .andThen(new ManualShoot())))
+                                    .andThen(new ManualShoot()
+                                        .alongWith(new WaitUntilCommand(() -> shooter.getState() != ShooterState.HOLD_ALGAE)
+                                            .andThen(new WaitCommand(0.3)))
+                                            .andThen(new SuperStructureAlgaeSafe118()))))
             )
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed()))

@@ -48,7 +48,7 @@ public interface Settings {
     }
 
     public interface Clearances {
-        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4 - Units.feetToMeters(1);
+        double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4 - Units.feetToMeters(1) + Units.inchesToMeters(6);
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(19.25); // From bumper
         double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
         double CLEARANCE_DISTANCE_FROM_REEF_ARM_ALGAE = Units.inchesToMeters(0);
@@ -127,7 +127,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_ALGAE_L3 = Units.inchesToMeters(-1);
 
                 double TARGET_DISTANCE_FROM_CENTERLINE_FOR_CATAPULT = 1.2;
-                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(8);
+                double TARGET_DISTANCE_FROM_CENTERLINE_FOR_BARGE_118 = 0.74 - Units.inchesToMeters(6);
 
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT = 0.85;
                 double Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG = 1.0;
@@ -195,7 +195,7 @@ public interface Settings {
         double BACK_L1_HEIGHT_METERS = 1.5;
 
         double FRONT_L2_HEIGHT_METERS = 1.57586;
-        double FRONT_L3_HEIGHT_METERS = 1.760498; // 1.0566
+        double FRONT_L3_HEIGHT_METERS = 1.760498 + Units.inchesToMeters(1); // 1.0566
         double FRONT_L4_HEIGHT_METERS = 1.706494;
         
         double BACK_L2_HEIGHT_METERS = 1.037109 + Units.inchesToMeters(1);
@@ -262,6 +262,7 @@ public interface Settings {
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
 
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
+        Rotation2d BARGE_SAFE_118 = Rotation2d.fromDegrees(80);
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         

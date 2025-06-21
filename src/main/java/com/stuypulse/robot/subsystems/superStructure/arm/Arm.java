@@ -60,7 +60,8 @@ public abstract class Arm extends SubsystemBase {
         CATAPULT_SHOOT(Settings.Arm.CATAPULT_FINAL_ANGLE),
         BARGE_118(Settings.Arm.BARGE_118_ANGLE),
         CLIMB(Settings.Arm.CLIMB_ANGLE),
-        UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE);
+        UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE),
+        BARGE_SAFE_118(Settings.Arm.BARGE_SAFE_118);
 
         private Rotation2d targetAngle;
 
