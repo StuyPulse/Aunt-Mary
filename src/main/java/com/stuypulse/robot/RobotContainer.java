@@ -182,6 +182,7 @@ public class RobotContainer {
             .onTrue(
                 new ConditionalCommand(
                     new ConditionalCommand(
+                        new ConditionalCommand(
                         new FroggyRollerShootCoralVersatile(), 
                         new ConditionalCommand(
                             new FroggyRollerShootCoralOne(), 
@@ -194,13 +195,14 @@ public class RobotContainer {
                         () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE),
                     new ManualShoot(),
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
-                    )
+                ),
+                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118())),
+                () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
                 )
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
-                .andThen(new SuperStructureFeed())
-                .onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_118 || superStructure.isScoringCoral()))
+                .andThen(new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_SAFE || superStructure.isScoringCoral() || shooter.getState() != ShooterState.HOLD_ALGAE)))
             .onFalse(new FroggyRollerStop()
                 .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
@@ -268,10 +270,10 @@ public class RobotContainer {
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore(0)
                         .andThen(new FroggyRollerShootCoralVersatile())), 
                 () -> shooter.hasCoral()))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1_FRONT || superStructure.getState() == SuperStructureState.L1_BACK))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1_FRONT || superStructure.getState() == SuperStructureState.L1_BACK || shooter.getState() != ShooterState.HOLD_ALGAE))
             .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
-        // L4 Coral Score + 118 Manual Score
+        // L4 Coral Score + Top L1
         driver.getTopButton()
         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_THREE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
@@ -302,25 +304,16 @@ public class RobotContainer {
                     .andThen(new SwerveDrivePIDToClosestL1FroggyScore(3).deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_THREE))
                     .andThen(new FroggyRollerShootCoralThree())), 
             new ConditionalCommand(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
-                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
-                    .andThen(new SuperStructureBarge118())),
-            new ConditionalCommand(
                 new ScoreRoutine(driver, 4, true).until(() -> false),
                 new ScoreRoutine(driver, 4, false).until(() -> false), 
-                () -> swerve.isFrontFacingAllianceReef()),
-            () -> shooter.getState() == ShooterState.HOLD_ALGAE
-        ), 
-        () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
+                () -> swerve.isFrontFacingAllianceReef()),         
+                () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
             )
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
             .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
-        // L3 Coral Score
+        // L3 Coral Score + 2nd L1
         driver.getRightButton()
         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_TWO) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
@@ -361,7 +354,7 @@ public class RobotContainer {
                 .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
-        // L2 Coral Score
+        // L2 Coral Score + Bottom L1
         driver.getBottomButton()
         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_ONE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
@@ -414,12 +407,14 @@ public class RobotContainer {
                                 .andThen(new WaitCommand(0.3)
                                     .andThen(new ManualShoot()
                                         .alongWith(new WaitUntilCommand(() -> shooter.getState() != ShooterState.HOLD_ALGAE)
-                                            .andThen(new WaitCommand(0.3)))
+                                            .andThen(new WaitCommand(0.1)))
                                             .andThen(new SuperStructureAlgaeSafe118()))))
             )
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed()))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+            .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
+                .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
+            // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
         // driver.getRightStickButton()

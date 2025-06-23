@@ -164,7 +164,7 @@ public interface Settings {
         double CORAL_ACQUIRE_SPEED = 0.5; // 0.35
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
-        double ALGAE_SHOOT_SPEED = 0.5;
+        double ALGAE_SHOOT_SPEED = 1.0; // 0.5
         double ALGAE_HOLD_SPEED = -0.05; // -0.5
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
@@ -262,7 +262,7 @@ public interface Settings {
         Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
 
         Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
-        Rotation2d BARGE_SAFE_118 = Rotation2d.fromDegrees(80);
+        Rotation2d BARGE_SAFE_118 = Rotation2d.fromDegrees(60); // 80
 
         Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
         
