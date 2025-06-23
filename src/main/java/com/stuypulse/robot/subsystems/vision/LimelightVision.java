@@ -73,7 +73,7 @@ public class LimelightVision extends SubsystemBase {
     private int maxTagCount;
     private StopWatch stopWatch;
 
-    private LimelightVision() {
+    public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
             Pose3d robotRelativePose = camera.getLocation();
             LimelightHelpers.setCameraPose_RobotSpace(
@@ -95,6 +95,9 @@ public class LimelightVision extends SubsystemBase {
         stopWatch = new StopWatch();
     }
 
+   
+
+
     public void setMegaTagMode(MegaTagMode mode) {
         this.megaTagMode = mode;
         switch (mode) {
@@ -107,20 +110,6 @@ public class LimelightVision extends SubsystemBase {
         }
     }
 
-    public Translation2d calculateTransformToCoral(double tx, double ty) {
-        Pose3d froggyCameraPose3d = Cameras.LimelightCameras[2].getLocation();
-
-        double robotAngleY = Units.radiansToDegrees(froggyCameraPose3d.getRotation().getY());
-        double totalAngleY = robotAngleY + ty;
-        double xDistance = (froggyCameraPose3d.getZ() - Units.inchesToMeters(4.5)) / Math.tan(totalAngleY);
-        //4.5 inches is the coral radius
-        double hypotenuseToGround = Math.hypot(xDistance, (froggyCameraPose3d.getZ() - Units.inchesToMeters(4.5)));
-
-        double yDistance = hypotenuseToGround * Math.tan(tx + froggyCameraPose3d.getY());
-
-        return new Translation2d(xDistance, yDistance);
-
-    }
     public void setPipelineMode(int pipeline, String limelightName) {
         LimelightHelpers.setPipelineIndex(limelightName, pipeline);
     }

@@ -35,6 +35,8 @@ public interface Field {
     double WIDTH = Units.inchesToMeters(317.000); 
     double LENGTH = Units.inchesToMeters(690.876);
 
+    double CORAL_RADIUS = Units.inchesToMeters(4.5); // Radius of the coral 
+
     public static Pose3d transformToOppositeAlliance(Pose3d pose) {
         Pose3d rotated = pose.rotateBy(new Rotation3d(0, 0, Math.PI));
 
