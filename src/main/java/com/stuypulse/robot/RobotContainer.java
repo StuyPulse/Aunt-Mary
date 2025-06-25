@@ -140,7 +140,7 @@ public class RobotContainer {
         configureDriverButtonBindings();
         // testingButtonBindings();
         configureAutons();
-        configureSysids();
+        // configureSysids();
 
         SmartDashboard.putData("Field", Field.FIELD2D);
     }
@@ -265,10 +265,13 @@ public class RobotContainer {
                     new ScoreRoutine(driver, 1, false).until(() -> false),
                     () -> swerve.isFrontFacingAllianceReef()
                 ),
-                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_VERSATILE.getTargetAngle().getDegrees() - 10)
-                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(0)
-                        .andThen(new FroggyRollerShootCoralVersatile())), 
+                new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1Versatile())
+                .andThen(new SwerveDrivePIDToClosestL1FroggyScore(0))
+                    .alongWith(
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_VERSATILE.getTargetAngle().getDegrees() - 10))
+                        .andThen(
+                            new SwerveDrivePIDToClosestL1FroggyScore(0)
+                                .andThen(new FroggyRollerShootCoralVersatile())), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1_FRONT || superStructure.getState() == SuperStructureState.L1_BACK || shooter.getState() != ShooterState.HOLD_ALGAE))
             .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
@@ -556,9 +559,9 @@ public class RobotContainer {
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        // AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
-        // "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        // G_TWO_ALGAE_AUTON.register(autonChooser);
+        AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
+        "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
+        G_TWO_ALGAE_AUTON.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

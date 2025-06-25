@@ -98,7 +98,7 @@ public interface Settings {
                 double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE_FROGGY = Rotation2d.fromDegrees(5.0);
 
-                double X_TOLERANCE_BARGE = Units.inchesToMeters(2);
+                double X_TOLERANCE_BARGE = Units.inchesToMeters(4);
                 Rotation2d THETA_TOLERANCE_BARGE = Rotation2d.fromDegrees(10.0);
 
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;

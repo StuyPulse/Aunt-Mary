@@ -18,6 +18,7 @@ import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL2Front;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeL3Front;
+import com.stuypulse.robot.commands.superStructure.algae.SuperStructureAlgaeSafe118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureBarge118;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultReady;
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureCatapultShoot;
@@ -77,7 +78,8 @@ public class HTwoAlgae extends SequentialCommandGroup {
                     ),
 
             new ShooterShootAlgae(),
-
+            new WaitCommand(0.2),
+            new SuperStructureAlgaeSafe118(),
             new WaitCommand(0.2),
 
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
@@ -98,11 +100,11 @@ public class HTwoAlgae extends SequentialCommandGroup {
                         )
                     ),
 
-            new ShooterShootAlgae(),
-
-            new WaitCommand(0.2),
-
-            new SuperStructureFeed()
+                    new ShooterShootAlgae(),
+                    new WaitCommand(0.2),
+                    new SuperStructureAlgaeSafe118(),
+                    new WaitCommand(0.2),
+                    new SuperStructureFeed()
 
         );
 
