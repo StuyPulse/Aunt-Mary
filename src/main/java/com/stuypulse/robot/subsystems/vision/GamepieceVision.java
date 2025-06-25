@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GamepieceVision extends LimelightVision {
 
@@ -53,9 +54,8 @@ public class GamepieceVision extends LimelightVision {
 
         double robotAngleY = Units.radiansToDegrees(froggyCameraPose3d.getRotation().getY());
         double totalAngleY = robotAngleY + ty;
-        double xDistance = (froggyCameraPose3d.getZ() - Field.CORAL_RADIUS) / Math.tan(totalAngleY);
+        double xDistance = (froggyCameraPose3d.getZ() - Field.CORAL_RADIUS) / Math.tan(Units.degreesToRadians(totalAngleY));
 
-        //4.5 inches is the coral radius
 
         double hypotenuseToGround = Math.hypot(xDistance, (froggyCameraPose3d.getZ() - Field.CORAL_RADIUS));
 
@@ -71,9 +71,10 @@ public class GamepieceVision extends LimelightVision {
     @Override
     public void periodic() {
         stopWatch.start();
-        if (LimelightHelpers.getCurrentPipelineIndex("froggy-limelight") == 1) {
+
+        if (LimelightHelpers.getCurrentPipelineIndex("limelight-froggy") == 1) {
             Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
-            RawDetection[] detections = LimelightHelpers.getRawDetections("froggy-limelight");
+            RawDetection[] detections = LimelightHelpers.getRawDetections("limelight-froggy");
             Translation2d coralTranslation2d = new Translation2d();
             double now = stopWatch.getDuration();
 
@@ -98,11 +99,11 @@ public class GamepieceVision extends LimelightVision {
             for (Coral coral : coralList) {
                 if (bestCoralPose == null || bestCoralPose.getTranslation().getDistance(robotPose.getTranslation()) > 
                     coral.coralPose.getTranslation().getDistance(robotPose.getTranslation())) {
-
                     bestCoralPose = coral.coralPose;
                 }
             }
-            
             }
+            SmartDashboard.putNumber("Vision/Best Coral X", bestCoralPose.getX());
+            SmartDashboard.putNumber("Vision/Best Coral Y", bestCoralPose.getY());
         }
     }

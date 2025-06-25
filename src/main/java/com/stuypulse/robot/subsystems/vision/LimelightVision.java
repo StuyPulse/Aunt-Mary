@@ -6,8 +6,6 @@
 
 package com.stuypulse.robot.subsystems.vision;
 
-import com.ctre.phoenix.time.StopWatch;
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
 import com.stuypulse.robot.constants.Cameras;
@@ -71,7 +69,6 @@ public class LimelightVision extends SubsystemBase {
     private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
-    private StopWatch stopWatch;
 
     public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -92,7 +89,6 @@ public class LimelightVision extends SubsystemBase {
         setMegaTagMode(MegaTagMode.MEGATAG1);
         setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
         setIMUMode(1);
-        stopWatch = new StopWatch();
     }
 
    
@@ -259,7 +255,6 @@ public class LimelightVision extends SubsystemBase {
         }
 
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-        // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
         SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }
