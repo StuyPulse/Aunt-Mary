@@ -67,19 +67,19 @@ public class ArmImpl extends Arm {
         voltageOverride = Optional.empty();
     }
 
-    @Override
-    public SysIdRoutine getSysIdRoutine() {
-        return SysId.getRoutine(
-            2, 
-            6, 
-            "Arm", 
-            voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getRotations(), 
-            () -> motor.getVelocity().getValueAsDouble(), 
-            () -> motor.getMotorVoltage().getValueAsDouble(), 
-            getInstance()
-        );
-    }
+    // @Override
+    // public SysIdRoutine getSysIdRoutine() {
+    //     return SysId.getRoutine(
+    //         2, 
+    //         6, 
+    //         "Arm", 
+    //         voltage -> setVoltageOverride(Optional.of(voltage)), 
+    //         () -> getCurrentAngle().getRotations(), 
+    //         () -> motor.getVelocity().getValueAsDouble(), 
+    //         () -> motor.getMotorVoltage().getValueAsDouble(), 
+    //         getInstance()
+    //     );
+    // }
 
     private boolean isWithinTolerance(Rotation2d tolerance) {
         return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < tolerance.getDegrees();

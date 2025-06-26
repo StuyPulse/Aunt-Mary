@@ -86,19 +86,19 @@ public class ArmSim extends Arm {
         voltageOverride = Optional.empty();
     }
 
-    @Override
-    public SysIdRoutine getSysIdRoutine() {
-        return SysId.getRoutine(
-            3, 
-            7, 
-            "Arm", 
-            voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getDegrees(), 
-            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
-            () -> voltageOverride.get(), 
-            getInstance()
-        );
-    }
+    // @Override
+    // public SysIdRoutine getSysIdRoutine() {
+    //     return SysId.getRoutine(
+    //         3, 
+    //         7, 
+    //         "Arm", 
+    //         voltage -> setVoltageOverride(Optional.of(voltage)), 
+    //         () -> getCurrentAngle().getDegrees(), 
+    //         () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+    //         () -> voltageOverride.get(), 
+    //         getInstance()
+    //     );
+    // }
 
     private boolean isWithinTolerance(Rotation2d tolerance) {
         return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
@@ -121,7 +121,8 @@ public class ArmSim extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads());
+        // return Rotation2d.fromRadians(sim.getAngleRads());
+        return Rotation2d.k180deg;
     }
 
     @Override
@@ -157,7 +158,7 @@ public class ArmSim extends Arm {
         SmartDashboard.putNumber("Arm/Setpoint (deg)", Units.radiansToDegrees(setpoint));
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
+        // controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ARM.get()) {

@@ -86,25 +86,25 @@ public class ElevatorSimu extends Elevator {
 
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
-        accel = IStream.create(() -> sim.getVelocityMetersPerSecond())
-            .filtered(new Derivative());
+        // accel = IStream.create(() -> sim.getVelocityMetersPerSecond())
+        //     .filtered(new Derivative());
 
         voltageOverride = Optional.empty();
     }
 
-    @Override
-    public SysIdRoutine getSysIdRoutine() {
-        return SysId.getRoutine(
-            2, 
-            7, 
-            "Elevator", 
-            voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentHeight(), 
-            () -> sim.getVelocityMetersPerSecond(), 
-            () -> voltageOverride.get(), 
-            getInstance()
-        );
-    }
+    // @Override
+    // public SysIdRoutine getSysIdRoutine() {
+    //     return SysId.getRoutine(
+    //         2, 
+    //         7, 
+    //         "Elevator", 
+    //         voltage -> setVoltageOverride(Optional.of(voltage)), 
+    //         () -> getCurrentHeight(), 
+    //         () -> sim.getVelocityMetersPerSecond(), 
+    //         () -> voltageOverride.get(), 
+    //         getInstance()
+    //     );
+    // }
 
     private double getTargetHeight() {
         return getState().getTargetHeight();
@@ -112,7 +112,8 @@ public class ElevatorSimu extends Elevator {
 
     @Override
     public double getCurrentHeight() {
-        return sim.getPositionMeters();
+        // return sim.getPositionMeters();
+        return 2.0;
     }
 
     private boolean isWithinTolerance(double toleranceMeters) {
@@ -152,7 +153,7 @@ public class ElevatorSimu extends Elevator {
         SmartDashboard.putNumber("Elevator/Setpoint", setpoint);
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getPositionMeters(), sim.getVelocityMetersPerSecond()));
+        // controller.correct(VecBuilder.fill(sim.getPositionMeters(), sim.getVelocityMetersPerSecond()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {

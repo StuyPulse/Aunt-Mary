@@ -114,7 +114,7 @@ public abstract class Froggy extends SubsystemBase {
 
     public abstract void setPivotVoltageOverride(Optional<Double> voltage);
 
-    public abstract SysIdRoutine getPivotSysIdRoutine();
+    // public abstract SysIdRoutine getPivotSysIdRoutine();
 
     @Override
     public void periodic() {

@@ -107,29 +107,29 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* SysId routine for characterizing chassis translation. This is used to find PID gains PID to pose. */
-    private final SysIdRoutine m_sysIdRoutineChassisTranslation = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            /* This is in meters per second², but SysId only supports "volts per second" */
-            Volts.of(1).per(Second),
-            /* This is in meters per second, but SysId only supports "volts" */
-            Volts.of(Settings.Swerve.Constraints.MAX_VELOCITY_M_PER_S),
-            null, // Use default timeout (10 s)
-            // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdChassisTranslation_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            output -> {
-                /* output is actually meters per second, but SysId only supports "volts" */
-                setControl(getFieldCentricSwerveRequest().withVelocityX(output.in(Volts)).withVelocityY(0).withRotationalRate(0));
-                /* also log the requested output for SysId */
-                SignalLogger.writeDouble("Target X Velocity ('voltage')", output.in(Volts));
-                SignalLogger.writeDouble("X Position", getPose().getX());
-                SignalLogger.writeDouble("X Velocity", getChassisSpeeds().vxMetersPerSecond * getPose().getRotation().getCos());
-            },
-            null,
-            this
-        )
-    );
+    // private final SysIdRoutine m_sysIdRoutineChassisTranslation = new SysIdRoutine(
+    //     new SysIdRoutine.Config(
+    //         /* This is in meters per second², but SysId only supports "volts per second" */
+    //         Volts.of(1).per(Second),
+    //         /* This is in meters per second, but SysId only supports "volts" */
+    //         Volts.of(Settings.Swerve.Constraints.MAX_VELOCITY_M_PER_S),
+    //         null, // Use default timeout (10 s)
+    //         // Log state with SignalLogger class
+    //         state -> SignalLogger.writeString("SysIdChassisTranslation_State", state.toString())
+    //     ),
+    //     new SysIdRoutine.Mechanism(
+    //         output -> {
+    //             /* output is actually meters per second, but SysId only supports "volts" */
+    //             setControl(getFieldCentricSwerveRequest().withVelocityX(output.in(Volts)).withVelocityY(0).withRotationalRate(0));
+    //             /* also log the requested output for SysId */
+    //             SignalLogger.writeDouble("Target X Velocity ('voltage')", output.in(Volts));
+    //             SignalLogger.writeDouble("X Position", getPose().getX());
+    //             SignalLogger.writeDouble("X Velocity", getChassisSpeeds().vxMetersPerSecond * getPose().getRotation().getCos());
+    //         },
+    //         null,
+    //         this
+    //     )
+    // );
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
@@ -152,32 +152,32 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
      * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
      */
-    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            /* This is in radians per second², but SysId only supports "volts per second" */
-            Volts.of(Math.PI / 6).per(Second),
-            /* This is in radians per second, but SysId only supports "volts" */
-            Volts.of(Math.PI),
-            null, // Use default timeout (10 s)
-            // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            output -> {
-                /* output is actually radians per second, but SysId only supports "volts" */
-                setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-                /* also log the requested output for SysId */
-                SignalLogger.writeDouble("Rotational_Target_Rate ('voltage')", output.in(Volts));
-                SignalLogger.writeDouble("Rotational Position", getPose().getRotation().getRadians());
-                SignalLogger.writeDouble("Rotational_Velocity", getState().Speeds.omegaRadiansPerSecond);
-            },
-            null,
-            this
-        )
-    );
+    // private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
+    //     new SysIdRoutine.Config(
+    //         /* This is in radians per second², but SysId only supports "volts per second" */
+    //         Volts.of(Math.PI / 6).per(Second),
+    //         /* This is in radians per second, but SysId only supports "volts" */
+    //         Volts.of(Math.PI),
+    //         null, // Use default timeout (10 s)
+    //         // Log state with SignalLogger class
+    //         state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
+    //     ),
+    //     new SysIdRoutine.Mechanism(
+    //         output -> {
+    //             /* output is actually radians per second, but SysId only supports "volts" */
+    //             setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
+    //             /* also log the requested output for SysId */
+    //             SignalLogger.writeDouble("Rotational_Target_Rate ('voltage')", output.in(Volts));
+    //             SignalLogger.writeDouble("Rotational Position", getPose().getRotation().getRadians());
+    //             SignalLogger.writeDouble("Rotational_Velocity", getState().Speeds.omegaRadiansPerSecond);
+    //         },
+    //         null,
+    //         this
+    //     )
+    // );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineChassisTranslation;
+    // private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineChassisTranslation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -272,9 +272,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param direction Direction of the SysId Quasistatic test
      * @return Command to run
      */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineToApply.quasistatic(direction);
-    }
+    // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    //     return m_sysIdRoutineToApply.quasistatic(direction);
+    // }
 
     /**
      * Runs the SysId Dynamic test in the given direction for the routine
@@ -283,9 +283,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param direction Direction of the SysId Dynamic test
      * @return Command to run
      */
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return m_sysIdRoutineToApply.dynamic(direction);
-    }
+    // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    //     return m_sysIdRoutineToApply.dynamic(direction);
+    // }
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
@@ -340,30 +340,30 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
-    public void configureAutoBuilder() {
-        try{
-            AutoBuilder.configure(
-                this::getPose,
-                this::resetPose,
-                this::getChassisSpeeds,
-                this::setChassisSpeeds,
-                new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
-                RobotConfig.fromGUISettings(),
-                () -> false,
-                instance
-            );
-            PathPlannerLogging.setLogActivePathCallback((poses) -> {
-                if (Robot.isBlue()) {
-                    Field.FIELD2D.getObject("path").setPoses(poses);
-                }
-                else {
-                    Field.FIELD2D.getObject("path").setPoses(Field.transformToOppositeAlliance(poses));
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // public void configureAutoBuilder() {
+    //     try{
+    //         AutoBuilder.configure(
+    //             this::getPose,
+    //             this::resetPose,
+    //             this::getChassisSpeeds,
+    //             this::setChassisSpeeds,
+    //             new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
+    //             RobotConfig.fromGUISettings(),
+    //             () -> false,
+    //             instance
+    //         );
+    //         PathPlannerLogging.setLogActivePathCallback((poses) -> {
+    //             if (Robot.isBlue()) {
+    //                 Field.FIELD2D.getObject("path").setPoses(poses);
+    //             }
+    //             else {
+    //                 Field.FIELD2D.getObject("path").setPoses(Field.transformToOppositeAlliance(poses));
+    //             }
+    //         });
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public Command followPathCommand(String pathName) {
         try {
@@ -390,14 +390,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getKinematics().toChassisSpeeds(getModuleStates());
     }
 
-    public Vector2D getFieldRelativeSpeeds() {
-        return new Vector2D(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
-            .rotate(Angle.fromRotation2d(getPose().getRotation()));
-    }
+    // public Vector2D getFieldRelativeSpeeds() {
+    //     // return new Vector2D(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
+    //     //     .rotate(Angle.fromRotation2d(getPose().getRotation()));
+    // }
 
-    private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
-        setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vxMetersPerSecond).withVelocityY(robotSpeeds.vyMetersPerSecond).withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
-    }
+    // private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
+    //     setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vxMetersPerSecond).withVelocityY(robotSpeeds.vyMetersPerSecond).withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
+    // }
 
     public boolean isOnAllianceSide() {
         return getPose().getX() <= Field.LENGTH / 2;
@@ -450,8 +450,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Pose/Theta", getPose().getRotation().getDegrees());
 
         for (int i = 0; i < 4; i++) {
-            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Speed (m per s)", getModule(i).getCurrentState().speedMetersPerSecond);
-            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Speed (m per s)", getModule(i).getTargetState().speedMetersPerSecond);
+            // SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Speed (m per s)", getModule(i).getCurrentState().speedMetersPerSecond);
+            // SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Speed (m per s)", getModule(i).getTargetState().speedMetersPerSecond);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Angle (deg)", getModule(i).getCurrentState().angle.getDegrees() % 360);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Angle (deg)", getModule(i).getTargetState().angle.getDegrees() % 360);
         }
@@ -464,13 +464,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Supply Current", getModule(i).getDriveMotor().getSupplyCurrent().getValueAsDouble());
             }
 
-            SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
-            SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+            // SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
+            // SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
     
-            SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
-            SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
+            // SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
+            // SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
     
-            SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
+            // SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
 
             SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
             SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());

@@ -86,19 +86,19 @@ public class FroggySim extends Froggy {
         pivotOperatorOffset = Rotation2d.kZero;
     }
 
-    @Override
-    public SysIdRoutine getPivotSysIdRoutine() {
-        return SysId.getRoutine(
-            3, 
-            7, 
-            "Froggy Pivot", 
-            voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getDegrees(), 
-            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
-            () -> pivotVoltageOverride.get(), 
-            getInstance()
-        );
-    }
+    // @Override
+    // public SysIdRoutine getPivotSysIdRoutine() {
+    //     return SysId.getRoutine(
+    //         3, 
+    //         7, 
+    //         "Froggy Pivot", 
+    //         voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
+    //         () -> getCurrentAngle().getDegrees(), 
+    //         () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+    //         () -> pivotVoltageOverride.get(), 
+    //         getInstance()
+    //     );
+    // }
 
     @Override
     public boolean isAtTargetAngle() {
@@ -115,7 +115,8 @@ public class FroggySim extends Froggy {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads());
+        // return Rotation2d.fromRadians(sim.getAngleRads());
+        return Rotation2d.k180deg;
     }
 
     @Override
@@ -130,7 +131,7 @@ public class FroggySim extends Froggy {
         double setpoint = motionProfile.get(getTargetAngle().getRadians());
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
+        // controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {

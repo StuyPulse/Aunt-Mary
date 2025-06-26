@@ -47,7 +47,7 @@ public class SwerveDrivePIDToPose extends Command {
     private boolean isMotionProfiled;
 
     private final BStream isAligned;
-    private final IStream velocityError;
+    // private final IStream velocityError;
 
     private final FieldObject2d targetPose2d;
 
@@ -86,9 +86,9 @@ public class SwerveDrivePIDToPose extends Command {
         isAligned = BStream.create(this::isAligned)
             .filtered(new BDebounceRC.Both(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE));
 
-        velocityError = IStream.create(() -> new Translation2d(controller.getError().vxMetersPerSecond, controller.getError().vyMetersPerSecond).getNorm())
-            .filtered(new LowPassFilter(0.05))
-            .filtered(x -> Math.abs(x));
+        // velocityError = IStream.create(() -> new Translation2d(controller.getError().vxMetersPerSecond, controller.getError().vyMetersPerSecond).getNorm())
+        //     .filtered(new LowPassFilter(0.05))
+        //     .filtered(x -> Math.abs(x));
 
         xTolerance = Settings.Swerve.Alignment.Tolerances.X_TOLERANCE;
         yTolerance = Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE;
@@ -156,7 +156,8 @@ public class SwerveDrivePIDToPose extends Command {
     }
 
     private boolean isAligned() {
-        return isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        // return isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        return true;
     }
 
     @Override
@@ -165,18 +166,18 @@ public class SwerveDrivePIDToPose extends Command {
 
         controller.update(new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.get().getRotation()), swerve.getPose());
         
-        swerve.setControl(swerve.getRobotCentricSwerveRequest()
-            .withVelocityX(controller.getOutput().vxMetersPerSecond)
-            .withVelocityY(controller.getOutput().vyMetersPerSecond)
-            .withRotationalRate(controller.getOutput().omegaRadiansPerSecond));
+        // swerve.setControl(swerve.getRobotCentricSwerveRequest()
+        //     .withVelocityX(controller.getOutput().vxMetersPerSecond)
+        //     .withVelocityY(controller.getOutput().vyMetersPerSecond)
+        //     .withRotationalRate(controller.getOutput().omegaRadiansPerSecond));
         
         SmartDashboard.putNumber("Alignment/Target x", targetPose.get().getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.get().getY());
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.get().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
+        // SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
+        // SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
+        // SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
 
         SmartDashboard.putBoolean("Alignment/Is Aligned", isAligned());
         SmartDashboard.putBoolean("Alignment/Is Aligned X", isAlignedX());

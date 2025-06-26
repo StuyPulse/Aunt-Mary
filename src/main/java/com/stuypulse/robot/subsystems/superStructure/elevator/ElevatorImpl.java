@@ -40,7 +40,7 @@ public class ElevatorImpl extends Elevator {
         voltageOverride = Optional.empty();
     }
 
-    @Override
+    // @Override
     public SysIdRoutine getSysIdRoutine() {
         return SysId.getRoutine(
             2, 

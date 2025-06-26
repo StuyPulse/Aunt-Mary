@@ -56,7 +56,7 @@ public class FroggyImpl extends Froggy {
         debuggingMotionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
     }
 
-    @Override
+    // @Override
     public SysIdRoutine getPivotSysIdRoutine() {
         return SysId.getRoutine(
             1, 

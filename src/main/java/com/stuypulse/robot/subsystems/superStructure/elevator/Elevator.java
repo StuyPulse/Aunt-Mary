@@ -115,7 +115,7 @@ public abstract class Elevator extends SubsystemBase {
 
     public abstract void setVoltageOverride(Optional<Double> voltage);
 
-    public abstract SysIdRoutine getSysIdRoutine();
+    // public abstract SysIdRoutine getSysIdRoutine();
     public abstract void setMotionProfileConstraints(double velLimitMetersPerSecond, double accelLimitMetersPerSecondSquared);
 
     @Override

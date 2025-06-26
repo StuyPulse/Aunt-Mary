@@ -90,20 +90,20 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
 
         controller.update(targetPose, swerve.getPose());
 
-        ChassisSpeeds controllerFieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(controller.getOutput(), swerve.getPose().getRotation());
+        // ChassisSpeeds controllerFieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(controller.getOutput(), swerve.getPose().getRotation());
         
-        swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond + driverLinearVelocity.get().x)
-            .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond + driverLinearVelocity.get().y)
-            .withRotationalRate(controllerFieldRelativeSpeeds.omegaRadiansPerSecond + driverAngularVelocity.get()));
+        // swerve.setControl(swerve.getFieldCentricSwerveRequest()
+            // .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond + driverLinearVelocity.get().x)
+            // .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond + driverLinearVelocity.get().y)
+            // .withRotationalRate(controllerFieldRelativeSpeeds.omegaRadiansPerSecond + driverAngularVelocity.get()));
         
         SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
+        // SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
+        // SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
+        // SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
     }
 
     @Override
