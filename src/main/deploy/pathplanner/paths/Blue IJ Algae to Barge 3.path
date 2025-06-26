@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.4304303278688515,
+        "y": 5.68529713114754
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.010645781970415,
+        "y": 6.331669899004683
+      },
+      "isLocked": false,
+      "linkedName": "Blue IJ Algae"
+    },
+    {
+      "anchor": {
+        "x": 7.260500578703703,
+        "y": 5.460478515625
+      },
+      "prevControl": {
+        "x": 5.671095845863301,
+        "y": 5.96698747907366
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Barge 3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Blue To Barge",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

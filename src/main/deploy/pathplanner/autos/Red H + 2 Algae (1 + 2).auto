@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Mid Top to H"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red H BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red H BackOut to GH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red GH BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red GH to Barge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Barge to IJ (1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Barge to IJ (2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red IJ BackOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red IJ to Barge"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Red Top Autons",
+  "choreoAuto": false
+}
