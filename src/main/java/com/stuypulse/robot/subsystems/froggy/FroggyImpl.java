@@ -76,7 +76,8 @@ public class FroggyImpl extends Froggy {
     }
 
     private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
-        double angleRotations = absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations();
+        // double angleRotations = absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations();
+        double angleRotations = 0;
         return Rotation2d.fromRotations(angleRotations > Constants.Froggy.MAXIMUM_ANGLE.getRotations() + Units.degreesToRotations(10)
             ? angleRotations - 1
             : angleRotations);
@@ -133,7 +134,8 @@ public class FroggyImpl extends Froggy {
         if (Settings.DEBUG_MODE) {
             // PIVOT
             SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", debuggingMotionProfile.get(getTargetAngle().getDegrees()));
-            SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+            // SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+            SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", 0);
 
             SmartDashboard.putNumber("Froggy/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Froggy/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());

@@ -29,18 +29,18 @@ public class LEDController extends SubsystemBase {
         return instance;
     }
 
-    private AddressableLED leds;
+    // private AddressableLED leds;
     private AddressableLEDBuffer ledsBuffer;
 
     private final LEDPattern defaultPattern = LEDPattern.kOff;
 
     protected LEDController(int port, int length) {
-        leds = new AddressableLED(port);
+        // leds = new AddressableLED(port);
         ledsBuffer = new AddressableLEDBuffer(length);
 
-        leds.setLength(length);
-        leds.setData(ledsBuffer);
-        leds.start();
+        // leds.setLength(length);
+        // leds.setData(ledsBuffer);
+        // leds.start();
 
         applyPattern(defaultPattern);
 
@@ -54,12 +54,12 @@ public class LEDController extends SubsystemBase {
     @Override
     public void periodic() {
         if (Settings.EnabledSubsystems.LEDS.get()) {
-            leds.start();
-            leds.setData(ledsBuffer);
+            // leds.start();
+            // leds.setData(ledsBuffer);
         }
         else {
-            LEDPattern.kOff.applyTo(ledsBuffer);
-            leds.setData(ledsBuffer);
+            // LEDPattern.kOff.applyTo(ledsBuffer);
+            // leds.setData(ledsBuffer);
         }
     }
 }

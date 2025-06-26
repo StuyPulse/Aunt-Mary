@@ -106,7 +106,8 @@ public class ArmImpl extends Arm {
     }
 
     private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
-        double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations();
+        // double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations();
+        double encoderAngle = 0;
         return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
             ? encoderAngle 
             : encoderAngle + 1);
@@ -190,7 +191,8 @@ public class ArmImpl extends Arm {
             SmartDashboard.putNumber("Arm/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
 
-            SmartDashboard.putNumber("Arm/Raw Encoder Value (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+            // SmartDashboard.putNumber("Arm/Raw Encoder Value (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+            SmartDashboard.putNumber("Arm/Raw Encoder Value (deg)", 0);
         }
     }
 }

@@ -340,30 +340,30 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
-    // public void configureAutoBuilder() {
-    //     try{
-    //         AutoBuilder.configure(
-    //             this::getPose,
-    //             this::resetPose,
-    //             this::getChassisSpeeds,
-    //             this::setChassisSpeeds,
-    //             new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
-    //             RobotConfig.fromGUISettings(),
-    //             () -> false,
-    //             instance
-    //         );
-    //         PathPlannerLogging.setLogActivePathCallback((poses) -> {
-    //             if (Robot.isBlue()) {
-    //                 Field.FIELD2D.getObject("path").setPoses(poses);
-    //             }
-    //             else {
-    //                 Field.FIELD2D.getObject("path").setPoses(Field.transformToOppositeAlliance(poses));
-    //             }
-    //         });
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    public void configureAutoBuilder() {
+        try{
+            AutoBuilder.configure(
+                this::getPose,
+                this::resetPose,
+                this::getChassisSpeeds,
+                this::setChassisSpeeds,
+                new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
+                RobotConfig.fromGUISettings(),
+                () -> false,
+                instance
+            );
+            PathPlannerLogging.setLogActivePathCallback((poses) -> {
+                if (Robot.isBlue()) {
+                    Field.FIELD2D.getObject("path").setPoses(poses);
+                }
+                else {
+                    Field.FIELD2D.getObject("path").setPoses(Field.transformToOppositeAlliance(poses));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public Command followPathCommand(String pathName) {
         try {
@@ -390,14 +390,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getKinematics().toChassisSpeeds(getModuleStates());
     }
 
-    // public Vector2D getFieldRelativeSpeeds() {
-    //     // return new Vector2D(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
-    //     //     .rotate(Angle.fromRotation2d(getPose().getRotation()));
-    // }
+    public Vector2D getFieldRelativeSpeeds() {
+        return new Vector2D(getChassisSpeeds().vx, getChassisSpeeds().vy)
+            .rotate(Angle.fromRotation2d(getPose().getRotation()));
+    }
 
-    // private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
-    //     setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vxMetersPerSecond).withVelocityY(robotSpeeds.vyMetersPerSecond).withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
-    // }
+    private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
+        setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vx).withVelocityY(robotSpeeds.vy).withRotationalRate(robotSpeeds.omega));
+    }
 
     public boolean isOnAllianceSide() {
         return getPose().getX() <= Field.LENGTH / 2;

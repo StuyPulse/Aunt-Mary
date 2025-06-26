@@ -134,7 +134,7 @@ public class RobotContainer {
 
     // Robot container
     public RobotContainer() {
-        // swerve.configureAutoBuilder();
+        swerve.configureAutoBuilder();
 
         configureDefaultCommands();
         configureDriverButtonBindings();
