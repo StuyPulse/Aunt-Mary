@@ -47,6 +47,7 @@ public class FroggyImpl extends Froggy {
         pivotMotor.setPosition(Constants.Froggy.MAXIMUM_ANGLE.getRotations());
        
         absoluteEncoder = new DutyCycleEncoder(Ports.Froggy.ABSOLUTE_ENCODER);
+        absoluteEncoder.setAssumedFrequency(Constants.REV_THROUGH_BORE_ENCODER_FREQUENCY_HZ);
         absoluteEncoder.setInverted(false);
 
         hasUsedAbsoluteEncoderToSetPivot = false;
@@ -76,8 +77,7 @@ public class FroggyImpl extends Froggy {
     }
 
     private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
-        // double angleRotations = absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations();
-        double angleRotations = 0;
+        double angleRotations = absoluteEncoder.get() - Constants.Froggy.ANGLE_OFFSET.getRotations();
         return Rotation2d.fromRotations(angleRotations > Constants.Froggy.MAXIMUM_ANGLE.getRotations() + Units.degreesToRotations(10)
             ? angleRotations - 1
             : angleRotations);
@@ -134,8 +134,7 @@ public class FroggyImpl extends Froggy {
         if (Settings.DEBUG_MODE) {
             // PIVOT
             SmartDashboard.putNumber("Froggy/Pivot/Setpoint (deg)", debuggingMotionProfile.get(getTargetAngle().getDegrees()));
-            // SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
-            SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", 0);
+            SmartDashboard.putNumber("Froggy/Pivot/Raw Encoder Angle (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
 
             SmartDashboard.putNumber("Froggy/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Froggy/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());

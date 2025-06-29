@@ -18,6 +18,8 @@ public interface Constants {
     double SHOOTER_Y_OFFSET = Units.inchesToMeters(3.5);
     double FROGGY_Y_OFFSET_WHEN_FULLY_EXTENDED = Units.inchesToMeters(30.05);
 
+    double REV_THROUGH_BORE_ENCODER_FREQUENCY_HZ = 975.6;
+
     public interface Elevator {
         double MIN_HEIGHT_METERS = Units.inchesToMeters(40.85); // FROM FLOOR TO TOP OF ELEVATOR
         double MAX_HEIGHT_METERS = Units.inchesToMeters(69.85); // FROM FLOOR TO TOP OF ELEVATOR

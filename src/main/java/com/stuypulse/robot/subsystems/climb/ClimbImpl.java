@@ -29,6 +29,7 @@ public class ClimbImpl extends Climb {
         motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
+        absoluteEncoder.setAssumedFrequency(Constants.REV_THROUGH_BORE_ENCODER_FREQUENCY_HZ);
         absoluteEncoder.setInverted(false);
     }
 
@@ -38,10 +39,9 @@ public class ClimbImpl extends Climb {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return new Rotation2d();
-        // return absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()
-        //     ? Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() + 1)
-        //     : Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
+        return absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()
+            ? Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() + 1)
+            : Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
     }
 
     @Override
