@@ -196,7 +196,9 @@ public class RobotContainer {
                     new ManualShoot(),
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
                 ),
-                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118())),
+                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118()).andThen(
+                    new WaitCommand(0.2).andThen(new BuzzController(driver))
+                )),
                 () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
                 )
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
@@ -417,8 +419,8 @@ public class RobotContainer {
                                     .andThen(new ManualShoot()
                                         .alongWith(new WaitUntilCommand(() -> shooter.getState() != ShooterState.HOLD_ALGAE)
                                             .andThen(new WaitCommand(0.1)))
-                                            .andThen(new SuperStructureAlgaeSafe118()))))
-            )
+                                            .andThen(new SuperStructureAlgaeSafe118())
+                                                .andThen(new WaitCommand(0.2).andThen(new BuzzController(driver)))))))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
