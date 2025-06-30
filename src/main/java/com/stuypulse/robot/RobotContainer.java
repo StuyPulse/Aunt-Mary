@@ -266,7 +266,6 @@ public class RobotContainer {
                     () -> swerve.isFrontFacingAllianceReef()
                 ),
                 new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1Versatile())
-                .andThen(new SwerveDrivePIDToClosestL1FroggyScore(0))
                     .alongWith(
                 new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_VERSATILE.getTargetAngle().getDegrees() - 10))
                         .andThen(
@@ -302,10 +301,12 @@ public class RobotContainer {
         driver.getTopButton().debounce(0.25)
             .whileTrue(
             new ConditionalCommand(
-                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_THREE.getTargetAngle().getDegrees() - 10)
-                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(3).deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_THREE))
-                    .andThen(new FroggyRollerShootCoralThree())), 
+                new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1Three())
+                    .alongWith(
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_THREE.getTargetAngle().getDegrees() - 10))
+                        .andThen(
+                            new SwerveDrivePIDToClosestL1FroggyScore(0)
+                                .andThen(new FroggyRollerShootCoralThree())), 
             new ConditionalCommand(
                 new ScoreRoutine(driver, 4, true).until(() -> false),
                 new ScoreRoutine(driver, 4, false).until(() -> false), 
@@ -343,10 +344,13 @@ public class RobotContainer {
         driver.getRightButton().debounce(0.25)
         .whileTrue(
             new ConditionalCommand(
-                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_TWO.getTargetAngle().getDegrees() - 10)
-                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(2).deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_TWO))
-                        .andThen(new FroggyRollerShootCoralTwo())),
+                new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1Two())
+                .andThen(new SwerveDrivePIDToClosestL1FroggyScore(2))
+                    .alongWith(
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_TWO.getTargetAngle().getDegrees() - 10))
+                        .andThen(
+                            new SwerveDrivePIDToClosestL1FroggyScore(2)
+                                .andThen(new FroggyRollerShootCoralTwo())),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 3, true).until(() -> false),
                         new ScoreRoutine(driver, 3, false).until(() -> false), 
@@ -383,10 +387,12 @@ public class RobotContainer {
         driver.getBottomButton().debounce(0.25)
         .whileTrue(
             new ConditionalCommand(
-                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_ONE.getTargetAngle().getDegrees() - 10)
-                    .deadlineFor(new SwerveDrivePIDToClosestL1FroggyReady())
-                    .andThen(new SwerveDrivePIDToClosestL1FroggyScore(1).deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_ONE))
-                        .andThen(new FroggyRollerShootCoralOne())),
+                new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1One())
+                    .alongWith(
+                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_ONE.getTargetAngle().getDegrees() - 10))
+                        .andThen(
+                            new SwerveDrivePIDToClosestL1FroggyScore(1)
+                                .andThen(new FroggyRollerShootCoralOne())),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 2, true).until(() -> false),
                         new ScoreRoutine(driver, 2, false).until(() -> false), 
@@ -554,14 +560,14 @@ public class RobotContainer {
         /**  TOP ALGAE AUTONS **/
 
         AutonConfig H_TWO_ALGAE_AUTON = new AutonConfig("H + 2 Algae", HTwoAlgae::new,
-        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut");
+        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
         H_TWO_ALGAE_AUTON.register(autonChooser);
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
-        "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut");
-        G_TWO_ALGAE_AUTON.register(autonChooser);
+        // AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
+        // "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
+        // G_TWO_ALGAE_AUTON.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

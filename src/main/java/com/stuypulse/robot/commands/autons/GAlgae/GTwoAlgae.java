@@ -104,7 +104,11 @@ public class GTwoAlgae extends SequentialCommandGroup {
                     new WaitCommand(0.2),
                     new SuperStructureAlgaeSafe118(),
                     new WaitCommand(0.2),
-                    new SuperStructureFeed()
+                    
+                    new ParallelCommandGroup(
+                        new SuperStructureFeed(),
+                        CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
+                    )
 
         );
 

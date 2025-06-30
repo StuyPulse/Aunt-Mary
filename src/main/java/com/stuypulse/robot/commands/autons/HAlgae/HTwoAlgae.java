@@ -85,9 +85,11 @@ public class HTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[1])
                 .alongWith(new SuperStructureFeed()),
 
+            new WaitCommand(0.2),
+
             // Acquire IJ Algae, Score on Barge
             new ReefAlgaePickupRoutineFront()
-                .withTimeout(1.5)
+                .withTimeout(2)
                 .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)),
             new ShooterHoldAlgae(),
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
@@ -104,7 +106,11 @@ public class HTwoAlgae extends SequentialCommandGroup {
                     new WaitCommand(0.2),
                     new SuperStructureAlgaeSafe118(),
                     new WaitCommand(0.2),
-                    new SuperStructureFeed()
+
+                    new ParallelCommandGroup(
+                        new SuperStructureFeed(),
+                        CommandSwerveDrivetrain.getInstance().followPathCommand(paths[3])
+                    )
 
         );
 
