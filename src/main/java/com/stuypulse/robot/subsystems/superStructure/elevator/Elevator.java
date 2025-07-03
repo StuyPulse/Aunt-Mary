@@ -14,6 +14,9 @@ import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.RobotVisualizer;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -23,6 +26,7 @@ import java.util.Optional;
 public abstract class Elevator extends SubsystemBase {
 
     private static final Elevator instance;
+    private final NetworkTableEntry elevatorEntry;
 
     static {
         if (Robot.isReal()) {
@@ -72,6 +76,8 @@ public abstract class Elevator extends SubsystemBase {
     private ElevatorState state;
 
     protected Elevator() {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("AdvantageScope");
+        elevatorEntry = table.getEntry("Robot:Components");
         this.state = ElevatorState.FEED;
     }
 
@@ -125,6 +131,8 @@ public abstract class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("Elevator/Target Height (m)", getState().getTargetHeight());
         SmartDashboard.putNumber("Elevator/Current Height (m)", getCurrentHeight());
         SmartDashboard.putBoolean("Elevator/At Target Height", atTargetHeight());
+
+        elevatorEntry.setDoubleArray(new double[] { getCurrentHeight() });
 
         if (Settings.DEBUG_MODE) {
             RobotVisualizer.getInstance().updateElevatorHeight(getCurrentHeight(), atTargetHeight());
