@@ -196,7 +196,7 @@ public class RobotContainer {
                     new ManualShoot(),
                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
                 ),
-                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118())),
+                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118()).onlyIf(() -> superStructure.getState() == SuperStructureState.BARGE_118)),
                 () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
                 )
             .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
