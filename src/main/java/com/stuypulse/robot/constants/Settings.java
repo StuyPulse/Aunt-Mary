@@ -94,8 +94,8 @@ public interface Settings {
                 double Y_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
                 Rotation2d THETA_TOLERANCE_REEF_PICKUP = Rotation2d.fromDegrees(4.0);
 
-                double X_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
-                double Y_TOLERANCE_FROGGY = Units.inchesToMeters(2.0);
+                double X_TOLERANCE_FROGGY = Units.inchesToMeters(3.0);
+                double Y_TOLERANCE_FROGGY = Units.inchesToMeters(3.0);
                 Rotation2d THETA_TOLERANCE_FROGGY = Rotation2d.fromDegrees(5.0);
 
                 double X_TOLERANCE_BARGE = Units.inchesToMeters(4);
@@ -334,7 +334,7 @@ public interface Settings {
 
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(230); // 245 - 3.5
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(215); // 245 - 3.5 // 230
         Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
         Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);

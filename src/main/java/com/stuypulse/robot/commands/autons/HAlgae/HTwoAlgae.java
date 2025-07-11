@@ -70,7 +70,7 @@ public class HTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge118Auto(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_SHORT)
-                    .withTranslationalConstraints(5, 8),
+                    .withTranslationalConstraints(5, 6),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()
@@ -95,7 +95,7 @@ public class HTwoAlgae extends SequentialCommandGroup {
             CommandSwerveDrivetrain.getInstance().followPathCommand(paths[2]),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBarge118Auto(Settings.Swerve.Alignment.Targets.Y_DISTANCE_FROM_MIDLINE_FOR_BARGE_AUTO_LONG)
-                    .withTranslationalConstraints(5, 8),
+                    .withTranslationalConstraints(5, 6),
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                             new SuperStructureBarge118()

@@ -267,13 +267,13 @@ public interface Field {
                 if (isLeftSideOfStation) {
                     distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN;
                 } else {
-                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT + Units.inchesToMeters(10);
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT + Units.inchesToMeters(8);
                 }
             } else {
-                if (!isLeftSideOfStation) {
-                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN;
+                if (isLeftSideOfStation) {
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT - Units.inchesToMeters(5);
                 } else {
-                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT - Units.inchesToMeters(3);
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN - Units.inchesToMeters(6);
                 }
             }
             return correspondingAprilTag.getLocation().toPose2d().transformBy(
