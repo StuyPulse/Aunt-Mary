@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 
@@ -265,15 +266,15 @@ public interface Field {
             double distance_y;
             if (isCD) {
                 if (isLeftSideOfStation) {
-                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN;
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN + Units.inchesToMeters(6);
                 } else {
                     distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT + Units.inchesToMeters(8);
                 }
             } else {
-                if (isLeftSideOfStation) {
+                if (!isLeftSideOfStation) {
                     distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_OUT - Units.inchesToMeters(5);
                 } else {
-                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN - Units.inchesToMeters(6);
+                    distance_y = Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION_IN - Units.inchesToMeters(8);
                 }
             }
             return correspondingAprilTag.getLocation().toPose2d().transformBy(
