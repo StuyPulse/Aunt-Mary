@@ -36,12 +36,22 @@ public class ClimbImpl extends Climb {
         return getState().getTargetAngle();
     }
 
-    @Override
     public Rotation2d getCurrentAngle() {
-        return absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()
-            ? Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() + 1)
-            : Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
+        Rotation2d angle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
+
+        while (angle.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()) {
+            angle = Rotation2d.fromRotations(1 + angle.getRotations());
+        }
+
+        return angle;
     }
+
+    
+    // public Rotation2d getCurrentAngle() {
+    //     return absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()
+    //         ? Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() + 1)
+    //         : Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
+    // }
 
     @Override
     public void periodic() {

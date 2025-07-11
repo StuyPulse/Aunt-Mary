@@ -83,6 +83,9 @@
         "Arm": {
           "open": true
         },
+        "Climb": {
+          "open": true
+        },
         "Enabled Subsystems": {
           "open": true
         },
@@ -90,9 +93,6 @@
           "Pivot": {
             "open": true
           },
-          "open": true
-        },
-        "Funnel": {
           "open": true
         },
         "Shooter": {

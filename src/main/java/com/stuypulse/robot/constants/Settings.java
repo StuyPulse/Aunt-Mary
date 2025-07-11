@@ -50,7 +50,7 @@ public interface Settings {
     public interface Clearances {
         double CLEARANCE_DISTANCE_FROM_CENTERLINE_BARGE_118 = 1.4 - Units.feetToMeters(1) + Units.inchesToMeters(6);
         double CLEARANCE_DISTANCE_FROM_REEF_ARM = Units.inchesToMeters(19.25); // From bumper
-        double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(11); // From bumper
+        double CLEARANCE_DISTANCE_FROGGY = Units.inchesToMeters(14); // From bumper
         double CLEARANCE_DISTANCE_FROM_REEF_ARM_ALGAE = Units.inchesToMeters(0);
 
         double CLEARANCE_DISTANCE_CORAL_STATION_ALIGN_FUNNEL_SIDE = Units.inchesToMeters(9);
@@ -330,11 +330,11 @@ public interface Settings {
     public interface Climb {
         double DEFAULT_VOLTAGE = 4; // Used for normal movement
         double OPEN_VOLTAGE_LOW = 1; // Used when getting close to the open angle
-        double CLIMB_VOLTAGE = 12; // Used when climbing
+        double CLIMB_VOLTAGE = 12; // Used when climbing 12
 
         Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
         Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(215); // 245 - 3.5 // 230
+        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(230); // 245 - 3.5 // 230 // 215
         Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
         
         Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);
