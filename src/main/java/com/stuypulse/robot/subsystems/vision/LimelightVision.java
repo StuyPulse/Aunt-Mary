@@ -15,6 +15,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
+import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -237,6 +238,36 @@ public class LimelightVision extends SubsystemBase {
                 0
             );
             if (camera.isEnabled()) {
+                RawDetection[] rawDetections = LimelightHelpers.getRawDetections(camera.getName());
+                if (rawDetections.length == 0) {
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/classId", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner0_X", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner0_Y", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner1_X", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner1_Y", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner2_X", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner2_Y", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner3_X", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/corner3_Y", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/ta", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/txnc", 0);
+                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + "null" + "/tync", 0);
+                } else {
+                    for (int i = 0; i < rawDetections.length; i++) {
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/classId", rawDetections[i].classId);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner0_X", rawDetections[i].corner0_X);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner0_Y", rawDetections[i].corner0_Y);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner1_X", rawDetections[i].corner1_X);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner1_Y", rawDetections[i].corner1_Y);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner2_X", rawDetections[i].corner2_X);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner2_Y", rawDetections[i].corner2_Y);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner3_X", rawDetections[i].corner3_X);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/corner3_Y", rawDetections[i].corner3_Y);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/ta", rawDetections[i].ta);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/txnc", rawDetections[i].txnc);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Object " + i + "/tync", rawDetections[i].tync);
+                    }
+                }
                 PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                     ? getMegaTag2PoseEstimate(camera.getName())
                     : getMegaTag1PoseEstimate(camera.getName());
