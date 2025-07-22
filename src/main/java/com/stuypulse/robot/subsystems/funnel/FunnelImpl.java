@@ -22,9 +22,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public class FunnelImpl extends Funnel {
 
     private final TalonFX motor;
-    private final DigitalInput irSensor;
+    // private final DigitalInput irSensor;
 
-    private final BStream hasCoral;
+    // private final BStream hasCoral;
     private final BStream shouldReverse;
 
     protected FunnelImpl() {
@@ -32,20 +32,20 @@ public class FunnelImpl extends Funnel {
         motor = new TalonFX(Ports.Funnel.MOTOR);
         Motors.Funnel.MOTOR_CONFIG.configure(motor);
 
-        irSensor = new DigitalInput(Ports.Funnel.IR);
+        // irSensor = new DigitalInput(Ports.Funnel.IR);
 
-        hasCoral = BStream.create(irSensor).not()
-                .filtered(new BDebounce.Rising(Settings.Funnel.HAS_CORAL_DEBOUNCE));
+        // hasCoral = BStream.create(irSensor).not()
+        //         .filtered(new BDebounce.Rising(Settings.Funnel.HAS_CORAL_DEBOUNCE));
 
         shouldReverse = BStream.create(() -> motor.getSupplyCurrent().getValueAsDouble() > Settings.Funnel.STALL_CURRENT)
             .filtered(new BDebounce.Rising(Settings.Funnel.STALL_DETECTION_TIME))
             .filtered(new BDebounce.Falling(Settings.Funnel.MIN_REVERSE_TIME));
     }
 
-    @Override
-    public boolean hasCoral() {
-        return hasCoral.get();
-    }
+    // @Override
+    // public boolean hasCoral() {
+    //     return hasCoral.get();
+    // }
 
     @Override
     public boolean shouldReverse() {
@@ -63,13 +63,13 @@ public class FunnelImpl extends Funnel {
             motor.set(0);
         }
 
-        SmartDashboard.putBoolean("Funnel/Has Coral", hasCoral());
+        // SmartDashboard.putBoolean("Funnel/Has Coral", hasCoral());
 
         if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Funnel/Stator Current", motor.getStatorCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Funnel/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
             
-            SmartDashboard.putBoolean("Funnel/IR Sensor raw", irSensor.get());
+            // SmartDashboard.putBoolean("Funnel/IR Sensor raw", irSensor.get());
         }
     }
 }
