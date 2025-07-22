@@ -86,7 +86,7 @@ public class SwerveDrivePIDToPose extends Command {
         isAligned = BStream.create(this::isAligned)
             .filtered(new BDebounceRC.Both(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE));
 
-        velocityError = IStream.create(() -> new Translation2d(controller.getError().vxMetersPerSecond, controller.getError().vyMetersPerSecond).getNorm())
+        velocityError = IStream.create(() -> new Translation2d(controller.getError().vx, controller.getError().vy).getNorm())
             .filtered(new LowPassFilter(0.05))
             .filtered(x -> Math.abs(x));
 
@@ -166,17 +166,17 @@ public class SwerveDrivePIDToPose extends Command {
         controller.update(new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.get().getRotation()), swerve.getPose());
         
         swerve.setControl(swerve.getRobotCentricSwerveRequest()
-            .withVelocityX(controller.getOutput().vxMetersPerSecond)
-            .withVelocityY(controller.getOutput().vyMetersPerSecond)
-            .withRotationalRate(controller.getOutput().omegaRadiansPerSecond));
+            .withVelocityX(controller.getOutput().vx)
+            .withVelocityY(controller.getOutput().vy)
+            .withRotationalRate(controller.getOutput().omega));
         
         SmartDashboard.putNumber("Alignment/Target x", targetPose.get().getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.get().getY());
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.get().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
+        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vx);
+        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vy);
+        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omega);
 
         SmartDashboard.putBoolean("Alignment/Is Aligned", isAligned());
         SmartDashboard.putBoolean("Alignment/Is Aligned X", isAlignedX());

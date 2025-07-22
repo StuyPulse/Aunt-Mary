@@ -86,7 +86,7 @@ public class ElevatorSimu extends Elevator {
 
         motionProfile.reset(Constants.Elevator.MIN_HEIGHT_METERS);
 
-        accel = IStream.create(() -> sim.getVelocityMetersPerSecond())
+        accel = IStream.create(() -> sim.getVelocity())
             .filtered(new Derivative());
 
         voltageOverride = Optional.empty();
@@ -100,7 +100,7 @@ public class ElevatorSimu extends Elevator {
             "Elevator", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentHeight(), 
-            () -> sim.getVelocityMetersPerSecond(), 
+            () -> sim.getVelocity(), 
             () -> voltageOverride.get(), 
             getInstance()
         );
@@ -112,7 +112,7 @@ public class ElevatorSimu extends Elevator {
 
     @Override
     public double getCurrentHeight() {
-        return sim.getPositionMeters();
+        return sim.getPosition();
     }
 
     private boolean isWithinTolerance(double toleranceMeters) {
@@ -152,7 +152,7 @@ public class ElevatorSimu extends Elevator {
         SmartDashboard.putNumber("Elevator/Setpoint", setpoint);
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getPositionMeters(), sim.getVelocityMetersPerSecond()));
+        controller.correct(VecBuilder.fill(sim.getPosition(), sim.getVelocity()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ELEVATOR.get()) {

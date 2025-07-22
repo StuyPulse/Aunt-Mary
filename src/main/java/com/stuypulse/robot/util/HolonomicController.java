@@ -36,19 +36,21 @@ public class HolonomicController {
     }
 
     public ChassisSpeeds getOutput() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(
-                xController.getOutput(),
-                yController.getOutput(),
-                angleController.getOutput(),
-                angleController.getMeasurement().getRotation2d());
+        return new ChassisSpeeds(xController.getOutput(), yController.getOutput(), angleController.getOutput());
+        // return ChassisSpeeds.fromFieldRelativeSpeeds(
+        //         xController.getOutput(),
+        //         yController.getOutput(),
+        //         angleController.getOutput(),
+        //         angleController.getMeasurement().getRotation2d());
     }
 
     public ChassisSpeeds getError() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(
-                xController.getError(),
-                yController.getError(),
-                angleController.getError().toDegrees(),
-                angleController.getMeasurement().getRotation2d());
+        return new ChassisSpeeds(xController.getError(), yController.getError(), angleController.getError().toRadians());
+        // return ChassisSpeeds.fromFieldRelativeSpeeds(
+        //         xController.getError(),
+        //         yController.getError(),
+        //         angleController.getError().toDegrees(),
+        //         angleController.getMeasurement().getRotation2d());
     }
 
     public boolean isDone(double xToleranceMeters, double yToleranceMeters, double angleToleranceDegrees) {

@@ -94,7 +94,7 @@ public class ArmSim extends Arm {
             "Arm", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentAngle().getDegrees(), 
-            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+            () -> Units.radiansToDegrees(sim.getVelocity()), 
             () -> voltageOverride.get(), 
             getInstance()
         );
@@ -121,7 +121,7 @@ public class ArmSim extends Arm {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads());
+        return Rotation2d.fromRadians(sim.getAngle());
     }
 
     @Override
@@ -157,7 +157,7 @@ public class ArmSim extends Arm {
         SmartDashboard.putNumber("Arm/Setpoint (deg)", Units.radiansToDegrees(setpoint));
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
+        controller.correct(VecBuilder.fill(sim.getAngle(), sim.getVelocity()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ARM.get()) {
