@@ -49,7 +49,7 @@ public class ArmImpl extends Arm {
 
     public ArmImpl() {
         super();
-        motor = new TalonFX(Ports.Arm.MOTOR);
+        motor = new TalonFX(Ports.Arm.MOTOR, "can_s3");
         Motors.Arm.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
 
