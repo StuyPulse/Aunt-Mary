@@ -7,24 +7,23 @@
 
 package com.stuypulse.robot.subsystems.froggy;
 
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
+import java.util.Optional;
 
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SysId;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-import java.util.Optional;
 
 public class FroggyImpl extends Froggy {
 
@@ -115,7 +114,8 @@ public class FroggyImpl extends Froggy {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
             } 
             else {
-                pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                pivotMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
             }
         }
         else {
