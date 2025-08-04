@@ -7,18 +7,16 @@
 
 package com.stuypulse.robot.subsystems.shooter;
 
-import com.stuypulse.stuylib.streams.booleans.BStream;
-import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
-
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.streams.booleans.BStream;
+import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ShooterImpl extends Shooter {
 
@@ -29,7 +27,7 @@ public class ShooterImpl extends Shooter {
 
     protected ShooterImpl() {
         super();
-        motor = new TalonFX(Ports.Shooter.MOTOR);
+        motor = new TalonFX(Ports.Shooter.MOTOR, "can_s3");
         Motors.Shooter.MOTOR_CONFIG.configure(motor);
 
         beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);

@@ -7,12 +7,11 @@
 
 package com.stuypulse.robot.subsystems.superStructure.arm;
 
-import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
+import java.util.Optional;
 
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Constants;
-import com.stuypulse.robot.constants.Gains;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -20,19 +19,16 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.ShooterState;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
-import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-import java.util.Optional;
 
 public class ArmImpl extends Arm {
 
@@ -49,7 +45,7 @@ public class ArmImpl extends Arm {
 
     public ArmImpl() {
         super();
-        motor = new TalonFX(Ports.Arm.MOTOR);
+        motor = new TalonFX(Ports.Arm.MOTOR, "can_s3");
         Motors.Arm.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
 

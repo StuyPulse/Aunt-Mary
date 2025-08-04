@@ -7,24 +7,23 @@
 
 package com.stuypulse.robot.subsystems.froggy;
 
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
+import java.util.Optional;
 
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SysId;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-import java.util.Optional;
 
 public class FroggyImpl extends Froggy {
 
@@ -39,10 +38,10 @@ public class FroggyImpl extends Froggy {
 
     protected FroggyImpl() {
         super();
-        rollerMotor = new TalonFX(Ports.Froggy.ROLLER);
+        rollerMotor = new TalonFX(Ports.Froggy.ROLLER, "can_s3");
         Motors.Froggy.ROLLER_MOTOR_CONFIG.configure(rollerMotor);
 
-        pivotMotor = new TalonFX(Ports.Froggy.PIVOT);
+        pivotMotor = new TalonFX(Ports.Froggy.PIVOT, "can_s3");
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
         pivotMotor.setPosition(Constants.Froggy.MAXIMUM_ANGLE.getRotations());
        

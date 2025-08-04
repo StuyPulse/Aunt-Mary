@@ -7,17 +7,14 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
-import com.stuypulse.stuylib.streams.booleans.BStream;
-import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
-
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.stuylib.streams.booleans.BStream;
+import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 
 public class FunnelImpl extends Funnel {
 
@@ -29,7 +26,7 @@ public class FunnelImpl extends Funnel {
 
     protected FunnelImpl() {
         super();
-        motor = new TalonFX(Ports.Funnel.MOTOR);
+        motor = new TalonFX(Ports.Funnel.MOTOR, "can_s3");
         Motors.Funnel.MOTOR_CONFIG.configure(motor);
 
         // irSensor = new DigitalInput(Ports.Funnel.IR);

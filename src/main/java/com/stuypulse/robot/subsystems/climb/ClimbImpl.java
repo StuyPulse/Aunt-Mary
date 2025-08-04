@@ -7,6 +7,7 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
@@ -16,15 +17,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
 public class ClimbImpl extends Climb {
     private TalonFX motor;
     private DutyCycleEncoder absoluteEncoder;
 
     protected ClimbImpl() {
         super();
-        motor = new TalonFX(Ports.Climb.MOTOR);
+        motor = new TalonFX(Ports.Climb.MOTOR, "can_s3");
         Motors.Climb.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
 
