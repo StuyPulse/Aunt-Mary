@@ -34,14 +34,16 @@ import com.stuypulse.robot.util.ReefUtil.ReefFace;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final Gamepad driver;
+    private final CommandXboxController driver;
     
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
@@ -52,7 +54,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1ShooterReady(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestL1ShooterReady(CommandXboxController driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -85,7 +87,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
+        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
     }
 
     @Override

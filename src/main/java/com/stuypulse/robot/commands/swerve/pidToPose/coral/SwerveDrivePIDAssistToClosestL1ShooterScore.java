@@ -37,11 +37,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDAssistToClosestL1ShooterScore extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final Gamepad driver;
+    private final CommandXboxController driver;
     
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
@@ -52,7 +53,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterScore extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1ShooterScore(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestL1ShooterScore(CommandXboxController driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -85,7 +86,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterScore extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
+        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
     }
 
     @Override

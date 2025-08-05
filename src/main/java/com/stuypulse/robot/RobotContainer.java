@@ -10,6 +10,8 @@ package com.stuypulse.robot;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
+import java.util.concurrent.locks.Condition;
+
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.DoNothingCommand;
 import com.stuypulse.robot.commands.ManualShoot;
@@ -59,6 +61,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL1Front;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -80,6 +83,8 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
@@ -105,6 +110,7 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
 import com.stuypulse.robot.util.Clearances;
+import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -258,15 +264,16 @@ public class RobotContainer {
                              shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT || 
                              froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE))
             .whileTrue(new ConditionalCommand(
-                // new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
-                //     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
-                //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
-                //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
-                //             .andThen(new ShooterShootL1()))),
+                // new WaitUntilCommand(() -> superStrucutre.getState() == SuperStructureState.L1)
+                new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1_FRONT && superStructure.atTarget())
+                    .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
+                    .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
+                        .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())).andThen(new ShooterShootL1Front()))
+                        .andThen(
                 new ConditionalCommand(
                     new ScoreRoutine(driver, 1, true).until(() -> false),
                     new ScoreRoutine(driver, 1, false).until(() -> false),
-                    () -> swerve.isFrontFacingAllianceReef()
+                    () -> swerve.isFrontFacingAllianceReef())
                 ),
                 new ConditionalCommand(
                     new FroggyPivotToL1Versatile()
