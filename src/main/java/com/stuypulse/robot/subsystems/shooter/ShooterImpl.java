@@ -25,7 +25,7 @@ public class ShooterImpl extends Shooter {
     private final TalonFX motor;
 
     private final DigitalInput beamBreak;
-    private final BStream hasCoral;
+    private final boolean hasCoral;
 
     protected ShooterImpl() {
         super();
@@ -34,13 +34,14 @@ public class ShooterImpl extends Shooter {
 
         beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);
 
-        hasCoral = BStream.create(beamBreak).not()
-                    .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
+        // hasCoral = BStream.create(beamBreak).not()
+        //             .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
+        hasCoral = false;
     }
 
     @Override
     public boolean hasCoral() {
-        return hasCoral.get();
+        return hasCoral;
     }
 
     @Override
