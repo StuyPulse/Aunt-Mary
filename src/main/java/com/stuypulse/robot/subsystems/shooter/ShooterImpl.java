@@ -36,7 +36,7 @@ public class ShooterImpl extends Shooter {
 
         // hasCoral = BStream.create(beamBreak).not()
         //             .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
-        hasCoral = false;
+        hasCoral = true;
     }
 
     @Override

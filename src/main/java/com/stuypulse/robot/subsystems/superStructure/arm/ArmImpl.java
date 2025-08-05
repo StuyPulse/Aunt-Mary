@@ -21,9 +21,10 @@ import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
-import com.stuypulse.stuylib.math.SLMath;
+//import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -92,8 +93,9 @@ public class ArmImpl extends Arm {
     }
 
     private Rotation2d getTargetAngle() {
-       return Rotation2d.fromDegrees(
-        SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+        return getState().getTargetAngle();
+        //return Rotation2d.fromDegrees(
+        //    SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override

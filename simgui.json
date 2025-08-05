@@ -26,6 +26,7 @@
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/PathPlanner": "Alerts",
       "/SmartDashboard/Swerve/Module 0": "Mechanism2d",
       "/SmartDashboard/Swerve/Module 1": "Mechanism2d",
       "/SmartDashboard/Swerve/Module 2": "Mechanism2d",
@@ -45,12 +46,16 @@
       },
       "/SmartDashboard/Field": {
         "bottom": 1638,
-        "builtin": "2025 Reefscape",
         "height": 8.051901817321777,
         "left": 534,
         "right": 3466,
         "top": 291,
         "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/PathPlanner": {
         "window": {
           "visible": true
         }
@@ -63,9 +68,6 @@
     }
   },
   "NetworkTables": {
-    "Retained Values": {
-      "open": false
-    },
     "transitory": {
       "LiveWindow": {
         "open": true
@@ -83,6 +85,9 @@
         "Arm": {
           "open": true
         },
+        "Autonomous": {
+          "open": true
+        },
         "Climb": {
           "open": true
         },
@@ -93,6 +98,9 @@
           "Pivot": {
             "open": true
           },
+          "open": true
+        },
+        "Funnel": {
           "open": true
         },
         "Shooter": {
@@ -116,8 +124,7 @@
           },
           "Elevator": {
             "open": true
-          },
-          "open": true
+          }
         },
         "open": true
       }
@@ -144,7 +151,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 266,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -189,7 +196,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 271,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -234,7 +241,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 332,
+          "height": 0,
           "series": [
             {
               "color": [

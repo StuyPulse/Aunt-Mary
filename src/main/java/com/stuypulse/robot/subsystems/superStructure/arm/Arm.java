@@ -14,6 +14,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.util.RobotVisualizer;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -66,7 +67,7 @@ public abstract class Arm extends SubsystemBase {
         private Rotation2d targetAngle;
 
         private ArmState(Rotation2d targetAngle) {
-            this.targetAngle = Rotation2d.fromDegrees(SLMath.clamp(targetAngle.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+            this.targetAngle = targetAngle;//Rotation2d.fromDegrees(MathUtil.clamp(targetAngle.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
         }
 
         public Rotation2d getTargetAngle() {
