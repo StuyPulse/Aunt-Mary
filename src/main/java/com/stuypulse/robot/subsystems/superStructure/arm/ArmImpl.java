@@ -9,7 +9,7 @@ package com.stuypulse.robot.subsystems.superStructure.arm;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
@@ -157,15 +157,15 @@ public class ArmImpl extends Arm {
                 }
                 else {
                     if (Shooter.getInstance().hasCoral()) {
-                        motor.setControl(new PositionVoltage(getTargetAngle().getRotations())
+                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(0));
                     }
                     if (getState() == ArmState.CATAPULT_SHOOT) {
-                        motor.setControl(new PositionVoltage(getTargetAngle().getRotations())
+                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(1));
                     }
                     else {
-                        motor.setControl(new PositionVoltage(getTargetAngle().getRotations())
+                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
                             .withSlot(2));
                     }
                 }
