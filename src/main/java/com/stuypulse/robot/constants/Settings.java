@@ -344,8 +344,10 @@ public interface Settings {
         double HOLD_ALGAE_SPEED = 0.3;
         double HOLD_CORAL_SPEED = -0.15;
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);
+        // Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
+        // Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);
+        double MAX_VEL_DEG = 500.0;
+        double MAX_ACCEL_DEG = 1000.0;
     }
 
     public interface Climb {

@@ -9,6 +9,7 @@ package com.stuypulse.robot.subsystems.froggy;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.stuypulse.robot.constants.Constants;
@@ -52,7 +53,7 @@ public class FroggyImpl extends Froggy {
 
         pivotVoltageOverride = Optional.empty();
 
-        debuggingMotionProfile = new MotionProfile(Settings.Froggy.MAX_VEL.getDegrees(), Settings.Froggy.MAX_ACCEL.getDegrees());
+        debuggingMotionProfile = new MotionProfile(Settings.Froggy.MAX_VEL_DEG, Settings.Froggy.MAX_ACCEL_DEG);
     }
 
     @Override
@@ -114,8 +115,8 @@ public class FroggyImpl extends Froggy {
                 pivotMotor.setVoltage(pivotVoltageOverride.get());
             } 
             else {
-                // pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
-                pivotMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
+                pivotMotor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations()));
+                // pivotMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
             }
         }
         else {
