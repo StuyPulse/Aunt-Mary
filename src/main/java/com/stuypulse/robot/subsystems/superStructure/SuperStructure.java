@@ -178,7 +178,7 @@ public class SuperStructure extends SubsystemBase{
             if (arm.isFunnelSide(armState)) {
                 arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_TELEOP_FUNNEL_SIDE, Settings.Arm.Constraints.MAX_ACCEL_TELEOP_FUNNEL_SIDE);
             } else {
-                arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_TELEOP, Settings.Arm.Constraints.MAX_ACCEL_TELEOP);
+                arm.setMotionProfileConstraints(Settings.Arm.Constraints.MAX_VEL_TELEOP_DEG, Settings.Arm.Constraints.MAX_ACCEL_TELEOP_DEG);
             }
         }
     }

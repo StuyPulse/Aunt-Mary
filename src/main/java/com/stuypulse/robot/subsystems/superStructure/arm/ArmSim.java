@@ -77,8 +77,8 @@ public class ArmSim extends Arm {
         
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
-        velLimitRadiansPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
-        accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getDegrees());
+        velLimitRadiansPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP_DEG);
+        accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP_DEG);
 
         motionProfile = new MotionProfile(velLimitRadiansPerSecond, accelLimitRadiansPerSecondSquared);
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
@@ -140,9 +140,9 @@ public class ArmSim extends Arm {
     }
 
     @Override
-    public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
-        this.velLimitRadiansPerSecond.set(velLimit.getRadians());
-        this.accelLimitRadiansPerSecondSquared.set(accelLimit.getRadians());
+    public void setMotionProfileConstraints(double velLimit, double accelLimit) {
+        this.velLimitRadiansPerSecond.set(velLimit);
+        this.accelLimitRadiansPerSecondSquared.set(accelLimit);
     }
     
     @Override

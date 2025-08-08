@@ -55,8 +55,8 @@ public class ArmImpl extends Arm {
 
         hasUsedAbsoluteEncoderToSetArm = false;
 
-        velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
-        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
+        velLimitDegreesPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP_DEG);
+        accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP_DEG);
 
         debuggingMotionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
         debuggingMotionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
@@ -126,10 +126,10 @@ public class ArmImpl extends Arm {
     }
 
     @Override
-    public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
-        this.velLimitDegreesPerSecond.set(velLimit.getDegrees());
-        this.accelLimitDegreesPerSecondSquared.set(accelLimit.getDegrees());
-        Motors.Arm.MOTOR_CONFIG.withMotionProfile(velLimit.getRotations(), accelLimit.getRotations());
+    public void setMotionProfileConstraints(double velLimit, double accelLimit) {
+        this.velLimitDegreesPerSecond.set(velLimit);
+        this.accelLimitDegreesPerSecondSquared.set(accelLimit);
+        Motors.Arm.MOTOR_CONFIG.withMotionProfile(velLimit/360, accelLimit/360);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
     }
 
@@ -158,7 +158,7 @@ public class ArmImpl extends Arm {
                 else {
                     if (Shooter.getInstance().hasCoral()) {
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
-                            .withSlot(0));
+                            .withSlot(0)); // testing coral gains
                     }
                     if (getState() == ArmState.CATAPULT_SHOOT) {
                         motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())

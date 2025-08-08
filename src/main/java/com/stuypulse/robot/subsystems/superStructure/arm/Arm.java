@@ -7,14 +7,10 @@
 
 package com.stuypulse.robot.subsystems.superStructure.arm;
 
-import com.stuypulse.stuylib.math.SLMath;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
 import com.stuypulse.robot.util.RobotVisualizer;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -102,7 +98,7 @@ public abstract class Arm extends SubsystemBase {
     public abstract double getVoltageOverride();
 
     public abstract SysIdRoutine getSysIdRoutine();
-    public abstract void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit);
+    public abstract void setMotionProfileConstraints(double velLimit, double accelLimit);
 
     @Override
     public void periodic() {        

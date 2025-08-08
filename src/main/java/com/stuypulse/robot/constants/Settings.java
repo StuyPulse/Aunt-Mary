@@ -269,27 +269,50 @@ public interface Settings {
         Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
 
         public interface Constraints {
-            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
-            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
+            // Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
+            // Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
+            // Rotation2d MAX_VEL_TELEOP = Rotation2d.fromRotations(5/3); 
+            // Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromRotations(10/3); 
+            double MAX_VEL_TELEOP_DEG = 500.0;
+            double MAX_ACCEL_TELEOP_DEG = 1200.0;
 
-            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
-            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+            double MAX_VEL_TELEOP_FUNNEL_SIDE = 600.0; // 550
+            double MAX_ACCEL_TELEOP_FUNNEL_SIDE = 600.0; // 550
 
 
-            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
-            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
+            double MAX_VEL_AUTON = 1200.0;
+            double MAX_ACCEL_AUTON = 2400.0;
 
-            Rotation2d ALGAE_VEL_AUTON = Rotation2d.fromDegrees(600.0);
-            Rotation2d ALGAE_ACCEL_AUTON = Rotation2d.fromDegrees(800.0);
+            double ALGAE_VEL_AUTON = 600.0;
+            double ALGAE_ACCEL_AUTON = 800.0;
 
-            Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(250.0);
-            Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+            double DEFAULT_MAX_VEL_BACK_TO_FEED = 250.0;
+            double DEFAULT_MAX_ACCEL_BACK_TO_FEED = 600.0;
 
-            Rotation2d MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
+            double MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = 200.0;
+            double MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = 500.0;
 
-            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
-            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
+            double MAX_VEL_CATAPULT = 720.0;
+            double MAX_ACCEL_CATAPULT = 1500.0;
+
+            // Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+            // Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+
+
+            // Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
+            // Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
+
+            // Rotation2d ALGAE_VEL_AUTON = Rotation2d.fromDegrees(600.0);
+            // Rotation2d ALGAE_ACCEL_AUTON = Rotation2d.fromDegrees(800.0);
+
+            // Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(250.0);
+            // Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+
+            // Rotation2d MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
+            // Rotation2d MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
+
+            // Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
+            // Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
         }
 
         Rotation2d ANGLE_TOLERANCE_FRONT = Rotation2d.fromDegrees(7.0);
