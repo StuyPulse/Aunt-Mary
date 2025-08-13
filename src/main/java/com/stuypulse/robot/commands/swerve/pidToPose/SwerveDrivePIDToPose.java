@@ -8,8 +8,6 @@
 package com.stuypulse.robot.commands.swerve.pidToPose;
 
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounceRC;
@@ -25,9 +23,11 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.HolonomicController;
 import com.stuypulse.robot.util.TranslationMotionProfileIan;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,8 +46,10 @@ public class SwerveDrivePIDToPose extends Command {
 
     private boolean isMotionProfiled;
 
-    private final BStream isAligned;
-    private final IStream velocityError;
+    private final Supplier<Boolean> isAligned;
+    Timer alignmentDebouncer = new Timer();
+
+    private final Supplier<Double> velocityError;
 
     private final FieldObject2d targetPose2d;
 
@@ -56,7 +58,7 @@ public class SwerveDrivePIDToPose extends Command {
     private Number thetaTolerance;
     private Number maxVelocityWhenAligned;
 
-    private VStream translationSetpoint;
+    private Supplier<Translation2d> translationSetpoint;
 
     private Supplier<Boolean> canEnd;
 
@@ -77,18 +79,16 @@ public class SwerveDrivePIDToPose extends Command {
         maxAcceleration = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION;
 
         isMotionProfiled = true;
-        translationSetpoint = getNewTranslationSetpointGenerator();
+        translationSetpoint = this::getNewTranslationSetpointGenerator;
 
         this.targetPose = targetPose;
 
         targetPose2d = Field.FIELD2D.getObject("Target Pose");
 
-        isAligned = BStream.create(this::isAligned)
-            .filtered(new BDebounceRC.Both(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE));
+        alignmentDebouncer.reset();
+        isAligned = this::isAligned;
 
-        velocityError = IStream.create(() -> new Translation2d(controller.getError().vx, controller.getError().vy).getNorm())
-            .filtered(new LowPassFilter(0.05))
-            .filtered(x -> Math.abs(x));
+        velocityError = this::getVelocityError;
 
         xTolerance = Settings.Swerve.Alignment.Tolerances.X_TOLERANCE;
         yTolerance = Settings.Swerve.Alignment.Tolerances.Y_TOLERANCE;
@@ -98,6 +98,10 @@ public class SwerveDrivePIDToPose extends Command {
         canEnd = () -> true;
 
         addRequirements(swerve);
+    }
+
+    private Double getVelocityError() {
+        return Math.abs(Math.min(new Translation2d(controller.getError().vx, controller.getError().vy).getNorm(), 0.05));
     }
 
     public SwerveDrivePIDToPose withTolerance(double x, double y, Rotation2d theta) {
@@ -124,23 +128,22 @@ public class SwerveDrivePIDToPose extends Command {
     }
 
     // the VStream needs to be recreated everytime the command is scheduled to allow the target tranlation to jump to the start of the path
-    private VStream getNewTranslationSetpointGenerator() {
+    private Translation2d getNewTranslationSetpointGenerator() {
         if (!isMotionProfiled) {
-            return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()));
+            return targetPose.get().getTranslation();
         }
         else {
-            return VStream.create(() -> new Vector2D(targetPose.get().getTranslation()))
-                .filtered(new TranslationMotionProfileIan(
+            return new TranslationMotionProfileIan(
                     this.maxVelocity, 
                     this.maxAcceleration,
-                    new Vector2D(swerve.getPose().getTranslation()),
-                    Vector2D.kOrigin));
+                    swerve.getPose().getTranslation(),
+                    Translation2d.kZero).get(targetPose.get().getTranslation()); //TODO: MAKE SURE THIS IS HOW YOU ACTUALLY FILTER THE TRANSLATION
         }
     }
 
     @Override
     public void initialize() {
-        translationSetpoint = getNewTranslationSetpointGenerator();
+        translationSetpoint = this::getNewTranslationSetpointGenerator;
     }
 
     private boolean isAlignedX() {
@@ -156,14 +159,17 @@ public class SwerveDrivePIDToPose extends Command {
     }
 
     private boolean isAligned() {
-        return isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        boolean currentlyAligned = isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        if(!currentlyAligned) alignmentDebouncer.reset();
+        else if(alignmentDebouncer.get()<Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE) currentlyAligned=false;
+        return currentlyAligned;
     }
 
     @Override
     public void execute() {
         targetPose2d.setPose(Robot.isBlue() ? targetPose.get() : Field.transformToOppositeAlliance(targetPose.get()));
 
-        controller.update(new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.get().getRotation()), swerve.getPose());
+        controller.update(new Pose2d(translationSetpoint.get(), targetPose.get().getRotation()), swerve.getPose());
         
         swerve.setControl(swerve.getRobotCentricSwerveRequest()
             .withVelocityX(controller.getOutput().vx)

@@ -11,15 +11,16 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.math.Angle;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class HolonomicController {
-    private Controller xController;
-    private Controller yController;
+    private PIDController xController;
+    private PIDController yController;
     private AngleController angleController;
 
-    public HolonomicController(Controller xController, Controller yController, AngleController angleController) {
+    public HolonomicController(PIDController xController, PIDController yController, AngleController angleController) {
         this.xController = xController;
         this.yController = yController;
         this.angleController = angleController;
