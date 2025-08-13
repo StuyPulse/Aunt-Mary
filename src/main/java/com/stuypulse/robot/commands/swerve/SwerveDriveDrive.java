@@ -59,7 +59,7 @@ public class SwerveDriveDrive extends Command {
     }
 
     private Translation2d getDriverInputAsVelocity() {
-        return new Translation2d(driver.getLeftY(), -driver.getLeftX());
+        return new Translation2d(-driver.getLeftY(), -driver.getLeftX());
     }
 
     @Override

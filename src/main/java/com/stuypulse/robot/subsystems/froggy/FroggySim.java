@@ -77,8 +77,8 @@ public class FroggySim extends Froggy {
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
         motionProfile = new MotionProfile(
-            Settings.Froggy.MAX_VEL.getRadians(),
-            Settings.Froggy.MAX_ACCEL.getRadians()
+            Settings.Froggy.MAX_VEL_DEG,
+            Settings.Froggy.MAX_ACCEL_DEG
         );
         motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
 

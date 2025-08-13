@@ -100,7 +100,7 @@ public abstract class Arm extends SubsystemBase {
     public abstract double getVoltageOverride();
 
     public abstract SysIdRoutine getSysIdRoutine();
-    public abstract void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit);
+    public abstract void setMotionProfileConstraints(double velLimit, double accelLimit);
 
     @Override
     public void periodic() {        

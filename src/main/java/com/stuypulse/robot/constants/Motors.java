@@ -64,7 +64,7 @@ public interface Motors {
             .withFFConstants(Gains.Arm.Empty.FF.kS, Gains.Arm.Empty.FF.kV, Gains.Arm.Empty.FF.kA, Gains.Arm.Empty.FF.kG,2)
             .withGravityType(GravityTypeValue.Arm_Cosine)
 			.withSensorToMechanismRatio(Constants.Arm.GEAR_RATIO)
-            .withMotionProfile(Settings.Arm.Constraints.MAX_VEL_TELEOP.getRotations(), Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getRotations());
+            .withMotionProfile(Settings.Arm.Constraints.MAX_VEL_TELEOP_DEG/360.0, Settings.Arm.Constraints.MAX_VEL_TELEOP_DEG/360.0);
     }
 
     public interface Froggy {
@@ -82,7 +82,7 @@ public interface Motors {
             .withFFConstants(Gains.Froggy.FF.kS, Gains.Froggy.FF.kV, Gains.Froggy.FF.kA, Gains.Froggy.FF.kG, 0)
             .withPIDConstants(Gains.Froggy.PID.kP, Gains.Froggy.PID.kI, Gains.Froggy.PID.kD, 0)
             .withGravityType(GravityTypeValue.Arm_Cosine)
-            .withMotionProfile(Settings.Froggy.MAX_VEL.getRotations(), Settings.Froggy.MAX_ACCEL.getRotations())
+            .withMotionProfile(Settings.Froggy.MAX_VEL_DEG/360.0, Settings.Froggy.MAX_ACCEL_DEG/360.0)
 			.withSensorToMechanismRatio(Constants.Froggy.GEAR_RATIO);
     }
 
