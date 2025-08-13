@@ -7,25 +7,24 @@
 
 package com.stuypulse.robot.util;
 
-import com.stuypulse.stuylib.math.Vector2D;
-import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
-import com.stuypulse.stuylib.util.StopWatch;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
 
-public class TranslationMotionProfileIan implements VFilter {
+public class TranslationMotionProfileIan {
 
     // Default number of times to apply filter (helps accuracy)
     private static final int kDefaultSteps = 64;
 
     // Stopwatch to Track dt
-    private StopWatch mTimer;
+    private Timer mTimer;
 
     // Limits for each of the derivatives
     private Number mVelLimit;
     private Number mAccelLimit;
 
     // The last output / velocity
-    private Vector2D mOutput;
-    private Vector2D mVelocity;
+    private Translation2d mOutput;
+    private Translation2d mVelocity;
 
     // Number of times to apply filter (helps accuracy)
     private final int mSteps;
@@ -33,11 +32,12 @@ public class TranslationMotionProfileIan implements VFilter {
     public TranslationMotionProfileIan(
         Number velLimit, 
         Number accelLimit, 
-        Vector2D startingTranslation, 
-        Vector2D startingVelocity, 
+        Translation2d startingTranslation, 
+        Translation2d startingVelocity, 
         int steps) 
     {
-        mTimer = new StopWatch();
+        mTimer = new Timer();
+        mTimer.reset();
 
         mVelLimit = velLimit;
         mAccelLimit = accelLimit;
@@ -48,66 +48,75 @@ public class TranslationMotionProfileIan implements VFilter {
         mSteps = steps;
     }
 
-    public TranslationMotionProfileIan(Number velLimit, Number accelLimit, Vector2D startingTranslation, Vector2D startingVelocity) {
+    public TranslationMotionProfileIan(Number velLimit, Number accelLimit, Translation2d startingTranslation, Translation2d startingVelocity) {
         this(velLimit, accelLimit, startingTranslation, startingVelocity, kDefaultSteps);
     }
 
     public TranslationMotionProfileIan(Number velLimit, Number accelLimit) {
-        this(velLimit, accelLimit, Vector2D.kOrigin, Vector2D.kOrigin, kDefaultSteps);
+        this(velLimit, accelLimit, new Translation2d(), new Translation2d(), kDefaultSteps);
     }
 
-    public Vector2D get(Vector2D target) {
-        double dt = mTimer.reset() / mSteps;
+    public Translation2d get(Translation2d target) {
+        double dt = mTimer.get() / mSteps;
+        mTimer.reset();
 
         for (int i = 0; i < mSteps; ++i) {
             // if there is a accel limit, limit the amount the velocity can change
             if (0 < mAccelLimit.doubleValue()) {
                 // amount of windup in system (how long it would take to slow down)
-                double windup = mVelocity.magnitude() / mAccelLimit.doubleValue();
+                double windup = mVelocity.getDistance(new Translation2d()) / mAccelLimit.doubleValue();
 
+                Translation2d accel = new Translation2d();
                 // If the windup is too small, just use normal algorithm to limit acceleration
                 if (windup < dt) {
                     // Calculate acceleration needed to reach target
-                    Vector2D accel = target.sub(mOutput).div(dt).sub(mVelocity);
-
-                    // Try to reach it while abiding by accel limit
-                    mVelocity = mVelocity.add(accel.clamp(dt * mAccelLimit.doubleValue()));
+                    accel = target.minus(mOutput).div(dt).minus(mVelocity);
                 } else {
                     // the position it would end up if it attempted to come to a full stop
-                    Vector2D windA =
-                        mVelocity.mul(0.5 * (dt + windup)); // windup caused by acceleration
-                    Vector2D future = mOutput.add(windA); // where the robot will end up
+                    Translation2d windA =
+                        mVelocity.times(0.5 * (dt + windup)); // windup caused by acceleration
+                    
+                    Translation2d future = mOutput.plus(windA); // where the robot will end up
 
                     // Calculate acceleration needed to come to stop at target throughout windup
-                    Vector2D accel = target.sub(future).div(windup);
+                    accel = target.minus(future).div(windup);
 
-                    // Try to reach it while abiding by accel limit
-                    mVelocity = mVelocity.add(accel.clamp(dt * mAccelLimit.doubleValue()));
                 }
 
+                //Clamping the value between 0 and the maximum acceleration within dt time
+                double maxMag = dt*mAccelLimit.doubleValue();
+                if(maxMag<=0) accel = new Translation2d();
+                else if(maxMag < accel.getDistance(new Translation2d())) accel.times(accel.getDistance(new Translation2d())/maxMag);
+                
+                // Try to reach it while abiding by accel limit
+                mVelocity = mVelocity.plus(accel);
+                
             } else {
                 // make the velocity the difference between target and current
-                mVelocity = target.sub(mOutput).div(dt);
+                mVelocity = target.minus(mOutput).div(dt);
             }
 
             // if there is an velocity limit, limit the velocity
             if (0 < mVelLimit.doubleValue()) {
-                mVelocity = mVelocity.clamp(mVelLimit.doubleValue());
+                double maxMag = mVelLimit.doubleValue();
+                if(maxMag<=0) mVelocity = new Translation2d();
+                else if(maxMag < mVelocity.getDistance(new Translation2d())) mVelocity=mVelocity.times(mVelocity.getDistance(new Translation2d())/maxMag);
             }
 
-            Vector2D error = target.sub(mOutput);
-            Vector2D unitError = error.normalize();
+            Translation2d error = target.minus(mOutput);
+            
+            Translation2d unitError = (error.getDistance(new Translation2d()) <= 1e-9)? new Translation2d(1, 0): error.div(error.getDistance(new Translation2d()));
 
-            double parallelMag = mVelocity.dot(unitError);
-            Vector2D accelParallel = unitError.mul(parallelMag);
+            double parallelMag = mVelocity.getX() * unitError.getX() + mVelocity.getY() * unitError.getY();
+            Translation2d accelParallel = unitError.times(parallelMag);
 
-            Vector2D accelPerpendicular = mVelocity.sub(accelParallel);
+            Translation2d accelPerpendicular = mVelocity.minus(accelParallel);
 
             double damping = Math.pow(0.5, dt);
-            mVelocity = accelParallel.add(accelPerpendicular.mul(damping));
+            mVelocity = accelParallel.plus(accelPerpendicular.times(damping));
 
             // adjust output by calculated velocity
-            mOutput = mOutput.add(mVelocity.mul(dt));
+            mOutput = mOutput.plus(mVelocity.times(dt));
         }
 
         // Field.FIELD2D.getObject("Translation Motion Profile Ian").setPose(!Robot.isBlue()
