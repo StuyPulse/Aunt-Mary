@@ -101,6 +101,7 @@ public class ArmImpl extends Arm {
     @Override
     public Rotation2d getCurrentAngle() {
         return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+
     }
 
     private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
@@ -189,6 +190,8 @@ public class ArmImpl extends Arm {
             SmartDashboard.putNumber("Arm/Stator Current", motor.getStatorCurrent().getValueAsDouble());
 
             SmartDashboard.putNumber("Arm/Raw Encoder Value (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
+            SmartDashboard.putNumber("Arm/ Im feeling shizo (actual raw encoder)", absoluteEncoder.get());
+            SmartDashboard.putNumber("Arm/ HEAGGGGGGG (motor encoder)", motor.getPosition().getValueAsDouble());
         }
     }
 }

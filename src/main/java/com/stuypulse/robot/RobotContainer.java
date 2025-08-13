@@ -60,6 +60,7 @@ import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
+// import com.stuypulse.robot.commands.shooter.ToggleHasCoral;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL1Front;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
@@ -126,29 +127,29 @@ public class RobotContainer {
 
     // Gamepads
     public final CommandXboxController driver = new CommandXboxController(Ports.Gamepad.DRIVER);
-    public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
+    public final CommandXboxController operator = new CommandXboxController(Ports.Gamepad.OPERATOR);
 
     // Subsystem
     private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
-    private final LimelightVision vision = LimelightVision.getInstance();
-    private final Funnel funnel = Funnel.getInstance();
+    // private final LimelightVision vision = LimelightVision.getInstance();
+    // private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final SuperStructure superStructure = SuperStructure.getInstance();
-    private final Climb climb = Climb.getInstance();
+    // private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
-    private final LEDController leds = LEDController.getInstance();
+    // private final LEDController leds = LEDController.getInstance();
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
     // Robot container
     public RobotContainer() {
-        swerve.configureAutoBuilder();
+        //swerve.configureAutoBuilder();
 
         configureDefaultCommands();
         configureDriverButtonBindings();
         // testingButtonBindings();
-        configureAutons();
+        // configureAutons();
         // configureSysids();
 
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -159,18 +160,18 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
-        funnel.setDefaultCommand(new FunnelDefaultCommand());
-        leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
-        shooter.setDefaultCommand(new ShooterAcquireCoral()
-            .andThen(new BuzzController(driver))
-            .onlyIf(() -> !shooter.hasCoral() 
-                && shooter.getState() != ShooterState.ACQUIRE_ALGAE
-                && shooter.getState() != ShooterState.HOLD_ALGAE 
-                && shooter.getState() != ShooterState.SHOOT_ALGAE 
-                && shooter.getState() != ShooterState.UNJAM_CORAL_BACKWARDS
-                && !shooter.isShooting()
-                && climb.getState() == ClimbState.CLOSED));
+        // swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+        //funnel.setDefaultCommand(new FunnelDefaultCommand());
+        //leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
+        // shooter.setDefaultCommand(new ShooterAcquireCoral()
+        //     .andThen(new BuzzController(driver))
+        //     .onlyIf(() -> !shooter.hasCoral() 
+        //         && shooter.getState() != ShooterState.ACQUIRE_ALGAE
+        //         && shooter.getState() != ShooterState.HOLD_ALGAE 
+        //         && shooter.getState() != ShooterState.SHOOT_ALGAE 
+        //         && shooter.getState() != ShooterState.UNJAM_CORAL_BACKWARDS
+        //         && !shooter.isShooting()));
+                //&& climb.getState() == ClimbState.CLOSED));
     }
 
     /***************/
@@ -187,37 +188,37 @@ public class RobotContainer {
         driver.povUp().onTrue(new SwerveDriveResetRotation());
 
         // Manual Shoot
-        driver.povRight()
-            .onTrue(
-                new ConditionalCommand(
-                    new ConditionalCommand(
-                        new ConditionalCommand(
-                        new FroggyRollerShootCoralVersatile(), 
-                        new ConditionalCommand(
-                            new FroggyRollerShootCoralOne(), 
-                            new ConditionalCommand(
-                                new FroggyRollerShootCoralTwo(),
-                                new FroggyRollerShootCoralThree(),
-                                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO
-                            ), 
-                            () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE), 
-                        () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE),
-                    new ManualShoot(),
-                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
-                ),
-                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118()).onlyIf(() -> superStructure.getState() == SuperStructureState.BARGE_118)),
-                () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
-                )
-            .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
-                .andThen(new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_SAFE || superStructure.isScoringCoral() || shooter.getState() != ShooterState.HOLD_ALGAE)))
-            .onFalse(new FroggyRollerStop()
-                .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
-            .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
-                .andThen(new FroggyPivotToStow()));
+        // driver.povRight()
+        //     .onTrue(
+        //         new ConditionalCommand(
+        //             new ConditionalCommand(
+        //                 new ConditionalCommand(
+        //                 new FroggyRollerShootCoralVersatile(), 
+        //                 new ConditionalCommand(
+        //                     new FroggyRollerShootCoralOne(), 
+        //                     new ConditionalCommand(
+        //                         new FroggyRollerShootCoralTwo(),
+        //                         new FroggyRollerShootCoralThree(),
+        //                         () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO
+        //                     ), 
+        //                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE), 
+        //                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE),
+        //             new ManualShoot(),
+        //             () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
+        //         ),
+        //         new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118()).onlyIf(() -> superStructure.getState() == SuperStructureState.BARGE_118)),
+        //         () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
+        //         )
+        //     .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
+        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
+        //         .andThen(new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_SAFE || superStructure.isScoringCoral() || shooter.getState() != ShooterState.HOLD_ALGAE)))
+        //     .onFalse(new FroggyRollerStop()
+        //         .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+        //         .andThen(new FroggyPivotToStow()));
 
-        // ground froggy algae intake and reset
+        // // ground froggy algae intake and reset
         driver.leftTrigger()
             .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
@@ -225,14 +226,14 @@ public class RobotContainer {
             .onFalse(new FroggyPivotToStow())
             .onFalse(new FroggyRollerHoldAlgae());
 
-        // Loki golf tee algae pickup
+        // // Loki golf tee algae pickup
         driver.leftBumper()
             .onTrue(new SuperStructureGolfTeeAlgaePickup())
             .onTrue(new ShooterAcquireAlgae())
             .onFalse(new SuperStructureProcessor())                                
             .onFalse(new ShooterHoldAlgae());
 
-        // Ground coral intake and send elevator/arm to feed
+        // // Ground coral intake and send elevator/arm to feed
         driver.rightTrigger()
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
                 .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
@@ -240,7 +241,7 @@ public class RobotContainer {
                 .andThen(new FroggyPivotToStow()))
             .onFalse(new FroggyRollerHoldCoral()); 
 
-        // L1
+        // // L1
         driver.rightBumper()
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_VERSATILE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
@@ -498,17 +499,17 @@ public class RobotContainer {
             .onFalse(new ShooterHoldAlgae());
 
         // Golf tee and Climb Shimmy
-        driver.povDown()
-            .onTrue(new ConditionalCommand(
-                new ClimbShimmy(),
-                new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
-                () -> climb.getState() != ClimbState.CLOSED
-            ))
-            .onFalse(
-                new ConditionalCommand(
-                    new SuperStructureClimb(), 
-                    new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
-                () -> climb.getState() != ClimbState.CLOSED));
+        // driver.povDown()
+        //     .onTrue(new ConditionalCommand(
+        //         new ClimbShimmy(),
+        //         new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
+        //         () -> climb.getState() != ClimbState.CLOSED
+        //     ))
+        //     .onFalse(
+        //         new ConditionalCommand(
+        //             new SuperStructureClimb(), 
+        //             new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
+        //         () -> climb.getState() != ClimbState.CLOSED));
 
         // Get ready for climb
         // driver.getLeftMenuButton()
@@ -553,9 +554,13 @@ public class RobotContainer {
         //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
         //         .onlyIf(() -> !shooter.hasCoral()))
         //     .onFalse(SwerveDriveDynamicObstacles.reset());
+    
+        // operator.x()
+        //     .onTrue(new ToggleHasCoral());
     }
 
     /**************/
+
     /*** AUTONS ***/
     /**************/
 
@@ -623,28 +628,28 @@ public class RobotContainer {
     }
 
     public void configureSysids() {
-        autonChooser.addOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
-        autonChooser.addOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
-        autonChooser.addOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
-        autonChooser.addOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
+        // autonChooser.addOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
+        // autonChooser.addOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
+        // autonChooser.addOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
+        // autonChooser.addOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
 
-        SysIdRoutine elevatorSysIdRoutine = Elevator.getInstance().getSysIdRoutine();
-        autonChooser.addOption("Elevator Quasi Forward", elevatorSysIdRoutine.quasistatic(Direction.kForward));
-        autonChooser.addOption("Elevator Quasi Backward", elevatorSysIdRoutine.quasistatic(Direction.kReverse));
-        autonChooser.addOption("Elevator Dynamic Forward", elevatorSysIdRoutine.dynamic(Direction.kForward));
-        autonChooser.addOption("Elevator Dynamic Backward", elevatorSysIdRoutine.dynamic(Direction.kReverse));
+        // SysIdRoutine elevatorSysIdRoutine = Elevator.getInstance().getSysIdRoutine();
+        // autonChooser.addOption("Elevator Quasi Forward", elevatorSysIdRoutine.quasistatic(Direction.kForward));
+        // autonChooser.addOption("Elevator Quasi Backward", elevatorSysIdRoutine.quasistatic(Direction.kReverse));
+        // autonChooser.addOption("Elevator Dynamic Forward", elevatorSysIdRoutine.dynamic(Direction.kForward));
+        // autonChooser.addOption("Elevator Dynamic Backward", elevatorSysIdRoutine.dynamic(Direction.kReverse));
 
-        SysIdRoutine armSysIdRoutine = Arm.getInstance().getSysIdRoutine();
-        autonChooser.addOption("Arm Quasi Forward", armSysIdRoutine.quasistatic(Direction.kForward));
-        autonChooser.addOption("Arm Quasi Backward", armSysIdRoutine.quasistatic(Direction.kReverse));
-        autonChooser.addOption("Arm Dynamic Forward", armSysIdRoutine.dynamic(Direction.kForward));
-        autonChooser.addOption("Arm Dynamic Backward", armSysIdRoutine.dynamic(Direction.kReverse));
+        // SysIdRoutine armSysIdRoutine = Arm.getInstance().getSysIdRoutine();
+        // autonChooser.addOption("Arm Quasi Forward", armSysIdRoutine.quasistatic(Direction.kForward));
+        // autonChooser.addOption("Arm Quasi Backward", armSysIdRoutine.quasistatic(Direction.kReverse));
+        // autonChooser.addOption("Arm Dynamic Forward", armSysIdRoutine.dynamic(Direction.kForward));
+        // autonChooser.addOption("Arm Dynamic Backward", armSysIdRoutine.dynamic(Direction.kReverse));
 
-        SysIdRoutine froggyPivotSysIdRoutine = froggy.getPivotSysIdRoutine();
-        autonChooser.addOption("Froggy Pivot Quasi Forward", froggyPivotSysIdRoutine.quasistatic(Direction.kForward));
-        autonChooser.addOption("Froggy Pivot Quasi Backward", froggyPivotSysIdRoutine.quasistatic(Direction.kReverse));
-        autonChooser.addOption("Froggy Pivot Dynamic Forward", froggyPivotSysIdRoutine.dynamic(Direction.kForward));
-        autonChooser.addOption("Froggy Pivot Dynamic Backward", froggyPivotSysIdRoutine.dynamic(Direction.kReverse));
+        // SysIdRoutine froggyPivotSysIdRoutine = froggy.getPivotSysIdRoutine();
+        // autonChooser.addOption("Froggy Pivot Quasi Forward", froggyPivotSysIdRoutine.quasistatic(Direction.kForward));
+        // autonChooser.addOption("Froggy Pivot Quasi Backward", froggyPivotSysIdRoutine.quasistatic(Direction.kReverse));
+        // autonChooser.addOption("Froggy Pivot Dynamic Forward", froggyPivotSysIdRoutine.dynamic(Direction.kForward));
+        // autonChooser.addOption("Froggy Pivot Dynamic Backward", froggyPivotSysIdRoutine.dynamic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() {

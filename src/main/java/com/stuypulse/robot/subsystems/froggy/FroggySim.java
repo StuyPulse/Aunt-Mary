@@ -124,7 +124,7 @@ public class FroggySim extends Froggy {
     }
 
     @Override
-    public void periodic() {
+    public void simulationPeriodic() {
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetAngle().getRadians());

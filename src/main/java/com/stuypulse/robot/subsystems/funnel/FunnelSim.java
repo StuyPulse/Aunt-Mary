@@ -30,7 +30,7 @@ public class FunnelSim extends Funnel {
     }
 
     @Override
-    public void periodic() {
+    public void simulationPeriodic() {
         super.periodic();
     }
 }

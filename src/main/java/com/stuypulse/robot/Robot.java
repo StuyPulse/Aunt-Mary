@@ -6,9 +6,12 @@
 
 package com.stuypulse.robot;
 
+import java.time.format.TextStyle;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterSetConfigMode;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
@@ -70,14 +73,13 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void robotPeriodic() {
+    public void robotPeriodic() {       
+        SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
         CommandScheduler.getInstance().run();
-
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
         if (DriverStation.getAlliance().isPresent()) {
             alliance = DriverStation.getAlliance().get();
         }
-
-        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     }
 
     /*********************/
@@ -90,10 +92,10 @@ public class Robot extends TimedRobot {
 
         if (!DriverStation.isFMSAttached()) {
             // new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)).schedule();
-            new VisionSetMegaTag1().schedule();
+            //new VisionSetMegaTag1().schedule();
         }
 
-        new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
+        //new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
     }
 
     @Override
@@ -109,11 +111,11 @@ public class Robot extends TimedRobot {
         auto = robot.getAutonomousCommand();
 
         // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
-        new VisionSetMegaTag2().schedule();
-        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
+        //new VisionSetMegaTag2().schedule();
+        //new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
         
         if (auto != null) {
-            auto.schedule();
+            //auto.schedule();
         }
 
         // Shuffleboard.selectTab("Autonomous");
@@ -137,8 +139,8 @@ public class Robot extends TimedRobot {
         }
 
         // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
-        new VisionSetMegaTag2().schedule();
-        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
+        //new VisionSetMegaTag2().schedule();
+        //new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
 
         // Shuffleboard.selectTab("Teleoperated");
     }

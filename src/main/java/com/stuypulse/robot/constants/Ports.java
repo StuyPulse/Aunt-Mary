@@ -23,7 +23,7 @@ public interface Ports {
 
     public interface Climb {
         int MOTOR = 50;
-        int ABSOLUTE_ENCODER = 5;
+        int ABSOLUTE_ENCODER = 2;
     }
 
     public interface Arm {
@@ -33,7 +33,7 @@ public interface Ports {
 
     public interface Shooter {
         int MOTOR = 42;
-        int BEAM_BREAK = 2;
+        int BEAM_BREAK = 5;
     }
 
     public interface Funnel {
