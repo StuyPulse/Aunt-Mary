@@ -11,13 +11,13 @@ import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -69,12 +69,19 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
         
         angleController.update(getTargetAngle(), Angle.fromRotation2d(swerve.getPose().getRotation()));
 
-        Vector2D targetVelocity = new Vector2D(xController.getOutput(), driverYVelocity.get())
-            .clamp(Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY));
+        Translation2d targetVelocity = new Translation2d(xController.getOutput(), driverYVelocity.get());
     
+        double maxVelocity = Math.min(Settings.Driver.Drive.MAX_TELEOP_SPEED, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY);
+        double currentVelocity = targetVelocity.getDistance(new Translation2d(0, 0));
+        
+        targetVelocity = 
+            (currentVelocity>maxVelocity) ? 
+            new Translation2d(targetVelocity.getX() * (maxVelocity/currentVelocity), targetVelocity.getY() * (maxVelocity/currentVelocity)): targetVelocity;
+
+
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(targetVelocity.x)
-            .withVelocityY(targetVelocity.y)
+            .withVelocityX(targetVelocity.getX())
+            .withVelocityY(targetVelocity.getY())
             .withRotationalRate(angleController.getOutput()));
     }
 }

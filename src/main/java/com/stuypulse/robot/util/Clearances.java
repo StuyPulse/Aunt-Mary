@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.util;
 
-import com.stuypulse.stuylib.math.Vector2D;
-
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Field.CoralStation;
@@ -20,6 +18,7 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public interface Clearances {
     public static boolean isArmClearFromReef() {
@@ -81,25 +80,25 @@ public interface Clearances {
     private static boolean isFroggyClearFromFieldWalls() {
         Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
         Rotation2d froggyHeading = robotPose.getRotation().rotateBy(Rotation2d.kCW_90deg);
-        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
+        Translation2d froggyHeadingAsVector = new Translation2d(froggyHeading.getCos(), froggyHeading.getSin());
 
         // Alliance driver station wall
-        if (froggyHeadingAsVector.dot(new Vector2D(1, 0)) < 0 && robotPose.getX() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
+        if (froggyHeadingAsVector.getX() < 0 && robotPose.getX() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
             return false;
         }
 
         // Opposite driver station wall
-        if (froggyHeadingAsVector.dot(new Vector2D(-1, 0)) < 0 && Field.LENGTH - robotPose.getX() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
+        if (-froggyHeadingAsVector.getX() < 0 && Field.LENGTH - robotPose.getX() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
             return false;
         }
 
         // Left field wall (from perspective of alliance driver station)
-        if (froggyHeadingAsVector.dot(new Vector2D(0, -1)) < 0 && Field.WIDTH - robotPose.getY() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
+        if (-froggyHeadingAsVector.getY() < 0 && Field.WIDTH - robotPose.getY() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
             return false;
         }
 
         // Right field wall (from perspective of alliance driver station)
-        if (froggyHeadingAsVector.dot(new Vector2D(0, 1)) < 0 && robotPose.getY() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
+        if (froggyHeadingAsVector.getY() < 0 && robotPose.getY() - Constants.WIDTH_WITH_BUMPERS_METERS / 2 < Settings.Clearances.CLEARANCE_DISTANCE_FROGGY){
             return false;
         }
 

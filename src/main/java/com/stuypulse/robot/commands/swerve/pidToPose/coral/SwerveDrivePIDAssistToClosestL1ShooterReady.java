@@ -9,7 +9,6 @@ package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
@@ -31,6 +30,7 @@ import com.stuypulse.robot.util.ReefUtil.ReefFace;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
@@ -84,8 +84,8 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
         addRequirements(swerve);
     }
 
-    private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
+    private Translation2d getDriverInputAsVelocity() {
+        return new Translation2d(driver.getLeftY(), -driver.getLeftX());
     }
 
     @Override
@@ -103,15 +103,14 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
         ChassisSpeeds controllerFieldRelativeSpeeds = controller.getOutput().toFieldRelative(swerve.getPose().getRotation());
 
         Rotation2d reefFaceParallelHeading = closestReefFace.getCorrespondingAprilTagPose().getRotation().rotateBy(Rotation2d.kCCW_90deg);
-        // double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().dot(new Vector2D(reefFaceParallelHeading.getCos(), reefFaceParallelHeading.getSin()));
         double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().y * (closestReefFace.isOnDriverStationSide() ? -1 : 1);
-        Vector2D driverVelocityVectorParallelToReefFace = new Vector2D(
+        Translation2d driverVelocityVectorParallelToReefFace = new Translation2d(
             driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getCos(), 
             driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getSin());
         
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(controllerFieldRelativeSpeeds.vx + driverVelocityVectorParallelToReefFace.x)
-            .withVelocityY(controllerFieldRelativeSpeeds.vy + driverVelocityVectorParallelToReefFace.y)
+            .withVelocityX(controllerFieldRelativeSpeeds.vx + driverVelocityVectorParallelToReefFace.getX())
+            .withVelocityY(controllerFieldRelativeSpeeds.vy + driverVelocityVectorParallelToReefFace.getY())
             .withRotationalRate(controllerFieldRelativeSpeeds.omega + driverAngularVelocity.get()));
 
         SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());

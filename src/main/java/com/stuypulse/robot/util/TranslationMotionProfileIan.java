@@ -11,8 +11,6 @@ import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
 import com.stuypulse.stuylib.util.StopWatch;
 
-
-
 public class TranslationMotionProfileIan implements VFilter {
 
     // Default number of times to apply filter (helps accuracy)

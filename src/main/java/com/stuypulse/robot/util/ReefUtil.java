@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.util;
 
-import com.stuypulse.stuylib.math.Vector2D;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Field;
@@ -225,16 +223,16 @@ public interface ReefUtil {
             Translation2d lineEnd = getLineEnd();
             Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
 
-            Vector2D lineStartToEnd = new Vector2D(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
-            Vector2D lineStartToPoint = new Vector2D(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
+            Translation2d lineStartToEnd = new Translation2d(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
+            Translation2d lineStartToPoint = new Translation2d(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
             
-            double lineLengthSquared = lineStartToEnd.dot(lineStartToEnd);
-            double dotProduct = lineStartToEnd.dot(lineStartToPoint);
+            double lineLengthSquared = lineStartToEnd.getX()*lineStartToEnd.getX()+lineStartToEnd.getY()*lineStartToEnd.getY();
+            double dotProduct = lineStartToEnd.getX()*lineStartToPoint.getX()+lineStartToEnd.getY()*lineStartToPoint.getY();
             
             double t = dotProduct / lineLengthSquared; // Projection factor
             t = Math.max(0, Math.min(1, t));
             
-            Translation2d closestPointOnReefFace = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
+            Translation2d closestPointOnReefFace = new Translation2d(lineStart.getX() + t * lineStartToEnd.getX(), lineStart.getY() + t * lineStartToEnd.getY());
 
             return new Pose2d(closestPointOnReefFace, getCorrespondingAprilTagPose().getRotation())
                 .transformBy(new Transform2d(Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_REEF_L1_SHOOTER_FRONT, 0, Rotation2d.k180deg));

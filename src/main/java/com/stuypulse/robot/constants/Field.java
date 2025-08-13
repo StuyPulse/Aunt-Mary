@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.math.Vector2D;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.AprilTag;
@@ -239,11 +237,11 @@ public interface Field {
             Translation2d lineEnd = getLineEnd();
             Translation2d robot = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
 
-            Vector2D lineStartToEnd = new Vector2D(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
-            Vector2D lineStartToPoint = new Vector2D(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
+            Translation2d lineStartToEnd = new Translation2d(lineEnd.getX() - lineStart.getX(), lineEnd.getY() - lineStart.getY());
+            Translation2d lineStartToPoint = new Translation2d(robot.getX() - lineStart.getX(), robot.getY() - lineStart.getY());
             
-            double lineLengthSquared = lineStartToEnd.dot(lineStartToEnd);
-            double dotProduct = lineStartToEnd.dot(lineStartToPoint);
+            double lineLengthSquared = (lineStartToEnd.getX()*lineStartToEnd.getX() + lineStartToEnd.getY() + lineStartToEnd.getY());
+            double dotProduct = (lineStartToEnd.getX()*lineStartToPoint.getX() + lineStartToEnd.getY() + lineStartToPoint.getY());
             
             double t = dotProduct / lineLengthSquared; // Projection factor
             
@@ -253,7 +251,7 @@ public interface Field {
             
             t = Math.max(percentToIgnoreFromDriverStationSide, Math.min(1 - percentToIgnoreFromSideWallSide, t));
             
-            Translation2d closestPointOnCoralStation = new Translation2d(lineStart.getX() + t * lineStartToEnd.x, lineStart.getY() + t * lineStartToEnd.y);
+            Translation2d closestPointOnCoralStation = new Translation2d(lineStart.getX() + t * lineStartToEnd.getX(), lineStart.getY() + t * lineStartToEnd.getY());
 
             return new Pose2d(closestPointOnCoralStation, correspondingAprilTag.getLocation().toPose2d().getRotation()).transformBy(new Transform2d(
                 Constants.LENGTH_WITH_BUMPERS_METERS / 2 + Settings.Swerve.Alignment.Targets.TARGET_DISTANCE_FROM_CORAL_STATION, 
@@ -284,20 +282,20 @@ public interface Field {
                     Rotation2d.kZero));
         }
 
-        public Vector2D getHeadingAsVector() {
-            return new Vector2D(
+        public Translation2d getHeadingAsVector() {
+            return new Translation2d(
                 Math.cos(correspondingAprilTag.getLocation().getRotation().getZ()), 
                 Math.sin(correspondingAprilTag.getLocation().getRotation().getZ()));
         }
 
         // https://www.youtube.com/watch?v=KHuI9bXZS74
         public double getDistanceToStation() {
-            Vector2D A = new Vector2D(getLineStart());
-            Vector2D B = new Vector2D(getLineEnd());
-            Vector2D C = new Vector2D(CommandSwerveDrivetrain.getInstance().getPose().getTranslation());
+            Translation2d A = getLineStart();
+            Translation2d B = getLineEnd();
+            Translation2d C = CommandSwerveDrivetrain.getInstance().getPose().getTranslation();
             
-            return Math.abs((C.x - A.x) * (-B.y + A.y) + (C.y - A.y) * (B.x - A.x))
-                / Math.sqrt(Math.pow((-B.y + A.y), 2) + Math.pow((B.x - A.x), 2));
+            return Math.abs((C.getX() - A.getX()) * (-B.getY() + A.getY()) + (C.getY() - A.getY()) * (B.getX() - A.getX()))
+                / Math.sqrt(Math.pow((-B.getY() + A.getY()), 2) + Math.pow((B.getX() - A.getX()), 2));
         }
 
         public static CoralStation getClosestCoralStation() {

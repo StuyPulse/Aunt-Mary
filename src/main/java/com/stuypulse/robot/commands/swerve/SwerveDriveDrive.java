@@ -7,7 +7,6 @@
 
 package com.stuypulse.robot.commands.swerve;
 
-import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
@@ -21,6 +20,7 @@ import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -58,8 +58,8 @@ public class SwerveDriveDrive extends Command {
         addRequirements(swerve);
     }
 
-    private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
+    private Translation2d getDriverInputAsVelocity() {
+        return new Translation2d(driver.getLeftY(), -driver.getLeftX());
     }
 
     @Override

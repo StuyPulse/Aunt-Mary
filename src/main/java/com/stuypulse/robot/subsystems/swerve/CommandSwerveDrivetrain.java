@@ -10,9 +10,6 @@ package com.stuypulse.robot.subsystems.swerve;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
-import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.math.Vector2D;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Field.CoralStation;
@@ -23,6 +20,7 @@ import com.stuypulse.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrai
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -390,9 +388,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getKinematics().toChassisSpeeds(getModuleStates());
     }
 
-    public Vector2D getFieldRelativeSpeeds() {
-        return new Vector2D(getChassisSpeeds().vx, getChassisSpeeds().vy)
-            .rotate(Angle.fromRotation2d(getPose().getRotation()));
+    public Translation2d getFieldRelativeSpeeds() {
+        return new Translation2d(getChassisSpeeds().vx, getChassisSpeeds().vy)
+            .rotateBy(getPose().getRotation());
     }
 
     private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
@@ -404,43 +402,43 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public boolean isFrontFacingAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.ALLIANCE_REEF_CENTER));
+        Translation2d reefCenterToRobot = getPose().getTranslation().minus(Field.ALLIANCE_REEF_CENTER);
         Rotation2d robotHeading = getPose().getRotation();
-        Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
-
-        return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
+        Translation2d robotHeadingAsVector = new Translation2d(robotHeading.getCos(), robotHeading.getSin());
+        
+        return reefCenterToRobot.getX() * robotHeadingAsVector.getX() + reefCenterToRobot.getY() * robotHeadingAsVector.getY() <= 0;
     }
 
     public boolean isFrontFacingOppositeAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.OPPOSITE_ALLIANCE_REEF_CENTER));
+        Translation2d reefCenterToRobot = getPose().getTranslation().minus(Field.OPPOSITE_ALLIANCE_REEF_CENTER);
         Rotation2d robotHeading = getPose().getRotation();
-        Vector2D robotHeadingAsVector = new Vector2D(robotHeading.getCos(), robotHeading.getSin());
+        Translation2d robotHeadingAsVector = new Translation2d(robotHeading.getCos(), robotHeading.getSin());
 
-        return reefCenterToRobot.dot(robotHeadingAsVector) <= 0;
+        return reefCenterToRobot.getX() * robotHeadingAsVector.getX() + reefCenterToRobot.getY() * robotHeadingAsVector.getY() <= 0;
     }
 
     public boolean isFroggyFacingCoralStation(CoralStation coralStation) {
         Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
-        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
-        Vector2D coralStationHeading = coralStation.getHeadingAsVector();
-
-        return froggyHeadingAsVector.dot(coralStationHeading) <= 0;
+        Translation2d froggyHeadingAsVector = new Translation2d(froggyHeading.getCos(), froggyHeading.getSin());
+        Translation2d coralStationHeading = coralStation.getHeadingAsVector();
+        
+        return coralStationHeading.getX() * froggyHeadingAsVector.getX() + coralStationHeading.getY() * froggyHeadingAsVector.getY() <= 0;
     }
 
     public boolean isFroggyFacingAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.ALLIANCE_REEF_CENTER));
+        Translation2d reefCenterToRobot = getPose().getTranslation().minus(Field.ALLIANCE_REEF_CENTER);
         Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
-        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
+        Translation2d froggyHeadingAsVector = new Translation2d(froggyHeading.getCos(), froggyHeading.getSin());
 
-        return reefCenterToRobot.dot(froggyHeadingAsVector) <= 0;
+        return reefCenterToRobot.getX() * froggyHeadingAsVector.getX() + reefCenterToRobot.getY() * froggyHeadingAsVector.getY() <= 0;
     }
 
     public boolean isFroggyFacingOppositeAllianceReef() {
-        Vector2D reefCenterToRobot = new Vector2D(getPose().getTranslation().minus(Field.transformToOppositeAlliance(Field.OPPOSITE_ALLIANCE_REEF_CENTER)));
+        Translation2d reefCenterToRobot = getPose().getTranslation().minus(Field.transformToOppositeAlliance(Field.OPPOSITE_ALLIANCE_REEF_CENTER));
         Rotation2d froggyHeading = getPose().getRotation().rotateBy(Rotation2d.kCW_90deg);
-        Vector2D froggyHeadingAsVector = new Vector2D(froggyHeading.getCos(), froggyHeading.getSin());
+        Translation2d froggyHeadingAsVector = new Translation2d(froggyHeading.getCos(), froggyHeading.getSin());
 
-        return reefCenterToRobot.dot(froggyHeadingAsVector) <= 0;
+        return reefCenterToRobot.getX() * froggyHeadingAsVector.getX() + reefCenterToRobot.getY() * froggyHeadingAsVector.getY() <= 0;
     }
 
     @Override
@@ -467,8 +465,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vx);
             SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vy);
     
-            SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
-            SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
+            SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().getX());
+            SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().getY());
     
             SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omega);
 
