@@ -7,13 +7,12 @@
 
 package com.stuypulse.robot.subsystems.superStructure.elevator;
 
-import com.stuypulse.stuylib.math.SLMath;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.RobotVisualizer;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -65,7 +64,7 @@ public abstract class Elevator extends SubsystemBase {
         }
 
         public double getTargetHeight() {
-            return SLMath.clamp(targetHeight.doubleValue(), Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
+            return MathUtil.clamp(targetHeight.doubleValue(), Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
         }
     }
 

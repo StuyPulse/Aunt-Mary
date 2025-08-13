@@ -7,7 +7,6 @@
 
 package com.stuypulse.robot.subsystems.superStructure.arm;
 
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import com.stuypulse.robot.constants.Constants;
@@ -15,6 +14,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SettableNumber;
 import com.stuypulse.robot.util.SysId;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -116,7 +116,7 @@ public class ArmSim extends Arm {
 
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
-            SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+            MathUtil.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override

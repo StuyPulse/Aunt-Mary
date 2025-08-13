@@ -13,11 +13,11 @@ import com.stuypulse.robot.commands.swerve.pidToPose.SwerveDrivePIDToPose;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.stuylib.input.Gamepad;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
     private static Boolean isLeftSideOfStation = null;
@@ -32,7 +32,7 @@ public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
         );
     }
 
-    public SwerveDrivePIDToCoralStation(Gamepad driver) {
+    public SwerveDrivePIDToCoralStation(CommandXboxController driver) {
         addCommands(
             new SwerveDrivePIDToPose(() -> getCoralStationPoseWithDriverInput(driver)).withCanEnd(() -> false).withoutMotionProfile(),
             new LEDApplyPattern(() -> led).onlyIf(() -> led != null)
@@ -40,7 +40,7 @@ public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
 
     }
         
-    private static Pose2d getCoralStationPoseWithDriverInput(Gamepad driver) {
+    private static Pose2d getCoralStationPoseWithDriverInput(CommandXboxController driver) {
         Pose2d[] sides = new Pose2d[] {
             Field.CoralStation.getClosestCoralStation().getTargetPose(true, isCD),
             Field.CoralStation.getClosestCoralStation().getTargetPose(false, isCD)

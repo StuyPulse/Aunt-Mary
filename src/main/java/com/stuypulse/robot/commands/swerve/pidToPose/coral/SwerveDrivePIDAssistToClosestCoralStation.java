@@ -9,8 +9,6 @@ package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.numbers.IStream;
@@ -34,11 +32,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final Gamepad driver;
+    private final CommandXboxController driver;
     
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
@@ -47,7 +46,7 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestCoralStation(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestCoralStation(CommandXboxController driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 

@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.subsystems.superStructure.arm;
 
-import com.stuypulse.stuylib.math.SLMath;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;

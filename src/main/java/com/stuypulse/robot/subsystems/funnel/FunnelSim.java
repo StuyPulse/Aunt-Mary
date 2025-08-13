@@ -7,9 +7,6 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
-import com.stuypulse.stuylib.network.SmartBoolean;
-
-
 public class FunnelSim extends Funnel {
 
     // private final SmartBoolean hasCoral;

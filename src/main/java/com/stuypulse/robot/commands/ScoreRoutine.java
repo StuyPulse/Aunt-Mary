@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.commands;
 
-import com.stuypulse.stuylib.input.Gamepad;
-
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterWaitUntilHasCoral;

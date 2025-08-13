@@ -9,7 +9,6 @@ package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;

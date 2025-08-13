@@ -7,7 +7,6 @@
 
 package com.stuypulse.robot.subsystems.superStructure.elevator;
 
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Motors;
@@ -15,6 +14,7 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SysId;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -60,7 +60,7 @@ public class ElevatorImpl extends Elevator {
     }
 
     private double getTargetHeight() {
-        return SLMath.clamp(getState().getTargetHeight(), Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
+        return MathUtil.clamp(getState().getTargetHeight(), Constants.Elevator.MIN_HEIGHT_METERS, Constants.Elevator.MAX_HEIGHT_METERS);
     }
 
     private boolean isWithinTolerance(double toleranceMeters) {

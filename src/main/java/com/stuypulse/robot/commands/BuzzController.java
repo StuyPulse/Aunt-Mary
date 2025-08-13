@@ -7,7 +7,6 @@
 
 package com.stuypulse.robot.commands;
 
-import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.util.StopWatch;
 
 import com.stuypulse.robot.constants.Settings;

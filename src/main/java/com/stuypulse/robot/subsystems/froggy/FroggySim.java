@@ -8,13 +8,13 @@
 package com.stuypulse.robot.subsystems.froggy;
 
 
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SysId;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -107,7 +107,7 @@ public class FroggySim extends Froggy {
 
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
-            SLMath.clamp(
+            MathUtil.clamp(
                 getPivotState().getTargetAngle().getDegrees() + pivotOperatorOffset.getDegrees(),
                 Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
                 Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));

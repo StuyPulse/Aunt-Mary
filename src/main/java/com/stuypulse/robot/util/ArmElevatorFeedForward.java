@@ -26,5 +26,4 @@ public class ArmElevatorFeedForward extends Controller {
     protected double calculate(double setpoint, double measurement) {
         return kG.doubleValue() * Math.cos(Units.degreesToRadians(measurement)) * elevatorAccelInGs.get();
     }
-
 }

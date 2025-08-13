@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.subsystems.climb;
 
-import com.stuypulse.stuylib.math.SLMath;
-
 import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Settings;
 

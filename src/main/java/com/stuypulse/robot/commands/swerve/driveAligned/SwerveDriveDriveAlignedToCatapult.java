@@ -10,9 +10,7 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 import com.stuypulse.stuylib.streams.numbers.IStream;
@@ -22,6 +20,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDriveDriveAlignedToCatapult extends Command {
 
@@ -32,7 +31,7 @@ public class SwerveDriveDriveAlignedToCatapult extends Command {
     private final Controller xController;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAlignedToCatapult(Gamepad driver) {
+    public SwerveDriveDriveAlignedToCatapult(CommandXboxController driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())

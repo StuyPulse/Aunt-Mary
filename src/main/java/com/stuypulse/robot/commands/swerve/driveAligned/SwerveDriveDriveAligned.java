@@ -9,7 +9,6 @@ package com.stuypulse.robot.commands.swerve.driveAligned;
 
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
-import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
@@ -25,20 +24,21 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import java.util.function.Supplier;
 
 public class SwerveDriveDriveAligned extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final Gamepad driver;
+    private final CommandXboxController driver;
 
     private final VStream linearVelocity;
 
     private final Supplier<Rotation2d> targetAngle;
     private final AngleController angleController;
 
-    public SwerveDriveDriveAligned(Gamepad driver, Supplier<Rotation2d> targetAngle) {
+    public SwerveDriveDriveAligned(CommandXboxController driver, Supplier<Rotation2d> targetAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -59,7 +59,7 @@ public class SwerveDriveDriveAligned extends Command {
         addRequirements(swerve);
     }
 
-    public SwerveDriveDriveAligned(Gamepad driver, Rotation2d targetAngle) {
+    public SwerveDriveDriveAligned(CommandXboxController driver, Rotation2d targetAngle) {
         this(driver, () -> targetAngle);
     }
 

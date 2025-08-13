@@ -7,9 +7,6 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-
 import java.util.concurrent.locks.Condition;
 
 import com.stuypulse.robot.commands.BuzzController;
@@ -126,7 +123,7 @@ public class RobotContainer {
 
     // Gamepads
     public final CommandXboxController driver = new CommandXboxController(Ports.Gamepad.DRIVER);
-    public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
+    public final CommandXboxController operator = new CommandXboxController(Ports.Gamepad.OPERATOR);
 
     // Subsystem
     private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();

@@ -16,9 +16,9 @@ import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SysId;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -83,7 +83,7 @@ public class FroggyImpl extends Froggy {
 
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
-            SLMath.clamp(
+            MathUtil.clamp(
                 getPivotState().getTargetAngle().getDegrees(),
                 Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
                 Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));

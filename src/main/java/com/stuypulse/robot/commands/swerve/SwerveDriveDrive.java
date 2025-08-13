@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.commands.swerve;
 
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
