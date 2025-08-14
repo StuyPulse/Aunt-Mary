@@ -91,11 +91,11 @@ public class Robot extends TimedRobot {
         mode = RobotMode.DISABLED;
 
         if (!DriverStation.isFMSAttached()) {
-            // new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)).schedule();
-            //new VisionSetMegaTag1().schedule();
+            new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)).schedule();
+            new VisionSetMegaTag1().schedule();
         }
 
-        //new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
+        new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
     }
 
     @Override
@@ -110,9 +110,9 @@ public class Robot extends TimedRobot {
         mode = RobotMode.AUTON;
         auto = robot.getAutonomousCommand();
 
-        // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
-        //new VisionSetMegaTag2().schedule();
-        //new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
+        new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
+        new VisionSetMegaTag2().schedule();
+        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
         
         if (auto != null) {
             //auto.schedule();
@@ -138,9 +138,9 @@ public class Robot extends TimedRobot {
             auto.cancel();
         }
 
-        // new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
-        //new VisionSetMegaTag2().schedule();
-        //new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
+        new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
+        new VisionSetMegaTag2().schedule();
+        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
 
         // Shuffleboard.selectTab("Teleoperated");
     }

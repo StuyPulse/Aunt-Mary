@@ -35,18 +35,18 @@ public class ClimbImpl extends Climb {
     private Rotation2d getTargetAngle() {
         return getState().getTargetAngle();
     }
-
+        
+    @Override
     public Rotation2d getCurrentAngle() {
-        Rotation2d angle = Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations());
+        Rotation2d angle = Rotation2d.fromRotations(1.0-(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations()));
 
         while (angle.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()) {
-            angle = Rotation2d.fromRotations(1 + angle.getRotations());
+            angle = Rotation2d.fromRotations(1).minus(angle);//angle.plus(Rotation2d.fromRotations(1.0));
         }
 
-        return angle;
+        return angle;//Rotation2d.fromDegrees(angle.getDegrees()-53.0/360.0);
     }
 
-    
     // public Rotation2d getCurrentAngle() {
     //     return absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()
     //         ? Rotation2d.fromRotations(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations() + 1)
@@ -56,6 +56,7 @@ public class ClimbImpl extends Climb {
     @Override
     public void periodic() {
         super.periodic();
+
         if (Settings.EnabledSubsystems.CLIMB.get()) {
             double angleErrorDegrees = getTargetAngle().getDegrees() - getCurrentAngle().getDegrees();
 

@@ -131,26 +131,26 @@ public class RobotContainer {
 
     // Subsystem
     private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
-    // private final LimelightVision vision = LimelightVision.getInstance();
-    // private final Funnel funnel = Funnel.getInstance();
+    private final LimelightVision vision = LimelightVision.getInstance();
+    private final Funnel funnel = Funnel.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final SuperStructure superStructure = SuperStructure.getInstance();
-    // private final Climb climb = Climb.getInstance();
+    private final Climb climb = Climb.getInstance();
     private final Froggy froggy = Froggy.getInstance();
-    // private final LEDController leds = LEDController.getInstance();
+    private final LEDController leds = LEDController.getInstance();
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
     // Robot container
     public RobotContainer() {
-        //swerve.configureAutoBuilder();
+        swerve.configureAutoBuilder();
 
         configureDefaultCommands();
         configureDriverButtonBindings();
         // testingButtonBindings();
-        // configureAutons();
-        // configureSysids();
+        configureAutons();
+        configureSysids();
 
         SmartDashboard.putData("Field", Field.FIELD2D);
     }
@@ -160,18 +160,18 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        // swerve.setDefaultCommand(new SwerveDriveDrive(driver));
-        //funnel.setDefaultCommand(new FunnelDefaultCommand());
-        //leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
-        // shooter.setDefaultCommand(new ShooterAcquireCoral()
-        //     .andThen(new BuzzController(driver))
-        //     .onlyIf(() -> !shooter.hasCoral() 
-        //         && shooter.getState() != ShooterState.ACQUIRE_ALGAE
-        //         && shooter.getState() != ShooterState.HOLD_ALGAE 
-        //         && shooter.getState() != ShooterState.SHOOT_ALGAE 
-        //         && shooter.getState() != ShooterState.UNJAM_CORAL_BACKWARDS
-        //         && !shooter.isShooting()));
-                //&& climb.getState() == ClimbState.CLOSED));
+        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+        funnel.setDefaultCommand(new FunnelDefaultCommand());
+        leds.setDefaultCommand(new LEDDefaultCommand().ignoringDisable(true));
+        shooter.setDefaultCommand(new ShooterAcquireCoral()
+            .andThen(new BuzzController(driver))
+            .onlyIf(() -> !shooter.hasCoral() 
+                && shooter.getState() != ShooterState.ACQUIRE_ALGAE
+                && shooter.getState() != ShooterState.HOLD_ALGAE 
+                && shooter.getState() != ShooterState.SHOOT_ALGAE 
+                && shooter.getState() != ShooterState.UNJAM_CORAL_BACKWARDS
+                && !shooter.isShooting()
+                && climb.getState() == ClimbState.CLOSED));
     }
 
     /***************/
@@ -188,35 +188,35 @@ public class RobotContainer {
         driver.povUp().onTrue(new SwerveDriveResetRotation());
 
         // Manual Shoot
-        // driver.povRight()
-        //     .onTrue(
-        //         new ConditionalCommand(
-        //             new ConditionalCommand(
-        //                 new ConditionalCommand(
-        //                 new FroggyRollerShootCoralVersatile(), 
-        //                 new ConditionalCommand(
-        //                     new FroggyRollerShootCoralOne(), 
-        //                     new ConditionalCommand(
-        //                         new FroggyRollerShootCoralTwo(),
-        //                         new FroggyRollerShootCoralThree(),
-        //                         () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO
-        //                     ), 
-        //                     () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE), 
-        //                 () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE),
-        //             new ManualShoot(),
-        //             () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
-        //         ),
-        //         new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118()).onlyIf(() -> superStructure.getState() == SuperStructureState.BARGE_118)),
-        //         () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
-        //         )
-        //     .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
-        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
-        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
-        //         .andThen(new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_SAFE || superStructure.isScoringCoral() || shooter.getState() != ShooterState.HOLD_ALGAE)))
-        //     .onFalse(new FroggyRollerStop()
-        //         .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
-        //     .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
-        //         .andThen(new FroggyPivotToStow()));
+        driver.povRight()
+            .onTrue(
+                new ConditionalCommand(
+                    new ConditionalCommand(
+                        new ConditionalCommand(
+                        new FroggyRollerShootCoralVersatile(), 
+                        new ConditionalCommand(
+                            new FroggyRollerShootCoralOne(), 
+                            new ConditionalCommand(
+                                new FroggyRollerShootCoralTwo(),
+                                new FroggyRollerShootCoralThree(),
+                                () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO
+                            ), 
+                            () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE), 
+                        () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE),
+                    new ManualShoot(),
+                    () -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_TWO ||  froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_THREE
+                ),
+                new ShooterShootAlgae().andThen(new WaitCommand(0.2).andThen(new SuperStructureAlgaeSafe118()).onlyIf(() -> superStructure.getState() == SuperStructureState.BARGE_118)),
+                () -> shooter.getState() != ShooterState.HOLD_ALGAE && superStructure.getState() != SuperStructureState.BARGE_SAFE)
+                )
+            .whileTrue(new LEDApplyPattern(Settings.LED.MANUAL_SHOOT_COLOR))
+            .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isArmClearFromBarge())
+                .andThen(new SuperStructureFeed().onlyIf(() -> superStructure.getState() == SuperStructureState.PROCESSOR || superStructure.getState() == SuperStructureState.BARGE_SAFE || superStructure.isScoringCoral() || shooter.getState() != ShooterState.HOLD_ALGAE)))
+            .onFalse(new FroggyRollerStop()
+                .onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL && froggy.getRollerState() != RollerState.HOLD_ALGAE))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+                .andThen(new FroggyPivotToStow()));
 
         // // ground froggy algae intake and reset
         driver.leftTrigger()
@@ -499,17 +499,17 @@ public class RobotContainer {
             .onFalse(new ShooterHoldAlgae());
 
         // Golf tee and Climb Shimmy
-        // driver.povDown()
-        //     .onTrue(new ConditionalCommand(
-        //         new ClimbShimmy(),
-        //         new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
-        //         () -> climb.getState() != ClimbState.CLOSED
-        //     ))
-        //     .onFalse(
-        //         new ConditionalCommand(
-        //             new SuperStructureClimb(), 
-        //             new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
-        //         () -> climb.getState() != ClimbState.CLOSED));
+        driver.povDown()
+            .onTrue(new ConditionalCommand(
+                new ClimbShimmy(),
+                new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
+                () -> climb.getState() != ClimbState.CLOSED
+            ))
+            .onFalse(
+                new ConditionalCommand(
+                    new SuperStructureClimb(), 
+                    new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
+                () -> climb.getState() != ClimbState.CLOSED));
 
         // Get ready for climb
         // driver.getLeftMenuButton()
@@ -554,9 +554,6 @@ public class RobotContainer {
         //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
         //         .onlyIf(() -> !shooter.hasCoral()))
         //     .onFalse(SwerveDriveDynamicObstacles.reset());
-    
-        // operator.x()
-        //     .onTrue(new ToggleHasCoral());
     }
 
     /**************/
