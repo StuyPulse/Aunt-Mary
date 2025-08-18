@@ -26,6 +26,7 @@ public class ShooterImpl extends Shooter {
 
     private final DigitalInput beamBreak;
     private final boolean hasCoral;
+    // private final BStream hasCoral;
 
     protected ShooterImpl() {
         super();
@@ -42,6 +43,7 @@ public class ShooterImpl extends Shooter {
     @Override
     public boolean hasCoral() {
         return hasCoral;
+        // return hasCoral.get();
     }
 
     @Override

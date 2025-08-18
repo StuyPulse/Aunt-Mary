@@ -7,27 +7,26 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose;
 
-import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
-import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Vector2D;
-import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
-import com.stuypulse.stuylib.streams.booleans.BStream;
-import com.stuypulse.stuylib.streams.booleans.filters.BDebounceRC;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
-
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.util.HolonomicController;
 import com.stuypulse.robot.util.TranslationMotionProfileIan;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +37,7 @@ public class SwerveDrivePIDToPose extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
-    private final HolonomicController controller;
+    private final HolonomicDriveController controller;
     private final Supplier<Pose2d> targetPose;
 
     private double maxVelocity;
@@ -46,7 +45,7 @@ public class SwerveDrivePIDToPose extends Command {
 
     private boolean isMotionProfiled;
 
-    private final BStream isAligned;
+    Debouncer isAlignedDebounce;
     private final IStream velocityError;
 
     private final FieldObject2d targetPose2d;
@@ -67,11 +66,17 @@ public class SwerveDrivePIDToPose extends Command {
     public SwerveDrivePIDToPose(Supplier<Pose2d> targetPose) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
-        controller = new HolonomicController(
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD),
-            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD),
-            new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
-                .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION)));
+        TrapezoidProfile.Constraints angularConstraints = new TrapezoidProfile.Constraints(
+            Settings.Swerve.Alignment.Constraints.DEFUALT_MAX_ANGULAR_VELOCITY, 
+            Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION);
+
+        controller = new HolonomicDriveController(
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD), 
+            new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD), 
+            new ProfiledPIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD, angularConstraints));
+        
+        controller.setTolerance(Settings.Swerve.Alignment.Tolerances.POSE_TOLERANCE);
+        isAlignedDebounce = new Debouncer(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE, DebounceType.kBoth);
 
         maxVelocity = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY;
         maxAcceleration = Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION;
@@ -83,10 +88,7 @@ public class SwerveDrivePIDToPose extends Command {
 
         targetPose2d = Field.FIELD2D.getObject("Target Pose");
 
-        isAligned = BStream.create(this::isAligned)
-            .filtered(new BDebounceRC.Both(Settings.Swerve.Alignment.Tolerances.ALIGNMENT_DEBOUNCE));
-
-        velocityError = IStream.create(() -> new Translation2d(controller.getError().vx, controller.getError().vy).getNorm())
+        velocityError = IStream.create(() -> new Vector2D(controller.getXController().getError(), controller.getYController().getError()).magnitude())
             .filtered(new LowPassFilter(0.05))
             .filtered(x -> Math.abs(x));
 
@@ -156,27 +158,32 @@ public class SwerveDrivePIDToPose extends Command {
     }
 
     private boolean isAligned() {
-        return isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        // return isAlignedX() && isAlignedY() && isAlignedTheta() && velocityError.get() < maxVelocityWhenAligned.doubleValue();
+        return isAlignedDebounce.calculate(controller.atReference()) && velocityError.get() < maxVelocityWhenAligned.doubleValue();
     }
 
     @Override
     public void execute() {
         targetPose2d.setPose(Robot.isBlue() ? targetPose.get() : Field.transformToOppositeAlliance(targetPose.get()));
 
-        controller.update(new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.get().getRotation()), swerve.getPose());
-        
+        ChassisSpeeds output = controller.calculate(
+            swerve.getPose(), 
+            new Pose2d(translationSetpoint.get().getTranslation2d(), targetPose.get().getRotation()), 
+            0, 
+            targetPose.get().getRotation());
+
         swerve.setControl(swerve.getRobotCentricSwerveRequest()
-            .withVelocityX(controller.getOutput().vx)
-            .withVelocityY(controller.getOutput().vy)
-            .withRotationalRate(controller.getOutput().omega));
+            .withVelocityX(output.vx)
+            .withVelocityY(output.vy)
+            .withRotationalRate(output.omega));
         
         SmartDashboard.putNumber("Alignment/Target x", targetPose.get().getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.get().getY());
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.get().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vx);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vy);
-        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omega);
+        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", output.vx);
+        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", output.vy);
+        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", output.omega);
 
         SmartDashboard.putBoolean("Alignment/Is Aligned", isAligned());
         SmartDashboard.putBoolean("Alignment/Is Aligned X", isAlignedX());
@@ -186,7 +193,7 @@ public class SwerveDrivePIDToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return isAligned.get() && canEnd.get();
+        return isAligned() && canEnd.get();
     }
 
     @Override

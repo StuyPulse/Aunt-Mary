@@ -12,6 +12,7 @@ import com.stuypulse.stuylib.network.SmartBoolean;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -87,6 +88,8 @@ public interface Settings {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
+
+                Pose2d POSE_TOLERANCE = new Pose2d(Units.inchesToMeters(2.0), Units.inchesToMeters(2.0), Rotation2d.fromDegrees(2.0));
 
                 double X_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
                 double Y_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
