@@ -26,25 +26,25 @@ public class ClimbImpl extends Climb {
         super();
         motor = new TalonFX(Ports.Climb.MOTOR, "can_s3");
         Motors.Climb.MOTOR_CONFIG.configure(motor);
-        motor.setPosition(Settings.Climb.OPEN_ANGLE.getRotations());
+        motor.setPosition(Settings.Climb.OPEN_ANGLE_DEG/360.0);
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Climb.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(false);
     }
 
-    private Rotation2d getTargetAngle() {
+    private double getTargetAngleDeg() {
         return getState().getTargetAngle();
     }
         
     @Override
-    public Rotation2d getCurrentAngle() {
-        Rotation2d angle = Rotation2d.fromRotations(1.0-(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET.getRotations()));
+    public double getCurrentAngleDeg() {
+        double angle = 360.0*(1.0-(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET_DEG/360.0));
 
-        while (angle.getRotations() < Constants.Climb.MIN_ANGLE.minus(Rotation2d.fromDegrees(10)).getRotations()) {
-            angle = Rotation2d.fromRotations(1).minus(angle);//angle.plus(Rotation2d.fromRotations(1.0));
+        while (angle/360.0 < (Constants.Climb.MIN_ANGLE_DEG-110.0)/360.0) {
+            angle = 1.0 + angle;
         }
 
-        return angle;//Rotation2d.fromDegrees(angle.getDegrees()-53.0/360.0);
+        return angle;
     }
 
     // public Rotation2d getCurrentAngle() {
@@ -58,7 +58,7 @@ public class ClimbImpl extends Climb {
         super.periodic();
 
         if (Settings.EnabledSubsystems.CLIMB.get()) {
-            double angleErrorDegrees = getTargetAngle().getDegrees() - getCurrentAngle().getDegrees();
+            double angleErrorDegrees = getTargetAngleDeg() - getCurrentAngleDeg();
 
             if (getState() == ClimbState.IDLE) {
                 motor.setVoltage(0);
@@ -77,8 +77,8 @@ public class ClimbImpl extends Climb {
                 }
             }
             else if (getState() == ClimbState.CLOSED) {
-                if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
-                    if (getCurrentAngle().getDegrees() > Settings.Climb.CLOSED_ANGLE.getDegrees()) {
+                if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY_DEG) {
+                    if (getCurrentAngleDeg() > Settings.Climb.CLOSED_ANGLE_DEG) {
                         motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
                     }
                     else {
@@ -90,8 +90,8 @@ public class ClimbImpl extends Climb {
                 }
             }
             else if (getState() == ClimbState.SHIMMY) {
-                if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY.getDegrees()) {
-                    if (getCurrentAngle().getDegrees() > Settings.Climb.SHIMMY_ANGLE.getDegrees()) {
+                if (Math.abs(angleErrorDegrees) > Settings.Climb.ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY_DEG) {
+                    if (getCurrentAngleDeg() > Settings.Climb.SHIMMY_ANGLE_DEG) {
                         motor.setVoltage(-Settings.Climb.DEFAULT_VOLTAGE);
                     }
                     else {
@@ -103,7 +103,7 @@ public class ClimbImpl extends Climb {
                 }
             }
             else if (getState() == ClimbState.CLIMBING) {
-                if (getCurrentAngle().getDegrees() < Settings.Climb.CLIMBED_ANGLE.getDegrees()) {
+                if (getCurrentAngleDeg() < Settings.Climb.CLIMBED_ANGLE_DEG) {
                     motor.setVoltage(Settings.Climb.CLIMB_VOLTAGE);
                 }
                 else {
@@ -115,8 +115,8 @@ public class ClimbImpl extends Climb {
             motor.setVoltage(0);
         }
 
-        SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Climb/Current Angle (deg)", getCurrentAngleDeg());
+        SmartDashboard.putNumber("Climb/Target Angle (deg)", getTargetAngleDeg());
 
         if (Settings.DEBUG_MODE) {
             SmartDashboard.putNumber("Climb/Voltage", motor.getMotorVoltage().getValueAsDouble());

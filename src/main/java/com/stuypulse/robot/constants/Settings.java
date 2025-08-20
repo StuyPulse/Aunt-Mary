@@ -33,14 +33,14 @@ public interface Settings {
     String CANIVORE_NAME = "CANIVORE";
     
     public interface EnabledSubsystems {
-        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", false);
+        SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
-        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
-        SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", false);
+        SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
+        SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
         SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
         SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", true);
         SmartBoolean FROGGY_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Froggy Limelight", true);
@@ -233,7 +233,7 @@ public interface Settings {
 
     public interface Arm {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(179);
 
         Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
         Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
@@ -255,6 +255,7 @@ public interface Settings {
 
         Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
 
+        // TODO: This angle is going to get wrapped - should be fixed at some point with field testing 
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(197.337891);  // -42.636719 + 6
         Rotation2d GROUND_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // MADE UP, FIND THIS
 
@@ -358,12 +359,12 @@ public interface Settings {
         double OPEN_VOLTAGE_LOW = 1; // Used when getting close to the open angle
         double CLIMB_VOLTAGE = 12; // Used when climbing 12
 
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
-        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(230); // 245 - 3.5 // 230 // 215
-        Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
+        double OPEN_ANGLE_DEG = 1.0;
+        double CLOSED_ANGLE_DEG = 165;
+        double CLIMBED_ANGLE_DEG = 230; // 245 - 3.5 // 230 // 215
+        double SHIMMY_ANGLE_DEG = 70;
         
-        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);
+        double ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY_DEG = 7;
     }
 
     public interface LED {

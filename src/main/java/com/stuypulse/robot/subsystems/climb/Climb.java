@@ -29,19 +29,19 @@ public abstract class Climb extends SubsystemBase {
     }
 
     public enum ClimbState {
-        CLOSED(Settings.Climb.CLOSED_ANGLE),
-        OPEN(Settings.Climb.OPEN_ANGLE),
-        CLIMBING(Settings.Climb.CLIMBED_ANGLE),
-        SHIMMY(Settings.Climb.SHIMMY_ANGLE),
-        IDLE(Rotation2d.kZero); // Filler angle (wont be used)
+        CLOSED(Settings.Climb.CLOSED_ANGLE_DEG),
+        OPEN(Settings.Climb.OPEN_ANGLE_DEG),
+        CLIMBING(Settings.Climb.CLIMBED_ANGLE_DEG),
+        SHIMMY(Settings.Climb.SHIMMY_ANGLE_DEG),
+        IDLE(0); // Filler angle (wont be used)
 
-        private Rotation2d targetAngle;
+        private double targetAngle;
 
-        private ClimbState(Rotation2d targetAngle) {
-            this.targetAngle = targetAngle; //Rotation2d.fromDegrees(MathUtil.clamp(targetAngle.getDegrees(), Constants.Climb.MIN_ANGLE.getDegrees(), Constants.Climb.MAX_ANGLE.getDegrees()));
+        private ClimbState(double targetAngle) {
+            this.targetAngle = targetAngle;
         }
 
-        public Rotation2d getTargetAngle() {
+        public double getTargetAngle() {
             return this.targetAngle;
         }
     }
@@ -60,7 +60,7 @@ public abstract class Climb extends SubsystemBase {
         this.state = state;
     }
 
-    public abstract Rotation2d getCurrentAngle();
+    public abstract double getCurrentAngleDeg();
 
     @Override
     public void periodic() {

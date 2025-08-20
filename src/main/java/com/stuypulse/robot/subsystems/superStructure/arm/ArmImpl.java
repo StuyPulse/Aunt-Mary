@@ -132,7 +132,7 @@ public class ArmImpl extends Arm {
         this.accelLimitDegreesPerSecondSquared.set(accelLimit);
         Motors.Arm.MOTOR_CONFIG.withMotionProfile(velLimit/360, accelLimit/360);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
-    }
+      }
 
     @Override
     public void periodic() {
