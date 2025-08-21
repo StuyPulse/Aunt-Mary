@@ -232,45 +232,45 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(179);
+        double MIN_ANGLE_DEG = -82.0; // Angle that arm makes when resting against the funnel
+        double MAX_ANGLE_DEG = 201.0;
 
-        Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(-38.330078); //53.05
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
+        double L1_ANGLE_FRONT_DEG = -35.139599;
+        double L2_ANGLE_FRONT_DEG = -59.050619;
+        double L3_ANGLE_FRONT_DEG = -38.330078; //53.05
+        double L4_ANGLE_FRONT_DEG = 55.361328;
 
-        Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599);
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(174.513809);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(156.446319);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
+        double L1_ANGLE_BACK_DEG = 150.139599;
+        double L2_ANGLE_BACK_DEG = 174.513809;
+        double L3_ANGLE_BACK_DEG = 156.446319;
+        double L4_ANGLE_BACK_DEG = 150.859437;
 
-        Rotation2d AUTON_END = Rotation2d.fromDegrees(94.570312);
+        double AUTON_END_DEG = 94.570312;
 
-        Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-47.724609);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); 
+        double ALGAE_L2_ANGLE_FRONT_DEG = -47.724609;
+        double ALGAE_L3_ANGLE_FRONT_DEG = -30.013672; 
 
-        Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(166.552734); // 160.076257 new setting 5/30/25
-        Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(155.102399);
+        double ALGAE_L2_ANGLE_BACK_DEG = 166.552734; // 160.076257 new setting 5/30/25
+        double ALGAE_L3_ANGLE_BACK_DEG = 155.102399;
 
-        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
+        double PROCESSOR_ANGLE_DEG = -71.464844;
 
         // TODO: This angle is going to get wrapped - should be fixed at some point with field testing 
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(197.337891);  // -42.636719 + 6
-        Rotation2d GROUND_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // MADE UP, FIND THIS
+        double GOLF_TEE_ALGAE_PICKUP_ANGLE_DEG = 197.337891;  // -42.636719 + 6
+        double GROUND_ALGAE_PICKUP_ANGLE_DEG = -56.347656; // MADE UP, FIND THIS
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-60);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-55);
-        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
+        double CATAPULT_READY_ANGLE_DEG = -60.0;
+        double CATAPULT_SHOOT_ANGLE_DEG = -55.0;
+        double CATAPULT_FINAL_ANGLE_DEG = 70.0;
 
-        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
-        Rotation2d BARGE_SAFE_118 = Rotation2d.fromDegrees(60); // 80
+        double BARGE_118_ANGLE_DEG = 90.0;
+        double BARGE_SAFE_118_DEG = 60.0; // 80
 
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
+        double FEED_ANGLE_DEG = -81.0;
         
-        Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
+        double CLIMB_ANGLE_DEG = MAX_ANGLE_DEG - 5.0;
 
-        Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
+        double UNSTUCK_CORAL_ANGLE_DEG = MIN_ANGLE_DEG + 20.0;
 
         public interface Constraints {
             // Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 

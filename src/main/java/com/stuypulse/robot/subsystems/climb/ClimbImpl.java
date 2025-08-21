@@ -38,11 +38,11 @@ public class ClimbImpl extends Climb {
         
     @Override
     public double getCurrentAngleDeg() {
-        double angle = 360.0*(1.0-(absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET_DEG/360.0));
+        double angle = 360.0*((absoluteEncoder.get() - Constants.Climb.ANGLE_OFFSET_DEG/360.0));
 
-        while (angle/360.0 < (Constants.Climb.MIN_ANGLE_DEG-110.0)/360.0) {
-            angle = 1.0 + angle;
-        }
+        //while (angle/360.0 < (Constants.Climb.MIN_ANGLE_DEG-110.0)/360.0) {
+            //angle = 360.0 + angle;
+        //}
 
         return angle;
     }

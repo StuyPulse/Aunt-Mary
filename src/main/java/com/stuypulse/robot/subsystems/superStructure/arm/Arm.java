@@ -36,37 +36,37 @@ public abstract class Arm extends SubsystemBase {
     }
 
     public enum ArmState {
-        FEED(Settings.Arm.FEED_ANGLE),
-        L1_FRONT(Settings.Arm.L1_ANGLE_FRONT),
-        L1_BACK(Settings.Arm.L1_ANGLE_BACK),
-        L2_FRONT(Settings.Arm.L2_ANGLE_FRONT),
-        L2_BACK(Settings.Arm.L2_ANGLE_BACK),
-        L3_FRONT(Settings.Arm.L3_ANGLE_FRONT),
-        L3_BACK(Settings.Arm.L3_ANGLE_BACK),
-        L4_FRONT(Settings.Arm.L4_ANGLE_FRONT),
-        L4_BACK(Settings.Arm.L4_ANGLE_BACK),
-        AUTON_END(Settings.Arm.AUTON_END),
-        ALGAE_L2_FRONT(Settings.Arm.ALGAE_L2_ANGLE_FRONT),
-        ALGAE_L3_FRONT(Settings.Arm.ALGAE_L3_ANGLE_FRONT),
-        ALGAE_L2_BACK(Settings.Arm.ALGAE_L2_ANGLE_BACK),
-        ALGAE_L3_BACK(Settings.Arm.ALGAE_L3_ANGLE_BACK),
-        GOLF_TEE_ALGAE_PICKUP(Settings.Arm.GOLF_TEE_ALGAE_PICKUP_ANGLE),
-        GROUND_ALGAE_PICKUP(Settings.Arm.GROUND_ALGAE_PICKUP_ANGLE),
-        PROCESSOR(Settings.Arm.PROCESSOR_ANGLE),
-        CATAPULT_READY(Settings.Arm.CATAPULT_READY_ANGLE),
-        CATAPULT_SHOOT(Settings.Arm.CATAPULT_FINAL_ANGLE),
-        BARGE_118(Settings.Arm.BARGE_118_ANGLE),
-        CLIMB(Settings.Arm.CLIMB_ANGLE),
-        UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE),
-        BARGE_SAFE_118(Settings.Arm.BARGE_SAFE_118);
+        FEED(Settings.Arm.FEED_ANGLE_DEG),
+        L1_FRONT(Settings.Arm.L1_ANGLE_FRONT_DEG),
+        L1_BACK(Settings.Arm.L1_ANGLE_BACK_DEG),
+        L2_FRONT(Settings.Arm.L2_ANGLE_FRONT_DEG),
+        L2_BACK(Settings.Arm.L2_ANGLE_BACK_DEG),
+        L3_FRONT(Settings.Arm.L3_ANGLE_FRONT_DEG),
+        L3_BACK(Settings.Arm.L3_ANGLE_BACK_DEG),
+        L4_FRONT(Settings.Arm.L4_ANGLE_FRONT_DEG),
+        L4_BACK(Settings.Arm.L4_ANGLE_BACK_DEG),
+        AUTON_END(Settings.Arm.AUTON_END_DEG),
+        ALGAE_L2_FRONT(Settings.Arm.ALGAE_L2_ANGLE_FRONT_DEG),
+        ALGAE_L3_FRONT(Settings.Arm.ALGAE_L3_ANGLE_FRONT_DEG),
+        ALGAE_L2_BACK(Settings.Arm.ALGAE_L2_ANGLE_BACK_DEG),
+        ALGAE_L3_BACK(Settings.Arm.ALGAE_L3_ANGLE_BACK_DEG),
+        GOLF_TEE_ALGAE_PICKUP(Settings.Arm.GOLF_TEE_ALGAE_PICKUP_ANGLE_DEG),
+        GROUND_ALGAE_PICKUP(Settings.Arm.GROUND_ALGAE_PICKUP_ANGLE_DEG),
+        PROCESSOR(Settings.Arm.PROCESSOR_ANGLE_DEG),
+        CATAPULT_READY(Settings.Arm.CATAPULT_READY_ANGLE_DEG),
+        CATAPULT_SHOOT(Settings.Arm.CATAPULT_FINAL_ANGLE_DEG),
+        BARGE_118(Settings.Arm.BARGE_118_ANGLE_DEG),
+        CLIMB(Settings.Arm.CLIMB_ANGLE_DEG),
+        UNSTUCK_CORAL(Settings.Arm.UNSTUCK_CORAL_ANGLE_DEG),
+        BARGE_SAFE_118(Settings.Arm.BARGE_SAFE_118_DEG);
 
-        private Rotation2d targetAngle;
+        private double targetAngle;
 
-        private ArmState(Rotation2d targetAngle) {
-            this.targetAngle = Rotation2d.fromDegrees(MathUtil.clamp(targetAngle.getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+        private ArmState(double targetAngle) {
+            this.targetAngle = MathUtil.clamp(targetAngle, Settings.Arm.MIN_ANGLE_DEG, Settings.Arm.MAX_ANGLE_DEG);
         }
 
-        public Rotation2d getTargetAngle() {
+        public double getTargetAngle() {
             return this.targetAngle;
         }
     }
@@ -87,10 +87,10 @@ public abstract class Arm extends SubsystemBase {
     }
 
     public boolean isFunnelSide(ArmState state) {
-        return state.getTargetAngle().getDegrees() > 90;
+        return state.getTargetAngle() > 90;
     }
 
-    public abstract Rotation2d getCurrentAngle();
+    public abstract double getCurrentAngleDeg();
     public abstract boolean atTargetAngle();
     public abstract boolean atCanSkipClearanceAngle();
 
@@ -105,11 +105,11 @@ public abstract class Arm extends SubsystemBase {
         SmartDashboard.putString("Arm/State", getState().toString());
         SmartDashboard.putBoolean("Arm/At Target Angle", atTargetAngle());
 
-        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngle().getDegrees());
-        SmartDashboard.putNumber("Arm/Target Angle (deg)", getState().getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("Arm/Current Angle (deg)", getCurrentAngleDeg());
+        SmartDashboard.putNumber("Arm/Target Angle (deg)", getState().getTargetAngle());
 
         if (Settings.DEBUG_MODE) {
-            RobotVisualizer.getInstance().updateArmAngle(getCurrentAngle(), atTargetAngle());
+            RobotVisualizer.getInstance().updateArmAngle(getCurrentAngleDeg(), atTargetAngle());
         }
     }
 }

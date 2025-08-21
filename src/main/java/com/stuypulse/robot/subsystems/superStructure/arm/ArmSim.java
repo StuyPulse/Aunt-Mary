@@ -50,10 +50,10 @@ public class ArmSim extends Arm {
             Constants.Arm.GEAR_RATIO,
             Constants.Arm.MOMENT_OF_INERTIA,
             Constants.Arm.ARM_LENGTH,
-            Settings.Arm.MIN_ANGLE.getRadians(),
-            Settings.Arm.MAX_ANGLE.getRadians(),
+            Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG),
+            Units.degreesToRadians(Settings.Arm.MAX_ANGLE_DEG),
             false,
-            Settings.Arm.MIN_ANGLE.getRadians()
+            Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG)
         );
 
         LinearSystem<N2, N1, N2> armSystem = LinearSystemId.createSingleJointedArmSystem(
@@ -81,7 +81,7 @@ public class ArmSim extends Arm {
         accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP_DEG);
 
         motionProfile = new MotionProfile(velLimitRadiansPerSecond, accelLimitRadiansPerSecondSquared);
-        motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
+        motionProfile.reset(Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG));
 
         voltageOverride = Optional.empty();
     }
@@ -93,7 +93,7 @@ public class ArmSim extends Arm {
             7, 
             "Arm", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getDegrees(), 
+            () -> getCurrentAngleDeg(), 
             () -> Units.radiansToDegrees(sim.getVelocity()), 
             () -> voltageOverride.get(), 
             getInstance()
@@ -101,7 +101,7 @@ public class ArmSim extends Arm {
     }
 
     private boolean isWithinTolerance(Rotation2d tolerance) {
-        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
+        return Math.abs(getCurrentAngleDeg() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
     }
 
     @Override
@@ -116,12 +116,12 @@ public class ArmSim extends Arm {
 
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
-            SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+            SLMath.clamp(getState().getTargetAngle(), Settings.Arm.MIN_ANGLE_DEG, Settings.Arm.MAX_ANGLE_DEG));
     }
 
     @Override
-    public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRadians(sim.getAngle());
+    public double getCurrentAngleDeg() {
+        return Units.radiansToDegrees(sim.getAngle());
     }
 
     @Override

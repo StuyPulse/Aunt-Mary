@@ -80,7 +80,7 @@ public class FroggySim extends Froggy {
             Settings.Froggy.MAX_VEL_DEG,
             Settings.Froggy.MAX_ACCEL_DEG
         );
-        motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
+        motionProfile.reset(Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG));
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;

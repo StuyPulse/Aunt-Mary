@@ -48,7 +48,7 @@ public class ArmImpl extends Arm {
         super();
         motor = new TalonFX(Ports.Arm.MOTOR, "can_s3");
         Motors.Arm.MOTOR_CONFIG.configure(motor);
-        motor.setPosition(Settings.Arm.MIN_ANGLE.getRotations());
+        motor.setPosition(Settings.Arm.MIN_ANGLE_DEG/360.0);
 
         absoluteEncoder = new DutyCycleEncoder(Ports.Arm.ABSOLUTE_ENCODER);
         absoluteEncoder.setInverted(true);
@@ -59,7 +59,7 @@ public class ArmImpl extends Arm {
         accelLimitDegreesPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP_DEG);
 
         debuggingMotionProfile = new MotionProfile(velLimitDegreesPerSecond, accelLimitDegreesPerSecondSquared);
-        debuggingMotionProfile.reset(Settings.Arm.MIN_ANGLE.getDegrees());
+        debuggingMotionProfile.reset(Settings.Arm.MIN_ANGLE_DEG/360.0);
 
         voltageOverride = Optional.empty();
     }
@@ -71,7 +71,7 @@ public class ArmImpl extends Arm {
             6, 
             "Arm", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getRotations(), 
+            () -> getCurrentAngleDeg()/360.0, 
             () -> motor.getVelocity().getValueAsDouble(), 
             () -> motor.getMotorVoltage().getValueAsDouble(), 
             getInstance()
@@ -79,7 +79,7 @@ public class ArmImpl extends Arm {
     }
 
     private boolean isWithinTolerance(Rotation2d tolerance) {
-        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
+        return Math.abs(getCurrentAngleDeg() - getTargetAngleDeg()) < tolerance.getDegrees();
     }
 
     @Override
@@ -92,23 +92,24 @@ public class ArmImpl extends Arm {
         return isWithinTolerance(Settings.Arm.ANGLE_TOLERANCE_TO_SKIP_CLEARANCE);
     }
 
-    private Rotation2d getTargetAngle() {
+    private double getTargetAngleDeg() {
         return getState().getTargetAngle();
         //return Rotation2d.fromDegrees(
         //    SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
     }
 
     @Override
-    public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+    public double getCurrentAngleDeg() {
+        return motor.getPosition().getValueAsDouble()*360.0;
 
     }
 
-    private Rotation2d getCurrentAngleFromAbsoluteEncoder() {
-        double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET.getRotations();
-        return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE.minus(Rotation2d.fromDegrees(15)).getRotations() 
-            ? encoderAngle 
-            : encoderAngle + 1);
+    private double getCurrentAngleFromAbsoluteEncoderDeg() {
+        double encoderAngle = absoluteEncoder.get() - Constants.Arm.ANGLE_OFFSET/360.0;
+        // return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE_DEG.minus(Rotation2d.fromDegrees(15)).getRotations() 
+        //     ? encoderAngle 
+        //     : encoderAngle + 1);
+        return encoderAngle*360.0;
     }
 
     @Override
@@ -138,8 +139,8 @@ public class ArmImpl extends Arm {
     public void periodic() {
         super.periodic();
 
-        if (!hasUsedAbsoluteEncoderToSetArm && getCurrentAngleFromAbsoluteEncoder().getRotations() != 0) {
-            motor.setPosition(getCurrentAngleFromAbsoluteEncoder().getRotations());
+        if (!hasUsedAbsoluteEncoderToSetArm && getCurrentAngleFromAbsoluteEncoderDeg()/360.0 != 0) {
+            motor.setPosition(getCurrentAngleFromAbsoluteEncoderDeg()/360.0);
             hasUsedAbsoluteEncoderToSetArm = true;
         }
                 
@@ -158,15 +159,15 @@ public class ArmImpl extends Arm {
                 }
                 else {
                     if (Shooter.getInstance().hasCoral()) {
-                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                        motor.setControl(new MotionMagicVoltage(getTargetAngleDeg()/360.0)
                             .withSlot(0)); // testing coral gains
                     }
                     if (getState() == ArmState.CATAPULT_SHOOT) {
-                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                        motor.setControl(new MotionMagicVoltage(getTargetAngleDeg()/360.0)
                             .withSlot(1));
                     }
                     else {
-                        motor.setControl(new MotionMagicVoltage(getTargetAngle().getRotations())
+                        motor.setControl(new MotionMagicVoltage(getTargetAngleDeg()/360.0)
                             .withSlot(2));
                     }
                 }
@@ -180,7 +181,7 @@ public class ArmImpl extends Arm {
             SmartDashboard.putNumber("Arm/Constraints/Current Max vel (deg per s)", velLimitDegreesPerSecond.get());
             SmartDashboard.putNumber("Arm/Constraints/Current Max accel (deg per s per s)", accelLimitDegreesPerSecondSquared.get());
 
-            SmartDashboard.putNumber("Arm/Current Setpoint (deg)", debuggingMotionProfile.get(getTargetAngle().getDegrees()));
+            SmartDashboard.putNumber("Arm/Current Setpoint (deg)", debuggingMotionProfile.get(getTargetAngleDeg()));
 
             SmartDashboard.putBoolean("Arm/Is Voltage Override Present", voltageOverride.isPresent());
             SmartDashboard.putNumber("Arm/Voltage Override", getVoltageOverride());

@@ -42,7 +42,7 @@ public interface Constants {
 
         double DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR = Units.inchesToMeters(5); // Current used for sim only
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(201.848576 + 90 - (5 * 360.0 / 42.0));
+        double ANGLE_OFFSET = 201.848576 + 90 - (5 * 360.0 / 42.0);
 
         double ARM_LENGTH = Units.inchesToMeters(29);
         double MASS_KG = Units.lbsToKilograms(12.8);
@@ -68,7 +68,7 @@ public interface Constants {
 
     public interface Climb {
         double GEAR_RATIO = 75.0;
-        double ANGLE_OFFSET_DEG = 259 - 60 - 3 + 300;
+        double ANGLE_OFFSET_DEG = 150;//259 - 60 - 3 + 300;
 
         double MIN_ANGLE_DEG = 0;
         double MAX_ANGLE_DEG = 265;
