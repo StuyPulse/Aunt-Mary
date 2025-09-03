@@ -142,12 +142,11 @@ public class LimelightVision extends SubsystemBase {
 
     public boolean isWhitelistMode(WhitelistMode mode) {
         if (whitelistModes != null) {
-            for (WhitelistMode m : this.whitelistModes) {
+            for (WhitelistMode m : whitelistModes) {
                 if (m.equals(mode)) {
                     return true;
                 }
             }
-            return false;
         }
         return false;
     }
@@ -156,7 +155,7 @@ public class LimelightVision extends SubsystemBase {
         if (whitelistModes != null) {
             int count = 0;
             for (WhitelistMode mode : modes) {
-                for (WhitelistMode m : this.whitelistModes) {
+                for (WhitelistMode m : whitelistModes) {
                     if (m.equals(mode)) {
                         count++;
                     }
