@@ -47,11 +47,11 @@ public class SwerveDrivePIDToCoralStation extends ParallelCommandGroup {
         };
 
         if (driver.getLeftX() < -Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-            isLeftSideOfStation = false;
+            isLeftSideOfStation = true;
             led = Settings.LED.CORAL_STATION_ALIGN_COLOR_LEFT;
             return sides[0];
         } else if (driver.getLeftX() > Settings.Driver.CORAL_STATION_OVERRIDE_DEADBAND) {
-            isLeftSideOfStation = true;
+            isLeftSideOfStation = false;
             led = Settings.LED.CORAL_STATION_ALIGN_COLOR_RIGHT;
             return sides[1];
         } else {

@@ -134,7 +134,7 @@ public interface Settings {
 
                 double TARGET_DISTANCE_FROM_CORAL_STATION = 0.12;
                 // double TARGET_DISTANCE_FROM_CORAL_STATION_LEFT_RIGHT = Units.inchesToMeters(21);
-                double TARGET_DISTANCE_FROM_CORAL_STATION_OUT = Units.inchesToMeters(-18);
+                double TARGET_DISTANCE_FROM_CORAL_STATION_OUT = Units.inchesToMeters(-16);
                 double TARGET_DISTANCE_FROM_CORAL_STATION_IN = Units.inchesToMeters(21);
 
                 Rotation2d ANGLE_FROM_HORIZONTAL_FOR_118 = Rotation2d.fromDegrees(0);
@@ -316,7 +316,7 @@ public interface Settings {
         double ALGAE_OUTTAKE_SPEED = -0.5;
         double ALGAE_OUTTAKE_SPEED_VERSATILE = -0.5;
         double CORAL_OUTTAKE_SPEED_ONE = 0.2;
-        double CORAL_OUTTAKE_SPEED_TWO = 0.3;
+        double CORAL_OUTTAKE_SPEED_TWO = 0.25;
         double CORAL_OUTTAKE_SPEED_THREE = 0.2;
         double CORAL_INTAKE_SPEED = -1.0;
         double CORAL_OUTTAKE_SPEED = 0.2;

@@ -24,6 +24,7 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -133,8 +134,7 @@ public class IKLAL2 extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
                     .andThen(
                         new ParallelCommandGroup(
-                            new SwerveDrivePIDToBranchScore(CoralBranch.A, 2, true)
-                            .withTranslationalConstraints(5.5, 16.5)
+                            new SwerveDrivePIDToBranchScore(CoralBranch.A, 2, true)                                .withTranslationalConstraints(5.5, 16.5)
                                 .withTimeout(5)
                                 .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
                             // new SwerveDriveCoralScoreAlignAuton(CoralBranch.A, 4, true, ElevatorState.L4_FRONT, ArmState.L4_FRONT, 5),
