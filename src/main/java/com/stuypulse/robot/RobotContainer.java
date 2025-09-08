@@ -323,7 +323,8 @@ public class RobotContainer {
                         .andThen(
                             new SwerveDrivePIDToClosestL1FroggyScore(3)
                                 .deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_THREE))
-                                .andThen(new FroggyRollerShootCoralThree())),
+                                .andThen(new FroggyRollerShootCoralThree())
+                                .andThen(new FroggyRollerStop()).onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())),
                 () -> Clearances.isFroggyClearFromAllObstables()),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 4, true).until(() -> false),
@@ -331,9 +332,11 @@ public class RobotContainer {
                         () -> swerve.isFrontFacingAllianceReef()), 
             () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
         )
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-            .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
-            .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
+        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+            .andThen(new FroggyPivotToStow().onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())))
+        .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score + 2nd L1
         driver.getRightButton()
@@ -374,7 +377,8 @@ public class RobotContainer {
                                 .andThen(
                                     new SwerveDrivePIDToClosestL1FroggyScore(2)
                                         .deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_TWO))
-                                        .andThen(new FroggyRollerShootCoralTwo())),
+                                        .andThen(new FroggyRollerShootCoralTwo())
+                                        .andThen(new FroggyRollerStop()).onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())),
                         () -> Clearances.isFroggyClearFromAllObstables()),
                             new ConditionalCommand(
                                 new ScoreRoutine(driver, 3, true).until(() -> false),
@@ -382,8 +386,10 @@ public class RobotContainer {
                                 () -> swerve.isFrontFacingAllianceReef()), 
                     () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
                 )
-        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+            .andThen(new FroggyPivotToStow().onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score + Bottom L1
@@ -403,7 +409,7 @@ public class RobotContainer {
                             () -> froggy.getRollerState() == RollerState.HOLD_CORAL), 
                 () -> shooter.hasCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
-                .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
+                .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop())).onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())
                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_ONE && (froggy.getRollerState() == RollerState.SHOOT_CORAL_ONE || froggy.getRollerState() == RollerState.STOP)))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()))
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
@@ -425,7 +431,8 @@ public class RobotContainer {
                         .andThen(
                             new SwerveDrivePIDToClosestL1FroggyScore(1)
                                 .deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_ONE))
-                                .andThen(new FroggyRollerShootCoralOne())),
+                                .andThen(new FroggyRollerShootCoralOne())
+                                .andThen(new FroggyRollerStop()).onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())),
                 () -> Clearances.isFroggyClearFromAllObstables()),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 2, true).until(() -> false),
@@ -433,8 +440,10 @@ public class RobotContainer {
                         () -> swerve.isFrontFacingAllianceReef()), 
             () -> !shooter.hasCoral() && froggy.getRollerState() == RollerState.HOLD_CORAL)
         )
-        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
-                .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)).alongWith(new FroggyPivotToStow()).andThen(new FroggyRollerStop()))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+            .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)))
+        .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+            .andThen(new FroggyPivotToStow().onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())))
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // 118 Auto Score

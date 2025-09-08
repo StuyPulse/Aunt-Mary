@@ -115,7 +115,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(7.f);
+                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(6.5);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_VERSATILE = Units.inchesToMeters(1);
@@ -161,7 +161,7 @@ public interface Settings {
         
         double CORAL_SHOOT_TIME_AUTON = 0.2;
 
-        double CORAL_ACQUIRE_SPEED = 0.5; // 0.35
+        double CORAL_ACQUIRE_SPEED = 0.5; // 0.5
         double ALGAE_ACQUIRE_SPEED = -1.0;
 
         double ALGAE_SHOOT_SPEED = 1.0; // 0.5

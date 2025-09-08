@@ -106,7 +106,7 @@ public interface Clearances {
         return true;
     }
 
-    private static boolean isFroggyClearFromAllianceReef() {
+    public static boolean isFroggyClearFromAllianceReef() {
         return Field.ALLIANCE_REEF_CENTER.getDistance(CommandSwerveDrivetrain.getInstance().getPose().getTranslation()) 
             > (Settings.Clearances.CLEARANCE_DISTANCE_FROGGY 
                 + Field.CENTER_OF_REEF_TO_REEF_FACE 
