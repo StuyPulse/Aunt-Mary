@@ -304,6 +304,9 @@ public class LimelightVision extends SubsystemBase {
                             objectFIFO.add(data);
 
                             currentFrame = data;
+                            SmartDashboard.putNumber("Coral X Pose Meters", currentFrame.objectPose.getX());
+                            SmartDashboard.putNumber("Coral Y Pose Meters", currentFrame.objectPose.getY());
+
                             //filter best frame, right now there is no use for the fifo
                         }
                     }
