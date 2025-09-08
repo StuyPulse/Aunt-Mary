@@ -77,7 +77,6 @@ public class LimelightVision extends SubsystemBase {
 
     private ObjectData currentFrame;
     private ObjectData closestObject;
-    private ObjectData lastGoodFrame;
 
     private Timer timer;
     private Queue<ObjectData> objectFIFO;
@@ -104,7 +103,6 @@ public class LimelightVision extends SubsystemBase {
 
         //Auto Acquire
         currentFrame = new ObjectData(Pose2d.kZero, 0);
-        lastGoodFrame = new ObjectData(Pose2d.kZero, 0);
         closestObject = new ObjectData(Pose2d.kZero, 0);
 
         timer = new Timer();
@@ -212,8 +210,8 @@ public class LimelightVision extends SubsystemBase {
         return currentFrame;
     }
 
-    public ObjectData getObjectFromLastGoodFrame() {
-        return lastGoodFrame;
+    public ObjectData getClosestObject() {
+        return closestObject;
     }
 
     private boolean robotIsOnBlueSide() {
@@ -285,43 +283,41 @@ public class LimelightVision extends SubsystemBase {
 
                     double closestDistance = Double.MAX_VALUE;
 
-                    if (RawResults.length > 0) {
+                    while (objectFIFO.size() >= 20) {
+                        objectFIFO.poll();
+                    }
 
-                        while (objectFIFO.size() >= 20) {
-                            objectFIFO.poll();
+                    for (RawDetection detection : RawResults) {
+
+                        Transform2d transform = ObjectData.calculateTransformToCoral(detection.txnc, detection.tync);
+                        Pose2d fieldCoralPose = robotPose.transformBy(transform);
+                        double distance = robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
+
+                        ObjectData data = new ObjectData(fieldCoralPose, timer.get());
+
+                        if (distance < closestDistance) { // meters
+                            closestDistance = distance;
+                            closestObject = data;
                         }
 
-                        for (RawDetection detection : RawResults) {
+                        objectFIFO.add(data);
 
-                            Transform2d transform = ObjectData.calculateTransformToCoral(detection.txnc, detection.tync);
-                            Pose2d fieldCoralPose = robotPose.transformBy(transform);
-                            double distance = robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
+                        currentFrame = data;
 
-                            ObjectData data = new ObjectData(fieldCoralPose, timer.get());
+                        SmartDashboard.putNumber("Vision/Coral Distance", distance);
+                        SmartDashboard.putNumber("Vision/Coral X Pose Meters", currentFrame.objectPose.getX());
+                        SmartDashboard.putNumber("Coral Y Pose Meters", currentFrame.objectPose.getY());
 
-                            if (distance < closestDistance) { // meters
-                                closestDistance = distance;
-                                closestObject = data;
-                            }
-
-                            objectFIFO.add(data);
-
-                            currentFrame = data;
-
-                            SmartDashboard.putNumber("Vision/Coral Distance", distance);
-                            SmartDashboard.putNumber("Vision/Coral X Pose Meters", currentFrame.objectPose.getX());
-                            SmartDashboard.putNumber("Coral Y Pose Meters", currentFrame.objectPose.getY());
-
-                            //filter best frame, right now there is no use for the fifo
-                        }
+                        //filter best frame, right now there is no use for the fifo
                     }
                 }
-
-                SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-                // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
-                SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
             }
-        }
 
+            SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
+            // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
+            SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
+        }
     }
+
+}
 }
