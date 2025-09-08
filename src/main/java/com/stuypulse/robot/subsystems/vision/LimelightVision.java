@@ -76,12 +76,13 @@ public class LimelightVision extends SubsystemBase {
     private int maxTagCount;
 
     private ObjectData currentFrame;
+    private ObjectData closestObject;
     private ObjectData lastGoodFrame;
 
     private Timer timer;
     private Queue<ObjectData> objectFIFO;
 
-    private LimelightVision() {
+    public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
             Pose3d robotRelativePose = camera.getLocation();
             LimelightHelpers.setCameraPose_RobotSpace(
@@ -104,6 +105,7 @@ public class LimelightVision extends SubsystemBase {
         //Auto Acquire
         currentFrame = new ObjectData(Pose2d.kZero, 0);
         lastGoodFrame = new ObjectData(Pose2d.kZero, 0);
+        closestObject = new ObjectData(Pose2d.kZero, 0);
 
         timer = new Timer();
         objectFIFO = new LinkedList<>();
@@ -259,6 +261,8 @@ public class LimelightVision extends SubsystemBase {
                     0,
                     0
             );
+            // DEBUGGING STATEMENT: DELETE
+            SmartDashboard.putNumber(camera.getName() + "Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(camera.getName()));
 
             if (camera.isEnabled()) {
                 if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.APRILTAG.ordinal()) {
@@ -281,8 +285,6 @@ public class LimelightVision extends SubsystemBase {
 
                     double closestDistance = Double.MAX_VALUE;
 
-                    ObjectData closestObject = null;
-
                     if (RawResults.length > 0) {
 
                         while (objectFIFO.size() >= 20) {
@@ -301,10 +303,13 @@ public class LimelightVision extends SubsystemBase {
                                 closestDistance = distance;
                                 closestObject = data;
                             }
+
                             objectFIFO.add(data);
 
                             currentFrame = data;
-                            SmartDashboard.putNumber("Coral X Pose Meters", currentFrame.objectPose.getX());
+
+                            SmartDashboard.putNumber("Vision/Coral Distance", distance);
+                            SmartDashboard.putNumber("Vision/Coral X Pose Meters", currentFrame.objectPose.getX());
                             SmartDashboard.putNumber("Coral Y Pose Meters", currentFrame.objectPose.getY());
 
                             //filter best frame, right now there is no use for the fifo
