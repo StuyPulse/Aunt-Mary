@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 public class ObjectData {
@@ -28,7 +29,7 @@ public class ObjectData {
         return objectPose;
     }
 
-    public static Transform2d calculateTransformToCoral(double txnc, double tync) {
+    public static Translation2d calculateCoralTranslation(double txnc, double tync) {
         Pose3d froggyCameraPose3d = Cameras.LimelightCameras[2].getLocation();
 
         Rotation3d froggyCameraRotation3d = froggyCameraPose3d.getRotation();
@@ -36,7 +37,8 @@ public class ObjectData {
         double robotAngleY = froggyCameraRotation3d.getY();
         double totalAngleY = robotAngleY + Units.degreesToRadians(tync);
 
-        double coralToRobotHeight = froggyCameraPose3d.getZ() - Units.inchesToMeters(Constants.Gamepiece.CORAL_RADIUS);
+        double coralToRobotHeight = froggyCameraPose3d.getZ()
+         - Units.inchesToMeters(Constants.Gamepiece.CORAL_RADIUS);
 
         double xDistance = (coralToRobotHeight) / Math.tan(totalAngleY);
 
@@ -44,6 +46,6 @@ public class ObjectData {
         // WHERE X IS FORWARD DISTANCE, Y IS SIDEWAYS DISTANCE
         double yDistance = hypotenuseToGround * Math.tan(Units.degreesToRadians(txnc) + froggyCameraRotation3d.getX());
 
-        return new Transform2d(xDistance, yDistance, Rotation2d.kZero);
+        return new Translation2d(xDistance, yDistance);
     }
 }

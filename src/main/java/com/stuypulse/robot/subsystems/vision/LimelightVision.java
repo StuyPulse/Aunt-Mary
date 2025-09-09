@@ -21,7 +21,9 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -289,8 +291,12 @@ public class LimelightVision extends SubsystemBase {
 
                     for (RawDetection detection : RawResults) {
 
-                        Transform2d transform = ObjectData.calculateTransformToCoral(detection.txnc, detection.tync);
-                        Pose2d fieldCoralPose = robotPose.transformBy(transform);
+                        Translation2d coralPose = ObjectData.calculateCoralTranslation(detection.txnc, detection.tync);
+                        SmartDashboard.putNumber("Vision/Coral Translation R Camera X", coralPose.getX());
+                        SmartDashboard.putNumber("Vision/Coral Translation R Camera Y", coralPose.getY());
+                        coralPose = coralPose.minus(camera.getLocation().toPose2d().getTranslation()); // turn the coral pose relative to the center of robot
+                                                                                                        // as opposed to the camera!
+                        Pose2d fieldCoralPose = robotPose.transformBy(new Transform2d(coralPose, new Rotation2d()));
                         double distance = robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
 
                         ObjectData data = new ObjectData(fieldCoralPose, timer.get());
@@ -306,7 +312,7 @@ public class LimelightVision extends SubsystemBase {
 
                         SmartDashboard.putNumber("Vision/Coral Distance", distance);
                         SmartDashboard.putNumber("Vision/Coral X Pose Meters", currentFrame.objectPose.getX());
-                        SmartDashboard.putNumber("Coral Y Pose Meters", currentFrame.objectPose.getY());
+                        SmartDashboard.putNumber("Vision/Coral Y Pose Meters", currentFrame.objectPose.getY());
 
                         //filter best frame, right now there is no use for the fifo
                     }
@@ -318,6 +324,5 @@ public class LimelightVision extends SubsystemBase {
             SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
         }
     }
+}
 
-}
-}
