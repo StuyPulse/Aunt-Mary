@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -39,6 +40,9 @@ public class ObjectData {
 
         double coralToRobotHeight = froggyCameraPose3d.getZ()
          - Units.inchesToMeters(Constants.Gamepiece.CORAL_RADIUS);
+
+         SmartDashboard.putNumber("Vision/Height", coralToRobotHeight);
+         SmartDashboard.putNumber("Vision/Angle", totalAngleY);
 
         double xDistance = (coralToRobotHeight) / Math.tan(totalAngleY);
 
