@@ -11,26 +11,26 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
-import com.stuypulse.stuylib.streams.numbers.IStream;
-import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
+
+import java.util.function.Supplier;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
-import com.stuypulse.robot.constants.Settings.Driver.Turn;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.HolonomicController;
 import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.robot.util.ReefUtil.ReefFace;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -46,15 +46,18 @@ public class SwerveDrivePIDAssistToL1Froggy extends Command {
     private final Gamepad driver;
     
     private final VStream driverLinearVelocity;
-    private final IStream driverAngularVelocity;
 
     private final HolonomicController controller;
 
     private final FieldObject2d targetPose2d;
+    private final int level;
 
-    public SwerveDrivePIDAssistToL1Froggy(Gamepad driver) {
+    private Supplier<Pose2d> targetPose;
+
+    public SwerveDrivePIDAssistToL1Froggy(Gamepad driver, int level) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
+        this.level = level;
 
         driverLinearVelocity = VStream.create(this::getDriverInputAsVelocity)
             .filtered(
@@ -64,14 +67,6 @@ public class SwerveDrivePIDAssistToL1Froggy extends Command {
                 x -> x.mul(Drive.MAX_TELEOP_SPEED),
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
-
-        driverAngularVelocity = IStream.create(driver::getRightX)
-            .filtered(
-                x -> -x,
-                x -> SLMath.deadband(x, Turn.DEADBAND),
-                x -> SLMath.spow(x, Turn.POWER),
-                x -> x * (Turn.MAX_TELEOP_TURN_SPEED),
-                new LowPassFilter(Turn.RC));
 
         controller = new HolonomicController(
             new PIDController(Alignment.XY.kP, Alignment.XY.kI, Alignment.XY.kD).add(new MotorFeedforward(0, 0, 0).position()),
@@ -89,25 +84,57 @@ public class SwerveDrivePIDAssistToL1Froggy extends Command {
     }
 
     @Override
-    public void execute() {
-        Pose2d targetPose = ReefUtil.getClosestReefFace().getL1FroggyScorePose(0);
-        targetPose.transformBy(
-            new Transform2d(new Translation2d(0, driverLinearVelocity.get().y), new Rotation2d())
-        );
-        targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
+    public void initialize() {
+        targetPose = () -> ReefUtil.getClosestReefFace().getL1FroggyScorePose(level);
+    }
 
-        controller.update(targetPose, swerve.getPose());
+    @Override
+    public void execute() {
+        Pose2d currentTarget = targetPose.get();
+
+        ReefFace reefFace = ReefUtil.getClosestReefFace();
+        Pose2d reefCenter = reefFace.getL1FroggyScorePose(level);
+        
+        Pose2d leftBound  = reefCenter.transformBy(
+            new Transform2d(new Translation2d(Field.LENGTH_OF_REEF_FACE / 2.0, 0), new Rotation2d()));
+        Pose2d rightBound  = reefCenter.transformBy(
+            new Transform2d(new Translation2d(-Field.LENGTH_OF_REEF_FACE / 2.0, 0), new Rotation2d()));
+
+        Translation2d L = leftBound.getTranslation();
+        Translation2d R = rightBound.getTranslation();
+        Translation2d robot = swerve.getPose().getTranslation();
+        Translation2d reef = R.minus(L);
+        Translation2d leftToRobot = robot.minus(L);
+        
+        double magSquared = reef.getX() * reef.getX() + reef.getY() * reef.getY();
+
+        double leftToRobot_dot_reef = leftToRobot.getX() * reef.getX() + leftToRobot.getY() * reef.getY();
+        double projected_t = leftToRobot_dot_reef / magSquared;
+
+        double dt = (reefFace == ReefFace.EF || reefFace == ReefFace.GH || reefFace == ReefFace.IJ) ? 
+            driverLinearVelocity.get().x / Field.LENGTH_OF_REEF_FACE : -driverLinearVelocity.get().x / Field.LENGTH_OF_REEF_FACE;
+        
+        double new_t = MathUtil.clamp(projected_t + dt, 0.0, 1.0);
+        
+        double shift_dist = (new_t - projected_t) * Field.LENGTH_OF_REEF_FACE;
+        
+        Pose2d newPose = currentTarget.transformBy(
+            new Transform2d(new Translation2d(shift_dist, 0.0), new Rotation2d())
+        );
+
+        controller.update(newPose, swerve.getPose());
+        targetPose2d.setPose(Robot.isBlue() ? newPose : Field.transformToOppositeAlliance(newPose));
 
         ChassisSpeeds controllerFieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(controller.getOutput(), swerve.getPose().getRotation());
         
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond + driverLinearVelocity.get().x)
-            .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond + driverLinearVelocity.get().y)
-            .withRotationalRate(controllerFieldRelativeSpeeds.omegaRadiansPerSecond + driverAngularVelocity.get()));
-        
-        SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
-        SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
-        SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
+            .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond)
+            .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond)
+            .withRotationalRate(controllerFieldRelativeSpeeds.omegaRadiansPerSecond));
+
+        SmartDashboard.putNumber("Alignment/Target x", targetPose.get().getX());
+        SmartDashboard.putNumber("Alignment/Target y", targetPose.get().getY());
+        SmartDashboard.putNumber("Alignment/Target angle", targetPose.get().getRotation().getDegrees());
 
         SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
         SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);

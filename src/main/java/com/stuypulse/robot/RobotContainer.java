@@ -286,7 +286,7 @@ public class RobotContainer {
             .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
             driver.getTopButton()
-                .whileTrue(new SwerveDrivePIDAssistToL1Froggy(driver));
+                .whileTrue(new SwerveDrivePIDAssistToL1Froggy(driver, 0));
         // // L4 Coral Score + Top L1
         // driver.getTopButton()
         // .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_THREE) && !shooter.hasCoral()))
