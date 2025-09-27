@@ -22,8 +22,10 @@ import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.FDCB.FDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBL2;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBNudge;
-import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgae;
-import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgae;
+import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgaeGHEF;
+import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgaeGHIJ;
+import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgaeGHEF;
+import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgaeGHIJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
@@ -628,15 +630,23 @@ public class RobotContainer {
 
         /**  TOP ALGAE AUTONS **/
 
-        AutonConfig H_TWO_ALGAE_AUTON = new AutonConfig("H + 2 Algae", HTwoAlgae::new,
+        AutonConfig H_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("H + 2 Algae (GH + IJ)", HTwoAlgaeGHIJ::new,
         "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE_AUTON.register(autonChooser);
+        H_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
 
-        // /** BOTTOM ALGAE AUTONS **/
+        AutonConfig H_TWO_ALGAE_AUTON_GHEF = new AutonConfig("H + 2 Algae (GH + EF)", HTwoAlgaeGHEF::new,
+        "Blue H BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
+        H_TWO_ALGAE_AUTON_GHEF.register(autonChooser);
 
-        AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
+        /** BOTTOM ALGAE AUTONS **/
+
+        AutonConfig G_TWO_ALGAE_AUTON_GHEF = new AutonConfig("G + 2 Algae (GH + EF)", GTwoAlgaeGHEF::new,
         "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE_AUTON.register(autonChooser);
+        G_TWO_ALGAE_AUTON_GHEF.register(autonChooser);
+
+        AutonConfig G_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("G + 2 Algae (GH + IJ)", GTwoAlgaeGHIJ::new,
+        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+        G_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

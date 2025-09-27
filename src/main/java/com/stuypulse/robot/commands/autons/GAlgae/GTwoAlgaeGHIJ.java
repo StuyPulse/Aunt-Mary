@@ -5,7 +5,7 @@
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-package com.stuypulse.robot.commands.autons.HAlgae;
+package com.stuypulse.robot.commands.autons.GAlgae;
 
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
@@ -43,15 +43,15 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 
-public class HTwoAlgae extends SequentialCommandGroup {
+public class GTwoAlgaeGHIJ extends SequentialCommandGroup {
     
-    public HTwoAlgae(PathPlannerPath... paths) {
+    public GTwoAlgaeGHIJ(PathPlannerPath... paths) {
 
         addCommands(
 
-            // Score Preload on H
+            // Score Preload on G
             new ParallelCommandGroup(
-                new SwerveDrivePIDToBranchScore(CoralBranch.H, 4, true)
+                new SwerveDrivePIDToBranchScore(CoralBranch.G, 4, true)
                     .withTranslationalConstraints(2, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
                     .withTimeout(1.5)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
