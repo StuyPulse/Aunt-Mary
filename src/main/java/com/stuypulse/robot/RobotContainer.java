@@ -634,9 +634,9 @@ public class RobotContainer {
 
         // /** BOTTOM ALGAE AUTONS **/
 
-        // AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
-        // "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        // G_TWO_ALGAE_AUTON.register(autonChooser);
+        AutonConfig G_TWO_ALGAE_AUTON = new AutonConfig("G + 2 Algae", GTwoAlgae::new,
+        "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
+        G_TWO_ALGAE_AUTON.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
