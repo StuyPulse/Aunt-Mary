@@ -176,7 +176,8 @@
         }
       ],
       "window": {
-        "name": "Elevator Target Vs Current Height"
+        "name": "Elevator Target Vs Current Height",
+        "visible": false
       }
     },
     "Plot <1>": {
@@ -221,7 +222,8 @@
         }
       ],
       "window": {
-        "name": "Arm Target vs Current Angle"
+        "name": "Arm Target vs Current Angle",
+        "visible": false
       }
     },
     "Plot <2>": {
@@ -266,7 +268,8 @@
         }
       ],
       "window": {
-        "name": "Froggy Pivot Target vs Current Angle"
+        "name": "Froggy Pivot Target vs Current Angle",
+        "visible": false
       }
     }
   }

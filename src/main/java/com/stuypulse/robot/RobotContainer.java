@@ -19,6 +19,8 @@ import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FDCE;
 import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
+import com.stuypulse.robot.commands.autons.L1Auton;
+import com.stuypulse.robot.commands.autons.FDCB.EDCF;
 import com.stuypulse.robot.commands.autons.FDCB.FDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBL2;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBNudge;
@@ -28,6 +30,7 @@ import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgaeGHEF;
 import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgaeGHIJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
+import com.stuypulse.robot.commands.autons.IKLA.JKLI;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
 import com.stuypulse.robot.commands.autons.IKLA.IKLAL2;
 import com.stuypulse.robot.commands.autons.IKLA.IKLANudge;
@@ -598,6 +601,10 @@ public class RobotContainer {
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
         IKLJ_AUTON.register(autonChooser);
 
+        AutonConfig JKLI_AUTON = new AutonConfig("JKLI", JKLI::new,
+        "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
+        JKLI_AUTON.register(autonChooser);
+
         AutonConfig IKLJ_NUDGE_AUTON = new AutonConfig("IKLJ Nudge", IKLJNudge::new,
         "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
         IKLJ_NUDGE_AUTON.register(autonChooser);
@@ -611,6 +618,10 @@ public class RobotContainer {
         AutonConfig FDCE_AUTON = new AutonConfig("FDCE", FDCE::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
         FDCE_AUTON.register(autonChooser);
+
+        AutonConfig EDCF_AUTON = new AutonConfig("EDCF", EDCF::new,
+        "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
+        EDCF_AUTON.register(autonChooser);
 
         AutonConfig FDCE_NUDGE_AUTON = new AutonConfig("FDCE Nudge", FDCENudge::new,
         "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
@@ -630,7 +641,7 @@ public class RobotContainer {
 
         /**  TOP ALGAE AUTONS **/
 
-        AutonConfig H_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("H + 2 Algae (GH + IJ)", HTwoAlgaeGHIJ::new,
+        AutonConfig H_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("H + 2 Algae (GH + IJ) RUN THIS ONE", HTwoAlgaeGHIJ::new,
         "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
         H_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
 
@@ -647,6 +658,10 @@ public class RobotContainer {
         AutonConfig G_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("G + 2 Algae (GH + IJ)", GTwoAlgaeGHIJ::new,
         "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
         G_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
+
+        AutonConfig CENTER_L1_AUTO = new AutonConfig("CENTER L1 AUTO", L1Auton::new,
+        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+        CENTER_L1_AUTO.register(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
