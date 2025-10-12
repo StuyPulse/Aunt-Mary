@@ -20,6 +20,8 @@ import com.stuypulse.robot.commands.ScoreRoutine;
 import com.stuypulse.robot.commands.autons.FDCB.FDCE;
 import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.L1Auton;
+import com.stuypulse.robot.commands.autons.FDCB.EDCB;
+import com.stuypulse.robot.commands.autons.FDCB.EDCBL2;
 import com.stuypulse.robot.commands.autons.FDCB.EDCF;
 import com.stuypulse.robot.commands.autons.FDCB.FDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBL2;
@@ -30,6 +32,8 @@ import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgaeGHEF;
 import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgaeGHIJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
 import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
+import com.stuypulse.robot.commands.autons.IKLA.JKLA;
+import com.stuypulse.robot.commands.autons.IKLA.JKLAL2;
 import com.stuypulse.robot.commands.autons.IKLA.JKLI;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
 import com.stuypulse.robot.commands.autons.IKLA.IKLAL2;
@@ -593,9 +597,17 @@ public class RobotContainer {
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
         IKLA_AUTON.register(autonChooser);
 
+        AutonConfig JKLA_AUTON = new AutonConfig("JKLA", JKLA::new,
+        "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+        JKLA_AUTON.register(autonChooser);
+
         AutonConfig IKLA_L2_AUTON = new AutonConfig("IKLA L2 LAST PIECE", IKLAL2::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
         IKLA_L2_AUTON.register(autonChooser);
+
+        AutonConfig JKLA_L2_AUTON = new AutonConfig("JKLA L2 LAST PIECE", JKLAL2::new,
+        "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+        JKLA_L2_AUTON.register(autonChooser);
 
         AutonConfig IKLJ_AUTON = new AutonConfig("IKLJ", IKLJ::new,
         "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
@@ -631,9 +643,17 @@ public class RobotContainer {
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         FDCB_AUTON.registerDefault(autonChooser);
 
+        AutonConfig EDCB_AUTON = new AutonConfig("EDCB", EDCB::new,
+        "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+        EDCB_AUTON.register(autonChooser);
+
         AutonConfig FDCB_L2_AUTON = new AutonConfig("FDCB L2 LAST PIECE", FDCBL2::new,
         "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
         FDCB_L2_AUTON.register(autonChooser);
+
+        AutonConfig EDCB_L2_AUTON = new AutonConfig("EDCB L2 LAST PIECE", EDCBL2::new,
+        "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+        EDCB_L2_AUTON.register(autonChooser);
 
         AutonConfig FDCB_NUDGE_AUTON = new AutonConfig("FDCB Nudge", FDCBNudge::new,
         "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
