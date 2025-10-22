@@ -62,8 +62,9 @@ public class Robot extends TimedRobot {
 
         // Allows us to see the limelight feeds even while tethered through USB-B 
         for (int port = 5800; port <= 5809; port++){   
-            PortForwarder.add(port, "10.6.94.11", port);
+            PortForwarder.add(port, "10.6.94.13", port);
             PortForwarder.add(port+10, "10.6.94.12", port);
+            // PortForwarder.add(port+20, "10.6.94.11", port);
         }
 
         // PathfindingCommand.warmupCommand().schedule();

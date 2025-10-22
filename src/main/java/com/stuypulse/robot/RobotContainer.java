@@ -460,7 +460,7 @@ public class RobotContainer {
                                 .deadlineFor(new LEDApplyPattern(Settings.LED.FROGGY_SCORE_ONE))
                                 .andThen(new FroggyRollerShootCoralOne())
                                 .andThen(new FroggyRollerStop()).onlyIf(() -> Clearances.isFroggyClearFromAllianceReef())),
-                () -> Clearances.isFroggyClearFromAllObstables()),
+                () -> Clearances.isFroggyClearFromAllObstables() && froggy.getRollerState() == RollerState.HOLD_CORAL),
                     new ConditionalCommand(
                         new ScoreRoutine(driver, 2, true).until(() -> false),
                         new ScoreRoutine(driver, 2, false).until(() -> false), 
