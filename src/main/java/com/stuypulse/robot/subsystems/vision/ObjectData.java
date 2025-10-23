@@ -33,19 +33,21 @@ public class ObjectData {
 
         Rotation3d froggyCameraRotation3d = froggyCameraPose3d.getRotation();
 
-        double totalAngleX = froggyCameraRotation3d.getX() + Units.degreesToRadians(txnc);
+        double totalAngleX = froggyCameraRotation3d.getZ() - Units.degreesToRadians(txnc); 
         double totalAngleY = froggyCameraRotation3d.getY() + Units.degreesToRadians(tync);
 
         double totalHeight = froggyCameraPose3d.getZ()
          - Units.inchesToMeters(Constants.Gamepiece.CORAL_DIAMETER);
 
-         SmartDashboard.putNumber("Vision/Height", totalHeight);
-         SmartDashboard.putNumber("Vision/Angle", totalAngleY);
+        SmartDashboard.putNumber("Vision/Total angle X", 180.0 / Math.PI * totalAngleX); // good
+        SmartDashboard.putNumber("Vision/Total angle Y", 180.0 / Math.PI * totalAngleY); // good
+        SmartDashboard.putNumber("Vision/Height", totalHeight); // good
+        SmartDashboard.putNumber("Vision/Angle", totalAngleY); // didnt check
 
-        double xDistance = (totalHeight) * Math.tan(totalAngleY);
+        double xDistance = (totalHeight) * Math.tan(totalAngleY); // bad
 
         // WHERE X IS FORWARD DISTANCE, Y IS SIDEWAYS DISTANCE
-        double yDistance = totalHeight * Math.tan(totalAngleX) / Math.cos(totalAngleY);
+        double yDistance = totalHeight * Math.tan(totalAngleX) / Math.cos(totalAngleY); // bad
 
         return new Translation2d(xDistance, yDistance);
     }

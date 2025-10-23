@@ -280,7 +280,7 @@ public class LimelightVision extends SubsystemBase {
                         SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", 0);
                     }
                 } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE.ordinal()) {
-
+                    SmartDashboard.putNumber("Vision/WHATTT", 0);
                     RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
 
                     double closestDistance = Double.MAX_VALUE;
@@ -291,6 +291,10 @@ public class LimelightVision extends SubsystemBase {
 
                     for (RawDetection detection : RawResults) {
                         Translation2d coralPose = ObjectData.calculateCoralTranslation(detection.txnc, detection.tync);
+
+                        double totalAngleX = Cameras.LimelightCameras[2].getLocation().getRotation().getZ() - Units.degreesToRadians(detection.txnc);
+                        double totalAngleY = Cameras.LimelightCameras[2].getLocation().getRotation().getY() + Units.degreesToRadians(detection.tync);
+                        
                         SmartDashboard.putNumber("Vision/Coral Translation R Camera X", coralPose.getX());
                         SmartDashboard.putNumber("Vision/Coral Translation R Camera Y", coralPose.getY());
                         coralPose = coralPose.plus(camera.getLocation().toPose2d().getTranslation()); // turn the coral pose relative to the center of robot
