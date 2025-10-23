@@ -81,7 +81,7 @@ public interface Constants {
 
     public interface Gamepiece {
 
-        double CORAL_RADIUS = 4.5; // inches
+        double CORAL_DIAMETER = 4.5; // inches
         double ALGAE_RADIUS = 0.0; // inches
     }
 

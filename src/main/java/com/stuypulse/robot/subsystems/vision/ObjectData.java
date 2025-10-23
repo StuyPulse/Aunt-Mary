@@ -5,9 +5,7 @@ import com.stuypulse.robot.constants.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -35,20 +33,19 @@ public class ObjectData {
 
         Rotation3d froggyCameraRotation3d = froggyCameraPose3d.getRotation();
 
-        double robotAngleY = froggyCameraRotation3d.getY();
-        double totalAngleY = robotAngleY + Units.degreesToRadians(tync);
+        double totalAngleX = froggyCameraRotation3d.getX() + Units.degreesToRadians(txnc);
+        double totalAngleY = froggyCameraRotation3d.getY() + Units.degreesToRadians(tync);
 
-        double coralToRobotHeight = froggyCameraPose3d.getZ()
-         - Units.inchesToMeters(Constants.Gamepiece.CORAL_RADIUS);
+        double totalHeight = froggyCameraPose3d.getZ()
+         - Units.inchesToMeters(Constants.Gamepiece.CORAL_DIAMETER);
 
-         SmartDashboard.putNumber("Vision/Height", coralToRobotHeight);
+         SmartDashboard.putNumber("Vision/Height", totalHeight);
          SmartDashboard.putNumber("Vision/Angle", totalAngleY);
 
-        double xDistance = (coralToRobotHeight) / Math.tan(totalAngleY);
+        double xDistance = (totalHeight) * Math.tan(totalAngleY);
 
-        double hypotenuseToGround = Math.hypot(xDistance, coralToRobotHeight);
         // WHERE X IS FORWARD DISTANCE, Y IS SIDEWAYS DISTANCE
-        double yDistance = hypotenuseToGround * Math.tan(Units.degreesToRadians(txnc) + froggyCameraRotation3d.getX());
+        double yDistance = totalHeight * Math.tan(totalAngleX) / Math.cos(totalAngleY);
 
         return new Translation2d(xDistance, yDistance);
     }

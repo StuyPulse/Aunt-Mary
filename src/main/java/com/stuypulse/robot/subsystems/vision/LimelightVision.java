@@ -290,12 +290,11 @@ public class LimelightVision extends SubsystemBase {
                     }
 
                     for (RawDetection detection : RawResults) {
-
                         Translation2d coralPose = ObjectData.calculateCoralTranslation(detection.txnc, detection.tync);
                         SmartDashboard.putNumber("Vision/Coral Translation R Camera X", coralPose.getX());
                         SmartDashboard.putNumber("Vision/Coral Translation R Camera Y", coralPose.getY());
-                        coralPose = coralPose.minus(camera.getLocation().toPose2d().getTranslation()); // turn the coral pose relative to the center of robot
-                                                                                                        // as opposed to the camera!
+                        coralPose = coralPose.plus(camera.getLocation().toPose2d().getTranslation()); // turn the coral pose relative to the center of robot
+                                                                                                       // as opposed to the camera!
                         Pose2d fieldCoralPose = robotPose.transformBy(new Transform2d(coralPose, new Rotation2d()));
                         double distance = robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
 
@@ -320,7 +319,7 @@ public class LimelightVision extends SubsystemBase {
             }
 
             SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-            // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
+            // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString()); // crashes code rn lol
             SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
         }
     }
