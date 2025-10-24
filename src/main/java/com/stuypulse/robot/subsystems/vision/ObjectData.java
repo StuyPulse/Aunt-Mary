@@ -33,21 +33,28 @@ public class ObjectData {
 
         Rotation3d froggyCameraRotation3d = froggyCameraPose3d.getRotation();
 
-        double totalAngleX = froggyCameraRotation3d.getZ() - Units.degreesToRadians(txnc); 
-        double totalAngleY = froggyCameraRotation3d.getY() + Units.degreesToRadians(tync);
+        double totalAngleX = froggyCameraRotation3d.getZ() - Units.degreesToRadians(txnc); // getZ seems wrong  
+        double totalAngleY = froggyCameraRotation3d.getY() + Units.degreesToRadians(-tync);
+        SmartDashboard.putNumber("Vision/Froggy Offset X Axis", froggyCameraRotation3d.getX());
+        SmartDashboard.putNumber("Vision/Froggy Offset Y Axis", froggyCameraRotation3d.getY());
+        SmartDashboard.putNumber("Vision/Froggy Offset Z Axis", froggyCameraRotation3d.getZ());
+        SmartDashboard.putNumber("Vision/Froggy Offset Translation Y Axis", froggyCameraPose3d.getX());
+        SmartDashboard.putNumber("Vision/Froggy Offset Translation Y Axis", froggyCameraPose3d.getY());
+        SmartDashboard.putNumber("Vision/Froggy Offset Translation Y Axis", froggyCameraPose3d.getZ());
 
         double totalHeight = froggyCameraPose3d.getZ()
          - Units.inchesToMeters(Constants.Gamepiece.CORAL_DIAMETER);
 
-        SmartDashboard.putNumber("Vision/Total angle X", 180.0 / Math.PI * totalAngleX); // good
-        SmartDashboard.putNumber("Vision/Total angle Y", 180.0 / Math.PI * totalAngleY); // good
+        SmartDashboard.putNumber("Vision/TX BEING FED IN X", txnc); 
+        SmartDashboard.putNumber("Vision/Total angle X",  totalAngleX); // good
+        SmartDashboard.putNumber("Vision/Total angle Y", totalAngleY); // good
         SmartDashboard.putNumber("Vision/Height", totalHeight); // good
         SmartDashboard.putNumber("Vision/Angle", totalAngleY); // didnt check
 
-        double xDistance = (totalHeight) * Math.tan(totalAngleY); // bad
+        double xDistance = (totalHeight) * 1.0/Math.tan(totalAngleY) + 0.2; // bad
 
         // WHERE X IS FORWARD DISTANCE, Y IS SIDEWAYS DISTANCE
-        double yDistance = totalHeight * Math.tan(totalAngleX) / Math.cos(totalAngleY); // bad
+        double yDistance = totalHeight * Math.tan(Units.degreesToRadians(txnc)) / Math.cos(totalAngleY); // bad
 
         return new Translation2d(xDistance, yDistance);
     }

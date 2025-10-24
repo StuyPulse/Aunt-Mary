@@ -283,6 +283,7 @@ public class LimelightVision extends SubsystemBase {
                     SmartDashboard.putNumber("Vision/WHATTT", 0);
                     RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
 
+
                     double closestDistance = Double.MAX_VALUE;
 
                     while (objectFIFO.size() >= 20) {
