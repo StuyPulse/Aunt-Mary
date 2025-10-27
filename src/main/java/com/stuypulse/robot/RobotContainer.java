@@ -65,6 +65,7 @@ import com.stuypulse.robot.commands.leds.LEDDefaultCommand;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
+import com.stuypulse.robot.commands.shooter.ShooterSetAcquireCoral;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
@@ -492,7 +493,9 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                 .andThen(new SuperStructureFeed()))
             .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
-                .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
+                .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()))
+            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
+                .andThen(new ShooterSetAcquireCoral()));
             // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
