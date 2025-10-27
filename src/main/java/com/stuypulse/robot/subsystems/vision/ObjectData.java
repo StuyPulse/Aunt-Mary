@@ -43,7 +43,7 @@ public class ObjectData {
         SmartDashboard.putNumber("Vision/Froggy Offset Translation Y Axis", froggyCameraPose3d.getZ());
 
         double totalHeight = froggyCameraPose3d.getZ()
-         - Units.inchesToMeters(Constants.Gamepiece.CORAL_DIAMETER);
+         - Units.inchesToMeters(Constants.Gamepiece.CORAL_DIAMETER - 2.25); // account for it being half 
 
         SmartDashboard.putNumber("Vision/TX BEING FED IN X", txnc); 
         SmartDashboard.putNumber("Vision/Total angle X",  totalAngleX); // good
@@ -51,11 +51,16 @@ public class ObjectData {
         SmartDashboard.putNumber("Vision/Height", totalHeight); // good
         SmartDashboard.putNumber("Vision/Angle", totalAngleY); // didnt check
 
-        double xDistance = (totalHeight) * 1.0/Math.tan(totalAngleY) + 0.2; // bad
+        // double xDistance = (totalHeight) * 1.0/Math.tan(totalAngleY) + 0.2; // bad
 
+        
+        double xDistance = (totalHeight) / Math.tan(totalAngleY);  // bad
+        SmartDashboard.putNumber("Vision/X Distance", xDistance); // good
         // WHERE X IS FORWARD DISTANCE, Y IS SIDEWAYS DISTANCE
-        double yDistance = totalHeight * Math.tan(Units.degreesToRadians(txnc)) / Math.cos(totalAngleY); // bad
-
+        // double yDistance = totalHeight * Math.tan(Units.degreesToRadians(txnc)) / Math.cos(totalAngleY); // bad
+        double yDistance = totalHeight * Math.tan(Units.degreesToRadians(txnc)) * xDistance; 
+        SmartDashboard.putNumber("Vision/Y Distance", yDistance); // good
+        // WHERE X IS FORWARD DISTANCE, Y IS SIDEWAYS DISTANCE
         return new Translation2d(xDistance, yDistance);
     }
 }
