@@ -151,7 +151,7 @@ public class RobotContainer {
         configureDefaultCommands();
         configureDriverButtonBindings();
         // testingButtonBindings();
-        configureAutons();
+        // configureAutons();
         // configureSysids();
 
         SmartDashboard.putData("Field", Field.FIELD2D);
@@ -229,11 +229,11 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Loki golf tee algae pickup
-        driver.getLeftBumper()
-            .onTrue(new SuperStructureGolfTeeAlgaePickup())
-            .onTrue(new ShooterAcquireAlgae())
-            .onFalse(new SuperStructureProcessor())                                
-            .onFalse(new ShooterHoldAlgae());
+        // driver.getLeftBumper()
+        //     .onTrue(new SuperStructureGolfTeeAlgaePickup())
+        //     .onTrue(new ShooterAcquireAlgae())
+        //     .onFalse(new SuperStructureProcessor())                                
+        //     .onFalse(new ShooterHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
@@ -511,11 +511,11 @@ public class RobotContainer {
         //     .onFalse(SwerveDriveDynamicObstacles.reset());
 
         // Align to closest Coral Station without path finding
-        driver.getRightStickButton()
-            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new SwerveDrivePIDToCoralStation(driver)
-                .onlyIf(() -> !shooter.hasCoral()));
+        // driver.getRightStickButton()
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
+        //         .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire closest reef algae
         driver.getDPadLeft()
@@ -529,36 +529,36 @@ public class RobotContainer {
             .onFalse(new ShooterHoldAlgae());
 
         // Golf tee and Climb Shimmy
-        driver.getDPadDown()
-            .onTrue(new ConditionalCommand(
-                new ClimbShimmy(),
-                new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
-                () -> climb.getState() != ClimbState.CLOSED
-            ))
-            .onFalse(
-                new ConditionalCommand(
-                    new SuperStructureClimb(), 
-                    new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
-                () -> climb.getState() != ClimbState.CLOSED));
+        // driver.getDPadDown()
+        //     .onTrue(new ConditionalCommand(
+        //         new ClimbShimmy(),
+        //         new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
+        //         () -> climb.getState() != ClimbState.CLOSED
+        //     ))
+        //     .onFalse(
+        //         new ConditionalCommand(
+        //             new SuperStructureClimb(), 
+        //             new SuperStructureProcessor().alongWith(new ShooterHoldAlgae()), 
+        //         () -> climb.getState() != ClimbState.CLOSED));
 
         // Get ready for climb
-        driver.getLeftMenuButton()
-            .onTrue(new FroggyPivotToStow())
-            .onTrue(new SuperStructureClimb()
-                .andThen(new WaitUntilCommand(() -> Elevator.getInstance().atTargetHeight() || Arm.getInstance().atTargetAngle()))
-                .andThen(new ClimbOpen()
-                    .alongWith(new ShooterStop())
-                    .alongWith(new FroggyRollerStop())));
+        // driver.getLeftMenuButton()
+        //     .onTrue(new FroggyPivotToStow())
+        //     .onTrue(new SuperStructureClimb()
+        //         .andThen(new WaitUntilCommand(() -> Elevator.getInstance().atTargetHeight() || Arm.getInstance().atTargetAngle()))
+        //         .andThen(new ClimbOpen()
+        //             .alongWith(new ShooterStop())
+        //             .alongWith(new FroggyRollerStop())));
 
         // Climb!!
-        driver.getRightMenuButton()
-            .onTrue(new ClimbClimb()
-                .onlyIf(() -> climb.getState() == ClimbState.OPEN 
-                    || climb.getState() == ClimbState.SHIMMY 
-                    || climb.getState() == ClimbState.IDLE))
-            .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
-            .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
-            .onFalse(new ShooterStop());
+        // driver.getRightMenuButton()
+        //     .onTrue(new ClimbClimb()
+        //         .onlyIf(() -> climb.getState() == ClimbState.OPEN 
+        //             || climb.getState() == ClimbState.SHIMMY 
+        //             || climb.getState() == ClimbState.IDLE))
+        //     .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
+        //     .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
+        //     .onFalse(new ShooterStop());
 
         // (UNUSED) Catapult
         // driver.getLeftButton()
@@ -592,129 +592,130 @@ public class RobotContainer {
 
     public void configureAutons() {
 
-        autonChooser.addOption("Do Nothing", new DoNothingCommand());
+         autonChooser.addOption("Do Nothing", new DoNothingCommand());
 
-        /** TOP AUTONS **/
+    //     /** TOP AUTONS **/
 
-        AutonConfig IKLA_AUTON = new AutonConfig("IKLA", IKLA::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        IKLA_AUTON.register(autonChooser);
+    //     AutonConfig IKLA_AUTON = new AutonConfig("IKLA", IKLA::new,
+    //     "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+    //     IKLA_AUTON.register(autonChooser);
 
-        AutonConfig JKLA_AUTON = new AutonConfig("JKLA", JKLA::new,
-        "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        JKLA_AUTON.register(autonChooser);
+    //     AutonConfig JKLA_AUTON = new AutonConfig("JKLA", JKLA::new,
+    //     "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+    //     JKLA_AUTON.register(autonChooser);
 
-        AutonConfig IKLA_L2_AUTON = new AutonConfig("IKLA L2 LAST PIECE", IKLAL2::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        IKLA_L2_AUTON.register(autonChooser);
+    //     AutonConfig IKLA_L2_AUTON = new AutonConfig("IKLA L2 LAST PIECE", IKLAL2::new,
+    //     "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+    //     IKLA_L2_AUTON.register(autonChooser);
 
-        AutonConfig JKLA_L2_AUTON = new AutonConfig("JKLA L2 LAST PIECE", JKLAL2::new,
-        "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        JKLA_L2_AUTON.register(autonChooser);
+    //     AutonConfig JKLA_L2_AUTON = new AutonConfig("JKLA L2 LAST PIECE", JKLAL2::new,
+    //     "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+    //     JKLA_L2_AUTON.register(autonChooser);
 
-        AutonConfig IKLJ_AUTON = new AutonConfig("IKLJ", IKLJ::new,
-        "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        IKLJ_AUTON.register(autonChooser);
+    //     AutonConfig IKLJ_AUTON = new AutonConfig("IKLJ", IKLJ::new,
+    //     "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
+    //     IKLJ_AUTON.register(autonChooser);
 
-        AutonConfig JKLI_AUTON = new AutonConfig("JKLI", JKLI::new,
-        "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        JKLI_AUTON.register(autonChooser);
+    //     AutonConfig JKLI_AUTON = new AutonConfig("JKLI", JKLI::new,
+    //     "Blue J to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
+    //     JKLI_AUTON.register(autonChooser);
 
-        AutonConfig IKLJ_NUDGE_AUTON = new AutonConfig("IKLJ Nudge", IKLJNudge::new,
-        "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
-        IKLJ_NUDGE_AUTON.register(autonChooser);
+    //     AutonConfig IKLJ_NUDGE_AUTON = new AutonConfig("IKLJ Nudge", IKLJNudge::new,
+    //     "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue J BackOut");
+    //     IKLJ_NUDGE_AUTON.register(autonChooser);
 
-        AutonConfig IKLA_NUDGE_AUTON = new AutonConfig("IKLA Nudge", IKLANudge::new,
-        "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
-        IKLA_NUDGE_AUTON.register(autonChooser);
+    //     AutonConfig IKLA_NUDGE_AUTON = new AutonConfig("IKLA Nudge", IKLANudge::new,
+    //     "Blue Top Nudge", "Blue I to HP", "Blue K to HP", "Blue L to HP", "Blue A BackOut");
+    //     IKLA_NUDGE_AUTON.register(autonChooser);
 
-        /** BOTTOM AUTONS **/
+    //     /** BOTTOM AUTONS **/
 
-        AutonConfig FDCE_AUTON = new AutonConfig("FDCE", FDCE::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        FDCE_AUTON.register(autonChooser);
+    //     AutonConfig FDCE_AUTON = new AutonConfig("FDCE", FDCE::new,
+    //     "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
+    //     FDCE_AUTON.register(autonChooser);
 
-        AutonConfig EDCF_AUTON = new AutonConfig("EDCF", EDCF::new,
-        "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        EDCF_AUTON.register(autonChooser);
+    //     AutonConfig EDCF_AUTON = new AutonConfig("EDCF", EDCF::new,
+    //     "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
+    //     EDCF_AUTON.register(autonChooser);
 
-        AutonConfig FDCE_NUDGE_AUTON = new AutonConfig("FDCE Nudge", FDCENudge::new,
-        "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
-        FDCE_NUDGE_AUTON.register(autonChooser);
+    //     AutonConfig FDCE_NUDGE_AUTON = new AutonConfig("FDCE Nudge", FDCENudge::new,
+    //     "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue E BackOut");
+    //     FDCE_NUDGE_AUTON.register(autonChooser);
 
-        AutonConfig FDCB_AUTON = new AutonConfig("FDCB", FDCB::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        FDCB_AUTON.registerDefault(autonChooser);
+    //     AutonConfig FDCB_AUTON = new AutonConfig("FDCB", FDCB::new,
+    //     "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+    //     FDCB_AUTON.registerDefault(autonChooser);
 
-        AutonConfig EDCB_AUTON = new AutonConfig("EDCB", EDCB::new,
-        "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        EDCB_AUTON.register(autonChooser);
+    //     AutonConfig EDCB_AUTON = new AutonConfig("EDCB", EDCB::new,
+    //     "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+    //     EDCB_AUTON.register(autonChooser);
 
-        AutonConfig FDCB_L2_AUTON = new AutonConfig("FDCB L2 LAST PIECE", FDCBL2::new,
-        "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        FDCB_L2_AUTON.register(autonChooser);
+    //     AutonConfig FDCB_L2_AUTON = new AutonConfig("FDCB L2 LAST PIECE", FDCBL2::new,
+    //     "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+    //     FDCB_L2_AUTON.register(autonChooser);
 
-        AutonConfig EDCB_L2_AUTON = new AutonConfig("EDCB L2 LAST PIECE", EDCBL2::new,
-        "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        EDCB_L2_AUTON.register(autonChooser);
+    //     AutonConfig EDCB_L2_AUTON = new AutonConfig("EDCB L2 LAST PIECE", EDCBL2::new,
+    //     "Blue E to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+    //     EDCB_L2_AUTON.register(autonChooser);
 
-        AutonConfig FDCB_NUDGE_AUTON = new AutonConfig("FDCB Nudge", FDCBNudge::new,
-        "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
-        FDCB_NUDGE_AUTON.register(autonChooser);
+    //     AutonConfig FDCB_NUDGE_AUTON = new AutonConfig("FDCB Nudge", FDCBNudge::new,
+    //     "Blue Bottom Nudge", "Blue F to HP", "Blue D to HP", "Blue C to HP", "Blue B BackOut");
+    //     FDCB_NUDGE_AUTON.register(autonChooser);
 
-        /**  TOP ALGAE AUTONS **/
+    //     /**  TOP ALGAE AUTONS **/
 
-        AutonConfig H_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("H + 2 Algae (GH + IJ) RUN THIS ONE", HTwoAlgaeGHIJ::new,
-        "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
+    //     AutonConfig H_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("H + 2 Algae (GH + IJ) RUN THIS ONE", HTwoAlgaeGHIJ::new,
+    //     "Blue H BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+    //     H_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
 
-        AutonConfig H_TWO_ALGAE_AUTON_GHEF = new AutonConfig("H + 2 Algae (GH + EF)", HTwoAlgaeGHEF::new,
-        "Blue H BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        H_TWO_ALGAE_AUTON_GHEF.register(autonChooser);
+    //     AutonConfig H_TWO_ALGAE_AUTON_GHEF = new AutonConfig("H + 2 Algae (GH + EF)", HTwoAlgaeGHEF::new,
+    //     "Blue H BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
+    //     H_TWO_ALGAE_AUTON_GHEF.register(autonChooser);
 
-        /** BOTTOM ALGAE AUTONS **/
+    //     /** BOTTOM ALGAE AUTONS **/
 
-        AutonConfig G_TWO_ALGAE_AUTON_GHEF = new AutonConfig("G + 2 Algae (GH + EF)", GTwoAlgaeGHEF::new,
-        "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE_AUTON_GHEF.register(autonChooser);
+    //     AutonConfig G_TWO_ALGAE_AUTON_GHEF = new AutonConfig("G + 2 Algae (GH + EF)", GTwoAlgaeGHEF::new,
+    //     "Blue G BackOut", "Blue Barge to EF (1)", "Blue EF BackOut", "Blue Barge BackOut");
+    //     G_TWO_ALGAE_AUTON_GHEF.register(autonChooser);
 
-        AutonConfig G_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("G + 2 Algae (GH + IJ)", GTwoAlgaeGHIJ::new,
-        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
-        G_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
+    //     AutonConfig G_TWO_ALGAE_AUTON_GHIJ = new AutonConfig("G + 2 Algae (GH + IJ)", GTwoAlgaeGHIJ::new,
+    //     "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+    //     G_TWO_ALGAE_AUTON_GHIJ.register(autonChooser);
 
-        AutonConfig CENTER_L1_AUTO = new AutonConfig("CENTER L1 AUTO", L1Auton::new,
-        "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
-        CENTER_L1_AUTO.register(autonChooser);
+    //     AutonConfig CENTER_L1_AUTO = new AutonConfig("CENTER L1 AUTO", L1Auton::new,
+    //     "Blue G BackOut", "Blue Barge to IJ (1)", "Blue IJ BackOut", "Blue Barge BackOut");
+    //     CENTER_L1_AUTO.register(autonChooser);
 
-        SmartDashboard.putData("Autonomous", autonChooser);
+    //     SmartDashboard.putData("Autonomous", autonChooser);
+    // }
+
+    // public void configureSysids() {
+    //     autonChooser.addOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
+    //     autonChooser.addOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
+    //     autonChooser.addOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
+    //     autonChooser.addOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
+
+    //     SysIdRoutine elevatorSysIdRoutine = Elevator.getInstance().getSysIdRoutine();
+    //     autonChooser.addOption("Elevator Quasi Forward", elevatorSysIdRoutine.quasistatic(Direction.kForward));
+    //     autonChooser.addOption("Elevator Quasi Backward", elevatorSysIdRoutine.quasistatic(Direction.kReverse));
+    //     autonChooser.addOption("Elevator Dynamic Forward", elevatorSysIdRoutine.dynamic(Direction.kForward));
+    //     autonChooser.addOption("Elevator Dynamic Backward", elevatorSysIdRoutine.dynamic(Direction.kReverse));
+
+    //     SysIdRoutine armSysIdRoutine = Arm.getInstance().getSysIdRoutine();
+    //     autonChooser.addOption("Arm Quasi Forward", armSysIdRoutine.quasistatic(Direction.kForward));
+    //     autonChooser.addOption("Arm Quasi Backward", armSysIdRoutine.quasistatic(Direction.kReverse));
+    //     autonChooser.addOption("Arm Dynamic Forward", armSysIdRoutine.dynamic(Direction.kForward));
+    //     autonChooser.addOption("Arm Dynamic Backward", armSysIdRoutine.dynamic(Direction.kReverse));
+
+    //     SysIdRoutine froggyPivotSysIdRoutine = froggy.getPivotSysIdRoutine();
+    //     autonChooser.addOption("Froggy Pivot Quasi Forward", froggyPivotSysIdRoutine.quasistatic(Direction.kForward));
+    //     autonChooser.addOption("Froggy Pivot Quasi Backward", froggyPivotSysIdRoutine.quasistatic(Direction.kReverse));
+    //     autonChooser.addOption("Froggy Pivot Dynamic Forward", froggyPivotSysIdRoutine.dynamic(Direction.kForward));
+    //     autonChooser.addOption("Froggy Pivot Dynamic Backward", froggyPivotSysIdRoutine.dynamic(Direction.kReverse));
+     }
+
+     public Command getAutonomousCommand() {
+         return autonChooser.getSelected();
     }
-
-    public void configureSysids() {
-        autonChooser.addOption("Swerve Quasi Forward", swerve.sysIdQuasistatic(Direction.kForward));
-        autonChooser.addOption("Swerve Quasi Backward", swerve.sysIdQuasistatic(Direction.kReverse));
-        autonChooser.addOption("Swerve Dynamic Forward", swerve.sysIdDynamic(Direction.kForward));
-        autonChooser.addOption("Swerve Dynamic Backward", swerve.sysIdDynamic(Direction.kReverse));
-
-        SysIdRoutine elevatorSysIdRoutine = Elevator.getInstance().getSysIdRoutine();
-        autonChooser.addOption("Elevator Quasi Forward", elevatorSysIdRoutine.quasistatic(Direction.kForward));
-        autonChooser.addOption("Elevator Quasi Backward", elevatorSysIdRoutine.quasistatic(Direction.kReverse));
-        autonChooser.addOption("Elevator Dynamic Forward", elevatorSysIdRoutine.dynamic(Direction.kForward));
-        autonChooser.addOption("Elevator Dynamic Backward", elevatorSysIdRoutine.dynamic(Direction.kReverse));
-
-        SysIdRoutine armSysIdRoutine = Arm.getInstance().getSysIdRoutine();
-        autonChooser.addOption("Arm Quasi Forward", armSysIdRoutine.quasistatic(Direction.kForward));
-        autonChooser.addOption("Arm Quasi Backward", armSysIdRoutine.quasistatic(Direction.kReverse));
-        autonChooser.addOption("Arm Dynamic Forward", armSysIdRoutine.dynamic(Direction.kForward));
-        autonChooser.addOption("Arm Dynamic Backward", armSysIdRoutine.dynamic(Direction.kReverse));
-
-        SysIdRoutine froggyPivotSysIdRoutine = froggy.getPivotSysIdRoutine();
-        autonChooser.addOption("Froggy Pivot Quasi Forward", froggyPivotSysIdRoutine.quasistatic(Direction.kForward));
-        autonChooser.addOption("Froggy Pivot Quasi Backward", froggyPivotSysIdRoutine.quasistatic(Direction.kReverse));
-        autonChooser.addOption("Froggy Pivot Dynamic Forward", froggyPivotSysIdRoutine.dynamic(Direction.kForward));
-        autonChooser.addOption("Froggy Pivot Dynamic Backward", froggyPivotSysIdRoutine.dynamic(Direction.kReverse));
-    }
-
-    public Command getAutonomousCommand() {
-        return autonChooser.getSelected();
-    }
+    
 }
