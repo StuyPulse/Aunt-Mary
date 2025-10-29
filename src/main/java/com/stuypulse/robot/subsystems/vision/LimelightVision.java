@@ -7,6 +7,7 @@ package com.stuypulse.robot.subsystems.vision;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Supplier;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
@@ -242,6 +243,10 @@ public class LimelightVision extends SubsystemBase {
                 setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS);
             }
         }
+    }
+
+    public Supplier<RawDetection[]> getLimelightRawDetections(String limelightName) {
+        return () -> LimelightHelpers.getRawDetections(limelightName);
     }
 
     @Override

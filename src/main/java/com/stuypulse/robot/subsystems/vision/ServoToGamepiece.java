@@ -7,19 +7,13 @@ package com.stuypulse.robot.subsystems.vision;
 
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
-import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
-import com.stuypulse.stuylib.streams.vectors.VStream;
-import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
-import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
-import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,14 +23,15 @@ import java.util.function.Supplier;
 public class ServoToGamepiece extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-
+    private final Rotation2d cameraAngle;
     private final Supplier<Rotation2d> targetAngle;
     private final AngleController angleController;
 
-    public ServoToGamepiece(Supplier<Rotation2d> targetAngle) {
+    public ServoToGamepiece(Supplier<RawDetection[]> rawDetections, Rotation2d cameraAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
-
-        this.targetAngle = targetAngle;
+        //get the raw detections, and then take the last actual detection's txnc as the target angle
+        this.targetAngle = () -> new Rotation2d (rawDetections.get()[rawDetections.get().length].txnc);
+        this.cameraAngle = cameraAngle;
 
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
             .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
@@ -48,7 +43,8 @@ public class ServoToGamepiece extends Command {
     public void execute() {
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withRotationalRate(angleController.update(
-                Angle.fromRotation2d(targetAngle.get()),
+                Angle.fromRotation2d(cameraAngle.minus(targetAngle.get())),
                 Angle.fromRotation2d(swerve.getPose().getRotation()))));
+                //implement the driving part
     }
 }
