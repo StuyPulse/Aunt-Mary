@@ -84,6 +84,7 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClose
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
 import com.stuypulse.robot.commands.vision.VisionSetTagWhitelist;
+import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -103,9 +104,12 @@ import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
+import com.stuypulse.robot.subsystems.vision.ServoToGamepiece;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -472,12 +476,14 @@ public class RobotContainer {
         //     .onFalse(SwerveDriveDynamicObstacles.reset());
 
         // Align to closest Coral Station without path finding
-        driver.getRightStickButton()
-            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new SwerveDrivePIDToCoralStation(driver)
-                .onlyIf(() -> !shooter.hasCoral()));
+        // driver.getRightStickButton()
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
+        //         .onlyIf(() -> !shooter.hasCoral()));
 
+            driver.getRightStickButton()
+                .whileTrue(new ServoToGamepiece(vision.getLimelightRawDetections("limelight-froggy"), new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getMeasureZ())));
         // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(
