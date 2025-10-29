@@ -223,11 +223,11 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Loki golf tee algae pickup
-        driver.getLeftBumper()
-            .onTrue(new SuperStructureGolfTeeAlgaePickup())
-            .onTrue(new ShooterAcquireAlgae())
-            .onFalse(new SuperStructureProcessor())                                
-            .onFalse(new ShooterHoldAlgae());
+        // driver.getLeftBumper()
+        //     .onTrue(new SuperStructureGolfTeeAlgaePickup())
+        //     .onTrue(new ShooterAcquireAlgae())
+        //     .onFalse(new SuperStructureProcessor())                                
+        //     .onFalse(new ShooterHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
@@ -482,8 +482,10 @@ public class RobotContainer {
         //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
         //         .onlyIf(() -> !shooter.hasCoral()));
 
-            driver.getRightStickButton()
-                .whileTrue(new ServoToGamepiece(vision.getLimelightRawDetections("limelight-froggy"), new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getMeasureZ())));
+            driver.getLeftBumper()
+                .onTrue((new ServoToGamepiece(() -> vision.getHorizontalTargetAngle("limelight-froggy"), 
+                new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getMeasureZ()))
+                .onlyWhile(() -> vision.hasNeuralNetworkData("limelight-froggy"))));
         // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(

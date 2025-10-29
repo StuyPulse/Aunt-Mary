@@ -5,6 +5,8 @@
 /** ************************************************************ */
 package com.stuypulse.robot.subsystems.vision;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Supplier;
@@ -77,6 +79,7 @@ public class LimelightVision extends SubsystemBase {
     private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
+    private RawDetection[] rawDetections;
 
     private ObjectData currentFrame;
     private ObjectData closestObject;
@@ -245,8 +248,18 @@ public class LimelightVision extends SubsystemBase {
         }
     }
 
-    public Supplier<RawDetection[]> getLimelightRawDetections(String limelightName) {
-        return () -> LimelightHelpers.getRawDetections(limelightName);
+    // public Supplier<RawDetection[]> getLimelightRawDetections(String limelightName) {
+    //     return () -> LimelightHelpers.getRawDetections(limelightName);
+    // }
+    public Rotation2d getHorizontalTargetAngle(String limelightName) {
+        if (hasNeuralNetworkData(limelightName)) {
+            return new Rotation2d(rawDetections[0].txnc);
+        }
+        return null;
+    }
+
+    public boolean hasNeuralNetworkData(String limelightName) {
+        return rawDetections.length > 0;
     }
 
     @Override
@@ -267,9 +280,9 @@ public class LimelightVision extends SubsystemBase {
                     0
             );
             // DEBUGGING STATEMENT: DELETE
-            SmartDashboard.putNumber(camera.getName() + "Pipeline Index", LimelightHelpers.getCurrentPipelineIndex(camera.getName()));
 
             if (camera.isEnabled()) {
+                rawDetections = LimelightHelpers.getRawDetections("froggy-limelight");
                 if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.APRILTAG.ordinal()) {
                     PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                             ? getMegaTag2PoseEstimate(camera.getName())
@@ -330,8 +343,8 @@ public class LimelightVision extends SubsystemBase {
 
             SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
             // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString()); // crashes code rn lol
+            SmartDashboard.putBoolean("Vision/Has NN Data", hasNeuralNetworkData("froggy-limelight"));
             SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
         }
     }
 }
-

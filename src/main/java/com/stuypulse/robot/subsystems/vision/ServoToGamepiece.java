@@ -24,13 +24,13 @@ public class ServoToGamepiece extends Command {
 
     private final CommandSwerveDrivetrain swerve;
     private final Rotation2d cameraAngle;
-    private final Supplier<Rotation2d> targetAngle;
+    private Supplier<Rotation2d> targetAngle;
     private final AngleController angleController;
 
-    public ServoToGamepiece(Supplier<RawDetection[]> rawDetections, Rotation2d cameraAngle) {
+    public ServoToGamepiece(Supplier<Rotation2d> targetAngle, Rotation2d cameraAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
+        this.targetAngle = targetAngle;
         //get the raw detections, and then take the last actual detection's txnc as the target angle
-        this.targetAngle = () -> new Rotation2d (rawDetections.get()[rawDetections.get().length].txnc);
         this.cameraAngle = cameraAngle;
 
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
@@ -46,5 +46,6 @@ public class ServoToGamepiece extends Command {
                 Angle.fromRotation2d(cameraAngle.minus(targetAngle.get())),
                 Angle.fromRotation2d(swerve.getPose().getRotation()))));
                 //implement the driving part
+                System.out.println(targetAngle);
     }
 }
