@@ -90,6 +90,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1WithDriver;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
@@ -281,7 +282,8 @@ public class RobotContainer {
                     new FroggyPivotToL1Versatile()
                     .deadlineFor(new LEDApplyPattern(Settings.LED.SCORE_COLOR))
                     .alongWith(
-                            new SwerveDrivePIDToClosestL1FroggyScore(0).alongWith(
+                            // new SwerveDrivePIDToClosestL1FroggyScore(0).alongWith(
+                            new SwerveDrivePIDAssistToClosestL1WithDriver(driver).alongWith(
                                 new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
                                     .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)))
                                 .andThen(new FroggyRollerShootCoralVersatile())), 

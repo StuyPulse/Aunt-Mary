@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
+public class SwerveDrivePIDAssistToClosestL1WithDriver extends Command {
 
     private final CommandSwerveDrivetrain swerve;
     private final Gamepad driver;
@@ -49,7 +49,7 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestCoralStation(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestL1WithDriver(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -58,7 +58,7 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
                 new VDeadZone(Drive.DEADBAND),
                 x -> x.clamp(1),
                 x -> x.pow(Drive.POWER),
-                x -> x.mul(Drive.MAX_TELEOP_SPEED),
+                x -> x.mul(Drive.MAX_FROGGY_ALIGNMENT_SPEED),
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL),
                 new VLowPassFilter(Drive.RC));
 
@@ -87,7 +87,7 @@ public class SwerveDrivePIDAssistToClosestCoralStation extends Command {
 
     @Override
     public void execute() {
-        Pose2d targetPose = Field.CoralStation.getClosestCoralStation().getTargetPose();
+        Pose2d targetPose = ReefUtil.getClosestReefFace().getL1FroggyClearPose();
         targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
 
         controller.update(targetPose, swerve.getPose());

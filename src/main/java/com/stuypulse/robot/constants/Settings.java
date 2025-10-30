@@ -393,6 +393,7 @@ public interface Settings {
 
             double MAX_TELEOP_SPEED = Swerve.Constraints.MAX_VELOCITY_M_PER_S;
             double MAX_TELEOP_ACCEL = Swerve.Constraints.MAX_ACCEL_M_PER_S_SQUARED;
+            double MAX_FROGGY_ALIGNMENT_SPEED = 1.0;
 
             double MAX_TELEOP_SPEED_WHILE_CLIMBING = MAX_TELEOP_SPEED / 2;
         }
