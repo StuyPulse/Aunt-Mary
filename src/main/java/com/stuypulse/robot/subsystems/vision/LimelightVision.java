@@ -7,12 +7,10 @@ package com.stuypulse.robot.subsystems.vision;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.function.Supplier;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
 import com.stuypulse.robot.constants.Cameras;
-import com.stuypulse.robot.constants.Constants;
 import com.stuypulse.robot.constants.Cameras.Camera;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
@@ -24,10 +22,7 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -263,8 +258,8 @@ public class LimelightVision extends SubsystemBase {
         return rawDetections.length > 0;
     }
 
-    public Queue<ServoObjectData> getNeuralNetworkFIFO() {
-        return objectFIFO;
+    public ServoObjectData getLastServoObject() {
+        return objectFIFO.poll();
     }
 
     @Override
@@ -304,7 +299,6 @@ public class LimelightVision extends SubsystemBase {
                     }
                 } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE
                         .ordinal()) {
-                    SmartDashboard.putNumber("Vision/WHATTT", 0);
                     RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
 
                     double closestDistance = Double.MAX_VALUE;

@@ -16,5 +16,4 @@ public class ServoObjectData {
     public double getTimeStamp() {
         return this.timeStamp;
     }
-
 }

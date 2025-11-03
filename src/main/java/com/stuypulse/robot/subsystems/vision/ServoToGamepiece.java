@@ -6,8 +6,6 @@ package com.stuypulse.robot.subsystems.vision;
 /* that can be found in the repository LICENSE file.           */
 /***************************************************************/
 
-import java.util.Queue;
-
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -24,17 +22,16 @@ public class ServoToGamepiece extends Command {
     private final CommandSwerveDrivetrain swerve;
     private final LimelightVision limelightVision;
     private final Rotation2d cameraAngle;
-    private final Queue<ServoObjectData> fifo;
     private final AngleController angleController;
+    private final ServoObjectData data;
+    // private final ServoObjectData lastGoodData;
 
     public ServoToGamepiece(Rotation2d cameraAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
         // get the raw detections, and then take the last actual detection's txnc as the
-        // target angle
         limelightVision = LimelightVision.getInstance();
+        data = limelightVision.getLastServoObject();
         this.cameraAngle = cameraAngle;
-        this.fifo = limelightVision.getNeuralNetworkFIFO();
-
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
                         Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
@@ -44,10 +41,18 @@ public class ServoToGamepiece extends Command {
     // still figure out what to do if the last frame is null?
     @Override
     public void execute() {
+        Rotation2d targetAngle;
+        if (data != null) {
+            targetAngle = new Rotation2d(data.getObjectAngle());
+        }
+        else {
+            targetAngle = null;
+        }
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
                 .withRotationalRate(angleController.update(
-                        Angle.fromRotation2d(cameraAngle.minus(new Rotation2d(fifo.poll().getObjectAngle()))),
+                        Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
                         Angle.fromRotation2d(swerve.getPose().getRotation()))));
+
         // implement the driving part
     }
 }
