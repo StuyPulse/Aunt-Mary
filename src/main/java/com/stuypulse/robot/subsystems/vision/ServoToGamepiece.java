@@ -15,22 +15,23 @@ import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.streams.angles.filters.AMotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ServoToGamepiece extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final LimelightVision limelightVision;
+    private final LimelightVision vision;
     private final Rotation2d cameraAngle;
     private final AngleController angleController;
-    private final ServoObjectData data;
+    private ServoObjectData data;
     // private final ServoObjectData lastGoodData;
 
     public ServoToGamepiece(Rotation2d cameraAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
         // get the raw detections, and then take the last actual detection's txnc as the
-        limelightVision = LimelightVision.getInstance();
-        data = limelightVision.getLastServoObject();
+        vision = LimelightVision.getInstance();
+        data = vision.getLastServoObject();
         this.cameraAngle = cameraAngle;
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
@@ -41,18 +42,24 @@ public class ServoToGamepiece extends Command {
     // still figure out what to do if the last frame is null?
     @Override
     public void execute() {
-        Rotation2d targetAngle;
-        if (data != null) {
-            targetAngle = new Rotation2d(data.getObjectAngle());
+        data = vision.getLastServoObject();
+        if (data == null) {
+            data = vision.getLastGood();
+
         }
-        else {
-            targetAngle = null;
-        }
+        Rotation2d targetAngle = new Rotation2d(Angle.fromDegrees(data.getObjectAngle()).toRadians());
+        
+        SmartDashboard.putNumber("Vision/Swerve Rotation", swerve.getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber("Vision/Camera Relative Target Angle", targetAngle.getDegrees());
+        SmartDashboard.putNumber("Vision/Field Relative Target", cameraAngle.minus(targetAngle).getDegrees());       
+        SmartDashboard.putNumber("Vision/Froggy Camera Angle", cameraAngle.getDegrees());                                                                                                                                                                                                                                                                                                                                                                         
+    
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
                 .withRotationalRate(angleController.update(
                         Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
                         Angle.fromRotation2d(swerve.getPose().getRotation()))));
 
         // implement the driving part
+
     }
 }

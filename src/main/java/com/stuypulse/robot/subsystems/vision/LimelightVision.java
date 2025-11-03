@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -80,6 +81,7 @@ public class LimelightVision extends SubsystemBase {
 
     private Timer timer;
     private Queue<ServoObjectData> objectFIFO;
+    private ServoObjectData lastGood;
 
     public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -193,6 +195,10 @@ public class LimelightVision extends SubsystemBase {
         return megaTagMode;
     }
 
+    public ServoObjectData getLastGood() {
+        return lastGood;
+    }
+
     public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
         return Robot.isBlue()
                 ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
@@ -281,7 +287,7 @@ public class LimelightVision extends SubsystemBase {
                     0);
 
             if (camera.isEnabled()) {
-                rawDetections = LimelightHelpers.getRawDetections("froggy-limelight");
+                rawDetections = LimelightHelpers.getRawDetections("limelight-froggy");
                 if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.APRILTAG.ordinal()) {
                     PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                             ? getMegaTag2PoseEstimate(camera.getName())
@@ -304,7 +310,13 @@ public class LimelightVision extends SubsystemBase {
                     double closestDistance = Double.MAX_VALUE;
 
                     while (objectFIFO.size() >= 20) {
-                        objectFIFO.poll();
+                        ServoObjectData temp = objectFIFO.poll();
+                        if (temp != null) {
+                            lastGood = temp;
+                            SmartDashboard.putNumber("Vision/LAST GOOD ANGLE", temp.getObjectAngle());
+                            SmartDashboard.putNumber("Vision/LAST GOOD TIME", temp.getTimeStamp());
+                        }
+                        
                     }
 
                     for (RawDetection detection : RawResults) {
@@ -336,16 +348,19 @@ public class LimelightVision extends SubsystemBase {
                         // }
 
                         ServoObjectData data = new ServoObjectData(totalAngleX, timer.getTimestamp());
+                        SmartDashboard.putNumber("Vision Total Angle X", totalAngleX);
+                    
                         objectFIFO.add(data);
-
-                        SmartDashboard.putNumber("Vision/Coral X Pose Meters", currentFrame.objectPose.getX());
-                        SmartDashboard.putNumber("Vision/Coral Y Pose Meters", currentFrame.objectPose.getY());
+                          SmartDashboard.putNumber("Vision/FIFO Length", objectFIFO.size());
+                        // SmartDashboard.putNumber("Vision/Coral X Pose Meters", currentFrame.objectPose.getX());
+                        // SmartDashboard.putNumber("Vision/Coral Y Pose Meters", currentFrame.objectPose.getY());
 
                     }
                 }
             }
 
             SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
+            SmartDashboard.putNumber("Raw Detection length", rawDetections.length);
             // SmartDashboard.putString("Vision/Whitelist Mode",
             // getWhitelistModes().toString()); // crashes code rn lol
             SmartDashboard.putBoolean("Vision/Has NN Data", hasNeuralNetworkData("froggy-limelight"));
