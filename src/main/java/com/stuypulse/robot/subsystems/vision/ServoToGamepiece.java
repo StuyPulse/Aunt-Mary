@@ -57,7 +57,7 @@ public class ServoToGamepiece extends Command {
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
                 .withRotationalRate(angleController.update(
                         Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
-                        Angle.fromRotation2d(swerve.getPose().getRotation()))));
+                        Angle.fromRotation2d(swerve.getPose().getRotation().minus(new Rotation2d(Math.PI/2.0))))));
 
         // implement the driving part
 
