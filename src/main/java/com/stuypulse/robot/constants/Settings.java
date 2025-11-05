@@ -104,6 +104,7 @@ public interface Settings {
                 double MAX_VELOCITY_WHEN_ALIGNED = 0.15;
 
                 double ALIGNMENT_DEBOUNCE = 0.15;
+                double AUTO_ACQUIRE_TOLERANCE_DEG = 5;
             }
 
             public interface Targets {

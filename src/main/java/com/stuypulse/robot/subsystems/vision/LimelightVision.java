@@ -291,7 +291,7 @@ public class LimelightVision extends SubsystemBase {
             }
         }
         if (lastGoodFrame != null) {
-            SmartDashboard.putNumber("Vision/LAST GOOD ANGLE", lastGoodFrame.getAngleOfHighestAreaCoral());
+            SmartDashboard.putNumber("Vision/LAST GOOD ANGLE", 180.0 / Math.PI * lastGoodFrame.getAngleOfHighestAreaCoral());
             SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
         }
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());

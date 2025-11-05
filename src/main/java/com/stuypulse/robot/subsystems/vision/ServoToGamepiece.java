@@ -1,6 +1,7 @@
 package com.stuypulse.robot.subsystems.vision;
 
 import com.stuypulse.robot.constants.Cameras;
+import com.stuypulse.robot.constants.Field;
 
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
@@ -27,10 +28,13 @@ public class ServoToGamepiece extends Command {
     private final Rotation2d cameraAngle;
     private final AngleController angleController;
 
+    private Rotation2d targetAngle;
+
     public ServoToGamepiece() {
         swerve = CommandSwerveDrivetrain.getInstance();
         vision = LimelightVision.getInstance();
         cameraAngle = new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ());
+        targetAngle = new Rotation2d();
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
                         Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
@@ -49,6 +53,19 @@ public class ServoToGamepiece extends Command {
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
             .withRotationalRate(angleController.update(
                 Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
-                Angle.fromRotation2d(swerve.getPose().getRotation().plus(new Rotation2d(-Math.PI/4.0)))))); // either plus or minus
+                Angle.fromRotation2d(swerve.getPose().getRotation().plus(new Rotation2d(Math.PI/2.0)))))); // either plus or minus
+    }
+
+    @Override
+    public boolean isFinished() {
+        return Math.abs(cameraAngle.minus(targetAngle).getDegrees() - swerve.getPose().getRotation().plus(new Rotation2d(Math.PI/2.0)).getDegrees()) > Settings.Swerve.Alignment.Tolerances.AUTO_ACQUIRE_TOLERANCE_DEG;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        swerve.setControl(swerve.getFieldCentricSwerveRequest()
+            .withVelocityX(0)
+            .withVelocityY(0)
+            .withRotationalRate(0));
     }
 }
