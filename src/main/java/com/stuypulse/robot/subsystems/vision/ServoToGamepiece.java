@@ -25,7 +25,6 @@ public class ServoToGamepiece extends Command {
     private final Rotation2d cameraAngle;
     private final AngleController angleController;
     private ServoObjectData data;
-    // private final ServoObjectData lastGoodData;
 
     public ServoToGamepiece(Rotation2d cameraAngle) {
         swerve = CommandSwerveDrivetrain.getInstance();
@@ -39,13 +38,11 @@ public class ServoToGamepiece extends Command {
         addRequirements(swerve);
     }
 
-    // still figure out what to do if the last frame is null?
     @Override
     public void execute() {
         data = vision.getLastServoObject();
         if (data == null) {
             data = vision.getLastGood();
-
         }
         Rotation2d targetAngle = new Rotation2d(Angle.fromDegrees(data.getObjectAngle()).toRadians());
         
@@ -57,7 +54,7 @@ public class ServoToGamepiece extends Command {
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
                 .withRotationalRate(angleController.update(
                         Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
-                        Angle.fromRotation2d(swerve.getPose().getRotation()))));
+                        Angle.fromRotation2d(swerve.getPose().getRotation().plus(new Rotation2d(-Math.PI/4.0)))))); // either plus or minus
 
         // implement the driving part
 
