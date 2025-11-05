@@ -276,7 +276,7 @@ public class LimelightVision extends SubsystemBase {
                     ServoObjectData currentFrame = new ServoObjectData(timestamp);
 
                     for (RawDetection detection : RawResults) {
-                        double angle = Cameras.LimelightCameras[2].getLocation().getRotation().getZ() - Units.degreesToRadians(detection.txnc);
+                        double angle = camera.getLocation().getRotation().getZ() - Units.degreesToRadians(detection.txnc);
                         currentFrame.addData(angle, detection.ta);
 
                         SmartDashboard.putNumber("Vision/Total Angle X", angle);
@@ -289,12 +289,14 @@ public class LimelightVision extends SubsystemBase {
                     }
                 }
             }
+        }
+        if (lastGoodFrame != null) {
             SmartDashboard.putNumber("Vision/LAST GOOD ANGLE", lastGoodFrame.getAngleOfHighestAreaCoral());
             SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
-            SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-            SmartDashboard.putNumber("Vision/Froggy Raw Detection Length", LimelightHelpers.getRawDetections("limelight-froggy").length);
-            SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
         }
+        SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
+        SmartDashboard.putNumber("Vision/Froggy Raw Detection Length", LimelightHelpers.getRawDetections("limelight-froggy").length);
+        SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }
 

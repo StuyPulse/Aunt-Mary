@@ -482,7 +482,7 @@ public class RobotContainer {
         //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
         //         .onlyIf(() -> !shooter.hasCoral()));
 
-            driver.getLeftBumper().onTrue(new ServoToGamepiece(new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ())));
+            driver.getLeftBumper().whileTrue(new ServoToGamepiece());
         // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(

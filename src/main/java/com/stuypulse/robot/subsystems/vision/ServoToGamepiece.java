@@ -39,7 +39,7 @@ public class ServoToGamepiece extends Command {
 
     @Override
     public void execute() {
-        Rotation2d targetAngle = new Rotation2d(Angle.fromDegrees(vision.getLastGoodFrame().getAngleOfHighestAreaCoral()).toRadians());
+        Rotation2d targetAngle = new Rotation2d(vision.getLastGoodFrame().getAngleOfHighestAreaCoral());
         
         SmartDashboard.putNumber("Vision/Swerve Rotation", swerve.getPose().getRotation().getDegrees());
         SmartDashboard.putNumber("Vision/Camera Relative Target Angle", targetAngle.getDegrees());
@@ -50,8 +50,5 @@ public class ServoToGamepiece extends Command {
             .withRotationalRate(angleController.update(
                 Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
                 Angle.fromRotation2d(swerve.getPose().getRotation().plus(new Rotation2d(-Math.PI/4.0)))))); // either plus or minus
-        
-        
-
     }
 }

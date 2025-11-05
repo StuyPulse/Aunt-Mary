@@ -23,6 +23,9 @@ public class ServoObjectData {
     }
 
     public double getHighestArea() {
+        if (areas.isEmpty()) { // handle empty case
+            return 0.0;
+        }
         int index = 0;
         double maxArea = 0;
         for (int i = 0; i < areas.size(); i++) {
@@ -35,6 +38,9 @@ public class ServoObjectData {
     }
 
     public double getAngleOfHighestAreaCoral() {
+        if (areas.isEmpty()) { // handle empty case
+            return 0.0;
+        }
         int index = 0;
         double maxArea = 0;
         for (int i = 0; i < areas.size(); i++) {
