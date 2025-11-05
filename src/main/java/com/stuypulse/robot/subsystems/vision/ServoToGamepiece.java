@@ -1,5 +1,7 @@
 package com.stuypulse.robot.subsystems.vision;
 
+import com.stuypulse.robot.constants.Cameras;
+
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
@@ -24,27 +26,20 @@ public class ServoToGamepiece extends Command {
     private final LimelightVision vision;
     private final Rotation2d cameraAngle;
     private final AngleController angleController;
-    private ServoObjectData data;
 
-    public ServoToGamepiece(Rotation2d cameraAngle) {
+    public ServoToGamepiece() {
         swerve = CommandSwerveDrivetrain.getInstance();
-        // get the raw detections, and then take the last actual detection's txnc as the
         vision = LimelightVision.getInstance();
-        data = vision.getLastServoObject();
-        this.cameraAngle = cameraAngle;
+        cameraAngle = new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ());
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
                 .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
                         Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
-        addRequirements(swerve);
+        addRequirements(swerve, vision);
     }
 
     @Override
     public void execute() {
-        data = vision.getLastServoObject();
-        if (data == null) {
-            data = vision.getLastGood();
-        }
-        Rotation2d targetAngle = new Rotation2d(Angle.fromDegrees(data.getObjectAngle()).toRadians());
+        Rotation2d targetAngle = new Rotation2d(Angle.fromDegrees(vision.getLastGoodFrame().getAngleOfHighestAreaCoral()).toRadians());
         
         SmartDashboard.putNumber("Vision/Swerve Rotation", swerve.getPose().getRotation().getDegrees());
         SmartDashboard.putNumber("Vision/Camera Relative Target Angle", targetAngle.getDegrees());
@@ -52,11 +47,11 @@ public class ServoToGamepiece extends Command {
         SmartDashboard.putNumber("Vision/Froggy Camera Angle", cameraAngle.getDegrees());                                                                                                                                                                                                                                                                                                                                                                         
     
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-                .withRotationalRate(angleController.update(
-                        Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
-                        Angle.fromRotation2d(swerve.getPose().getRotation().plus(new Rotation2d(-Math.PI/4.0)))))); // either plus or minus
-
-        // implement the driving part
+            .withRotationalRate(angleController.update(
+                Angle.fromRotation2d(cameraAngle.minus(targetAngle)),
+                Angle.fromRotation2d(swerve.getPose().getRotation().plus(new Rotation2d(-Math.PI/4.0)))))); // either plus or minus
+        
+        
 
     }
 }
