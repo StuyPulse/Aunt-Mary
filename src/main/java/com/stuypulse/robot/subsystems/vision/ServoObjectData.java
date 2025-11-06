@@ -4,22 +4,22 @@ import java.util.ArrayList;
 
 public class ServoObjectData {
     private final double timestamp;
-    private ArrayList<Double> rotationAngles;
+    private ArrayList<Double> txncList;
     private ArrayList<Double> areas;
 
     public ServoObjectData(double timestamp) {
-        rotationAngles = new ArrayList<>();
+        txncList = new ArrayList<>();
         areas = new ArrayList<>();
         this.timestamp = timestamp;
     }
 
-    public void addData(double rotationAngle, double ta) {
-        rotationAngles.add(rotationAngle);
+    public void addData(double txnc, double ta) {
+        txncList.add(txnc);
         areas.add(ta);
     }
 
     public boolean hasData() {
-        return rotationAngles.size() > 0;
+        return txncList.size() > 0;
     }
 
     public double getHighestArea() {
@@ -37,7 +37,7 @@ public class ServoObjectData {
         return areas.get(index);
     }
 
-    public double getAngleOfHighestAreaCoral() {
+    public double txncOfHighestArea() {
         if (areas.isEmpty()) { // handle empty case
             return 0.0;
         }
@@ -49,11 +49,11 @@ public class ServoObjectData {
                 index = i;
             }
         }
-        return rotationAngles.get(index);
+        return txncList.get(index);
     }
 
-    public ArrayList<Double> getAngles() {
-        return rotationAngles;
+    public ArrayList<Double> getTXNCs() {
+        return txncList;
     }
 
     public ArrayList<Double> getAreas() {

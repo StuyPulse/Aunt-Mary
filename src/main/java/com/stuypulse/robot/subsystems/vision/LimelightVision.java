@@ -97,7 +97,7 @@ public class LimelightVision extends SubsystemBase {
         setIMUMode(1);
 
         // Auto Acquire
-
+        lastGoodFrame = new ServoObjectData(0);
         timer = new Timer();
         objectFIFO = new LinkedList<>();
     }
@@ -276,14 +276,9 @@ public class LimelightVision extends SubsystemBase {
                     ServoObjectData currentFrame = new ServoObjectData(timestamp);
 
                     for (RawDetection detection : RawResults) {
-                        double angle = camera.getLocation().getRotation().getZ() - Units.degreesToRadians(detection.txnc);
-                        currentFrame.addData(angle, detection.ta);
-
-                        SmartDashboard.putNumber("Vision/Total Angle X", angle);
-                        SmartDashboard.putNumber("Vision/FIFO Length", objectFIFO.size());
+                        currentFrame.addData(detection.txnc, detection.ta);
                     }
 
-                    // objectFIFO.add(currentFrame); // i dont think we actually need a fifo
                     if (currentFrame.hasData()) {
                         lastGoodFrame = currentFrame;
                     }
@@ -291,7 +286,8 @@ public class LimelightVision extends SubsystemBase {
             }
         }
         if (lastGoodFrame != null) {
-            SmartDashboard.putNumber("Vision/LAST GOOD ANGLE", 180.0 / Math.PI * lastGoodFrame.getAngleOfHighestAreaCoral());
+            SmartDashboard.putNumber("Vision/LAST GOOD TXNC", lastGoodFrame.txncOfHighestArea());
+            SmartDashboard.putNumber("Vision/LAST GOOD AREA", lastGoodFrame.getHighestArea());
             SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
         }
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
