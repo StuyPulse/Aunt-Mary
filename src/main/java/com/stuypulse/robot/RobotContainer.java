@@ -103,6 +103,7 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.subsystems.vision.AlexServoToGamepiece;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.ServoToGamepiece;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
@@ -442,26 +443,26 @@ public class RobotContainer {
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // 118 Auto Score
-        driver.getLeftButton()
-            .whileTrue(
-                new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
-                    .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
-                    .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
-                    .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
-                        .andThen(new SuperStructureBarge118()
-                            .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToCatapult())))
-                                .andThen(new WaitCommand(0.3)
-                                    .andThen(new ManualShoot()
-                                        .alongWith(new WaitUntilCommand(() -> shooter.getState() != ShooterState.HOLD_ALGAE)
-                                            .andThen(new WaitCommand(0.1)))
-                                            .andThen(new SuperStructureAlgaeSafe118()))))
-            )
-            .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
-                .andThen(new SuperStructureFeed()))
-            .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
-                .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
-            // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
+        // driver.getLeftButton()
+        //     .whileTrue(
+        //         new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
+        //             .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
+        //             .until(() -> superStructure.getState() == SuperStructureState.BARGE_118 && superStructure.canSkipClearance())
+        //             .andThen(new SwerveDriveDriveAlignedToBarge118Score(driver, false))
+        //             .alongWith(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge() && Clearances.isArmClearFromReef())
+        //                 .andThen(new SuperStructureBarge118()
+        //                     .andThen(new SuperStructureWaitUntilAtTarget().alongWith(new SwerveDriveWaitUntilAlignedToCatapult())))
+        //                         .andThen(new WaitCommand(0.3)
+        //                             .andThen(new ManualShoot()
+        //                                 .alongWith(new WaitUntilCommand(() -> shooter.getState() != ShooterState.HOLD_ALGAE)
+        //                                     .andThen(new WaitCommand(0.1)))
+        //                                     .andThen(new SuperStructureAlgaeSafe118()))))
+        //     )
+        //     .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromBarge())
+        //         .andThen(new SuperStructureFeed()))
+        //     .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
+        //         .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
+        //     // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
         // driver.getRightStickButton()
@@ -482,7 +483,8 @@ public class RobotContainer {
         //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
         //         .onlyIf(() -> !shooter.hasCoral()));
 
-            driver.getLeftBumper().whileTrue(new ServoToGamepiece());
+        driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+
         // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(

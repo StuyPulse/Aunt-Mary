@@ -80,23 +80,13 @@
           },
           "open": true
         },
-        "Arm": {
-          "open": true
-        },
-        "Climb": {
-          "open": true
-        },
         "Enabled Subsystems": {
           "open": true
         },
         "Froggy": {
           "Pivot": {
             "open": true
-          },
-          "open": true
-        },
-        "Shooter": {
-          "open": true
+          }
         },
         "Super Structure": {
           "open": true
@@ -144,7 +134,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 266,
+          "height": -6,
           "series": [
             {
               "color": [
@@ -189,7 +179,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 271,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -234,7 +224,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 332,
+          "height": 338,
           "series": [
             {
               "color": [
