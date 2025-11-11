@@ -103,6 +103,7 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.subsystems.vision.AgarthanGamepieceAlignment;
 import com.stuypulse.robot.subsystems.vision.AlexServoToGamepiece;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.ServoToGamepiece;
@@ -483,7 +484,9 @@ public class RobotContainer {
         //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
         //         .onlyIf(() -> !shooter.hasCoral()));
 
-        driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+        // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+        driver.getLeftButton().whileTrue(new AgarthanGamepieceAlignment(driver));
+        
 
         // Acquire closest reef algae
         driver.getDPadLeft()
