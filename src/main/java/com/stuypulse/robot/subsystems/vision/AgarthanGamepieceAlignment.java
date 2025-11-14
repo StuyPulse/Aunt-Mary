@@ -42,6 +42,7 @@ public class AgarthanGamepieceAlignment extends Command {
     private double targetAngle;
     private Rotation2d initialRobot;
     private double test;
+    private Rotation2d txnc;
 
     private final static double kP_VEL_PARALLEL = 10.0;
 
@@ -54,7 +55,7 @@ public class AgarthanGamepieceAlignment extends Command {
         this.driver = driver;
         offset = new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ());
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
-                .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
+                .setSetpointFilter(new AMotionProfile(1.0,
                         Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
 
         linearVelocity = VStream.create(this::getDriverInputAsVelocity)
@@ -63,7 +64,7 @@ public class AgarthanGamepieceAlignment extends Command {
                 x -> x.clamp(1),
                 x -> x.pow(Drive.POWER),
                 x -> x.mul(Drive.MAX_TELEOP_SPEED),
-                new VRateLimit(Drive.MAX_TELEOP_ACCEL),
+                new VRateLimit(1.0),
                 new VLowPassFilter(Drive.RC));
                 
         addRequirements(swerve, vision);
@@ -73,14 +74,14 @@ public class AgarthanGamepieceAlignment extends Command {
     @Override
     public void initialize() {
         initialRobot = swerve.getPose().getRotation();
-        test = 10.0;
+        txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
+        // test = 10.0;
     }
 
     @Override
     public void execute() {
         // REMEMBER TO CHANGE BELOW LINES BEFORE TESTING ON ROBOT
-        test = (test < 0.1) ? test : test-0.1;
-        Rotation2d txnc = Rotation2d.fromDegrees(test);
+        // test = (test < 0.1) ? test : test-0.1;
         // Rotation2d txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
         double unWrappedAngle = initialRobot.getDegrees();
         if (unWrappedAngle < 0.0) {
@@ -94,17 +95,14 @@ public class AgarthanGamepieceAlignment extends Command {
 
         double speed_parallel = kP_VEL_PARALLEL * Math.abs(txnc.getRadians());
         Vector2D vel_parallel = new Vector2D(
-            Math.cos(Units.degreesToRadians(offset.getDegrees()+90.0)),
-            Math.sin(Units.degreesToRadians(offset.getDegrees()+90.0)))
+            Math.cos(Units.degreesToRadians(offset.getDegrees()+ 90.0)),
+            Math.sin(Units.degreesToRadians(offset.getDegrees()+ 90.0)))
                 .mul(speed_parallel).rotate(Angle.fromDegrees(targetAngle));
-    
         double target_omega = angleController.update(
             Angle.fromDegrees(targetAngle),
             Angle.fromRotation2d(swerve.getPose().getRotation()));
 
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(linearVelocity.get().x + vel_parallel.x)
-            .withVelocityY(linearVelocity.get().y + vel_parallel.y)
             .withRotationalRate(target_omega));
 
         SmartDashboard.putNumber("Vision/Target Omega", target_omega);

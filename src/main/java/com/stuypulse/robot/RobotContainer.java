@@ -485,7 +485,7 @@ public class RobotContainer {
         //         .onlyIf(() -> !shooter.hasCoral()));
 
         // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
-        driver.getLeftButton().whileTrue(new AgarthanGamepieceAlignment(driver));
+        driver.getLeftButton().whileTrue(new AgarthanGamepieceAlignment(driver).alongWith(new LEDApplyPattern(Settings.LED.ALIGN_RIGHT_COLOR)));
         
 
         // Acquire closest reef algae
