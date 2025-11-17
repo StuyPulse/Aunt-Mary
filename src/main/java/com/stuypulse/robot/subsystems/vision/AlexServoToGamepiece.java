@@ -1,8 +1,5 @@
 package com.stuypulse.robot.subsystems.vision;
 
-import java.time.OffsetDateTime;
-
-import com.fasterxml.jackson.databind.deser.impl.UnwrappedPropertyHandler;
 import com.stuypulse.robot.constants.Cameras;
 
 /************************ PROJECT MARY *************************/
@@ -90,7 +87,8 @@ public class AlexServoToGamepiece extends Command {
         // froggy at -90 shooter at 0
         // offset = 275 - 15 + 260 -> 160
         // 160 is angle of the gamepiece, shooter needs to be at -115
-        double swerveTargetAngle = angleOfGamepiece + 85.0; // magic number to account for shooter heading
+        double swerveTargetAngle = angleOfGamepiece + 85.0; // magic number to account for shooter heading relative to
+                                                            // the gamepiece
         if (swerveTargetAngle > 180) {
             swerveTargetAngle -= 360;
         }
@@ -114,13 +112,13 @@ public class AlexServoToGamepiece extends Command {
         // takes to execute..
 
         double final_target = angleController.update(
-                Angle.fromDegrees(angleOfGamepiece),
+                Angle.fromDegrees(swerveTargetAngle),
                 Angle.fromRotation2d(swerve.getPose().getRotation()));
 
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
                 .withVelocityX(linearVelocity.get().x)
                 .withVelocityY(linearVelocity.get().y)
-                .withRotationalRate(swerveTargetAngle));
+                .withRotationalRate(final_target));
 
         SmartDashboard.putNumber("Vision/Final Target", final_target);
 
