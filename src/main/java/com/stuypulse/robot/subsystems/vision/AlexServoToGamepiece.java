@@ -24,6 +24,7 @@ import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -40,6 +41,8 @@ public class AlexServoToGamepiece extends Command {
 
     private final AngleController angleController;
     private final VStream linearVelocity;
+
+    private final static double kP_VEL_PARALLEL = 3.0;
 
     public AlexServoToGamepiece(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
@@ -93,6 +96,12 @@ public class AlexServoToGamepiece extends Command {
             swerveTargetAngle -= 360;
         }
 
+        double speed_parallel = kP_VEL_PARALLEL * Math.abs(txnc.getRadians());
+        Vector2D vel_parallel = new Vector2D(
+            Math.cos(Units.degreesToRadians(offset.getDegrees()+ 90.0)),
+            Math.sin(Units.degreesToRadians(offset.getDegrees()+ 90.0)))
+                .mul(speed_parallel).rotate(Angle.fromDegrees(swerveTargetAngle));
+
         // this gives us the field-relative angle of the gamepiece
         // we need to transform this such that this is the angle the shooter must be to
         // have the froggy face this angle
@@ -116,9 +125,12 @@ public class AlexServoToGamepiece extends Command {
                 Angle.fromRotation2d(swerve.getPose().getRotation()));
 
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-                .withVelocityX(linearVelocity.get().x)
-                .withVelocityY(linearVelocity.get().y)
+                .withVelocityX(linearVelocity.get().x + vel_parallel.x)
+                .withVelocityY(linearVelocity.get().y + vel_parallel.y)
                 .withRotationalRate(final_target));
+
+        swerve.setControl(swerve.getRobotCentricSwerveRequest()
+            .withVelocityY(-0.5));
 
         SmartDashboard.putNumber("Vision/Final Target", final_target);
 
