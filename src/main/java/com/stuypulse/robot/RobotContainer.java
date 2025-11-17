@@ -223,11 +223,11 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Loki golf tee algae pickup
-        // driver.getLeftBumper()
-        //     .onTrue(new SuperStructureGolfTeeAlgaePickup())
-        //     .onTrue(new ShooterAcquireAlgae())
-        //     .onFalse(new SuperStructureProcessor())                                
-        //     .onFalse(new ShooterHoldAlgae());
+        driver.getLeftBumper()
+            .onTrue(new SuperStructureGolfTeeAlgaePickup())
+            .onTrue(new ShooterAcquireAlgae())
+            .onFalse(new SuperStructureProcessor())                                
+            .onFalse(new ShooterHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
         driver.getRightTriggerButton()
@@ -476,13 +476,12 @@ public class RobotContainer {
         //     .onFalse(SwerveDriveDynamicObstacles.reset());
 
         // Align to closest Coral Station without path finding
-        // driver.getRightStickButton()
-        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-        //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
-        //         .onlyIf(() -> !shooter.hasCoral()));
+        driver.getRightStickButton()
+            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+            .whileTrue(new SwerveDrivePIDToCoralStation(driver)
+                .onlyIf(() -> !shooter.hasCoral()));
 
-            driver.getLeftBumper().onTrue(new ServoToGamepiece(new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ())));
         // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(
@@ -525,19 +524,6 @@ public class RobotContainer {
             .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
-
-        // (UNUSED) Catapult
-        // driver.getLeftButton()
-        //     .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
-        //         .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-        //         .alongWith(new SuperStructureCatapultReady()
-        //             .andThen(new SuperStructureWaitUntilAtTarget()
-        //                 .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
-        //             .andThen(new SuperStructureCatapultShoot()
-        //                 .andThen(new SuperStructureWaitUntilCanCatapult()
-        //                     .andThen(new ShooterShootAlgae())))))
-        //     .onFalse(new SuperStructureFeed())
-        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
         // driver.getRightStickButton()
