@@ -83,6 +83,7 @@ import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedT
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
+import com.stuypulse.robot.commands.vision.AlexServoToGamepiece;
 import com.stuypulse.robot.commands.vision.VisionSetTagWhitelist;
 import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.constants.Field;
@@ -103,10 +104,7 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.subsystems.vision.AgarthanGamepieceAlignment;
-import com.stuypulse.robot.subsystems.vision.AlexServoToGamepiece;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
-import com.stuypulse.robot.subsystems.vision.ServoToGamepiece;
 import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
@@ -485,9 +483,7 @@ public class RobotContainer {
         //         .onlyIf(() -> !shooter.hasCoral()));
 
         driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver).alongWith(new LEDApplyPattern(Settings.LED.ALIGN_RIGHT_COLOR)));
-        //driver.getLeftButton().whileTrue(new AgarthanGamepieceAlignment(driver).alongWith(new LEDApplyPattern(Settings.LED.ALIGN_RIGHT_COLOR)));
         
-
         // Acquire closest reef algae
         driver.getDPadLeft()
             .whileTrue(new ConditionalCommand(

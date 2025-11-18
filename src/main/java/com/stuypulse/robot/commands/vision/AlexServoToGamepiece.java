@@ -1,10 +1,6 @@
-package com.stuypulse.robot.subsystems.vision;
+package com.stuypulse.robot.commands.vision;
 
-import java.time.OffsetDateTime;
-
-import com.fasterxml.jackson.databind.deser.impl.UnwrappedPropertyHandler;
 import com.stuypulse.robot.constants.Cameras;
-
 
 /************************ PROJECT MARY *************************/
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
@@ -16,6 +12,7 @@ import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.input.Gamepad;
@@ -32,93 +29,90 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class AgarthanGamepieceAlignment extends Command {
+public class AlexServoToGamepiece extends Command {
 
     private final CommandSwerveDrivetrain swerve;
     private final LimelightVision vision;
     private final Gamepad driver;
 
     private final Rotation2d offset;
-    private double targetAngle;
-    private Rotation2d initialRobot;
-    private double test;
-    private Rotation2d txnc;
-
-    private final static double kP_VEL_PARALLEL = 10.0;
+    private double angleOfGamepiece;
+    private Rotation2d robotHeading;
 
     private final AngleController angleController;
     private final VStream linearVelocity;
 
-    public AgarthanGamepieceAlignment(Gamepad driver) {
+    private final static double kP_VEL_PARALLEL = 3.0;
+
+    public AlexServoToGamepiece(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         vision = LimelightVision.getInstance();
         this.driver = driver;
         offset = new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ());
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD)
-                .setSetpointFilter(new AMotionProfile(1.0,
+                .setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
                         Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ANGULAR_ACCELERATION));
 
         linearVelocity = VStream.create(this::getDriverInputAsVelocity)
-            .filtered(
-                new VDeadZone(Drive.DEADBAND),
-                x -> x.clamp(1),
-                x -> x.pow(Drive.POWER),
-                x -> x.mul(Drive.MAX_TELEOP_SPEED),
-                new VRateLimit(1.0),
-                new VLowPassFilter(Drive.RC));
-                
+                .filtered(
+                        new VDeadZone(Drive.DEADBAND),
+                        x -> x.clamp(1),
+                        x -> x.pow(Drive.POWER),
+                        x -> x.mul(Drive.MAX_TELEOP_SPEED),
+                        new VRateLimit(Drive.MAX_TELEOP_ACCEL),
+                        new VLowPassFilter(Drive.RC));
+
         addRequirements(swerve, vision);
-        targetAngle = 0.0;
+        angleOfGamepiece = 0.0;
     }
 
     @Override
     public void initialize() {
-        initialRobot = swerve.getPose().getRotation();
-        txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
-        // test = 10.0;
     }
 
     @Override
     public void execute() {
-        // REMEMBER TO CHANGE BELOW LINES BEFORE TESTING ON ROBOT
-        // test = (test < 0.1) ? test : test-0.1;
-        // Rotation2d txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
-        double unWrappedAngle = initialRobot.getDegrees();
+        robotHeading = swerve.getPose().getRotation();
+        Rotation2d txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
+
+        double unWrappedAngle = robotHeading.getDegrees();
         if (unWrappedAngle < 0.0) {
             unWrappedAngle += 360.0;
-        } //convert to 0-360
+        } // convert to 0-360
 
-        double targetAngle = ((offset.getDegrees() - txnc.getDegrees()) + unWrappedAngle) % 360;
-        if (targetAngle > 180.0) {
-            targetAngle -= 360.0;
+        angleOfGamepiece = ((offset.getDegrees() - txnc.getDegrees()) + unWrappedAngle) % 360; // target angle but needs to be converted in terms of swerve pose
+
+        double swerveTargetAngle = angleOfGamepiece + 85.0; // magic number to account for shooter heading relative to the gamepiece
+        if (swerveTargetAngle > 180) {
+            swerveTargetAngle -= 360;
         }
 
         double speed_parallel = kP_VEL_PARALLEL * Math.abs(txnc.getRadians());
         Vector2D vel_parallel = new Vector2D(
             Math.cos(Units.degreesToRadians(offset.getDegrees()+ 90.0)),
             Math.sin(Units.degreesToRadians(offset.getDegrees()+ 90.0)))
-                .mul(speed_parallel).rotate(Angle.fromDegrees(targetAngle));
-        double target_omega = angleController.update(
-            Angle.fromDegrees(targetAngle),
-            Angle.fromRotation2d(swerve.getPose().getRotation()));
+                .mul(speed_parallel).rotate(Angle.fromDegrees(swerveTargetAngle));
+
+        double final_target = angleController.update(
+                Angle.fromDegrees(swerveTargetAngle),
+                Angle.fromRotation2d(swerve.getPose().getRotation()));
 
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withRotationalRate(target_omega));
+                .withVelocityX(linearVelocity.get().x + vel_parallel.x)
+                .withVelocityY(linearVelocity.get().y + vel_parallel.y)
+                .withRotationalRate(final_target));
 
-        SmartDashboard.putNumber("Vision/Target Omega", target_omega);
-
-        SmartDashboard.putNumber("Vision/TEST TEST TEST TEST", test);
         SmartDashboard.putNumber("Vision/TXNC Degrees", txnc.getDegrees());
         SmartDashboard.putNumber("Vision/Current Robot Angle", swerve.getPose().getRotation().getDegrees());
-        SmartDashboard.putNumber("Vision/Target Robot Angle", targetAngle);
+        SmartDashboard.putNumber("Vision/Target Robot Angle", swerveTargetAngle);
     }
 
     @Override
     public void end(boolean interrupted) {
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(0)
-            .withVelocityY(0)
-            .withRotationalRate(0));
+                .withVelocityX(0)
+                .withVelocityY(0)
+                .withRotationalRate(0));
     }
 
     private Vector2D getDriverInputAsVelocity() {
