@@ -22,6 +22,7 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -76,6 +77,7 @@ public class LimelightVision extends SubsystemBase {
     private Timer timer;
     private Queue<ServoObjectData> objectFIFO;
     private ServoObjectData lastGoodFrame;
+    NetworkTableInstance networkTableInstance;
 
     public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -100,6 +102,7 @@ public class LimelightVision extends SubsystemBase {
         lastGoodFrame = new ServoObjectData(0);
         timer = new Timer();
         objectFIFO = new LinkedList<>();
+        networkTableInstance = NetworkTableInstance.getDefault();
     }
 
     public void setMegaTagMode(MegaTagMode mode) {
@@ -261,7 +264,8 @@ public class LimelightVision extends SubsystemBase {
                             : getMegaTag1PoseEstimate(camera.getName());
 
                     if (poseEstimate != null && poseEstimate.tagCount > 0) {
-                        CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
+                        CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose,
+                                poseEstimate.timestampSeconds);
                         SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", true);
                         SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", poseEstimate.tagCount);
                         maxTagCount = Math.max(maxTagCount, poseEstimate.tagCount);
@@ -269,19 +273,24 @@ public class LimelightVision extends SubsystemBase {
                         SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", false);
                         SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", 0);
                     }
-                } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE.ordinal()) {
+                } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE
+                        .ordinal()) {
                     RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
 
-                    double timestamp = timer.get();
-                    ServoObjectData currentFrame = new ServoObjectData(timestamp);
+                    if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tclass").getString("OBJECT")
+                            .equals("algae")) {
+                        double timestamp = timer.get();
+                        ServoObjectData currentFrame = new ServoObjectData(timestamp);
 
-                    for (RawDetection detection : RawResults) {
-                        currentFrame.addData(detection.txnc, detection.ta);
+                        for (RawDetection detection : RawResults) {
+                            currentFrame.addData(detection.txnc, detection.ta);
+                        }
+
+                        if (currentFrame.hasData()) {
+                            lastGoodFrame = currentFrame;
+                        }
                     }
 
-                    if (currentFrame.hasData()) {
-                        lastGoodFrame = currentFrame;
-                    }
                 }
             }
         }
@@ -291,32 +300,34 @@ public class LimelightVision extends SubsystemBase {
             SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
         }
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-        SmartDashboard.putNumber("Vision/Froggy Raw Detection Length", LimelightHelpers.getRawDetections("limelight-froggy").length);
+        SmartDashboard.putNumber("Vision/Froggy Raw Detection Length",
+                LimelightHelpers.getRawDetections("limelight-froggy").length);
         SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }
 
-    // Translation2d coralPose =
-    // ObjectData.calculateCoralTranslation(detection.txnc, detection.tync);
-    //
-    // double totalAngleY = Cameras.LimelightCameras[2].getLocation().getRotation().getY()
-    //         + Units.degreesToRadians(detection.tync);
+// Translation2d coralPose =
+// ObjectData.calculateCoralTranslation(detection.txnc, detection.tync);
+//
+// double totalAngleY =
+// Cameras.LimelightCameras[2].getLocation().getRotation().getY()
+// + Units.degreesToRadians(detection.tync);
 
-    // SmartDashboard.putNumber("Vision/Coral Translation R Camera X",
-    // coralPose.getX());
-    // SmartDashboard.putNumber("Vision/Coral Translation R Camera Y",
-    // coralPose.getY());
-    // coralPose = coralPose.plus(camera.getLocation().toPose2d().getTranslation());
-    // // turn the coral pose relative to the center of robot
-    // as opposed to the camera!
-    // Pose2d fieldCoralPose = robotPose.transformBy(new Transform2d(coralPose, new
-    // Rotation2d()));
-    // double distance =
-    // robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
+// SmartDashboard.putNumber("Vision/Coral Translation R Camera X",
+// coralPose.getX());
+// SmartDashboard.putNumber("Vision/Coral Translation R Camera Y",
+// coralPose.getY());
+// coralPose = coralPose.plus(camera.getLocation().toPose2d().getTranslation());
+// // turn the coral pose relative to the center of robot
+// as opposed to the camera!
+// Pose2d fieldCoralPose = robotPose.transformBy(new Transform2d(coralPose, new
+// Rotation2d()));
+// double distance =
+// robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
 
-    // ObjectData data = new ObjectData(fieldCoralPose, timer.get());
+// ObjectData data = new ObjectData(fieldCoralPose, timer.get());
 
-    // if (distance < closestDistance) { // meters
-    // closestDistance = distance;
-    // closestObject = data
-    // }
+// if (distance < closestDistance) { // meters
+// closestDistance = distance;
+// closestObject = data
+// }
