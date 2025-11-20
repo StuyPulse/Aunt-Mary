@@ -1,32 +1,33 @@
-/************************ PROJECT MARY *************************/
+/** ********************** PROJECT MARY ************************ */
 /* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
 /* that can be found in the repository LICENSE file.           */
-/***************************************************************/
-
+/** ************************************************************ */
 package com.stuypulse.robot.subsystems.vision;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.Robot.RobotMode;
 import com.stuypulse.robot.constants.Cameras;
-import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Cameras.Camera;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
+import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightVision extends SubsystemBase {
-
     private static final LimelightVision instance;
 
     static {
@@ -51,12 +52,10 @@ public class LimelightVision extends SubsystemBase {
         RED_PROCESSOR_TAG(Field.RED_PROCESSOR),
         BLUE_BARGE_TAGS(Field.BLUE_SIDE_BARGE_TAGS),
         RED_BARGE_TAGS(Field.RED_SIDE_BARGE_TAGS);
-        // ALL_REEF_TAGS_AND_BLUE_CS(Field.ALL_REEF_TAGS_AND_BLUE_CS),
-        // ALL_REEF_TAGS_AND_RED_CS(Field.ALL_REEF_TAGS_AND_RED_CS);
 
         private int[] ids;
 
-        private WhitelistMode(int... ids){
+        private WhitelistMode(int... ids) {
             this.ids = ids;
         }
 
@@ -65,24 +64,32 @@ public class LimelightVision extends SubsystemBase {
         }
     }
 
+    public enum PipelineMode {
+        APRILTAG,
+        GAMEPIECE
+    }
+
     private MegaTagMode megaTagMode;
     private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
-    private FieldObject2d gamePiece;
 
-    private LimelightVision() {
+    private Timer timer;
+    private Queue<ServoObjectData> objectFIFO;
+    private ServoObjectData lastGoodFrame;
+    NetworkTableInstance networkTableInstance;
+
+    public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
             Pose3d robotRelativePose = camera.getLocation();
             LimelightHelpers.setCameraPose_RobotSpace(
-                camera.getName(), 
-                robotRelativePose.getX(), 
-                -robotRelativePose.getY(), 
-                robotRelativePose.getZ(), 
-                Units.radiansToDegrees(robotRelativePose.getRotation().getX()), 
-                Units.radiansToDegrees(robotRelativePose.getRotation().getY()), 
-                Units.radiansToDegrees(robotRelativePose.getRotation().getZ())
-            );
+                    camera.getName(),
+                    robotRelativePose.getX(),
+                    -robotRelativePose.getY(),
+                    robotRelativePose.getZ(),
+                    Units.radiansToDegrees(robotRelativePose.getRotation().getX()),
+                    Units.radiansToDegrees(robotRelativePose.getRotation().getY()),
+                    Units.radiansToDegrees(robotRelativePose.getRotation().getZ()));
         }
 
         maxTagCount = 0;
@@ -91,7 +98,11 @@ public class LimelightVision extends SubsystemBase {
         setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS);
         setIMUMode(1);
 
-        gamePiece = Field.FIELD2D.getObject("Gamepiece Pose");
+        // Auto Acquire
+        lastGoodFrame = new ServoObjectData(0);
+        timer = new Timer();
+        objectFIFO = new LinkedList<>();
+        networkTableInstance = NetworkTableInstance.getDefault();
     }
 
     public void setMegaTagMode(MegaTagMode mode) {
@@ -116,7 +127,7 @@ public class LimelightVision extends SubsystemBase {
         for (WhitelistMode mode : modes) {
             totalLength += mode.getIds().length;
         }
-    
+
         int[] combined = new int[totalLength];
         int index = 0;
         for (WhitelistMode mode : modes) {
@@ -125,7 +136,7 @@ public class LimelightVision extends SubsystemBase {
             }
         }
 
-        setTagWhitelist(combined); 
+        setTagWhitelist(combined);
     }
 
     public WhitelistMode[] getWhitelistModes() {
@@ -134,12 +145,11 @@ public class LimelightVision extends SubsystemBase {
 
     public boolean isWhitelistMode(WhitelistMode mode) {
         if (whitelistModes != null) {
-            for (WhitelistMode m : this.whitelistModes) {
+            for (WhitelistMode m : whitelistModes) {
                 if (m.equals(mode)) {
                     return true;
                 }
             }
-            return false;
         }
         return false;
     }
@@ -148,7 +158,7 @@ public class LimelightVision extends SubsystemBase {
         if (whitelistModes != null) {
             int count = 0;
             for (WhitelistMode mode : modes) {
-                for (WhitelistMode m : this.whitelistModes) {
+                for (WhitelistMode m : whitelistModes) {
                     if (m.equals(mode)) {
                         count++;
                     }
@@ -163,7 +173,7 @@ public class LimelightVision extends SubsystemBase {
         for (Camera camera : Cameras.LimelightCameras) {
             LimelightHelpers.SetFiducialIDFiltersOverride(camera.getName(), ids);
         }
-    } 
+    }
 
     public void setIMUMode(int mode) {
         this.imuMode = mode;
@@ -180,16 +190,20 @@ public class LimelightVision extends SubsystemBase {
         return megaTagMode;
     }
 
+    public ServoObjectData getLastGoodFrame() {
+        return lastGoodFrame;
+    }
+
     public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
-        return Robot.isBlue() 
-            ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
-            : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
+        return Robot.isBlue()
+                ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
+                : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
     }
 
     private PoseEstimate getMegaTag2PoseEstimate(String limelightName) {
-        return Robot.isBlue() 
-            ? LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName)
-            : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
+        return Robot.isBlue()
+                ? LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName)
+                : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
     }
 
     private boolean robotIsOnBlueSide() {
@@ -211,13 +225,19 @@ public class LimelightVision extends SubsystemBase {
             if (!robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS)) {
                 setWhitelistMode(WhitelistMode.RED_REEF_TAGS);
             }
-            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS)) {
+            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS,
+                    WhitelistMode.BLUE_CS_TAGS)) {
                 setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.BLUE_CS_TAGS);
             }
-            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS)) {
+            if (robotIsOnBlueSide() && isWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS,
+                    WhitelistMode.RED_CS_TAGS)) {
                 setWhitelistMode(WhitelistMode.BLUE_REEF_TAGS, WhitelistMode.RED_REEF_TAGS, WhitelistMode.RED_CS_TAGS);
             }
         }
+    }
+
+    public ServoObjectData getLastServoObject() {
+        return objectFIFO.poll();
     }
 
     @Override
@@ -228,34 +248,86 @@ public class LimelightVision extends SubsystemBase {
 
         for (Camera camera : Cameras.LimelightCameras) {
             LimelightHelpers.SetRobotOrientation(
-                camera.getName(), 
-                (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180)) % 360, 
-                0, 
-                0, 
-                0, 
-                0, 
-                0
-            );
-            if (camera.isEnabled()) {
-                PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
-                    ? getMegaTag2PoseEstimate(camera.getName())
-                    : getMegaTag1PoseEstimate(camera.getName());
+                    camera.getName(),
+                    (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees()
+                            + (Robot.isBlue() ? 0 : 180)) % 360,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0);
 
-                if (poseEstimate != null && poseEstimate.tagCount > 0) {
-                    CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
-                    SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", true);
-                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", poseEstimate.tagCount);
-                    maxTagCount = Math.max(maxTagCount, poseEstimate.tagCount);
-                }
-                else {
-                    SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", false);
-                    SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", 0);
+            if (camera.isEnabled()) {
+                if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.APRILTAG.ordinal()) {
+                    PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
+                            ? getMegaTag2PoseEstimate(camera.getName())
+                            : getMegaTag1PoseEstimate(camera.getName());
+
+                    if (poseEstimate != null && poseEstimate.tagCount > 0) {
+                        CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose,
+                                poseEstimate.timestampSeconds);
+                        SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", true);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", poseEstimate.tagCount);
+                        maxTagCount = Math.max(maxTagCount, poseEstimate.tagCount);
+                    } else {
+                        SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", false);
+                        SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", 0);
+                    }
+                } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE
+                        .ordinal()) {
+                    RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
+
+                    if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tclass").getString("OBJECT")
+                            .equals("algae")) {
+                        double timestamp = timer.get();
+                        ServoObjectData currentFrame = new ServoObjectData(timestamp);
+
+                        for (RawDetection detection : RawResults) {
+                            currentFrame.addData(detection.txnc, detection.ta);
+                        }
+
+                        if (currentFrame.hasData()) {
+                            lastGoodFrame = currentFrame;
+                        }
+                    }
+
                 }
             }
         }
-
+        if (lastGoodFrame != null) {
+            SmartDashboard.putNumber("Vision/LAST GOOD TXNC", lastGoodFrame.txncOfHighestArea());
+            SmartDashboard.putNumber("Vision/LAST GOOD AREA", lastGoodFrame.getHighestArea());
+            SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
+        }
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
-        // SmartDashboard.putString("Vision/Whitelist Mode", getWhitelistModes().toString());
+        SmartDashboard.putNumber("Vision/Froggy Raw Detection Length",
+                LimelightHelpers.getRawDetections("limelight-froggy").length);
         SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }
+
+// Translation2d coralPose =
+// ObjectData.calculateCoralTranslation(detection.txnc, detection.tync);
+//
+// double totalAngleY =
+// Cameras.LimelightCameras[2].getLocation().getRotation().getY()
+// + Units.degreesToRadians(detection.tync);
+
+// SmartDashboard.putNumber("Vision/Coral Translation R Camera X",
+// coralPose.getX());
+// SmartDashboard.putNumber("Vision/Coral Translation R Camera Y",
+// coralPose.getY());
+// coralPose = coralPose.plus(camera.getLocation().toPose2d().getTranslation());
+// // turn the coral pose relative to the center of robot
+// as opposed to the camera!
+// Pose2d fieldCoralPose = robotPose.transformBy(new Transform2d(coralPose, new
+// Rotation2d()));
+// double distance =
+// robotPose.getTranslation().getDistance(fieldCoralPose.getTranslation());
+
+// ObjectData data = new ObjectData(fieldCoralPose, timer.get());
+
+// if (distance < closestDistance) { // meters
+// closestDistance = distance;
+// closestObject = data
+// }

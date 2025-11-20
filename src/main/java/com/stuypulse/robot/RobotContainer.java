@@ -7,11 +7,6 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-
-import java.util.concurrent.locks.Condition;
-
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.DoNothingCommand;
 import com.stuypulse.robot.commands.ManualShoot;
@@ -19,18 +14,17 @@ import com.stuypulse.robot.commands.ReefAlgaePickupRoutineBack;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ScoreRoutine;
-import com.stuypulse.robot.commands.autons.FDCB.FDCE;
-import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.FDCB.FDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBL2;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBNudge;
-import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgae;
+import com.stuypulse.robot.commands.autons.FDCB.FDCE;
+import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgae;
-import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
-import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
 import com.stuypulse.robot.commands.autons.IKLA.IKLAL2;
 import com.stuypulse.robot.commands.autons.IKLA.IKLANudge;
+import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
+import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
@@ -72,7 +66,6 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlg
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Front;
-import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Front;
@@ -87,12 +80,9 @@ import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistT
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
-import com.stuypulse.robot.commands.vision.VisionSetTagWhitelist;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Vision;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
@@ -108,10 +98,10 @@ import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
-import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
 import com.stuypulse.robot.util.Clearances;
-import com.stuypulse.robot.util.ReefUtil;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
+import com.stuypulse.robot.util.ReefUtil;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
