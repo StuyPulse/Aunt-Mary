@@ -24,7 +24,7 @@ public class ClimbImpl extends Climb {
 
     protected ClimbImpl() {
         super();
-        motor = new TalonFX(Ports.Climb.MOTOR, "can_s3");
+        motor = new TalonFX(Ports.Climb.MOTOR, Settings.canBus4);
         Motors.Climb.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Climb.OPEN_ANGLE_DEG/360.0);
 

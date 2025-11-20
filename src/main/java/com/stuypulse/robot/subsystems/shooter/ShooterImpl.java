@@ -30,7 +30,7 @@ public class ShooterImpl extends Shooter {
 
     protected ShooterImpl() {
         super();
-        motor = new TalonFX(Ports.Shooter.MOTOR, "can_s3");
+        motor = new TalonFX(Ports.Shooter.MOTOR, Settings.canBus4);
         Motors.Shooter.MOTOR_CONFIG.configure(motor);
 
         beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);

@@ -29,7 +29,7 @@ public class FunnelImpl extends Funnel {
 
     protected FunnelImpl() {
         super();
-        motor = new TalonFX(Ports.Funnel.MOTOR, "can_s3");
+        motor = new TalonFX(Ports.Funnel.MOTOR, Settings.canBus4);
         Motors.Funnel.MOTOR_CONFIG.configure(motor);
 
         // irSensor = new DigitalInput(Ports.Funnel.IR);

@@ -7,6 +7,7 @@
 
 package com.stuypulse.robot.constants;
 
+import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.path.PathConstraints;
 import com.stuypulse.stuylib.network.SmartBoolean;
 
@@ -30,7 +31,8 @@ public interface Settings {
 
     double DT = 0.020;
     boolean DEBUG_MODE = true;
-    String CANIVORE_NAME = "CANIVORE";
+    CANBus canBusCanivore = new CANBus("CANIVORE");
+    CANBus canBus4 = new CANBus("can_s4");
     
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
@@ -170,7 +172,7 @@ public interface Settings {
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
-        double HAS_CORAL_DEBOUNCE = 0.1;
+        double HAS_CORAL_DEBOUNCE = 0.1; //TODO: MAKE SURE THIS VALUE IS CORRECT -charimen
 
         double CORAL_STATOR_CURRENT_THRESHOLD = 17.0;
     }

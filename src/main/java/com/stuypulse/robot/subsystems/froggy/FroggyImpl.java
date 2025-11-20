@@ -39,10 +39,10 @@ public class FroggyImpl extends Froggy {
 
     protected FroggyImpl() {
         super();
-        rollerMotor = new TalonFX(Ports.Froggy.ROLLER, "can_s3");
+        rollerMotor = new TalonFX(Ports.Froggy.ROLLER, Settings.canBus4);
         Motors.Froggy.ROLLER_MOTOR_CONFIG.configure(rollerMotor);
 
-        pivotMotor = new TalonFX(Ports.Froggy.PIVOT, "can_s3");
+        pivotMotor = new TalonFX(Ports.Froggy.PIVOT, Settings.canBus4);
         Motors.Froggy.PIVOT_MOTOR_CONFIG.configure(pivotMotor);
         pivotMotor.setPosition(Constants.Froggy.MAXIMUM_ANGLE.getRotations());
        

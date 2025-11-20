@@ -46,7 +46,7 @@ public class ArmImpl extends Arm {
 
     public ArmImpl() {
         super();
-        motor = new TalonFX(Ports.Arm.MOTOR, "can_s3");
+        motor = new TalonFX(Ports.Arm.MOTOR, Settings.canBus4);
         Motors.Arm.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Settings.Arm.MIN_ANGLE_DEG/360.0);
 
@@ -192,7 +192,6 @@ public class ArmImpl extends Arm {
 
             SmartDashboard.putNumber("Arm/Raw Encoder Value (deg)", Units.rotationsToDegrees(absoluteEncoder.get()));
             SmartDashboard.putNumber("Arm/ Im feeling shizo (actual raw encoder)", absoluteEncoder.get());
-            SmartDashboard.putNumber("Arm/ HEAGGGGGGG (motor encoder)", motor.getPosition().getValueAsDouble());
         }
     }
 }
