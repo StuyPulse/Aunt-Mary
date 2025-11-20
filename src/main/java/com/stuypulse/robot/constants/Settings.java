@@ -170,7 +170,7 @@ public interface Settings {
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
-        double HAS_CORAL_DEBOUNCE = 0.0;
+        double HAS_CORAL_DEBOUNCE = 0.1;
 
         double CORAL_STATOR_CURRENT_THRESHOLD = 17.0;
     }

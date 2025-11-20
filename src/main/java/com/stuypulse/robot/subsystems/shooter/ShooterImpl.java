@@ -25,8 +25,8 @@ public class ShooterImpl extends Shooter {
     private final TalonFX motor;
 
     private final DigitalInput beamBreak;
-    private final boolean hasCoral;
-    // private final BStream hasCoral;
+    // private final boolean hasCoral;
+    private final BStream hasCoral;
 
     protected ShooterImpl() {
         super();
@@ -35,15 +35,15 @@ public class ShooterImpl extends Shooter {
 
         beamBreak = new DigitalInput(Ports.Shooter.BEAM_BREAK);
 
-        // hasCoral = BStream.create(beamBreak).not()
-        //             .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
-        hasCoral = true;
+        hasCoral = BStream.create(beamBreak).not()
+                    .filtered(new BDebounce.Both(Settings.Shooter.HAS_CORAL_DEBOUNCE));
+       // hasCoral = true;
     }
 
     @Override
     public boolean hasCoral() {
-        return hasCoral;
-        // return hasCoral.get();
+        // return hasCoral;
+        return hasCoral.get();
     }
 
     @Override
@@ -67,8 +67,9 @@ public class ShooterImpl extends Shooter {
         }
 
         SmartDashboard.putBoolean("Shooter/Has Coral", hasCoral());
-
+        
         if (Settings.DEBUG_MODE) {
+            SmartDashboard.putBoolean("Shooter/ Has Coral Raw", beamBreak.get());
             SmartDashboard.putNumber("Shooter/Voltage", motor.getMotorVoltage().getValueAsDouble());
             SmartDashboard.putNumber("Shooter/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Shooter/Stator Current", motor.getStatorCurrent().getValueAsDouble());
