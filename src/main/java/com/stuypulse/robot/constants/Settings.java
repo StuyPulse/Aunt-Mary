@@ -118,7 +118,7 @@ public interface Settings {
                 double TARGET_DISTANCE_FROM_REEF_L4_FRONT = Units.inchesToMeters(1.0);
 
                 double TARGET_DISTANCE_FROM_REEF_L2_BACK = Units.inchesToMeters(6.5);
-                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(6.5);
+                double TARGET_DISTANCE_FROM_REEF_L3_BACK = Units.inchesToMeters(7.f);
                 double TARGET_DISTANCE_FROM_REEF_L4_BACK = Units.inchesToMeters(7.5);
 
                 double TARGET_DISTANCE_FROM_REEF_L1_FROGGY_VERSATILE = Units.inchesToMeters(1);

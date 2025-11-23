@@ -23,7 +23,7 @@ public interface Ports {
 
     public interface Climb {
         int MOTOR = 50;
-        int ABSOLUTE_ENCODER = 5;
+        int ABSOLUTE_ENCODER = 3;
     }
 
     public interface Arm {
@@ -38,6 +38,7 @@ public interface Ports {
 
     public interface Funnel {
         int MOTOR = 41;
+        int IR = 9;
     }
 
     public interface Elevator {

@@ -21,6 +21,7 @@ import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
@@ -73,11 +74,14 @@ public class LimelightVision extends SubsystemBase {
     private WhitelistMode[] whitelistModes;
     private int imuMode;
     private int maxTagCount;
+    private RawDetection[] rawDetections;
+
+    private ObjectData currentFrame;
+    private ObjectData closestObject;
 
     private Timer timer;
     private Queue<ServoObjectData> objectFIFO;
-    private ServoObjectData lastGoodFrame;
-    NetworkTableInstance networkTableInstance;
+    private ServoObjectData lastGood;
 
     public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -99,10 +103,11 @@ public class LimelightVision extends SubsystemBase {
         setIMUMode(1);
 
         // Auto Acquire
-        lastGoodFrame = new ServoObjectData(0);
+        currentFrame = new ObjectData(Pose2d.kZero, 0);
+        closestObject = new ObjectData(Pose2d.kZero, 0);
+
         timer = new Timer();
         objectFIFO = new LinkedList<>();
-        networkTableInstance = NetworkTableInstance.getDefault();
     }
 
     public void setMegaTagMode(MegaTagMode mode) {
@@ -190,8 +195,8 @@ public class LimelightVision extends SubsystemBase {
         return megaTagMode;
     }
 
-    public ServoObjectData getLastGoodFrame() {
-        return lastGoodFrame;
+    public ServoObjectData getLastGood() {
+        return lastGood;
     }
 
     public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
@@ -204,6 +209,14 @@ public class LimelightVision extends SubsystemBase {
         return Robot.isBlue()
                 ? LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName)
                 : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
+    }
+
+    public ObjectData getObjectFromCurrentFrame() {
+        return currentFrame;
+    }
+
+    public ObjectData getClosestObject() {
+        return closestObject;
     }
 
     private boolean robotIsOnBlueSide() {
@@ -236,12 +249,28 @@ public class LimelightVision extends SubsystemBase {
         }
     }
 
+    // public Supplier<RawDetection[]> getLimelightRawDetections(String
+    // limelightName) {
+    // return () -> LimelightHelpers.getRawDetections(limelightName);
+    // }
+    public Rotation2d getHorizontalTargetAngle(String limelightName) {
+        if (hasNeuralNetworkData(limelightName)) {
+            return new Rotation2d(rawDetections[0].txnc);
+        }
+        return null;
+    }
+
+    public boolean hasNeuralNetworkData(String limelightName) {
+        return rawDetections.length > 0;
+    }
+
     public ServoObjectData getLastServoObject() {
         return objectFIFO.poll();
     }
 
     @Override
     public void periodic() {
+        Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
         this.maxTagCount = 0;
 
         updateWhitelistMode();
@@ -258,6 +287,7 @@ public class LimelightVision extends SubsystemBase {
                     0);
 
             if (camera.isEnabled()) {
+                rawDetections = LimelightHelpers.getRawDetections("limelight-froggy");
                 if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.APRILTAG.ordinal()) {
                     PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                             ? getMegaTag2PoseEstimate(camera.getName())

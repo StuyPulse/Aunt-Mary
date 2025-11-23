@@ -98,10 +98,12 @@ import com.stuypulse.robot.subsystems.superStructure.arm.Arm;
 import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
+import com.stuypulse.robot.subsystems.vision.ServoToGamepiece;
+import com.stuypulse.robot.subsystems.vision.LimelightVision.WhitelistMode;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
-import com.stuypulse.robot.util.ReefUtil;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -518,19 +520,6 @@ public class RobotContainer {
             .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
             .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
             .onFalse(new ShooterStop());
-
-        // (UNUSED) Catapult
-        // driver.getLeftButton()
-        //     .whileTrue(new SwerveDriveDriveAlignedToCatapult(driver)
-        //         .deadlineFor(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR))
-        //         .alongWith(new SuperStructureCatapultReady()
-        //             .andThen(new SuperStructureWaitUntilAtTarget()
-        //                 .alongWith(new SwerveDriveWaitUntilAlignedToCatapult()))
-        //             .andThen(new SuperStructureCatapultShoot()
-        //                 .andThen(new SuperStructureWaitUntilCanCatapult()
-        //                     .andThen(new ShooterShootAlgae())))))
-        //     .onFalse(new SuperStructureFeed())
-        //     .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
         
         // Align to closest Coral Station
         // driver.getRightStickButton()
