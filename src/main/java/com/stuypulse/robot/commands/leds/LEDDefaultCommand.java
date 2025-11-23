@@ -92,7 +92,7 @@ public class LEDDefaultCommand extends Command{
             else if (superStructure.getState() == SuperStructureState.PROCESSOR) {
                 leds.applyPattern(Settings.LED.PROCESSOR_SCORE_ANGLE);
             }
-            else if (shooter.hasCoral() || funnel.hasCoral()) {
+            else if (shooter.hasCoral()) {
                 leds.applyPattern(Settings.LED.HAS_CORAL_COLOR);
             }
             else {

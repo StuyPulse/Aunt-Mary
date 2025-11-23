@@ -12,20 +12,22 @@ import com.stuypulse.stuylib.util.StopWatch;
 
 import com.stuypulse.robot.constants.Settings;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class BuzzController extends Command {
-    private final Gamepad driver;
+    private final CommandXboxController driver;
     private final StopWatch timer;
 
-    public BuzzController(Gamepad driver) {
+    public BuzzController(CommandXboxController driver) {
         this.driver = driver;
         timer = new StopWatch();
     }
 
     @Override
     public void initialize() {
-        driver.setRumble(Settings.Driver.BUZZ_INTENSITY);
+        driver.setRumble(RumbleType.kBothRumble, Settings.Driver.BUZZ_INTENSITY);
         timer.reset();
     }
 
@@ -36,6 +38,6 @@ public class BuzzController extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        driver.setRumble(0);
+        driver.setRumble(RumbleType.kBothRumble, 0);
     }
 }

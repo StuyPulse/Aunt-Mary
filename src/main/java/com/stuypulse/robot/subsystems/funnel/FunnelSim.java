@@ -12,17 +12,17 @@ import com.stuypulse.stuylib.network.SmartBoolean;
 
 public class FunnelSim extends Funnel {
 
-    private final SmartBoolean hasCoral;
+    // private final SmartBoolean hasCoral;
 
     protected FunnelSim() {
         super();
-        hasCoral = new SmartBoolean("Funnel/Has Coral", false);
+        // hasCoral = new SmartBoolean("Funnel/Has Coral", false);
     }
 
-    @Override
-    public boolean hasCoral() {
-        return hasCoral.get();
-    }
+    // @Override
+    // public boolean hasCoral() {
+    //     return hasCoral.get();
+    // }
 
     @Override
     public boolean shouldReverse() {
@@ -30,7 +30,7 @@ public class FunnelSim extends Funnel {
     }
 
     @Override
-    public void periodic() {
+    public void simulationPeriodic() {
         super.periodic();
     }
 }

@@ -14,8 +14,10 @@ import com.stuypulse.robot.constants.Settings;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.hal.DIOJNI;
 
 public class LEDController extends SubsystemBase {
 
@@ -40,7 +42,7 @@ public class LEDController extends SubsystemBase {
 
         leds.setLength(length);
         leds.setData(ledsBuffer);
-        leds.start();
+        leds.setStart(0);
 
         applyPattern(defaultPattern);
 
@@ -54,7 +56,7 @@ public class LEDController extends SubsystemBase {
     @Override
     public void periodic() {
         if (Settings.EnabledSubsystems.LEDS.get()) {
-            leds.start();
+            leds.setStart(0);
             leds.setData(ledsBuffer);
         }
         else {

@@ -24,6 +24,7 @@ import com.stuypulse.stuylib.streams.numbers.filters.RateLimit;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDriveDriveAlignedToBarge118Clearance extends Command {
 
@@ -36,7 +37,7 @@ public class SwerveDriveDriveAlignedToBarge118Clearance extends Command {
 
     private boolean isAngled;
 
-    public SwerveDriveDriveAlignedToBarge118Clearance(Gamepad driver, boolean isAngled) {
+    public SwerveDriveDriveAlignedToBarge118Clearance(CommandXboxController driver, boolean isAngled) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         driverYVelocity = IStream.create(() -> -driver.getLeftX())

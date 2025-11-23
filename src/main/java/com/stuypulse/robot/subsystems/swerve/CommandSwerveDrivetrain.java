@@ -124,7 +124,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 /* also log the requested output for SysId */
                 SignalLogger.writeDouble("Target X Velocity ('voltage')", output.in(Volts));
                 SignalLogger.writeDouble("X Position", getPose().getX());
-                SignalLogger.writeDouble("X Velocity", getChassisSpeeds().vxMetersPerSecond * getPose().getRotation().getCos());
+                SignalLogger.writeDouble("X Velocity", getChassisSpeeds().vx * getPose().getRotation().getCos());
             },
             null,
             this
@@ -169,7 +169,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 /* also log the requested output for SysId */
                 SignalLogger.writeDouble("Rotational_Target_Rate ('voltage')", output.in(Volts));
                 SignalLogger.writeDouble("Rotational Position", getPose().getRotation().getRadians());
-                SignalLogger.writeDouble("Rotational_Velocity", getState().Speeds.omegaRadiansPerSecond);
+                SignalLogger.writeDouble("Rotational_Velocity", getState().Speeds.omega);
             },
             null,
             this
@@ -391,12 +391,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public Vector2D getFieldRelativeSpeeds() {
-        return new Vector2D(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
+        return new Vector2D(getChassisSpeeds().vx, getChassisSpeeds().vy)
             .rotate(Angle.fromRotation2d(getPose().getRotation()));
     }
 
     private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
-        setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vxMetersPerSecond).withVelocityY(robotSpeeds.vyMetersPerSecond).withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
+        setControl(new SwerveRequest.RobotCentric().withVelocityX(robotSpeeds.vx).withVelocityY(robotSpeeds.vy).withRotationalRate(robotSpeeds.omega));
     }
 
     public boolean isOnAllianceSide() {
@@ -450,8 +450,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Swerve/Pose/Theta", getPose().getRotation().getDegrees());
 
         for (int i = 0; i < 4; i++) {
-            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Speed (m per s)", getModule(i).getCurrentState().speedMetersPerSecond);
-            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Speed (m per s)", getModule(i).getTargetState().speedMetersPerSecond);
+            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Speed (m per s)", getModule(i).getCurrentState().speed);
+            SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Speed (m per s)", getModule(i).getTargetState().speed);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Angle (deg)", getModule(i).getCurrentState().angle.getDegrees() % 360);
             SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Target Angle (deg)", getModule(i).getTargetState().angle.getDegrees() % 360);
         }
@@ -464,14 +464,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 SmartDashboard.putNumber("Swerve/Modules/Module " + i + "/Supply Current", getModule(i).getDriveMotor().getSupplyCurrent().getValueAsDouble());
             }
 
-            SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vxMetersPerSecond);
-            SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vyMetersPerSecond);
+            SmartDashboard.putNumber("Swerve/Velocity Robot Relative X (m per s)", getChassisSpeeds().vx);
+            SmartDashboard.putNumber("Swerve/Velocity Robot Relative Y (m per s)", getChassisSpeeds().vy);
     
             SmartDashboard.putNumber("Swerve/Velocity Field Relative X (m per s)", getFieldRelativeSpeeds().x);
             SmartDashboard.putNumber("Swerve/Field Relative Rotation", getPose().getRotation().getDegrees());
             SmartDashboard.putNumber("Swerve/Velocity Field Relative Y (m per s)", getFieldRelativeSpeeds().y);
     
-            SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omegaRadiansPerSecond);
+            SmartDashboard.putNumber("Swerve/Angular Velocity (rad per s)", getChassisSpeeds().omega);
 
             SmartDashboard.putBoolean("Swerve/Is Front Facing Alliance Reef", isFrontFacingAllianceReef());
             SmartDashboard.putBoolean("Swerve/Is Front Facing Opposite Alliance Reef", isFrontFacingOppositeAllianceReef());

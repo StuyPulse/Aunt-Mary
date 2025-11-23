@@ -50,10 +50,10 @@ public class ArmSim extends Arm {
             Constants.Arm.GEAR_RATIO,
             Constants.Arm.MOMENT_OF_INERTIA,
             Constants.Arm.ARM_LENGTH,
-            Settings.Arm.MIN_ANGLE.getRadians(),
-            Settings.Arm.MAX_ANGLE.getRadians(),
+            Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG),
+            Units.degreesToRadians(Settings.Arm.MAX_ANGLE_DEG),
             false,
-            Settings.Arm.MIN_ANGLE.getRadians()
+            Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG)
         );
 
         LinearSystem<N2, N1, N2> armSystem = LinearSystemId.createSingleJointedArmSystem(
@@ -77,11 +77,11 @@ public class ArmSim extends Arm {
         
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
-        velLimitRadiansPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP.getDegrees());
-        accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP.getDegrees());
+        velLimitRadiansPerSecond = new SettableNumber(Settings.Arm.Constraints.MAX_VEL_TELEOP_DEG);
+        accelLimitRadiansPerSecondSquared = new SettableNumber(Settings.Arm.Constraints.MAX_ACCEL_TELEOP_DEG);
 
         motionProfile = new MotionProfile(velLimitRadiansPerSecond, accelLimitRadiansPerSecondSquared);
-        motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
+        motionProfile.reset(Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG));
 
         voltageOverride = Optional.empty();
     }
@@ -93,15 +93,15 @@ public class ArmSim extends Arm {
             7, 
             "Arm", 
             voltage -> setVoltageOverride(Optional.of(voltage)), 
-            () -> getCurrentAngle().getDegrees(), 
-            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+            () -> getCurrentAngleDeg(), 
+            () -> Units.radiansToDegrees(sim.getVelocity()), 
             () -> voltageOverride.get(), 
             getInstance()
         );
     }
 
     private boolean isWithinTolerance(Rotation2d tolerance) {
-        return Math.abs(getCurrentAngle().getDegrees() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
+        return Math.abs(getCurrentAngleDeg() - getTargetAngle().getDegrees()) < tolerance.getDegrees();
     }
 
     @Override
@@ -116,12 +116,12 @@ public class ArmSim extends Arm {
 
     private Rotation2d getTargetAngle() {
         return Rotation2d.fromDegrees(
-            SLMath.clamp(getState().getTargetAngle().getDegrees(), Settings.Arm.MIN_ANGLE.getDegrees(), Settings.Arm.MAX_ANGLE.getDegrees()));
+            SLMath.clamp(getState().getTargetAngle(), Settings.Arm.MIN_ANGLE_DEG, Settings.Arm.MAX_ANGLE_DEG));
     }
 
     @Override
-    public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads());
+    public double getCurrentAngleDeg() {
+        return Units.radiansToDegrees(sim.getAngle());
     }
 
     @Override
@@ -140,13 +140,13 @@ public class ArmSim extends Arm {
     }
 
     @Override
-    public void setMotionProfileConstraints(Rotation2d velLimit, Rotation2d accelLimit) {
-        this.velLimitRadiansPerSecond.set(velLimit.getRadians());
-        this.accelLimitRadiansPerSecondSquared.set(accelLimit.getRadians());
+    public void setMotionProfileConstraints(double velLimit, double accelLimit) {
+        this.velLimitRadiansPerSecond.set(velLimit);
+        this.accelLimitRadiansPerSecondSquared.set(accelLimit);
     }
     
     @Override
-    public void periodic() {
+    public void simulationPeriodic() {
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetAngle().getRadians());
@@ -157,7 +157,7 @@ public class ArmSim extends Arm {
         SmartDashboard.putNumber("Arm/Setpoint (deg)", Units.radiansToDegrees(setpoint));
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
+        controller.correct(VecBuilder.fill(sim.getAngle(), sim.getVelocity()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.ARM.get()) {

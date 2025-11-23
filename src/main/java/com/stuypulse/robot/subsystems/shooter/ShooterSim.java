@@ -42,7 +42,7 @@ public class ShooterSim extends Shooter {
     public void setMotorConfig(NeutralModeValue mode) {}
 
     @Override
-    public void periodic() {
+    public void simulationPeriodic() {
         super.periodic();
         
         if (hasShotLongEnoughToEjectCoral.get()) {

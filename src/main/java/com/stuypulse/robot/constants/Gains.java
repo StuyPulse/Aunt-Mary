@@ -13,7 +13,15 @@ public interface Gains {
 
     public interface Swerve {
         public interface Alignment {
-            PIDConstants XY = new PIDConstants(3.5, 0, 0.2);
+            // sim gains
+            double kP = 3.5;
+            double kI = 0;
+            double kD = 0.2;
+            double akP = 3.0;
+            double akI = 0;
+            double akD = 0.1;
+
+            PIDConstants XY = new PIDConstants(3.5, 0, 0.2); // real robot gains
             PIDConstants THETA = new PIDConstants(3.0, 0, 0.1);
         }
     }
@@ -36,7 +44,7 @@ public interface Gains {
     public interface Arm {
         public interface Coral  {
             public interface PID {
-                double kP = 95.308; //0.4 * 360;
+                double kP = 95.308; //0.4 * 360; // 95.308;
                 double kI = 0.0 * 360;
 
                 double kD = 10.912;// 0.032 * 360;

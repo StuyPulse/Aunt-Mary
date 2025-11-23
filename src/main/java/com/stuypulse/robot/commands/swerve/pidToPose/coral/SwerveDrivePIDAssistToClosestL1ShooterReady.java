@@ -34,14 +34,16 @@ import com.stuypulse.robot.util.ReefUtil.ReefFace;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final Gamepad driver;
+    private final CommandXboxController driver;
     
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
@@ -52,7 +54,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1ShooterReady(Gamepad driver) {
+    public SwerveDrivePIDAssistToClosestL1ShooterReady(CommandXboxController driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -85,7 +87,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
+        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
     }
 
     @Override
@@ -100,7 +102,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
         controller.update(targetPose, swerve.getPose());
 
-        ChassisSpeeds controllerFieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(controller.getOutput(), swerve.getPose().getRotation());
+        ChassisSpeeds controllerFieldRelativeSpeeds = controller.getOutput().toFieldRelative(swerve.getPose().getRotation());
 
         Rotation2d reefFaceParallelHeading = closestReefFace.getCorrespondingAprilTagPose().getRotation().rotateBy(Rotation2d.kCCW_90deg);
         // double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().dot(new Vector2D(reefFaceParallelHeading.getCos(), reefFaceParallelHeading.getSin()));
@@ -110,17 +112,17 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
             driverVelocityComponentParallelToReefFace * reefFaceParallelHeading.getSin());
         
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-            .withVelocityX(controllerFieldRelativeSpeeds.vxMetersPerSecond + driverVelocityVectorParallelToReefFace.x)
-            .withVelocityY(controllerFieldRelativeSpeeds.vyMetersPerSecond + driverVelocityVectorParallelToReefFace.y)
-            .withRotationalRate(controllerFieldRelativeSpeeds.omegaRadiansPerSecond + driverAngularVelocity.get()));
+            .withVelocityX(controllerFieldRelativeSpeeds.vx + driverVelocityVectorParallelToReefFace.x)
+            .withVelocityY(controllerFieldRelativeSpeeds.vy + driverVelocityVectorParallelToReefFace.y)
+            .withRotationalRate(controllerFieldRelativeSpeeds.omega + driverAngularVelocity.get()));
 
         SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
         SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vxMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vyMetersPerSecond);
-        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omegaRadiansPerSecond);
+        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative X (m per s)", controller.getOutput().vx);
+        SmartDashboard.putNumber("Alignment/Target Velocity Robot Relative Y (m per s)", controller.getOutput().vy);
+        SmartDashboard.putNumber("Alignment/Target Angular Velocity (rad per s)", controller.getOutput().omega);
     }
 
     @Override

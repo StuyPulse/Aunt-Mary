@@ -7,18 +7,18 @@
 
 package com.stuypulse.robot.constants;
 
+import com.ctre.phoenix6.CANBus;
+import com.pathplanner.lib.path.PathConstraints;
 import com.stuypulse.stuylib.network.SmartBoolean;
-import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
-
-import com.pathplanner.lib.path.PathConstraints;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -31,14 +31,15 @@ public interface Settings {
 
     double DT = 0.020;
     boolean DEBUG_MODE = true;
-    String CANIVORE_NAME = "CANIVORE";
+    CANBus canBusCanivore = new CANBus("CANIVORE");
+    CANBus canBus4 = new CANBus("can_s4");
     
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
         SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
@@ -89,6 +90,8 @@ public interface Settings {
                 double X_TOLERANCE = Units.inchesToMeters(2.0); 
                 double Y_TOLERANCE = Units.inchesToMeters(2.0);
                 Rotation2d THETA_TOLERANCE = Rotation2d.fromDegrees(2.0);
+
+                Pose2d POSE_TOLERANCE = new Pose2d(Units.inchesToMeters(2.0), Units.inchesToMeters(2.0), Rotation2d.fromDegrees(2.0));
 
                 double X_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
                 double Y_TOLERANCE_REEF_ALGAE_PICKUP_READY = Units.inchesToMeters(3.0);
@@ -169,7 +172,7 @@ public interface Settings {
 
         double UNJAM_CORAL_BACKWARDS_SPEED = -0.3;
         
-        double HAS_CORAL_DEBOUNCE = 0.0;
+        double HAS_CORAL_DEBOUNCE = 0.1; //TODO: MAKE SURE THIS VALUE IS CORRECT -charimen
 
         double CORAL_STATOR_CURRENT_THRESHOLD = 17.0;
     }
@@ -231,67 +234,91 @@ public interface Settings {
     }
 
     public interface Arm {
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-82); // Angle that arm makes when resting against the funnel
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(201);
+        double MIN_ANGLE_DEG = -82.0; // Angle that arm makes when resting against the funnel
+        double MAX_ANGLE_DEG = 201.0;
 
-        Rotation2d L1_ANGLE_FRONT = Rotation2d.fromDegrees(-35.139599);
-        Rotation2d L2_ANGLE_FRONT = Rotation2d.fromDegrees(-59.050619);
-        Rotation2d L3_ANGLE_FRONT = Rotation2d.fromDegrees(-38.330078); //53.05
-        Rotation2d L4_ANGLE_FRONT = Rotation2d.fromDegrees(55.361328);
+        double L1_ANGLE_FRONT_DEG = -35.139599;
+        double L2_ANGLE_FRONT_DEG = -59.050619;
+        double L3_ANGLE_FRONT_DEG = -38.330078; //53.05
+        double L4_ANGLE_FRONT_DEG = 55.361328;
 
-        Rotation2d L1_ANGLE_BACK = Rotation2d.fromDegrees(150.139599);
-        Rotation2d L2_ANGLE_BACK = Rotation2d.fromDegrees(174.513809);
-        Rotation2d L3_ANGLE_BACK = Rotation2d.fromDegrees(156.446319);
-        Rotation2d L4_ANGLE_BACK = Rotation2d.fromDegrees(150.859437);
+        double L1_ANGLE_BACK_DEG = 150.139599;
+        double L2_ANGLE_BACK_DEG = 174.513809;
+        double L3_ANGLE_BACK_DEG = 156.446319;
+        double L4_ANGLE_BACK_DEG = 150.859437;
 
-        Rotation2d AUTON_END = Rotation2d.fromDegrees(94.570312);
+        double AUTON_END_DEG = 94.570312;
 
-        Rotation2d ALGAE_L2_ANGLE_FRONT = Rotation2d.fromDegrees(-47.724609);
-        Rotation2d ALGAE_L3_ANGLE_FRONT = Rotation2d.fromDegrees(-30.013672); 
+        double ALGAE_L2_ANGLE_FRONT_DEG = -47.724609;
+        double ALGAE_L3_ANGLE_FRONT_DEG = -30.013672; 
 
-        Rotation2d ALGAE_L2_ANGLE_BACK = Rotation2d.fromDegrees(166.552734); // 160.076257 new setting 5/30/25
-        Rotation2d ALGAE_L3_ANGLE_BACK = Rotation2d.fromDegrees(155.102399);
+        double ALGAE_L2_ANGLE_BACK_DEG = 166.552734; // 160.076257 new setting 5/30/25
+        double ALGAE_L3_ANGLE_BACK_DEG = 155.102399;
 
-        Rotation2d PROCESSOR_ANGLE = Rotation2d.fromDegrees(-71.464844);
+        double PROCESSOR_ANGLE_DEG = -71.464844;
 
-        Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(197.337891);  // -42.636719 + 6
-        Rotation2d GROUND_ALGAE_PICKUP_ANGLE = Rotation2d.fromDegrees(-56.347656); // MADE UP, FIND THIS
+        // TODO: This angle is going to get wrapped - should be fixed at some point with field testing 
+        double GOLF_TEE_ALGAE_PICKUP_ANGLE_DEG = 197.337891;  // -42.636719 + 6
+        double GROUND_ALGAE_PICKUP_ANGLE_DEG = -56.347656; // MADE UP, FIND THIS
 
-        Rotation2d CATAPULT_READY_ANGLE = Rotation2d.fromDegrees(-60);
-        Rotation2d CATAPULT_SHOOT_ANGLE = Rotation2d.fromDegrees(-55);
-        Rotation2d CATAPULT_FINAL_ANGLE = Rotation2d.fromDegrees(70);
+        double CATAPULT_READY_ANGLE_DEG = -60.0;
+        double CATAPULT_SHOOT_ANGLE_DEG = -55.0;
+        double CATAPULT_FINAL_ANGLE_DEG = 70.0;
 
-        Rotation2d BARGE_118_ANGLE = Rotation2d.fromDegrees(90);
-        Rotation2d BARGE_SAFE_118 = Rotation2d.fromDegrees(60); // 80
+        double BARGE_118_ANGLE_DEG = 90.0;
+        double BARGE_SAFE_118_DEG = 60.0; // 80
 
-        Rotation2d FEED_ANGLE = Rotation2d.fromDegrees(-81);
+        double FEED_ANGLE_DEG = -81.0;
         
-        Rotation2d CLIMB_ANGLE = Rotation2d.fromDegrees(MAX_ANGLE.getDegrees() - 5);
+        double CLIMB_ANGLE_DEG = MAX_ANGLE_DEG - 5.0;
 
-        Rotation2d UNSTUCK_CORAL_ANGLE = Rotation2d.fromDegrees(MIN_ANGLE.getDegrees() + 20);
+        double UNSTUCK_CORAL_ANGLE_DEG = MIN_ANGLE_DEG + 20.0;
 
         public interface Constraints {
-            Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
-            Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
+            // Rotation2d MAX_VEL_TELEOP = Rotation2d.fromDegrees(600.0); 
+            // Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromDegrees(1200.0); 
+            // Rotation2d MAX_VEL_TELEOP = Rotation2d.fromRotations(5/3); 
+            // Rotation2d MAX_ACCEL_TELEOP = Rotation2d.fromRotations(10/3); 
+            double MAX_VEL_TELEOP_DEG = 500.0;
+            double MAX_ACCEL_TELEOP_DEG = 1200.0;
 
-            Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
-            Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+            double MAX_VEL_TELEOP_FUNNEL_SIDE = 600.0; // 550
+            double MAX_ACCEL_TELEOP_FUNNEL_SIDE = 600.0; // 550
 
 
-            Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
-            Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
+            double MAX_VEL_AUTON = 1200.0;
+            double MAX_ACCEL_AUTON = 2400.0;
 
-            Rotation2d ALGAE_VEL_AUTON = Rotation2d.fromDegrees(600.0);
-            Rotation2d ALGAE_ACCEL_AUTON = Rotation2d.fromDegrees(800.0);
+            double ALGAE_VEL_AUTON = 600.0;
+            double ALGAE_ACCEL_AUTON = 800.0;
 
-            Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(250.0);
-            Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+            double DEFAULT_MAX_VEL_BACK_TO_FEED = 250.0;
+            double DEFAULT_MAX_ACCEL_BACK_TO_FEED = 600.0;
 
-            Rotation2d MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
-            Rotation2d MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
+            double MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = 200.0;
+            double MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = 500.0;
 
-            Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
-            Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
+            double MAX_VEL_CATAPULT = 720.0;
+            double MAX_ACCEL_CATAPULT = 1500.0;
+
+            // Rotation2d MAX_VEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+            // Rotation2d MAX_ACCEL_TELEOP_FUNNEL_SIDE = Rotation2d.fromDegrees(600.0); // 550
+
+
+            // Rotation2d MAX_VEL_AUTON = Rotation2d.fromDegrees(1200.0);
+            // Rotation2d MAX_ACCEL_AUTON = Rotation2d.fromDegrees(2400.0);
+
+            // Rotation2d ALGAE_VEL_AUTON = Rotation2d.fromDegrees(600.0);
+            // Rotation2d ALGAE_ACCEL_AUTON = Rotation2d.fromDegrees(800.0);
+
+            // Rotation2d DEFAULT_MAX_VEL_BACK_TO_FEED = Rotation2d.fromDegrees(250.0);
+            // Rotation2d DEFAULT_MAX_ACCEL_BACK_TO_FEED = Rotation2d.fromDegrees(600.0);
+
+            // Rotation2d MAX_VEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(200.0);
+            // Rotation2d MAX_ACCEL_BACK_TO_FEED_AND_PROCESSOR_WITH_ALGAE = Rotation2d.fromDegrees(500.0);
+
+            // Rotation2d MAX_VEL_CATAPULT = Rotation2d.fromDegrees(720.0);
+            // Rotation2d MAX_ACCEL_CATAPULT = Rotation2d.fromDegrees(1500.0);
         }
 
         Rotation2d ANGLE_TOLERANCE_FRONT = Rotation2d.fromDegrees(7.0);
@@ -323,8 +350,10 @@ public interface Settings {
         double HOLD_ALGAE_SPEED = 0.3;
         double HOLD_CORAL_SPEED = -0.15;
 
-        Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
-        Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);
+        // Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
+        // Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);
+        double MAX_VEL_DEG = 500.0;
+        double MAX_ACCEL_DEG = 1000.0;
     }
 
     public interface Climb {
@@ -332,12 +361,12 @@ public interface Settings {
         double OPEN_VOLTAGE_LOW = 1; // Used when getting close to the open angle
         double CLIMB_VOLTAGE = 12; // Used when climbing 12
 
-        Rotation2d OPEN_ANGLE = Rotation2d.fromDegrees(1.0);
-        Rotation2d CLOSED_ANGLE = Rotation2d.fromDegrees(165);
-        Rotation2d CLIMBED_ANGLE = Rotation2d.fromDegrees(230); // 245 - 3.5 // 230 // 215
-        Rotation2d SHIMMY_ANGLE = Rotation2d.fromDegrees(70);
+        double OPEN_ANGLE_DEG = 1.0;
+        double CLOSED_ANGLE_DEG = 165;
+        double CLIMBED_ANGLE_DEG = 230; // 245 - 3.5 // 230 // 215
+        double SHIMMY_ANGLE_DEG = 70;
         
-        Rotation2d ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY = Rotation2d.fromDegrees(7);
+        double ANGLE_TOLERANCE_FOR_CLOSED_AND_SHIMMY_DEG = 7;
     }
 
     public interface LED {

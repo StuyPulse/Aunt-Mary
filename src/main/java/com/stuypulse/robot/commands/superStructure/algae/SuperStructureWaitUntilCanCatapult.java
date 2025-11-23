@@ -7,6 +7,6 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class SuperStructureWaitUntilCanCatapult extends WaitUntilCommand{
     public SuperStructureWaitUntilCanCatapult() {
-        super(() -> Arm.getInstance().getCurrentAngle().getDegrees() > Settings.Arm.CATAPULT_SHOOT_ANGLE.getDegrees());
+        super(() -> Arm.getInstance().getCurrentAngleDeg() > Settings.Arm.CATAPULT_SHOOT_ANGLE_DEG);
     }
 }

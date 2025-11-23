@@ -77,10 +77,10 @@ public class FroggySim extends Froggy {
         controller = new LinearSystemLoop<>(armSystem, lqr, kalmanFilter, 12.0, Settings.DT);
 
         motionProfile = new MotionProfile(
-            Settings.Froggy.MAX_VEL.getRadians(),
-            Settings.Froggy.MAX_ACCEL.getRadians()
+            Settings.Froggy.MAX_VEL_DEG,
+            Settings.Froggy.MAX_ACCEL_DEG
         );
-        motionProfile.reset(Settings.Arm.MIN_ANGLE.getRadians());
+        motionProfile.reset(Units.degreesToRadians(Settings.Arm.MIN_ANGLE_DEG));
 
         pivotVoltageOverride = Optional.empty();
         pivotOperatorOffset = Rotation2d.kZero;
@@ -89,12 +89,12 @@ public class FroggySim extends Froggy {
     @Override
     public SysIdRoutine getPivotSysIdRoutine() {
         return SysId.getRoutine(
-            3, 
-            7, 
+            3.0, 
+            7.0, 
             "Froggy Pivot", 
             voltage -> setPivotVoltageOverride(Optional.of(voltage)), 
             () -> getCurrentAngle().getDegrees(), 
-            () -> Units.radiansToDegrees(sim.getVelocityRadPerSec()), 
+            () -> Units.radiansToDegrees(sim.getVelocity()), 
             () -> pivotVoltageOverride.get(), 
             getInstance()
         );
@@ -115,7 +115,7 @@ public class FroggySim extends Froggy {
 
     @Override
     public Rotation2d getCurrentAngle() {
-        return Rotation2d.fromRadians(sim.getAngleRads());
+        return Rotation2d.fromRadians(sim.getAngle());
     }
 
     @Override
@@ -124,13 +124,13 @@ public class FroggySim extends Froggy {
     }
 
     @Override
-    public void periodic() {
+    public void simulationPeriodic() {
         super.periodic();
 
         double setpoint = motionProfile.get(getTargetAngle().getRadians());
 
         controller.setNextR(VecBuilder.fill(setpoint, 0));
-        controller.correct(VecBuilder.fill(sim.getAngleRads(), sim.getVelocityRadPerSec()));
+        controller.correct(VecBuilder.fill(sim.getAngle(), sim.getVelocity()));
         controller.predict(Settings.DT);
 
         if (Settings.EnabledSubsystems.FROGGY.get()) {

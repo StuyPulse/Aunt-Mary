@@ -25,6 +25,7 @@ import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import java.util.function.Supplier;
 
@@ -60,11 +61,11 @@ public class ScoreRoutine extends SequentialCommandGroup {
         );
     }
 
-    public ScoreRoutine(Gamepad driver, int level, boolean isFrontFacingReef) {
+    public ScoreRoutine(CommandXboxController driver, int level, boolean isFrontFacingReef) {
         this(level, isFrontFacingReef, getCoralBranchSupplierWithDriverInput(driver));
     }
 
-    private static Supplier<CoralBranch> getCoralBranchSupplierWithDriverInput(Gamepad driver) {
+    private static Supplier<CoralBranch> getCoralBranchSupplierWithDriverInput(CommandXboxController driver) {
         return () -> {
             if (driver.getLeftX() > Settings.Driver.BRANCH_OVERRIDE_DEADBAND) {
                 return ReefUtil.getClosestReefFace().getRightBranchFieldRelative();

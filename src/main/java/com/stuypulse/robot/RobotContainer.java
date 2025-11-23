@@ -7,9 +7,6 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
-
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.DoNothingCommand;
 import com.stuypulse.robot.commands.ManualShoot;
@@ -17,18 +14,17 @@ import com.stuypulse.robot.commands.ReefAlgaePickupRoutineBack;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.Reset;
 import com.stuypulse.robot.commands.ScoreRoutine;
-import com.stuypulse.robot.commands.autons.FDCB.FDCE;
-import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.FDCB.FDCB;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBL2;
 import com.stuypulse.robot.commands.autons.FDCB.FDCBNudge;
-import com.stuypulse.robot.commands.autons.GAlgae.GTwoAlgae;
+import com.stuypulse.robot.commands.autons.FDCB.FDCE;
+import com.stuypulse.robot.commands.autons.FDCB.FDCENudge;
 import com.stuypulse.robot.commands.autons.HAlgae.HTwoAlgae;
-import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
-import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.autons.IKLA.IKLA;
 import com.stuypulse.robot.commands.autons.IKLA.IKLAL2;
 import com.stuypulse.robot.commands.autons.IKLA.IKLANudge;
+import com.stuypulse.robot.commands.autons.IKLA.IKLJ;
+import com.stuypulse.robot.commands.autons.IKLA.IKLJNudge;
 import com.stuypulse.robot.commands.climb.ClimbClimb;
 import com.stuypulse.robot.commands.climb.ClimbIdle;
 import com.stuypulse.robot.commands.climb.ClimbOpen;
@@ -59,6 +55,7 @@ import com.stuypulse.robot.commands.shooter.ShooterHoldAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.ShooterUnjamCoralBackwards;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootAlgae;
+import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL1Front;
 import com.stuypulse.robot.commands.superStructure.SuperStructureClimb;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
@@ -69,7 +66,6 @@ import com.stuypulse.robot.commands.superStructure.algae.SuperStructureGroundAlg
 import com.stuypulse.robot.commands.superStructure.algae.SuperStructureProcessor;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL1Front;
-import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Back;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL3Front;
@@ -80,15 +76,13 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterReady;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestL1ShooterScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
-import com.stuypulse.robot.commands.vision.VisionSetTagWhitelist;
-import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Vision;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.froggy.Froggy;
@@ -116,14 +110,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class RobotContainer {
 
     // Gamepads
-    public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
-    public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
+    public final CommandXboxController driver = new CommandXboxController(Ports.Gamepad.DRIVER);
+    public final CommandXboxController operator = new CommandXboxController(Ports.Gamepad.OPERATOR);
 
     // Subsystem
     private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
@@ -181,10 +176,10 @@ public class RobotContainer {
 
     private void configureDriverButtonBindings() {
 
-        driver.getDPadUp().onTrue(new SwerveDriveResetRotation());
+        driver.povUp().onTrue(new SwerveDriveResetRotation());
 
         // Manual Shoot
-        driver.getDPadRight()
+        driver.povRight()
             .onTrue(
                 new ConditionalCommand(
                     new ConditionalCommand(
@@ -215,7 +210,7 @@ public class RobotContainer {
                 .andThen(new FroggyPivotToStow()));
 
         // ground froggy algae intake and reset
-        driver.getLeftTriggerButton()
+        driver.leftTrigger()
             .onTrue(new Reset())
             .onTrue(new FroggyPivotToAlgaeGroundPickup())
             .onTrue(new FroggyRollerIntakeAlgae())
@@ -223,14 +218,14 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldAlgae());
 
         // Loki golf tee algae pickup
-        driver.getLeftBumper()
+        driver.leftBumper()
             .onTrue(new SuperStructureGolfTeeAlgaePickup())
             .onTrue(new ShooterAcquireAlgae())
             .onFalse(new SuperStructureProcessor())                                
             .onFalse(new ShooterHoldAlgae());
 
         // Ground coral intake and send elevator/arm to feed
-        driver.getRightTriggerButton()
+        driver.rightTrigger()
             .onTrue(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.CORAL_GROUND_PICKUP)
                 .andThen(new FroggyPivotToCoralGroundPickup().alongWith(new FroggyRollerIntakeCoral())))
             .onFalse(new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.STOW)
@@ -238,7 +233,7 @@ public class RobotContainer {
             .onFalse(new FroggyRollerHoldCoral()); 
 
         // L1
-        driver.getRightBumper()
+        driver.rightBumper()
             .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_VERSATILE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
@@ -255,21 +250,22 @@ public class RobotContainer {
                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE && (froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE || froggy.getRollerState() == RollerState.STOP)))
             .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT || shooter.getState() == ShooterState.SHOOT_CORAL_L1_BACK));
         
-        driver.getRightBumper().debounce(0.25)
+        driver.rightBumper().debounce(0.25)
             .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
                 .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT || 
                              shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT || 
                              froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE))
             .whileTrue(new ConditionalCommand(
-                // new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
-                //     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
-                //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
-                //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
-                //             .andThen(new ShooterShootL1()))),
+                // new WaitUntilCommand(() -> superStrucutre.getState() == SuperStructureState.L1)
+                new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1_FRONT && superStructure.atTarget())
+                    .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
+                    .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
+                        .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())).andThen(new ShooterShootL1Front()))
+                        .andThen(
                 new ConditionalCommand(
                     new ScoreRoutine(driver, 1, true).until(() -> false),
                     new ScoreRoutine(driver, 1, false).until(() -> false),
-                    () -> swerve.isFrontFacingAllianceReef()
+                    () -> swerve.isFrontFacingAllianceReef())
                 ),
                 new ConditionalCommand(
                     new FroggyPivotToL1Versatile()
@@ -289,7 +285,7 @@ public class RobotContainer {
             .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
         // L4 Coral Score + Top L1
-        driver.getTopButton()
+        driver.y()
         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_THREE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
@@ -311,7 +307,7 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
                 .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)));
 
-        driver.getTopButton().debounce(0.25)
+        driver.y().debounce(0.25)
         .whileTrue(
             new ConditionalCommand(
                 new ConditionalCommand(
@@ -340,7 +336,7 @@ public class RobotContainer {
             .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L3 Coral Score + 2nd L1
-        driver.getRightButton()
+        driver.b()
         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_TWO) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
@@ -362,7 +358,7 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
                 .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)));
         
-            driver.getRightButton().debounce(0.25)
+            driver.b().debounce(0.25)
             .whileTrue(
                     new ConditionalCommand(
                         new ConditionalCommand(
@@ -391,14 +387,14 @@ public class RobotContainer {
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
 
         // L2 Coral Score + Bottom L1
-        driver.getBottomButton()
+        driver.a()
         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_ONE) && !shooter.hasCoral()))
             .whileTrue(new ConditionalCommand(
                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
                     .andThen(
                         new ConditionalCommand(
                             new SuperStructureCoralL2Front(),
-                            new SuperStructureCoralL2Back(),
+                            new SuperStructureCoralL2Front(),
                             () -> swerve.isFrontFacingAllianceReef())),
                         new ConditionalCommand(
                             new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_ONE)
@@ -413,7 +409,7 @@ public class RobotContainer {
             .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef() && Clearances.isFroggyClearFromAllObstables())
                 .andThen(new SuperStructureFeed().onlyIf(() -> shooter.getState() != ShooterState.HOLD_ALGAE)));
 
-        driver.getBottomButton().debounce(0.25)
+        driver.a().debounce(0.25)
         .whileTrue(
             new ConditionalCommand(
                 new ConditionalCommand(
@@ -442,7 +438,7 @@ public class RobotContainer {
         .onFalse(new ShooterStop().onlyIf(() -> shooter.isShootingCoral()));
         
         // 118 Auto Score
-        driver.getLeftButton()
+        driver.x()
             .whileTrue(
                 new SwerveDriveDriveAlignedToBarge118Clearance(driver, false)
                     .deadlineFor(new LEDApplyPattern(Settings.LED.BARGE_ALIGNING))
@@ -476,14 +472,14 @@ public class RobotContainer {
         //     .onFalse(SwerveDriveDynamicObstacles.reset());
 
         // Align to closest Coral Station without path finding
-        driver.getRightStickButton()
-            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .whileTrue(new SwerveDrivePIDToCoralStation(driver)
-                .onlyIf(() -> !shooter.hasCoral()));
+        // driver.getRightStickButton()
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .whileTrue(new SwerveDrivePIDToCoralStation(driver)
+        //         .onlyIf(() -> !shooter.hasCoral()));
 
         // Acquire closest reef algae
-        driver.getDPadLeft()
+        driver.povLeft()
             .whileTrue(new ConditionalCommand(
                 new ReefAlgaePickupRoutineFront(),
                 new ReefAlgaePickupRoutineBack(),
@@ -494,7 +490,7 @@ public class RobotContainer {
             .onFalse(new ShooterHoldAlgae());
 
         // Golf tee and Climb Shimmy
-        driver.getDPadDown()
+        driver.povDown()
             .onTrue(new ConditionalCommand(
                 new ClimbShimmy(),
                 new SuperStructureGroundAlgaePickup().alongWith(new ShooterAcquireAlgae()),
@@ -507,7 +503,7 @@ public class RobotContainer {
                 () -> climb.getState() != ClimbState.CLOSED));
 
         // Get ready for climb
-        driver.getLeftMenuButton()
+        driver.back()
             .onTrue(new FroggyPivotToStow())
             .onTrue(new SuperStructureClimb()
                 .andThen(new WaitUntilCommand(() -> Elevator.getInstance().atTargetHeight() || Arm.getInstance().atTargetAngle()))
@@ -515,8 +511,8 @@ public class RobotContainer {
                     .alongWith(new ShooterStop())
                     .alongWith(new FroggyRollerStop())));
 
-        // Climb!!
-        driver.getRightMenuButton()
+        // // Climb!!
+        driver.start()
             .onTrue(new ClimbClimb()
                 .onlyIf(() -> climb.getState() == ClimbState.OPEN 
                     || climb.getState() == ClimbState.SHIMMY 

@@ -173,7 +173,7 @@ public class RobotVisualizer {
         coralRoot.append(coralBack);
     }
 
-    public void updateArmAngle(Rotation2d armAngle, boolean atTargetAngle) {
+    public void updateArmAngle(double armAngle, boolean atTargetAngle) {
         armPivot.setPosition(width/2, elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR);
         arm.setAngle(armAngle);
 
@@ -190,8 +190,8 @@ public class RobotVisualizer {
             width/2 + Math.cos(Units.degreesToRadians(arm.getAngle())) * ((Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER + Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER) / 2), 
             elevatorHeight - Constants.Arm.DISTANCE_FROM_PIVOT_TO_TOP_OF_ELEVATOR + Math.sin(Units.degreesToRadians(arm.getAngle())) * ((Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_TOP_ROLLER + Constants.Shooter.DISTANCE_FROM_ARM_PIVOT_TO_BOTTOM_ROLLER) / 2));
 
-        coralFront.setAngle(90 + armAngle.getDegrees());
-        coralBack.setAngle(-90 + armAngle.getDegrees());
+        coralFront.setAngle(90 + armAngle);
+        coralBack.setAngle(-90 + armAngle);
 
         SmartDashboard.putData("Visualizers/Robot", canvas);
     }
