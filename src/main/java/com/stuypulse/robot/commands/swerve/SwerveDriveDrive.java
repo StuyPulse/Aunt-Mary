@@ -24,18 +24,17 @@ import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDriveDrive extends Command {
 
     private final CommandSwerveDrivetrain swerve;
 
-    private final CommandXboxController driver;
+    private final Gamepad driver;
 
     private final VStream linearVelocity;
     private final IStream angularVelocity;
 
-    public SwerveDriveDrive(CommandXboxController driver) {
+    public SwerveDriveDrive(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
 
         linearVelocity = VStream.create(this::getDriverInputAsVelocity)
@@ -61,7 +60,7 @@ public class SwerveDriveDrive extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(-driver.getLeftY(), -driver.getLeftX());
+        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
     }
 
     @Override

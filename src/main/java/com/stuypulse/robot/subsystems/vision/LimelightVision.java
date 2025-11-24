@@ -81,7 +81,7 @@ public class LimelightVision extends SubsystemBase {
 
     private Timer timer;
     private Queue<ServoObjectData> objectFIFO;
-    private ServoObjectData lastGood;
+    private ServoObjectData lastGoodFrame;
 
     public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
@@ -195,8 +195,8 @@ public class LimelightVision extends SubsystemBase {
         return megaTagMode;
     }
 
-    public ServoObjectData getLastGood() {
-        return lastGood;
+    public ServoObjectData getLastGoodFrame() {
+        return lastGoodFrame;
     }
 
     public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
@@ -325,7 +325,7 @@ public class LimelightVision extends SubsystemBase {
             }
         }
         if (lastGoodFrame != null) {
-            SmartDashboard.putNumber("Vision/LAST GOOD TXNC", lastGoodFrame.txncOfHighestArea());
+            SmartDashboard.putNumber("Vision/LAST GOOD TXNC", lastGoodFrame .txncOfHighestArea());
             SmartDashboard.putNumber("Vision/LAST GOOD AREA", lastGoodFrame.getHighestArea());
             SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
         }

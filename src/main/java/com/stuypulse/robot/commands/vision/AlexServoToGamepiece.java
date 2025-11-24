@@ -36,7 +36,6 @@ public class AlexServoToGamepiece extends Command {
     private final VStream linearVelocity;
 
     private final static double kP_VEL_PARALLEL = 3.0;
-    private final static double kP_VEL_FORWARD = 3.0;
 
     public AlexServoToGamepiece(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
@@ -67,9 +66,7 @@ public class AlexServoToGamepiece extends Command {
     @Override
     public void execute() {
         robotHeading = swerve.getPose().getRotation();
-        Rotation2d froggyHeading = robotHeading.minus(Rotation2d.fromDegrees(90.0));
         Rotation2d txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
-        double ta = vision.getLastGoodFrame().getHighestArea();
 
         double unWrappedAngle = robotHeading.getDegrees();
         if (unWrappedAngle < 0.0) {
@@ -89,19 +86,13 @@ public class AlexServoToGamepiece extends Command {
                 Math.sin(Units.degreesToRadians(offset.getDegrees() + 90.0)))
                 .mul(speed_parallel).rotate(Angle.fromDegrees(swerveTargetAngle));
 
-        double speed_forward = kP_VEL_FORWARD * 1.0 / ta;
-        Vector2D vel_forward = new Vector2D(
-                froggyHeading.getCos(),
-                froggyHeading.getSin())
-                .mul(speed_forward);
-
         double final_target = angleController.update(
                 Angle.fromDegrees(swerveTargetAngle),
                 Angle.fromRotation2d(swerve.getPose().getRotation()));
 
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-                .withVelocityX(linearVelocity.get().x + vel_parallel.x + vel_forward.x)
-                .withVelocityY(linearVelocity.get().y + vel_parallel.y + vel_forward.y)
+                .withVelocityX(linearVelocity.get().x + vel_parallel.x)
+                .withVelocityY(linearVelocity.get().y + vel_parallel.y)
                 .withRotationalRate(final_target));
 
         SmartDashboard.putNumber("Vision/TXNC Degrees", txnc.getDegrees());

@@ -7,8 +7,6 @@
 
 package com.stuypulse.robot.subsystems.funnel;
 
-import com.stuypulse.stuylib.network.SmartBoolean;
-
 
 public class FunnelSim extends Funnel {
 
@@ -32,5 +30,11 @@ public class FunnelSim extends Funnel {
     @Override
     public void simulationPeriodic() {
         super.periodic();
+    }
+
+    @Override
+    public boolean hasCoral() {
+       return true;
+       //adding this so it builds
     }
 }

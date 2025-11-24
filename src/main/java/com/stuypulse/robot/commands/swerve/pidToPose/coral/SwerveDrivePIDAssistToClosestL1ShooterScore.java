@@ -7,6 +7,16 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
+import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Driver.Drive;
+import com.stuypulse.robot.constants.Settings.Driver.Turn;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.HolonomicController;
+import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.robot.util.ReefUtil.ReefFace;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.input.Gamepad;
@@ -20,29 +30,17 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
-import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.constants.Field;
-import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
-import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Driver.Drive;
-import com.stuypulse.robot.constants.Settings.Driver.Turn;
-import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.util.HolonomicController;
-import com.stuypulse.robot.util.ReefUtil;
-import com.stuypulse.robot.util.ReefUtil.ReefFace;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDAssistToClosestL1ShooterScore extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final CommandXboxController driver;
+    private final Gamepad driver;
     
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
@@ -53,7 +51,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterScore extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1ShooterScore(CommandXboxController driver) {
+    public SwerveDrivePIDAssistToClosestL1ShooterScore(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -86,7 +84,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterScore extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
+        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
     }
 
     @Override

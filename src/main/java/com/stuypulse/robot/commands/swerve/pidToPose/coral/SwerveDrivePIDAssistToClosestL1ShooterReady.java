@@ -7,6 +7,16 @@
 
 package com.stuypulse.robot.commands.swerve.pidToPose.coral;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
+import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Driver.Drive;
+import com.stuypulse.robot.constants.Settings.Driver.Turn;
+import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import com.stuypulse.robot.util.HolonomicController;
+import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.robot.util.ReefUtil.ReefFace;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.input.Gamepad;
@@ -20,30 +30,17 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
-import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.constants.Field;
-import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
-import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Driver.Drive;
-import com.stuypulse.robot.constants.Settings.Driver.Turn;
-import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import com.stuypulse.robot.util.HolonomicController;
-import com.stuypulse.robot.util.ReefUtil;
-import com.stuypulse.robot.util.ReefUtil.ReefFace;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final CommandSwerveDrivetrain swerve;
-    private final CommandXboxController driver;
+    private final Gamepad driver;
     
     private final VStream driverLinearVelocity;
     private final IStream driverAngularVelocity;
@@ -54,7 +51,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    public SwerveDrivePIDAssistToClosestL1ShooterReady(CommandXboxController driver) {
+    public SwerveDrivePIDAssistToClosestL1ShooterReady(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
         this.driver = driver;
 
@@ -87,7 +84,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftY(), -driver.getLeftX());
+        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
     }
 
     @Override
@@ -103,6 +100,7 @@ public class SwerveDrivePIDAssistToClosestL1ShooterReady extends Command {
         controller.update(targetPose, swerve.getPose());
 
         ChassisSpeeds controllerFieldRelativeSpeeds = controller.getOutput().toFieldRelative(swerve.getPose().getRotation());
+        
 
         Rotation2d reefFaceParallelHeading = closestReefFace.getCorrespondingAprilTagPose().getRotation().rotateBy(Rotation2d.kCCW_90deg);
         // double driverVelocityComponentParallelToReefFace = driverLinearVelocity.get().dot(new Vector2D(reefFaceParallelHeading.getCos(), reefFaceParallelHeading.getSin()));

@@ -1,25 +1,18 @@
 package com.stuypulse.robot.commands.autons.IKLA;
 
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.stuypulse.robot.commands.leds.LEDApplyPattern;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
+import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL2Front;
 import com.stuypulse.robot.commands.shooter.scoring.ShooterShootL4Front;
-import com.stuypulse.robot.commands.shooter.ShooterStop;
 import com.stuypulse.robot.commands.superStructure.SuperStructureFeed;
 import com.stuypulse.robot.commands.superStructure.SuperStructureWaitUntilAtTarget;
-import com.stuypulse.robot.commands.superStructure.coral.SuperStructureAutonEnd;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL2Front;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
-import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
-import com.stuypulse.robot.commands.leds.LEDApplyPattern;
-import com.stuypulse.robot.subsystems.funnel.Funnel;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
-import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructureState;
-import com.stuypulse.robot.subsystems.superStructure.arm.Arm.ArmState;
-import com.stuypulse.robot.subsystems.superStructure.elevator.Elevator.ElevatorState;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.ReefUtil.CoralBranch;
