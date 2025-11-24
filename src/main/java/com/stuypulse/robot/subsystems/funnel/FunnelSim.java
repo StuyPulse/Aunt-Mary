@@ -32,9 +32,9 @@ public class FunnelSim extends Funnel {
         super.periodic();
     }
 
-    @Override
-    public boolean hasCoral() {
-       return true;
+    // @Override
+    // public boolean hasCoral() {
+    //    return true;
        //adding this so it builds
-    }
+    // }
 }

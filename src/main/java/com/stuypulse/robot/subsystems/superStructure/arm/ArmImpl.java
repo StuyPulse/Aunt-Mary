@@ -109,7 +109,7 @@ public class ArmImpl extends Arm {
         // return Rotation2d.fromRotations(encoderAngle > Settings.Arm.MIN_ANGLE_DEG.minus(Rotation2d.fromDegrees(15)).getRotations() 
         //     ? encoderAngle 
         //     : encoderAngle + 1);
-        return encoderAngle*360.0;
+        return encoderAngle * 360.0;
     }
 
     @Override
