@@ -6,12 +6,8 @@
 
 package com.stuypulse.robot;
 
-import java.time.format.TextStyle;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.stuypulse.robot.commands.shooter.ShooterAcquireAlgae;
 import com.stuypulse.robot.commands.shooter.ShooterSetConfigMode;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
@@ -20,9 +16,8 @@ import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -36,6 +31,7 @@ public class Robot extends TimedRobot {
         TEST
     }
 
+    private static CommandScheduler commandScheduler;
     private static Alliance alliance;
     private static RobotMode mode;
 
@@ -88,14 +84,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        commandScheduler = CommandScheduler.getInstance();
         mode = RobotMode.DISABLED;
 
+        // stop using debrecated .schedule method
         if (!DriverStation.isFMSAttached()) {
-            new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)).schedule();
-            new VisionSetMegaTag1().schedule();
+            //commandScheduler.schedule(new VisionSetMegaTag1());
+            commandScheduler.schedule(new VisionSetMegaTag1().andThen(new VisionSetIMUMode(1)));
         }
 
-        new ShooterSetConfigMode(NeutralModeValue.Coast).schedule();
+        commandScheduler.schedule(new ShooterSetConfigMode(NeutralModeValue.Coast));
     }
 
     @Override
@@ -109,10 +107,11 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         mode = RobotMode.AUTON;
         auto = robot.getAutonomousCommand();
+        commandScheduler = CommandScheduler.getInstance();
 
-        new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
-        new VisionSetMegaTag2().schedule();
-        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
+        commandScheduler.schedule(new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)));
+        //commandScheduler.schedule(new VisionSetMegaTag2());
+        commandScheduler.schedule(new ShooterSetConfigMode(NeutralModeValue.Brake) );
         
         if (auto != null) {
             //auto.schedule();
@@ -138,10 +137,9 @@ public class Robot extends TimedRobot {
             auto.cancel();
         }
 
-        new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)).schedule();
-        new VisionSetMegaTag2().schedule();
-        new ShooterSetConfigMode(NeutralModeValue.Brake).schedule();
-
+        commandScheduler.schedule(new VisionSetMegaTag2().andThen(new VisionSetIMUMode(2)));
+        //commandScheduler.schedule(new VisionSetMegaTag2());
+        commandScheduler.schedule(new ShooterSetConfigMode(NeutralModeValue.Brake));
         // Shuffleboard.selectTab("Teleoperated");
     }
 
