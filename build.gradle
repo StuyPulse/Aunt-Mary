@@ -16,7 +16,7 @@ java {
 def ROBOT_MAIN_CLASS = "com.stuypulse.robot.Main"
 // Set this to the latest version of StuyLib.
 // You can check here: https://github.com/StuyPulse/StuyLib/releases.
-final String STUYLIB_VERSION = 'syscore-SNAPSHOT'
+final String STUYLIB_VERSION = '8dd01b87790c67b36fd884fae548995712e62102'
 
 // Define my targets (SystemCore) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.

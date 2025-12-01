@@ -3,7 +3,6 @@ package com.stuypulse.robot.subsystems.vision;
 import java.util.ArrayList;
 
 public class ServoObjectData {
-
     private final double timestamp;
     private ArrayList<Double> txncList;
     private ArrayList<Double> areas;

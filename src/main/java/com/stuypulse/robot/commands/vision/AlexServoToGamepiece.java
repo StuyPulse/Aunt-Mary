@@ -1,6 +1,13 @@
 package com.stuypulse.robot.commands.vision;
 
 import com.stuypulse.robot.constants.Cameras;
+
+/************************ PROJECT MARY *************************/
+/* Copyright (c) 2025 StuyPulse Robotics. All rights reserved. */
+/* Use of this source code is governed by an MIT-style license */
+/* that can be found in the repository LICENSE file.           */
+/***************************************************************/
+
 import com.stuypulse.robot.constants.Gains.Swerve.Alignment;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
@@ -17,6 +24,7 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,7 +43,8 @@ public class AlexServoToGamepiece extends Command {
     private final AngleController angleController;
     private final VStream linearVelocity;
 
-    private final static double kP_VEL_PARALLEL = 3.0;
+    private final static double kP_VEL_PARALLEL = 0.5;
+    private final static double kP_VEL_FORWARD = 0.25;
 
     public AlexServoToGamepiece(Gamepad driver) {
         swerve = CommandSwerveDrivetrain.getInstance();
@@ -60,13 +69,14 @@ public class AlexServoToGamepiece extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
         robotHeading = swerve.getPose().getRotation();
+        Rotation2d froggyHeading = robotHeading.minus(Rotation2d.fromDegrees(90.0));
         Rotation2d txnc = Rotation2d.fromDegrees(vision.getLastGoodFrame().txncOfHighestArea());
+        double ta = vision.getLastGoodFrame().getHighestArea();
 
         double unWrappedAngle = robotHeading.getDegrees();
         if (unWrappedAngle < 0.0) {
@@ -82,22 +92,32 @@ public class AlexServoToGamepiece extends Command {
 
         double speed_parallel = kP_VEL_PARALLEL * Math.abs(txnc.getRadians());
         Vector2D vel_parallel = new Vector2D(
-                Math.cos(Units.degreesToRadians(offset.getDegrees() + 90.0)),
-                Math.sin(Units.degreesToRadians(offset.getDegrees() + 90.0)))
+            Math.cos(Units.degreesToRadians(offset.getDegrees()+ 90.0)),
+            Math.sin(Units.degreesToRadians(offset.getDegrees()+ 90.0)))
                 .mul(speed_parallel).rotate(Angle.fromDegrees(swerveTargetAngle));
+
+        double speed_forward = kP_VEL_FORWARD * 1.0/ta;
+        Vector2D vel_forward = new Vector2D(
+            froggyHeading.getCos(),
+            froggyHeading.getSin())
+                .mul(speed_forward);
+
+        Pose2d swervePose = swerve.getPose();
 
         double final_target = angleController.update(
                 Angle.fromDegrees(swerveTargetAngle),
-                Angle.fromRotation2d(swerve.getPose().getRotation()));
+                Angle.fromRotation2d(swervePose.getRotation()));
 
         swerve.setControl(swerve.getFieldCentricSwerveRequest()
-                .withVelocityX(linearVelocity.get().x + vel_parallel.x)
-                .withVelocityY(linearVelocity.get().y + vel_parallel.y)
+                .withVelocityX(linearVelocity.get().x + vel_parallel.x + vel_forward.x)
+                .withVelocityY(linearVelocity.get().y + vel_parallel.y + vel_forward.y)
                 .withRotationalRate(final_target));
 
         SmartDashboard.putNumber("Vision/TXNC Degrees", txnc.getDegrees());
-        SmartDashboard.putNumber("Vision/Current Robot Angle", swerve.getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber("Vision/Current Robot Angle", swervePose.getRotation().getDegrees());
         SmartDashboard.putNumber("Vision/Target Robot Angle", swerveTargetAngle);
+
+        SmartDashboard.putNumber("Vision/Error of Angle Controller", swerveTargetAngle - swervePose.getRotation().getDegrees());
     }
 
     @Override

@@ -307,8 +307,10 @@ public class LimelightVision extends SubsystemBase {
                         .ordinal()) {
                     RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
 
-                    if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tclass").getString("OBJECT")
-                            .equals("algae")) {
+                    if (NetworkTableInstance.getDefault().getTable("limelight-froggy")
+                    .getEntry("tdclass").getString("THIS IS THE DEFAULT")
+                    .contains("algae")) {
+                        SmartDashboard.putBoolean("Vision/REACHED", true);
                         double timestamp = timer.get();
                         ServoObjectData currentFrame = new ServoObjectData(timestamp);
 
@@ -322,13 +324,22 @@ public class LimelightVision extends SubsystemBase {
                     }
 
                 }
+                
             }
         }
+
         if (lastGoodFrame != null) {
-            SmartDashboard.putNumber("Vision/LAST GOOD TXNC", lastGoodFrame .txncOfHighestArea());
+            SmartDashboard.putNumber("Vision/LAST GOOD TXNC", lastGoodFrame.txncOfHighestArea());
             SmartDashboard.putNumber("Vision/LAST GOOD AREA", lastGoodFrame.getHighestArea());
             SmartDashboard.putNumber("Vision/LAST GOOD TIME", lastGoodFrame.getTimeStamp());
         }
+
+
+        SmartDashboard.putBoolean("Vision/currentFrame null?", currentFrame == null);
+
+        SmartDashboard.putBoolean("Vision/lastGoodFrame null?", lastGoodFrame == null);
+        
+        //SmartDashboard.putBoolean("Vision/Last detected object algae?", NetworkTableInstance.getDefault().getTable("limelight-froggy").getEntry("tdclass").getString("this is the default").contains("algae"));
         SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
         SmartDashboard.putNumber("Vision/Froggy Raw Detection Length",
                 LimelightHelpers.getRawDetections("limelight-froggy").length);
