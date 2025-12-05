@@ -5,6 +5,7 @@
 /** ************************************************************ */
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.AutoAcquireRoutine;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.DoNothingCommand;
 import com.stuypulse.robot.commands.ManualShoot;
@@ -466,12 +467,14 @@ public class RobotContainer {
         //                 .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
         // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver).alongWith(new LEDApplyPattern(LED.ALIGN_RIGHT_COLOR)));
         try {
-                driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+                // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+                driver.getLeftButton().whileTrue(new AutoAcquireRoutine(driver));
 
         } catch (Exception e) {
                 System.out.println("THIS IS THE TRY CATCH STATEMENT");
                 e.printStackTrace();
         }
+
         // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Align to closest Coral Station
