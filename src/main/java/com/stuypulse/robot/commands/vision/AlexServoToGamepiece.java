@@ -14,6 +14,7 @@ import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
 import com.stuypulse.robot.subsystems.climb.Climb;
 import com.stuypulse.robot.subsystems.climb.Climb.ClimbState;
+import com.stuypulse.robot.subsystems.froggy.Froggy;
 import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.subsystems.vision.ServoObjectData;
@@ -61,7 +62,7 @@ public class AlexServoToGamepiece extends Command {
     private final IStream angularVelocity;
 
     private final static double kP_VEL_PARALLEL = 0.5;
-    private final static double kP_VEL_FORWARD = 2.5;
+    private final static double kP_VEL_FORWARD = 1.5;
     private final static double PID_SCALING = 20.0; // < 20% of frame = faster rotation
     private final static double FORWARD_VEL_SCALING = 20.0; // > 20% of frame = slow down translation
 
@@ -69,7 +70,7 @@ public class AlexServoToGamepiece extends Command {
         swerve = CommandSwerveDrivetrain.getInstance();
         vision = LimelightVision.getInstance();
         this.driver = driver;
-        offset = new Rotation2d(Cameras.LimelightCameras[2].getLocation().getRotation().getZ());
+        offset = new Rotation2d(Cameras.LimelightCameras[1].getLocation().getRotation().getZ());
 
         angleController = new AnglePIDController(Alignment.THETA.kP, Alignment.THETA.kI, Alignment.THETA.kD);
         angleController.setSetpointFilter(new AMotionProfile(Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_VELOCITY,
@@ -154,6 +155,7 @@ public class AlexServoToGamepiece extends Command {
                     .withVelocityY(linearVelocity.get().y + vel_parallel.y + vel_forward.y)
                     .withRotationalRate(final_target));
 
+
             SmartDashboard.putNumber("Vision/TXNC Degrees", txnc.getDegrees());
             SmartDashboard.putNumber("Vision/Current Robot Angle", swervePose.getRotation().getDegrees());
             SmartDashboard.putNumber("Vision/Target Robot Angle", swerveTargetAngle);
@@ -165,6 +167,8 @@ public class AlexServoToGamepiece extends Command {
                     .withVelocityY(linearVelocity.get().y)
                     .withRotationalRate(angularVelocity.getAsDouble()));
         }
+
+
     }
 
     @Override
@@ -173,6 +177,11 @@ public class AlexServoToGamepiece extends Command {
                 .withVelocityX(0)
                 .withVelocityY(0)
                 .withRotationalRate(0));
+    }
+
+    @Override
+    public boolean isFinished() {
+        return Froggy.getInstance().isStalling();
     }
 
     private Vector2D getDriverInputAsVelocity() {

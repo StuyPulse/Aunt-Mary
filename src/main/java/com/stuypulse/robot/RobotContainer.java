@@ -469,8 +469,14 @@ public class RobotContainer {
         // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
         driver.getLeftButton()
                 .whileTrue(new AutoAcquireRoutine(driver)
-                        .alongWith(new FroggyPivotToAlgaeGroundPickup()).alongWith(new FroggyRollerIntakeAlgae()))
-                .onFalse(new FroggyPivotToStow().alongWith(new FroggyRollerHoldAlgae()));
+                        .alongWith(new FroggyPivotToAlgaeGroundPickup())
+                        .alongWith(new FroggyRollerIntakeAlgae())
+                                .until(() -> Froggy.getInstance().isStalling())
+                        .andThen(new BuzzController(driver)
+                                .alongWith(new FroggyPivotToStow()).alongWith(new FroggyRollerHoldAlgae())))
+
+                .onFalse(new FroggyPivotToStow()
+                        .alongWith(new FroggyRollerHoldAlgae()));
 
         // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 

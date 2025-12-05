@@ -58,6 +58,10 @@ public interface Constants {
     }
 
     public interface Froggy {
+        
+        double AMPS_TO_STALL = 30.0;
+
+        double AMPS_NOT_STALLING = 20.0;
 
         double GEAR_RATIO = 48.0;
 

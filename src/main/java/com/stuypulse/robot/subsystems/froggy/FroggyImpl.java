@@ -18,6 +18,7 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.SysId;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class FroggyImpl extends Froggy {
 
+    private boolean isStalling;
     private TalonFX rollerMotor;
     private TalonFX pivotMotor;
     private DutyCycleEncoder absoluteEncoder;
@@ -54,6 +56,7 @@ public class FroggyImpl extends Froggy {
         pivotVoltageOverride = Optional.empty();
 
         debuggingMotionProfile = new MotionProfile(Settings.Froggy.MAX_VEL_DEG, Settings.Froggy.MAX_ACCEL_DEG);
+        isStalling = false;
     }
 
     @Override
@@ -88,6 +91,11 @@ public class FroggyImpl extends Froggy {
                 getPivotState().getTargetAngle().getDegrees(),
                 Constants.Froggy.MINIMUM_ANGLE.getDegrees(),
                 Constants.Froggy.MAXIMUM_ANGLE.getDegrees()));
+    }
+    
+    @Override
+    public boolean isStalling() {
+        return isStalling;
     }
 
     @Override
@@ -124,6 +132,13 @@ public class FroggyImpl extends Froggy {
             pivotMotor.setVoltage(0);
         }
 
+        if (rollerMotor.getStatorCurrent().getValueAsDouble() >= Constants.Froggy.AMPS_TO_STALL) {
+            isStalling = true;
+        }
+
+        if (rollerMotor.getStatorCurrent().getValueAsDouble() <= Constants.Froggy.AMPS_NOT_STALLING) { 
+            isStalling = false;
+        }
         // PIVOT
         SmartDashboard.putBoolean("Froggy/Pivot/At Target Angle", isAtTargetAngle());
 
@@ -145,5 +160,7 @@ public class FroggyImpl extends Froggy {
             SmartDashboard.putNumber("Froggy/Roller/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
             SmartDashboard.putNumber("Froggy/Roller/Stator Current", rollerMotor.getStatorCurrent().getValueAsDouble());
         }
+        
+        
     }
 }
