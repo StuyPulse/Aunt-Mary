@@ -106,7 +106,7 @@ public class LimelightVision extends SubsystemBase {
         // Auto Acquire
         currentFrame = new ObjectData(Pose2d.kZero, 0);
         closestObject = new ObjectData(Pose2d.kZero, 0);
-        currentGamepieceTarget = "algae";
+        currentGamepieceTarget = "none";
 
         timer = new Timer();
         objectFIFO = new LinkedList<>();
@@ -276,7 +276,6 @@ public class LimelightVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
         this.maxTagCount = 0;
 
         updateWhitelistMode();
@@ -328,7 +327,7 @@ public class LimelightVision extends SubsystemBase {
                             lastGoodFrame = currentFrame;
                         }
 
-                    } else if  (tdClass.contains("coral")) { // you can define different behavior for coral if you want
+                    } else if (tdClass.contains("coral")) { // you can define different behavior for coral if you want
                         double timestamp = timer.get();
                         ServoObjectData currentFrame = new ServoObjectData(timestamp);
 

@@ -405,6 +405,7 @@ public interface Settings {
 
         LEDPattern AUTO_ACQUIRE_ALGAE = LEDPattern.solid(Color.kAqua);
         LEDPattern AUTO_ACQUIRE_CORAL = LEDPattern.solid(Color.kWhite);
+        LEDPattern AUTO_ACQUIRE_DEFAULT = LEDPattern.solid(Color.kPink);
 
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled

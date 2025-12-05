@@ -466,14 +466,8 @@ public class RobotContainer {
         //         .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
         //                 .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
         // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver).alongWith(new LEDApplyPattern(LED.ALIGN_RIGHT_COLOR)));
-        try {
-                // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
-                driver.getLeftButton().whileTrue(new AutoAcquireRoutine(driver));
-
-        } catch (Exception e) {
-                System.out.println("THIS IS THE TRY CATCH STATEMENT");
-                e.printStackTrace();
-        }
+        // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+        driver.getLeftButton().whileTrue(new AutoAcquireRoutine(driver));
 
         // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
