@@ -61,7 +61,7 @@ public class AlexServoToGamepiece extends Command {
     private final IStream angularVelocity;
 
     private final static double kP_VEL_PARALLEL = 0.5;
-    private final static double kP_VEL_FORWARD = 0.25;
+    private final static double kP_VEL_FORWARD = 2.5;
     private final static double PID_SCALING = 20.0; // < 20% of frame = faster rotation
     private final static double FORWARD_VEL_SCALING = 20.0; // > 20% of frame = slow down translation
 
