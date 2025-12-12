@@ -74,6 +74,9 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveResetRotation;
 import com.stuypulse.robot.commands.swerve.SwerveDriveWaitUntilAlignedToCatapult;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Clearance;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedToBarge118Score;
+import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDriveDynamicObstacles;
+import com.stuypulse.robot.commands.swerve.pathFindToPose.SwerveDrivePathFindToPose;
+import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDAssistToClosestCoralStation;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
@@ -99,6 +102,7 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 import com.stuypulse.robot.util.Clearances;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
+import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
@@ -241,55 +245,55 @@ public class RobotContainer {
                 .onFalse(new FroggyRollerHoldCoral());
 
         // L1
-        driver.getRightBumper()
-                .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_VERSATILE) && !shooter.hasCoral()))
-                .whileTrue(new ConditionalCommand(
-                        new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                                .andThen(
-                                        new ConditionalCommand(
-                                                new SuperStructureCoralL1Front(),
-                                                new SuperStructureCoralL1Back(),
-                                                () -> swerve.isFrontFacingAllianceReef())),
-                        new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_VERSATILE)
-                                .andThen(new FroggyPivotToL1Versatile()),
-                        () -> shooter.hasCoral()))
-                .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
-                        .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
-                        .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE && (froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE || froggy.getRollerState() == RollerState.STOP)))
-                .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT || shooter.getState() == ShooterState.SHOOT_CORAL_L1_BACK));
+        // driver.getRightBumper()
+        //         .onTrue(new BuzzController(driver).onlyIf(() -> !Clearances.canMoveFroggyWithoutColliding(PivotState.L1_SCORE_ANGLE_VERSATILE) && !shooter.hasCoral()))
+        //         .whileTrue(new ConditionalCommand(
+        //                 new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
+        //                         .andThen(
+        //                                 new ConditionalCommand(
+        //                                         new SuperStructureCoralL1Front(),
+        //                                         new SuperStructureCoralL1Back(),
+        //                                         () -> swerve.isFrontFacingAllianceReef())),
+        //                 new FroggyPivotWaitUntilCanMoveWithoutColliding(PivotState.L1_SCORE_ANGLE_VERSATILE)
+        //                         .andThen(new FroggyPivotToL1Versatile()),
+        //                 () -> shooter.hasCoral()))
+        //         .onFalse(new WaitUntilCommand(() -> Clearances.isFroggyClearFromAllObstables())
+        //                 .andThen(new FroggyPivotToStow().alongWith(new FroggyRollerStop()))
+        //                 .onlyIf(() -> froggy.getPivotState() == PivotState.L1_SCORE_ANGLE_VERSATILE && (froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE || froggy.getRollerState() == RollerState.STOP)))
+        //         .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT || shooter.getState() == ShooterState.SHOOT_CORAL_L1_BACK));
 
-        driver.getRightBumper().debounce(0.25)
-                .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
-                        .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT
-                        || shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT
-                        || froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE))
-                .whileTrue(new ConditionalCommand(
-                        // new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
-                        //     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
-                        //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
-                        //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
-                        //             .andThen(new ShooterShootL1()))),
-                        new ConditionalCommand(
-                                new ScoreRoutine(driver, 1, true).until(() -> false),
-                                new ScoreRoutine(driver, 1, false).until(() -> false),
-                                () -> swerve.isFrontFacingAllianceReef()
-                        ),
-                        new ConditionalCommand(
-                                new FroggyPivotToL1Versatile()
-                                        .deadlineFor(new LEDApplyPattern(Settings.LED.SCORE_COLOR))
-                                        .alongWith(
-                                                new SwerveDrivePIDToClosestL1FroggyScore(0)
-                                                        .andThen(new FroggyRollerShootCoralVersatile())),
-                                new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1Versatile())
-                                        .alongWith(
-                                                new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_VERSATILE.getTargetAngle().getDegrees() - 10))
-                                        .andThen(
-                                                new SwerveDrivePIDToClosestL1FroggyScore(0)
-                                                        .andThen(new FroggyRollerShootCoralVersatile())),
-                                () -> Clearances.isFroggyClearFromAllObstables()),
-                        () -> shooter.hasCoral()))
-                .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1_FRONT || superStructure.getState() == SuperStructureState.L1_BACK || shooter.getState() != ShooterState.HOLD_ALGAE))
-                .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
+        // driver.getRightBumper().debounce(0.25)
+        //         .whileTrue(new LEDApplyPattern(Settings.LED.DEFAULT_ALIGN_COLOR)
+        //                 .until(() -> shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT
+        //                 || shooter.getState() == ShooterState.SHOOT_CORAL_L1_FRONT
+        //                 || froggy.getRollerState() == RollerState.SHOOT_CORAL_VERSATILE))
+        //         .whileTrue(new ConditionalCommand(
+        //                 // new WaitUntilCommand(() -> superStructure.getState() == SuperStructureState.L1 && superStructure.atTarget())
+        //                 //     .deadlineFor(new SwerveDrivePIDAssistToClosestL1ShooterReady(driver))
+        //                 //     .andThen(new SwerveDrivePIDAssistToClosestL1ShooterScore(driver)
+        //                 //         .alongWith(new WaitUntilCommand(() -> ReefUtil.getClosestReefFace().isAlignedToL1ShooterTarget())
+        //                 //             .andThen(new ShooterShootL1()))),
+        //                 new ConditionalCommand(
+        //                         new ScoreRoutine(driver, 1, true).until(() -> false),
+        //                         new ScoreRoutine(driver, 1, false).until(() -> false),
+        //                         () -> swerve.isFrontFacingAllianceReef()
+        //                 ),
+        //                 new ConditionalCommand(
+        //                         new FroggyPivotToL1Versatile()
+        //                                 .deadlineFor(new LEDApplyPattern(Settings.LED.SCORE_COLOR))
+        //                                 .alongWith(
+        //                                         new SwerveDrivePIDToClosestL1FroggyScore(0)
+        //                                                 .andThen(new FroggyRollerShootCoralVersatile())),
+        //                         new SwerveDrivePIDToClosestL1FroggyReady().alongWith(new FroggyPivotToL1Versatile())
+        //                                 .alongWith(
+        //                                         new WaitUntilCommand(() -> froggy.getCurrentAngle().getDegrees() > PivotState.L1_SCORE_ANGLE_VERSATILE.getTargetAngle().getDegrees() - 10))
+        //                                 .andThen(
+        //                                         new SwerveDrivePIDToClosestL1FroggyScore(0)
+        //                                                 .andThen(new FroggyRollerShootCoralVersatile())),
+        //                         () -> Clearances.isFroggyClearFromAllObstables()),
+        //                 () -> shooter.hasCoral()))
+        //         .onFalse(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new SuperStructureFeed()).onlyIf(() -> superStructure.getState() == SuperStructureState.L1_FRONT || superStructure.getState() == SuperStructureState.L1_BACK || shooter.getState() != ShooterState.HOLD_ALGAE))
+        //         .onFalse(new FroggyRollerStop().onlyIf(() -> froggy.getRollerState() != RollerState.HOLD_CORAL));
 
         // L4 Coral Score + Top L1
         driver.getTopButton()
@@ -465,13 +469,6 @@ public class RobotContainer {
         //         .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
         //                 .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
         // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver).alongWith(new LEDApplyPattern(LED.ALIGN_RIGHT_COLOR)));
-        try {
-                driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
-
-        } catch (Exception e) {
-                System.out.println("THIS IS THE TRY CATCH STATEMENT");
-                e.printStackTrace();
-        }
         // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Align to closest Coral Station
@@ -526,26 +523,23 @@ public class RobotContainer {
                                 .alongWith(new FroggyRollerStop())));
 
         // Climb!!
-        driver.getRightMenuButton()
-                .onTrue(new ClimbClimb()
-                        .onlyIf(() -> climb.getState() == ClimbState.OPEN
-                        || climb.getState() == ClimbState.SHIMMY
-                        || climb.getState() == ClimbState.IDLE))
-                .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
-                .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
-                .onFalse(new ShooterStop());
+        // driver.getRightMenuButton()
+        //         .onTrue(new ClimbClimb()
+        //                 .onlyIf(() -> climb.getState() == ClimbState.OPEN
+        //                 || climb.getState() == ClimbState.SHIMMY
+        //                 || climb.getState() == ClimbState.IDLE))
+        //         .onTrue(new ShooterUnjamCoralBackwards().onlyIf(() -> climb.getState() == ClimbState.CLOSED))
+        //         .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
+        //         .onFalse(new ShooterStop());
 
-        // //Align to closest Coral Station
-        // driver.getRightStickButton()
-        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-        //     .onTrue(SwerveDriveDynamicObstacles.reefClearance())
-        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
-        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-        //         .onlyIf(() -> !shooter.hasCoral()))
-        //     .onFalse(SwerveDriveDynamicObstacles.reset());
+        //Align to closest Coral Station
+        driver.getRightBumper()
+            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
+            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+            .whileTrue(SwerveDrivePathFindToPose.pathFindToBranch(CoralBranch.A, 4, true)
+                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR)))
+                .onFalse( SwerveDriveDynamicObstacles.reset());
     }
 
     /**
