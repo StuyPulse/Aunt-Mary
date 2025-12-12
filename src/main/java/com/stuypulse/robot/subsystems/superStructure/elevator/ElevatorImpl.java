@@ -30,7 +30,7 @@ public class ElevatorImpl extends Elevator {
 
     protected ElevatorImpl() {
         super();
-        motor = new TalonFX(Ports.Elevator.MOTOR, Settings.canBusCanivore);
+        motor = new TalonFX(Ports.Elevator.MOTOR, Settings.canBus3);
         Motors.Elevator.MOTOR_CONFIG.configure(motor);
         motor.setPosition(Constants.Elevator.MIN_HEIGHT_METERS);
 

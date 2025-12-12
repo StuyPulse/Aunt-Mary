@@ -24,6 +24,8 @@ import com.stuypulse.robot.subsystems.superStructure.SuperStructure.SuperStructu
 import com.stuypulse.robot.subsystems.vision.LimelightVision;
 
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LEDDefaultCommand extends Command{
@@ -58,12 +60,12 @@ public class LEDDefaultCommand extends Command{
 
     @Override
     public void execute() {
-        if(Robot.getMode() == RobotMode.DISABLED) {
+        if (Robot.getMode() == RobotMode.DISABLED) {
             if (LimelightVision.getInstance().getMaxTagCount() >= Settings.LED.DESIRED_TAGS_WHEN_DISABLED) {
                 leds.applyPattern(Settings.LED.DISABLED_ALIGNED);
             }
             else {
-                leds.applyPattern(LEDPattern.kOff);
+                leds.applyPattern(LEDPattern.solid(Color.kAliceBlue));
             }
         }
         else {
