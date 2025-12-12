@@ -535,17 +535,17 @@ public class RobotContainer {
                 .onFalse(new ClimbIdle().onlyIf(() -> climb.getState() == ClimbState.CLIMBING))
                 .onFalse(new ShooterStop());
 
-        Align to closest Coral Station
-        driver.getRightStickButton()
-            .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
-            .onTrue(SwerveDriveDynamicObstacles.reefClearance())
-            .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
-            .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
-                .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
-                .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
-                .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
-                .onlyIf(() -> !shooter.hasCoral()))
-            .onFalse(SwerveDriveDynamicObstacles.reset());
+        // //Align to closest Coral Station
+        // driver.getRightStickButton()
+        //     .onTrue(new BuzzController(driver).onlyIf(() -> shooter.hasCoral()))
+        //     .onTrue(SwerveDriveDynamicObstacles.reefClearance())
+        //     .onTrue(new WaitUntilCommand(() -> Clearances.isArmClearFromReef()).andThen(new Reset()).onlyIf(() -> !shooter.hasCoral()))
+        //     .whileTrue(SwerveDrivePathFindToPose.pathFindToNearestCoralStation()
+        //         .until(() -> swerve.getPose().getX() < Field.ALLIANCE_REEF_CENTER.getX())
+        //         .andThen(new SwerveDrivePIDAssistToClosestCoralStation(driver))
+        //         .alongWith(new LEDApplyPattern(Settings.LED.CORAL_STATION_ALIGN_COLOR))
+        //         .onlyIf(() -> !shooter.hasCoral()))
+        //     .onFalse(SwerveDriveDynamicObstacles.reset());
     }
 
     /**
