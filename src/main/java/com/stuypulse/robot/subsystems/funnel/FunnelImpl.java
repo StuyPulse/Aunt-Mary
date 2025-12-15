@@ -12,7 +12,6 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FunnelImpl extends Funnel {
@@ -23,7 +22,7 @@ public class FunnelImpl extends Funnel {
 
     protected FunnelImpl() {
         super();
-        motor = new TalonFX(Ports.Funnel.MOTOR);
+        motor = new TalonFX(Ports.Funnel.MOTOR, Settings.canBus4);
         Motors.Funnel.MOTOR_CONFIG.configure(motor);
 
         shouldReverse = BStream.create(() -> motor.getSupplyCurrent().getValueAsDouble() > Settings.Funnel.STALL_CURRENT)
