@@ -58,13 +58,17 @@ public interface Constants {
     }
 
     public interface Froggy {
+        
+        double AMPS_TO_STALL = 30.0;
+
+        double AMPS_NOT_STALLING = 20.0;
 
         double GEAR_RATIO = 48.0;
 
         Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-40.760301);
         Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(105.958171);
 
-        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-111.291762 - 90 + 120 - 60 - 60 - 5);
+        Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-111.291762 - 90 + 120 - 60 - 60);
 
         double LENGTH = 0.5; // FOR SIM ONLY
         double MOI = 1; // FOR SIM ONLY

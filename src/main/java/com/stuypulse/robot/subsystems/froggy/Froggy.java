@@ -108,6 +108,7 @@ public abstract class Froggy extends SubsystemBase {
         this.rollerState = state;
     }
 
+    public abstract boolean isStalling();
     public abstract boolean isAtTargetAngle();
 
     public abstract Rotation2d getCurrentAngle();

@@ -5,6 +5,7 @@
 /** ************************************************************ */
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.AutoAcquireRoutine;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.DoNothingCommand;
 import com.stuypulse.robot.commands.ManualShoot;
@@ -469,6 +470,18 @@ public class RobotContainer {
         //         .onFalse(new WaitUntilCommand(() -> shooter.getState() == ShooterState.SHOOT_ALGAE)
         //                 .andThen(new WaitCommand(0.2)).andThen(new ShooterAcquireAlgae()));
         // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver).alongWith(new LEDApplyPattern(LED.ALIGN_RIGHT_COLOR)));
+        // driver.getLeftButton().whileTrue(new AlexServoToGamepiece(driver));
+        driver.getLeftButton()
+                .whileTrue(new AutoAcquireRoutine(driver)
+                        .alongWith(new FroggyPivotToAlgaeGroundPickup())
+                        .alongWith(new FroggyRollerIntakeAlgae())
+                                .until(() -> Froggy.getInstance().isStalling())
+                        .andThen(new BuzzController(driver)
+                                .alongWith(new FroggyPivotToStow()).alongWith(new FroggyRollerHoldAlgae())))
+
+                .onFalse(new FroggyPivotToStow()
+                        .alongWith(new FroggyRollerHoldAlgae()));
+
         // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         // Align to closest Coral Station

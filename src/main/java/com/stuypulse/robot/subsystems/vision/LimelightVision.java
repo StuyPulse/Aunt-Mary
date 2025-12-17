@@ -78,6 +78,7 @@ public class LimelightVision extends SubsystemBase {
 
     private ObjectData currentFrame;
     private ObjectData closestObject;
+    private String currentGamepieceTarget;
 
     private Timer timer;
     private Queue<ServoObjectData> objectFIFO;
@@ -105,6 +106,7 @@ public class LimelightVision extends SubsystemBase {
         // Auto Acquire
         currentFrame = new ObjectData(Pose2d.kZero, 0);
         closestObject = new ObjectData(Pose2d.kZero, 0);
+        currentGamepieceTarget = "none";
 
         timer = new Timer();
         objectFIFO = new LinkedList<>();
@@ -199,6 +201,10 @@ public class LimelightVision extends SubsystemBase {
         return lastGoodFrame;
     }
 
+    public String getCurrentGamepieceTarget() {
+        return currentGamepieceTarget;
+    }
+
     public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
         return Robot.isBlue()
                 ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
@@ -270,7 +276,6 @@ public class LimelightVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
         this.maxTagCount = 0;
 
         updateWhitelistMode();
@@ -303,14 +308,26 @@ public class LimelightVision extends SubsystemBase {
                         SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", false);
                         SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", 0);
                     }
-                } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE
-                        .ordinal()) {
+                } else if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.GAMEPIECE.ordinal()) {
                     RawDetection[] RawResults = LimelightHelpers.getRawDetections(camera.getName());
+                    String tdClass = NetworkTableInstance.getDefault().getTable("limelight-froggy")
+                                    .getEntry("tdclass")
+                                    .getString("none");
+                    currentGamepieceTarget = tdClass;
 
-                    if (NetworkTableInstance.getDefault().getTable("limelight-froggy")
-                    .getEntry("tdclass").getString("THIS IS THE DEFAULT")
-                    .contains("algae")) {
-                        SmartDashboard.putBoolean("Vision/REACHED", true);
+                    if (tdClass.contains("algae")) {
+                        double timestamp = timer.get();
+                        ServoObjectData currentFrame = new ServoObjectData(timestamp);
+
+                        for (RawDetection detection : RawResults) {
+                            currentFrame.addData(detection.txnc, detection.ta);
+                        }
+
+                        if (currentFrame.hasData()) {
+                            lastGoodFrame = currentFrame;
+                        }
+
+                    } else if (tdClass.contains("coral")) { // you can define different behavior for coral if you want
                         double timestamp = timer.get();
                         ServoObjectData currentFrame = new ServoObjectData(timestamp);
 
@@ -322,9 +339,7 @@ public class LimelightVision extends SubsystemBase {
                             lastGoodFrame = currentFrame;
                         }
                     }
-
                 }
-                
             }
         }
 

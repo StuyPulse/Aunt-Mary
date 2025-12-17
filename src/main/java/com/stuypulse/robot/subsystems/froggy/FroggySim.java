@@ -124,6 +124,12 @@ public class FroggySim extends Froggy {
     }
 
     @Override
+    public boolean isStalling() {
+        return true;
+        //adding this so this compiles 
+    }
+
+    @Override
     public void simulationPeriodic() {
         super.periodic();
 

@@ -347,7 +347,7 @@ public interface Settings {
         double CORAL_OUTTAKE_SPEED_THREE = 0.2;
         double CORAL_INTAKE_SPEED = -1.0;
         double CORAL_OUTTAKE_SPEED = 0.2;
-        double HOLD_ALGAE_SPEED = 0.3;
+        double HOLD_ALGAE_SPEED = 0.15;
         double HOLD_CORAL_SPEED = -0.15;
 
         // Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
@@ -402,6 +402,10 @@ public interface Settings {
 
         LEDPattern BARGE_ALIGNING = LEDPattern.solid(Color.kYellow);
         LEDPattern BARGE_ALIGNMENT_DONE = LEDPattern.solid(Color.kRed);
+
+        LEDPattern AUTO_ACQUIRE_ALGAE = LEDPattern.solid(Color.kAqua);
+        LEDPattern AUTO_ACQUIRE_CORAL = LEDPattern.solid(Color.kWhite);
+        LEDPattern AUTO_ACQUIRE_DEFAULT = LEDPattern.solid(Color.kPink);
 
         double DESIRED_TAGS_WHEN_DISABLED = 2; // How many tags we wanna see with one cam when disabled
         LEDPattern DISABLED_ALIGNED = LEDPattern.solid(Color.kPurple); // When able to see DESIRED_TAGS_WHEN_DISABLED+ tags with one cam when disabled

@@ -31,6 +31,7 @@ public class LEDApplyPattern extends Command {
 
     @Override
     public void execute() {
+        System.out.println("im going insane");
         leds.applyPattern(pattern.get());
     }
 }
