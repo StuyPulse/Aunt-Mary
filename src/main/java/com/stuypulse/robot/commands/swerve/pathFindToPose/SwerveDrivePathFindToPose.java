@@ -10,6 +10,8 @@ package com.stuypulse.robot.commands.swerve.pathFindToPose;
 
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.util.ReefUtil;
+import com.stuypulse.robot.util.ReefUtil.CoralBranch;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -33,6 +35,11 @@ public class SwerveDrivePathFindToPose extends Command{
 
     public static SwerveDrivePathFindToPose pathFindToNearestCoralStation() {
         return new SwerveDrivePathFindToPose(() -> Field.CoralStation.getClosestCoralStation().getTargetPose());
+    }
+
+    public static SwerveDrivePathFindToPose pathFindToBranch(CoralBranch targetBranch, int level, boolean front) {
+        //hardcoded
+        return new SwerveDrivePathFindToPose(() -> targetBranch.getScorePose(level, front));
     }
 
     @Override

@@ -31,7 +31,7 @@ public interface Settings {
 
     double DT = 0.020;
     boolean DEBUG_MODE = true;
-    CANBus canBusCanivore = new CANBus("CANIVORE");
+    CANBus canBus3 = new CANBus("can_s3");
     CANBus canBus4 = new CANBus("can_s4");
     
     public interface EnabledSubsystems {
@@ -41,8 +41,8 @@ public interface Settings {
         SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
         SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", false);
-        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
-        SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", false);
+        SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", false);
+        SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
         SmartBoolean SHOOTER_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Shooter Limelight is Enabled", true);
         SmartBoolean FUNNEL_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Funnel Limelight is Enabled", true);
         SmartBoolean FROGGY_LIMELIGHT = new SmartBoolean("Enabled Subsystems/Vision/Froggy Limelight", true);
