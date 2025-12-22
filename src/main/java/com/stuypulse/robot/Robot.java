@@ -13,6 +13,7 @@ import com.stuypulse.robot.commands.shooter.ShooterSetConfigMode;
 import com.stuypulse.robot.commands.vision.VisionSetIMUMode;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag1;
 import com.stuypulse.robot.commands.vision.VisionSetMegaTag2;
+import com.stuypulse.robot.subsystems.vision.LimelightVision;
 
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -77,6 +78,9 @@ public class Robot extends TimedRobot {
         if (DriverStation.getAlliance().isPresent()) {
             alliance = DriverStation.getAlliance().get();
         }
+
+        SmartDashboard.putNumber("Vision/Closest Algae Pose X", LimelightVision.getInstance().getCurrentTargetPose().getX());
+        SmartDashboard.putNumber("Vision/Closest Algae Pose Y", LimelightVision.getInstance().getCurrentTargetPose().getY());
     }
 
     /*********************/
@@ -142,6 +146,8 @@ public class Robot extends TimedRobot {
         //commandScheduler.schedule(new VisionSetMegaTag2());
         commandScheduler.schedule(new ShooterSetConfigMode(NeutralModeValue.Brake));
         // Shuffleboard.selectTab("Teleoperated");
+
+        LimelightVision.getInstance().setPipelineMode(1, "limelight-froggy");
     }
 
     @Override

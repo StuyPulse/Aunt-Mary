@@ -23,8 +23,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -203,6 +205,28 @@ public class LimelightVision extends SubsystemBase {
 
     public String getCurrentGamepieceTarget() {
         return currentGamepieceTarget;
+    }
+
+    public Pose2d getCurrentTargetPose() {
+        CommandSwerveDrivetrain drivetrain = CommandSwerveDrivetrain.getInstance();
+
+        Rotation2d angleToGoal = Rotation2d.fromDegrees(-5);
+        
+        double distanceX = (Units.inchesToMeters(11.349) - Units.inchesToMeters(8)) / (angleToGoal.plus(Rotation2d.fromDegrees(LimelightHelpers.getTY("limelight-froggy")))).getTan();
+        double distanceY = distanceX * Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight-froggy")).getTan();
+        
+        double cameraLensHorizontalOffset = LimelightHelpers.getTX("limelight-froggy") / distanceX;
+        double realHorizontalOffset = Math.atan(cameraLensHorizontalOffset / distanceX);
+        double rotationError = Math.atan(realHorizontalOffset / distanceX);
+        
+        Pose2d algaePose = new Pose2d(drivetrain.getPose().getX() - distanceX*Math.cos(rotationError), drivetrain.getPose().getY() + distanceY*Math.sin(rotationError), Rotation2d.kZero);
+        Field2d algaeField2d = new Field2d();
+
+        algaeField2d.setRobotPose(algaePose);
+
+        SmartDashboard.putData("Field/Algae", algaeField2d);
+
+        return algaePose;
     }
 
     public PoseEstimate getMegaTag1PoseEstimate(String limelightName) {
