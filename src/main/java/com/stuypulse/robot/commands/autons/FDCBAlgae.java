@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands.autons.FDCB;
+package com.stuypulse.robot.commands.autons;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.shooter.ShooterAcquireCoral;
@@ -10,6 +10,7 @@ import com.stuypulse.robot.commands.superStructure.coral.SuperStructureAutonEnd;
 import com.stuypulse.robot.commands.superStructure.coral.SuperStructureCoralL4Front;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDriveCoralScoreAlignWithClearance;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToBranchScore;
+import com.stuypulse.robot.commands.vision.AlexServoToGamepiece;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.commands.ReefAlgaePickupRoutineFront;
 import com.stuypulse.robot.commands.leds.LEDApplyPattern;
@@ -27,9 +28,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FDCB extends SequentialCommandGroup {
+public class FDCBAlgae extends SequentialCommandGroup {
     
-    public FDCB(PathPlannerPath... paths) {
+    public FDCBAlgae(PathPlannerPath... paths) {
 
         addCommands(
 
@@ -38,32 +39,13 @@ public class FDCB extends SequentialCommandGroup {
                 new SwerveDrivePIDToBranchScore(CoralBranch.F, 4, true)
                     .withTranslationalConstraints(2.5, Settings.Swerve.Alignment.Constraints.DEFAULT_MAX_ACCELERATION)
                     .withTimeout(1.75)
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR)),
-                new SuperStructureCoralL4Front()
-                    .andThen(new SuperStructureWaitUntilAtTarget())
+                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_REEF_COLOR))
             ),
-            new ShooterShootL4Front(),
-            new WaitCommand(Settings.Shooter.CORAL_SHOOT_TIME_AUTON),
-            new ShooterStop(),
 
             // To HP, Score D
-            new ParallelCommandGroup(
-                CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
-                    .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
-                new WaitUntilCommand(() -> Clearances.isArmClearFromReef())
-                    .andThen(
-                        new SuperStructureFeed()
-                            .andThen(new SuperStructureWaitUntilAtTarget())
-                    )
-            ),
-            new ParallelCommandGroup(
-                new WaitUntilCommand(() -> Shooter.getInstance().hasCoral()),
-                new ShooterAcquireCoral()
-                    .andThen(
-                        new WaitUntilCommand(() -> Shooter.getInstance().hasCoral())
-                            .andThen(new ShooterStop())
-                    )
-            ),
+            CommandSwerveDrivetrain.getInstance().followPathCommand(paths[0])
+                .deadlineFor(new LEDApplyPattern(Settings.LED.AUTON_TO_HP_COLOR)),
+            //new AlexServoToGamepiece(),
             new ParallelCommandGroup(
                 new SwerveDrivePIDToBranchScore(CoralBranch.D, 4, true)
                 .withTranslationalConstraints(5.5, 16)
