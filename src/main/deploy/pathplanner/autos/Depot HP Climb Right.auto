@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Auto Start to Depot Side"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Side to Collect"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot to HP"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HP to Tower Right 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Tower Right 1 to 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Depot HP Climb",
+  "choreoAuto": false
+}

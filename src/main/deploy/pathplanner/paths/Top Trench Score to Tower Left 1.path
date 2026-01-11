@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.3577958015267177,
+        "y": 7.516221374045802
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1907488324121167,
+        "y": 6.57125402039259
+      },
+      "isLocked": false,
+      "linkedName": "Top Trench Score"
+    },
+    {
+      "anchor": {
+        "x": 2.1109160305343515,
+        "y": 4.076841603053436
+      },
+      "prevControl": {
+        "x": 2.3504625953377616,
+        "y": 4.900410029596671
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Tower Left 1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "To Tower",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -68.70264595096619
+  },
+  "useDefaultConstraints": true
+}

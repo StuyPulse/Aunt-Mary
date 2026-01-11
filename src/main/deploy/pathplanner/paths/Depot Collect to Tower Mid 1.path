@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.47072519083969466,
+        "y": 5.968082061068702
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.688330152671756,
+        "y": 5.909503816793894
+      },
+      "isLocked": false,
+      "linkedName": "Depot Collect"
+    },
+    {
+      "anchor": {
+        "x": 2.0523377862595424,
+        "y": 3.7923187022900766
+      },
+      "prevControl": {
+        "x": 2.035601145038168,
+        "y": 6.687757633587787
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Tower Mid 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.75,
+    "maxAcceleration": 6.75,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 900.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "To Tower",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
