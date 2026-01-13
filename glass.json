@@ -227,12 +227,15 @@
     },
     "windows": {
       "/Pose": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "width": 16.541748046875
+        "bottom": 1638,
+        "height": 8.051901817321777,
+        "left": 534,
+        "right": 3466,
+        "top": 291,
+        "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
       },
       "/SmartDashboard/Autonomous": {
         "window": {
@@ -241,7 +244,6 @@
       },
       "/SmartDashboard/Field": {
         "bottom": 1638,
-        "builtin": "2025 Reefscape",
         "height": 8.051901817321777,
         "left": 534,
         "right": 3466,
@@ -302,7 +304,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 290,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -437,7 +439,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 326,
+          "height": 0,
           "series": [
             {
               "color": [

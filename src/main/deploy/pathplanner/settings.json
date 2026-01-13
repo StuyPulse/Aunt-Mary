@@ -3,25 +3,9 @@
   "robotLength": 0.9440500042,
   "holonomicMode": true,
   "pathFolders": [
-    "Blue BackOut",
-    "Blue To Algae",
-    "Blue To Barge",
-    "Blue To HP",
-    "Blue To Reef",
-    "Blue Utilities",
-    "Red BackOut",
-    "Red To Barge",
-    "Red To Algae",
-    "Red Utilities",
-    "Red to HP",
-    "Red to Reef",
     "Tests"
   ],
   "autoFolders": [
-    "Blue Bottom Autons",
-    "Blue Top Autons",
-    "Red Bottom Autons",
-    "Red Top Autons",
     "Tests"
   ],
   "defaultMaxVel": 5.75,
