@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Trench to NZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top NZ to Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Score to NZ"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

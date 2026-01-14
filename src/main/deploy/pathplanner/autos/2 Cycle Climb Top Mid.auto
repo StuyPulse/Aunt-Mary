@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Trench to NZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top NZ to Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Score to NZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top NZ to Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Trench Score to Tower Mid 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Tower Mid 1 to 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2 Cycle Climb",
+  "choreoAuto": false
+}

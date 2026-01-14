@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.470782442748092,
-        "y": 0.49520038167938996
+        "x": 3.3722000000000003,
+        "y": 2.4628666666666663
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.562891221374047,
-        "y": 0.5203053435114509
+        "x": 2.4551222222222226,
+        "y": 0.06435555555555528
       },
       "isLocked": false,
-      "linkedName": "Bottom Trench Auto Start"
+      "linkedName": "Bottom Score"
+    },
+    {
+      "anchor": {
+        "x": 4.6520777777777775,
+        "y": 0.5984777777777766
+      },
+      "prevControl": {
+        "x": 3.3813312203021386,
+        "y": 0.6100651324052141
+      },
+      "nextControl": {
+        "x": 7.967666666666666,
+        "y": 0.5682444444444434
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,20 +36,25 @@
         "y": 3.599847328244275
       },
       "prevControl": {
-        "x": 7.79300572519084,
-        "y": 1.0558778625954197
+        "x": 7.897122222222222,
+        "y": 0.3465333333333329
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "NZ Bottom Center"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4527986633249788,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6697916666666689,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 1.727083333333352,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 3.0,
         "maxAcceleration": 2.0,
@@ -62,7 +83,7 @@
   "folder": "To NZ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -125.5376777919744
   },
   "useDefaultConstraints": true
 }

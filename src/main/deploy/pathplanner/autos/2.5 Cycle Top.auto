@@ -7,49 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depot Auto Start to Depot Side"
+            "pathName": "Top Trench to NZ"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Depot Side to Collect"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
+            "pathName": "Top NZ to Score"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Depot to HP"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
+            "pathName": "Top Score to NZ"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HP to Tower Right 1"
+            "pathName": "Top NZ to Score"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Tower Right 1 to 2"
+            "pathName": "Top Score to NZ"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Depot HP Climb",
+  "folder": "2.5 Cycle",
   "choreoAuto": false
 }

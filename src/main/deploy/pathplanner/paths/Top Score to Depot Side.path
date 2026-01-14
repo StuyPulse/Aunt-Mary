@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.47072519083969466,
-        "y": 0.6290935114503815
+        "x": 3.352044444444445,
+        "y": 5.687755555555555
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.922643129773897,
-        "y": 2.051708015262453
+        "x": 2.747377777777778,
+        "y": 6.262188888888889
       },
       "isLocked": false,
-      "linkedName": "HP"
+      "linkedName": "Top Score"
     },
     {
       "anchor": {
@@ -20,20 +20,15 @@
         "y": 7.214961832056345
       },
       "prevControl": {
-        "x": 2.746908396949469,
-        "y": 7.214961832056345
+        "x": 1.719444444444444,
+        "y": 7.239733333333334
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Depot Side"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3673913043478265,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -53,7 +48,7 @@
   "folder": "To Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 129.36931724236476
   },
   "useDefaultConstraints": true
 }

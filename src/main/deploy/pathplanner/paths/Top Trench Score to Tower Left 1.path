@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3577958015267177,
-        "y": 7.516221374045802
+        "x": 3.352044444444445,
+        "y": 5.687755555555555
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1907488324121167,
-        "y": 6.57125402039259
+        "x": 2.5683411306917576,
+        "y": 4.960262445403606
       },
       "isLocked": false,
-      "linkedName": "Top Trench Score"
+      "linkedName": "Top Score"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 4.076841603053436
       },
       "prevControl": {
-        "x": 2.3504625953377616,
-        "y": 4.900410029596671
+        "x": 2.881836233112139,
+        "y": 5.090175123625146
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "To Tower",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -68.70264595096619
+    "rotation": 129.36931724236476
   },
   "useDefaultConstraints": true
 }

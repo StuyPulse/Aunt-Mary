@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.487519083969466,
-        "y": 7.650114503816795
+        "x": 4.521066666666667,
+        "y": 7.562222222222221
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.713520992366412,
-        "y": 7.4994847328244285
+        "x": 8.747068575063615,
+        "y": 7.411592451229855
       },
       "isLocked": false,
       "linkedName": "Top Trench Auto Start"
     },
     {
       "anchor": {
-        "x": 7.851583969465649,
-        "y": 4.595677480916031
+        "x": 7.806422222222222,
+        "y": 4.498577777777778
       },
       "prevControl": {
-        "x": 7.818110687022902,
-        "y": 7.424169847328245
+        "x": 7.772948939779475,
+        "y": 7.327070144189992
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.5,
+      "minWaypointRelativePos": 0.686458333333336,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 3.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 400.0,
         "maxAngularAcceleration": 900.0,
         "nominalVoltage": 12.0,
@@ -59,7 +59,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "To Neutral Zone",
+  "folder": "To NZ",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

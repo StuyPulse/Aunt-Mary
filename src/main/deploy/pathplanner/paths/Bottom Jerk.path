@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.47072519083969466,
-        "y": 0.6290935114503815
+        "x": 4.470782442748092,
+        "y": 0.49520038167938996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8601915717984765,
-        "y": 1.1491320155519977
+        "x": 9.116533333333333,
+        "y": 0.5077777777777772
       },
       "isLocked": false,
-      "linkedName": "HP"
+      "linkedName": "Bottom Trench Auto Start"
     },
     {
       "anchor": {
-        "x": 2.1443893129770997,
-        "y": 3.223272900763358
+        "x": 8.652955555555558,
+        "y": 5.879233333333334
       },
       "prevControl": {
-        "x": 1.9804294885247824,
-        "y": 3.0345477673932493
+        "x": 8.602566666666666,
+        "y": 0.3364555555555553
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Tower Right 1"
+      "linkedName": "Bottom Jerk End"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "To Tower",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

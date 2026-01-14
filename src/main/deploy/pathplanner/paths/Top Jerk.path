@@ -3,41 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.47072519083969466,
-        "y": 5.968082061068702
+        "x": 4.521066666666667,
+        "y": 7.562222222222221
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.039799618320838,
-        "y": 6.001555343515516
+        "x": 9.428944444444443,
+        "y": 7.652922222222223
       },
       "isLocked": false,
-      "linkedName": "Depot Collect"
+      "linkedName": "Top Trench Auto Start"
     },
     {
       "anchor": {
-        "x": 0.47072519083969466,
-        "y": 0.6290935114503815
+        "x": 8.602566666666666,
+        "y": 2.1806888888888896
       },
       "prevControl": {
-        "x": 2.2615458015267174,
-        "y": 1.2734541984732834
+        "x": 8.622722222222224,
+        "y": 7.2296555555555555
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP"
+      "linkedName": "Top Jerk Auto End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.47282608695652184,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.8413043478260874,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -51,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "To HP",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

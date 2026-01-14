@@ -3,10 +3,14 @@
   "robotLength": 0.9440500042,
   "holonomicMode": true,
   "pathFolders": [
-    "Tests"
+    "To Depot",
+    "To NZ",
+    "To Score",
+    "To Tower"
   ],
   "autoFolders": [
-    "Tests"
+    "2 Cycle Climb",
+    "2.5 Cycle"
   ],
   "defaultMaxVel": 5.75,
   "defaultMaxAccel": 6.75,

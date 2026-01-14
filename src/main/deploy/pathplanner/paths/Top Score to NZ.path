@@ -3,45 +3,61 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.806422222222222,
-        "y": 4.498577777777778
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 5.518766666666667,
-        "y": 5.728066666666666
-      },
-      "isLocked": false,
-      "linkedName": "NZ Top Center"
-    },
-    {
-      "anchor": {
         "x": 3.352044444444445,
         "y": 5.687755555555555
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8683111111111117,
+        "y": 7.8544777777777774
+      },
+      "isLocked": false,
+      "linkedName": "Top Score"
+    },
+    {
+      "anchor": {
+        "x": 4.510988888888889,
+        "y": 7.491677777777777
+      },
       "prevControl": {
-        "x": 5.327288888888888,
-        "y": 5.677677777777778
+        "x": 3.303684252925522,
+        "y": 7.449102803209799
+      },
+      "nextControl": {
+        "x": 8.511866666666668,
+        "y": 7.632766666666667
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.806422222222222,
+        "y": 4.498577777777778
+      },
+      "prevControl": {
+        "x": 7.771338252756573,
+        "y": 7.233333630195081
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Top Score"
+      "linkedName": "NZ Top Center"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 0.756892230576442,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.5656249999999995,
-      "maxWaypointRelativePos": 0.8906249999999997,
+      "minWaypointRelativePos": 1.7062500000000005,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 3.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 400.0,
         "maxAngularAcceleration": 900.0,
         "nominalVoltage": 12.0,
@@ -61,13 +77,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 129.36931724236476
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "To Score",
+  "folder": "To NZ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 129.36931724236476
   },
   "useDefaultConstraints": true
 }
