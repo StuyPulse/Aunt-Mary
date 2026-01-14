@@ -46,7 +46,8 @@ public abstract class Froggy extends SubsystemBase {
         L1_SCORE_ANGLE_TWO(Settings.Froggy.L1_SCORING_ANGLE_TWO),
         L1_SCORE_ANGLE_THREE(Settings.Froggy.L1_SCORING_ANGLE_THREE),
         GOLF_TEE_ALGAE_PICKUP(Settings.Froggy.GOLF_TEE_ALGAE_PICKUP_ANGLE),
-        CLIMB(Settings.Froggy.CLIMB_ANGLE);
+        CLIMB(Settings.Froggy.CLIMB_ANGLE),
+        REBUILT(Settings.Froggy.REBUILT);
 
         private Rotation2d targetAngle;
 
@@ -70,6 +71,7 @@ public abstract class Froggy extends SubsystemBase {
         SHOOT_ALGAE(Settings.Froggy.ALGAE_OUTTAKE_SPEED),
         HOLD_ALGAE(Settings.Froggy.HOLD_ALGAE_SPEED),
         HOLD_CORAL(Settings.Froggy.HOLD_CORAL_SPEED),
+        REBUILT(Settings.Froggy.INTAKE_REBUILT),
         STOP(0);
 
         private double speed;

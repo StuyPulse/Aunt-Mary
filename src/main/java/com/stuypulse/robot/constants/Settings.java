@@ -35,10 +35,10 @@ public interface Settings {
     
     public interface EnabledSubsystems {
         SmartBoolean SWERVE = new SmartBoolean("Enabled Subsystems/Swerve Is Enabled", true);
-        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", true);
+        SmartBoolean ARM = new SmartBoolean("Enabled Subsystems/Arm Is Enabled", false);
         SmartBoolean ELEVATOR = new SmartBoolean("Enabled Subsystems/Elevator Is Enabled", true);
-        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", true);
-        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", true);
+        SmartBoolean SHOOTER = new SmartBoolean("Enabled Subsystems/Shooter Is Enabled", false);
+        SmartBoolean FUNNEL = new SmartBoolean("Enabled Subsystems/Funnel Is Enabled", false);
         SmartBoolean CLIMB = new SmartBoolean("Enabled Subsystems/Climb Is Enabled", true);
         SmartBoolean FROGGY = new SmartBoolean("Enabled Subsystems/Froggy Is Enabled", true);
         SmartBoolean LEDS = new SmartBoolean("Enabled Subsystems/LEDs", true);
@@ -309,6 +309,7 @@ public interface Settings {
         Rotation2d L1_SCORING_ANGLE_THREE = Rotation2d.fromDegrees(54.667969);
         Rotation2d GOLF_TEE_ALGAE_PICKUP_ANGLE = STOW_ANGLE;
         Rotation2d CLIMB_ANGLE = Constants.Froggy.MAXIMUM_ANGLE;
+        Rotation2d REBUILT = Rotation2d.fromDegrees(-30);
 
         Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5.0);
 
@@ -322,6 +323,7 @@ public interface Settings {
         double CORAL_OUTTAKE_SPEED = 0.2;
         double HOLD_ALGAE_SPEED = 0.3;
         double HOLD_CORAL_SPEED = -0.15;
+        double INTAKE_REBUILT = 1;
 
         Rotation2d MAX_VEL = Rotation2d.fromDegrees(500);
         Rotation2d MAX_ACCEL = Rotation2d.fromDegrees(1000);
