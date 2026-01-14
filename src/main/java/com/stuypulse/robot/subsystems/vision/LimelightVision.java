@@ -18,6 +18,7 @@ import com.stuypulse.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 import com.stuypulse.robot.util.vision.LimelightHelpers.RawDetection;
+import com.stuypulse.robot.util.vision.LimelightHelpers.RawFiducial;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -75,6 +76,7 @@ public class LimelightVision extends SubsystemBase {
     private int imuMode;
     private int maxTagCount;
     private RawDetection[] rawDetections;
+    private RawFiducial[] rawFiducials;
 
     private ObjectData currentFrame;
     private ObjectData closestObject;
@@ -288,6 +290,7 @@ public class LimelightVision extends SubsystemBase {
 
             if (camera.isEnabled()) {
                 rawDetections = LimelightHelpers.getRawDetections("limelight-froggy");
+                rawFiducials = LimelightHelpers.getRawFiducials("limelight-froggy");
                 if (LimelightHelpers.getCurrentPipelineIndex(camera.getName()) == PipelineMode.APRILTAG.ordinal()) {
                     PoseEstimate poseEstimate = (megaTagMode == MegaTagMode.MEGATAG2)
                             ? getMegaTag2PoseEstimate(camera.getName())
