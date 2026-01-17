@@ -59,6 +59,7 @@ public class LimelightVision extends SubsystemBase {
     private RawFiducial[] rawFiducials;
 
     private boolean[] whitelist = new boolean[Field.APRILTAGS.length];
+    private double[] tagDistances = new double[Field.APRILTAGS.length];
 
     private ObjectData currentFrame;
     private ObjectData closestObject;
@@ -83,7 +84,7 @@ public class LimelightVision extends SubsystemBase {
         maxTagCount = 0;
 
         setMegaTagMode(MegaTagMode.MEGATAG1);
-
+        setAllWhitelist();
         setIMUMode(1);
 
         // Auto Acquire
@@ -110,9 +111,13 @@ public class LimelightVision extends SubsystemBase {
         LimelightHelpers.setPipelineIndex(limelightName, pipeline);
     }
 
-    private void setTagWhitelist(int... ids) {
+    private void setTagWhitelist(double... ids) {
+        int[] new_ids = new int[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            new_ids[i] = (int) ids[i];
+        }
         for (Camera camera : Cameras.LimelightCameras) {
-            LimelightHelpers.SetFiducialIDFiltersOverride(camera.getName(), ids);
+            LimelightHelpers.SetFiducialIDFiltersOverride(camera.getName(), new_ids);
         }
     }
 
@@ -160,12 +165,12 @@ public class LimelightVision extends SubsystemBase {
         return pose.getX() < Field.LENGTH / 2 == Robot.isBlue();
     }
 
-    private int[] getWhitelist() {
-        int[] ids = new int[whitelist.length];
+    private double[] getWhitelist() {
+        double[] ids = new double[whitelist.length];
         int num = 0;
         for (int i = 0; i < whitelist.length; i++) {
             if (whitelist[i]) {
-                ids[num] = i;
+                ids[num] = i+1;
                 num++;
             }
         }
@@ -173,8 +178,8 @@ public class LimelightVision extends SubsystemBase {
     }
 
     private void setAllWhitelist() {
-        for (boolean x : whitelist) {
-            x = true;
+        for (int i = 0; i < whitelist.length; i++) {
+            whitelist[i] = true;
         }
     }
 
@@ -233,14 +238,32 @@ public class LimelightVision extends SubsystemBase {
         Pose2d robotPose = CommandSwerveDrivetrain.getInstance().getPose();
         this.maxTagCount = 0;
 
-        setAllWhitelist();
-
-        rawFiducials = LimelightHelpers.getRawFiducials("limelight-froggy");
-        for (RawFiducial tag : rawFiducials) {
-            if (tag.distToRobot > 10.0) {
-                whitelist[tag.id] = false;
-            }
+        // setAllWhitelist();
+        for (int i = 0; i < tagDistances.length; i++) {
+            tagDistances[i] = 0;
         }
+
+        RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("limelight-froggy");
+
+        
+        // for (RawFiducial tag : rawFiducials) {
+        //     if (tag.distToRobot <= Units.feetToMeters(3.0)) {
+        //         whitelist[tag.id+1] = true;
+        //         tagDistances[tag.id+1] = tag.distToRobot;
+        //     } else {
+        //         whitelist[tag.id+1] = false;
+        //         tagDistances[tag.id+1] = tag.distToRobot;
+        //     }
+        //     tagDistances[tag.id+1] = tag.distToRobot;
+        // }
+        for (int i = 0; i < whitelist.length; i++) {
+            double distance = CommandSwerveDrivetrain.getInstance().getPose().getTranslation()
+                .getDistance(Field.APRILTAGS[i].getLocation().getTranslation().toTranslation2d());
+        
+            whitelist[i] = distance <= Units.feetToMeters(3.0);
+            tagDistances[i] = distance;
+        }
+        
 
         // updateWhitelist();
         setTagWhitelist(getWhitelist());
@@ -309,6 +332,9 @@ public class LimelightVision extends SubsystemBase {
             SmartDashboard.putString("Vision/Megatag Mode", getMTmode().toString());
             SmartDashboard.putNumber("Raw Detection length", rawDetections.length);
             SmartDashboard.putBoolean("Vision/Has NN Data", hasNeuralNetworkData("froggy-limelight"));
+            SmartDashboard.putBooleanArray("Vision/Whitelist Boolean Array", whitelist);
+            SmartDashboard.putNumberArray("Vision/Tag Distances", tagDistances);
+            SmartDashboard.putNumberArray("Vision/ Whitelist Ids Array", getWhitelist());
             SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
         }
     }
