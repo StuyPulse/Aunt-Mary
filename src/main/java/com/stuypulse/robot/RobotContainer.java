@@ -86,6 +86,7 @@ import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedT
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyReady;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToClosestL1FroggyScore;
 import com.stuypulse.robot.commands.swerve.pidToPose.coral.SwerveDrivePIDToCoralStation;
+import com.stuypulse.robot.commands.vision.VisionSetPipeline;
 import com.stuypulse.robot.commands.vision.VisionSetTagWhitelist;
 import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.constants.Field;
@@ -467,7 +468,9 @@ public class RobotContainer {
             // .onFalse(new ShooterStop().onlyIf(() -> shooter.getState() == ShooterState.SHOOT_ALGAE));
 
         driver.getLeftButton()
-            .whileTrue(new SwerveDriveXMode());
+            // .whileTrue(new SwerveDriveXMode());
+            .whileTrue(new VisionSetPipeline("limelight-froggy", 1))
+            .onFalse(new VisionSetPipeline("limelight-froggy", 0));
 
         driver.getLeftBumper()
             .onTrue(
